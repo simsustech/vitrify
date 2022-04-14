@@ -56,7 +56,7 @@ export async function build(opts: {
   appDir?: URL
   publicDir?: URL
 }) {
-  let config = await baseConfig({
+  const config = await baseConfig({
     command: 'build',
     mode: 'production',
     ssr: opts?.ssr,

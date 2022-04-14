@@ -1,31 +1,29 @@
 import { promises as fs } from 'fs'
 import { routesToPaths } from '../helpers/routes.js'
-import { SsrFunction } from '../vitrify-config.js'
+import type { SsrFunction } from '../vitrify-config.js'
 
 export const prerender = async ({
   outDir,
   templatePath,
   manifestPath,
   entryServerPath,
-  injectSsrContext
+  ssrFunctions
 }: {
   outDir: string
   templatePath: string
   manifestPath: string
   entryServerPath: string
-  injectSsrContext: SsrFunction
+  ssrFunctions: SsrFunction[]
 }) => {
-  let template
-  let manifest
   const promises = []
-  template = (await fs.readFile(templatePath)).toString()
-  manifest = await fs.readFile(manifestPath)
-  let { render, getRoutes } = await import(entryServerPath)
+  const template = (await fs.readFile(templatePath)).toString()
+  const manifest = await fs.readFile(manifestPath)
+  const { render, getRoutes } = await import(entryServerPath)
   const routes = await getRoutes()
   const paths = routesToPaths(routes).filter(
     (i) => !i.includes(':') && !i.includes('*')
   )
-  for (let url of paths) {
+  for (const url of paths) {
     const filename =
       (url.endsWith('/') ? 'index' : url.replace(/^\//g, '')) + '.html'
     console.log(`Generating ${filename}`)
@@ -39,7 +37,11 @@ export const prerender = async ({
       .replace(`<!--preload-links-->`, preloadLinks)
       .replace(`<!--app-html-->`, appHtml)
 
-    html = injectSsrContext(html, ssrContext)
+    if (ssrFunctions?.length) {
+      for (const ssrFunction of ssrFunctions) {
+        html = ssrFunction(html, ssrContext)
+      }
+    }
 
     promises.push(fs.writeFile(outDir + filename, html, 'utf-8'))
   }

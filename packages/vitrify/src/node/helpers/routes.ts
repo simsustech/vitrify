@@ -1,5 +1,5 @@
 // https://github.com/antfu/vite-ssg/blob/462722203dade87365a519d847fcd881ee16a7f4/src/node/utils.ts#L13
-import { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
 export const routesToPaths = (routes?: RouteRecordRaw[]) => {
   if (!routes) return ['/']

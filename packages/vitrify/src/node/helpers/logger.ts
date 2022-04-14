@@ -2,10 +2,11 @@
 import chalk from 'chalk'
 const { bgGreen, green, inverse, bgRed, red, bgYellow, yellow } = chalk
 import readline from 'readline'
-import { AddressInfo, Server } from 'net'
-import { ResolvedConfig, Logger } from 'vite'
+import type { AddressInfo, Server } from 'net'
+import type { ResolvedConfig, Logger } from 'vite'
 import os from 'os'
-import { resolveHostname, Hostname } from '../helpers/utils.js'
+import type { Hostname } from '../helpers/utils.js'
+import { resolveHostname } from '../helpers/utils.js'
 
 /**
  * Main approach - App CLI related

@@ -45,7 +45,7 @@ export const renderAll = ({
     writeFileSync(fileOutputPath, output, 'utf-8')
   }
 
-  for (let directory of directories) {
+  for (const directory of directories) {
     renderAll({
       inputPath: new URL(`./${directory}/`, inputPath),
       outputPath: new URL(`./${directory}/`, outputPath),

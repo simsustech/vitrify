@@ -1,6 +1,7 @@
 import { renderTemplate } from './index.js'
 import parseArgs from 'minimist'
-import inquirer, { QuestionCollection } from 'inquirer'
+import type { QuestionCollection } from 'inquirer'
+import inquirer from 'inquirer'
 import { promises } from 'fs'
 import { templates } from './templates.js'
 const escape = (val: any) => JSON.stringify(val).slice(1, -1)
@@ -13,7 +14,6 @@ const argv = parseArgs(process.argv.slice(2), {
   string: ['template']
 })
 
-let answers: Record<string, any>
 let questions: QuestionCollection[] = []
 if (!argv.template) {
   // throw new Error('Please provide a template argument: --template')
@@ -67,13 +67,12 @@ questions = [
     message: 'Author'
   }
 ]
-answers = await inquirer.prompt(questions)
+const answers = await inquirer.prompt(questions)
 
 const cwdUrl = new URL('', `file://${process.cwd()}/`)
 const templateVariables = answers
-console.log(process.cwd())
-// @ts-ignore
 const templateUrl =
+  // @ts-ignore
   templates[answers.template].url || templates[argv.template].url
 renderTemplate({
   templateUrl,

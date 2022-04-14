@@ -10,7 +10,7 @@ import type {
 // import { quasarDir as defaultQuasarDir } from '../app-urls.js'
 // import { QuasarResolver } from '../resolver.js';
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
-import { VitrifyPlugin } from './index.js'
+import type { VitrifyPlugin } from './index.js'
 import { getPkgJsonDir } from '../app-urls.js'
 import { resolve } from 'import-meta-resolve'
 
@@ -119,7 +119,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       name: 'vite-plugin-quasar-setup',
       enforce: 'pre',
       config: async (config: VitrifyConfig, env): Promise<VitrifyConfig> => {
-        let { vitrify: { urls } = {}, quasar } = config
+        const { vitrify: { urls } = {}, quasar } = config
 
         const globalCss = quasar?.extras.map(
           (extra) => `@quasar/extras/${extra}/${extra}.css`
@@ -127,7 +127,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
 
         const localPackages = ['@quasar/extras', 'quasar']
         await (async () => {
-          for (let val of localPackages)
+          for (const val of localPackages)
             urls!.packages![val] = getPkgJsonDir(
               new URL(await resolve(val, urls!.app!.href))
             )
@@ -198,7 +198,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         // let quasarDir: URL
         // let quasarConf: QuasarConf | undefined
 
-        let { quasar: quasarConf, vitrify: { urls } = {} } = config
+        const { quasar: quasarConf, vitrify: { urls } = {} } = config
 
         const quasarPkgJsonPath = new URL(
           'package.json',

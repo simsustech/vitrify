@@ -14,7 +14,7 @@ import type {
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { getPkgJsonDir } from './app-urls.js'
 
 const serverModules = ['fastify', 'middie']
@@ -50,18 +50,13 @@ export const baseConfig = async ({
   framework?: 'vue'
   pwa?: boolean
 }): Promise<InlineConfig> => {
-  let tempAppDir: URL
-  let cliDir: URL
-  let cliViteDir: URL
-  let srcDir: URL
-  let cwd: URL
-  ;({
+  const {
     appDir: tempAppDir,
     cliDir,
     cliViteDir,
     srcDir
-  } = await import('./app-urls.js'))
-  cwd = appDir || tempAppDir
+  } = await import('./app-urls.js')
+  const cwd = appDir || tempAppDir
   const frameworkDir = new URL(`${framework}/`, cliViteDir)
 
   if (!appDir) appDir = tempAppDir
@@ -70,13 +65,13 @@ export const baseConfig = async ({
   const cliPackages = ['vitest']
   const packageUrls: Record<string, URL> = {}
   await (async () => {
-    for (let val of localPackages)
+    for (const val of localPackages)
       packageUrls[val] = getPkgJsonDir(
         new URL(await resolve(val, appDir!.href))
       )
   })()
   await (async () => {
-    for (let val of cliPackages)
+    for (const val of cliPackages)
       packageUrls[val] = getPkgJsonDir(
         new URL(await resolve(val, cliDir!.href))
       )
@@ -112,19 +107,19 @@ export const baseConfig = async ({
     console.log('No vitrify.config.js file found, using defaults')
     vitrifyConfig = {}
   }
-  let { productName = 'Product name' } = JSON.parse(
+  const { productName = 'Product name' } = JSON.parse(
     readFileSync(new URL('package.json', appDir).pathname, {
       encoding: 'utf-8'
     })
   )
 
-  let fastifySetup =
+  const fastifySetup =
     vitrifyConfig.vitrify?.fastify?.setup || ((fastify: FastifyInstance) => {})
 
   const sass = []
-  let sassVariables = vitrifyConfig.vitrify?.sassVariables
+  const sassVariables = vitrifyConfig.vitrify?.sassVariables
   if (sassVariables) {
-    for (let variable in sassVariables) {
+    for (const variable in sassVariables) {
       sass.push(`${variable}: ${sassVariables[variable]}`)
     }
   }
@@ -137,7 +132,7 @@ export const baseConfig = async ({
   }
 
   const frameworkPlugins = []
-  for (let framework of Object.keys(configPluginMap)) {
+  for (const framework of Object.keys(configPluginMap)) {
     if (Object.keys(vitrifyConfig).includes(framework)) {
       const plugin = await configPluginMap[framework]()
       frameworkPlugins.push(
@@ -148,7 +143,6 @@ export const baseConfig = async ({
       )
     }
   }
-  console.log(frameworkPlugins)
 
   let bootFunctions: BootFunction[]
   let ssrFunctions: SsrFunction[]

@@ -1,9 +1,13 @@
-import { FastifyPluginCallback, FastifyRequest, FastifyReply } from 'fastify'
+import type {
+  FastifyPluginCallback,
+  FastifyRequest,
+  FastifyReply
+} from 'fastify'
 import fastifyStatic from 'fastify-static'
 import { readFileSync } from 'fs'
 // import { injectSsrContext } from '../helpers/ssr.js'
 import type { ViteDevServer } from 'vite'
-import { SsrFunction } from '../vitrify-config.js'
+import type { SsrFunction } from '../vitrify-config.js'
 
 export interface FastifySsrOptions {
   baseUrl?: string
@@ -33,21 +37,19 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       try {
         // const url = req.originalUrl
         const url = req.raw.url
-        let template
-        let render
         const ssrContext = {
           req,
           res
         }
         // always read fresh template in dev
         // template = readFileSync(resolve('index.html'), 'utf-8')
-        template = readFileSync(
+        const template = readFileSync(
           new URL('index.html', options.cliDir)
         ).toString()
 
         // template = await vite.transformIndexHtml(url, template)
         const entryUrl = new URL('ssr/entry-server.ts', options.cliDir).pathname
-        render = (await options.vite!.ssrLoadModule(entryUrl)).render
+        const render = (await options.vite!.ssrLoadModule(entryUrl)).render
         let manifest
         // TODO: https://github.com/vitejs/vite/issues/2282
         try {
@@ -85,9 +87,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     fastify.get(`${options.baseUrl}*`, async (req, res) => {
       const url = req.raw.url
       const provide = options.provide ? await options.provide(req, res) : {}
-      let template
-      let render
-      let manifest
       const ssrContext: Record<string, any> = {
         req,
         res,
@@ -97,15 +96,15 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       // template = readFileSync(new URL('../client/index.html', import.meta.url).pathname).toString()
       // manifest = JSON.parse(readFileSync(new URL('../client/ssr-manifest.json', import.meta.url)).toString())
       // render = (await import(new URL('./entry-server.mjs', import.meta.url).pathname)).render
-      template = readFileSync(
+      const template = readFileSync(
         new URL('./dist/ssr/client/index.html', options.appDir).pathname
       ).toString()
-      manifest = JSON.parse(
+      const manifest = JSON.parse(
         readFileSync(
           new URL('./dist/ssr/client/ssr-manifest.json', options.appDir)
         ).toString()
       )
-      render = (
+      const render = (
         await import(
           new URL('./dist/ssr/server/entry-server.mjs', options.appDir).pathname
         )
@@ -121,7 +120,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         .replace(`<!--app-html-->`, appHtml)
 
       if (options.ssrFunctions?.length) {
-        for (let ssrFunction of options.ssrFunctions) {
+        for (const ssrFunction of options.ssrFunctions) {
           html = ssrFunction(html, ssrContext)
         }
       }

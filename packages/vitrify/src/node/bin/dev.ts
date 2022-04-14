@@ -23,8 +23,8 @@ export async function createServer({
   appDir?: URL
   publicDir?: URL
 }) {
-  let { appDir: tempAppDir, cliDir } = await import('../app-urls.js')
-  let cwd = appDir || tempAppDir
+  const { appDir: tempAppDir, cliDir } = await import('../app-urls.js')
+  const cwd = appDir || tempAppDir
   if (!appDir) appDir = tempAppDir
   const { fastifySsrPlugin } = await import(
     `../${framework}/fastify-ssr-plugin.js`
@@ -33,7 +33,6 @@ export async function createServer({
   /**
    * @type {import('vite').ViteDevServer}
    */
-  let vite: ViteDevServer
   const config = await baseConfig({
     ssr: mode === 'ssr' ? 'server' : undefined,
     command: 'dev',
@@ -60,13 +59,13 @@ export async function createServer({
     },
     host
   }
-  vite = await (
+  const vite = await (
     await import('vite')
   ).createServer({
     configFile: false,
     ...config
   })
-  let { productName = 'Product name' } = JSON.parse(
+  const { productName = 'Product name' } = JSON.parse(
     readFileSync(new URL('package.json', appDir).pathname, {
       encoding: 'utf-8'
     })

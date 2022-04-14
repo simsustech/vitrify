@@ -15,7 +15,8 @@ cli
   .option('--publicDir [publicDir]', 'Public directory')
   .option('--productName [productName]', 'Product name')
   .action(async (options) => {
-    let { build } = await import('./build.js')
+    const { build } = await import('./build.js')
+    let prerender
     let appDir: URL
     if (options.appDir) {
       if (options.appDir.slice(-1) !== '/') options.appDir += '/'
@@ -24,7 +25,7 @@ cli
       appDir = defaultAppDir
     }
 
-    let baseOutDir = parsePath(options.outDir) || new URL('dist/', appDir)
+    const baseOutDir = parsePath(options.outDir) || new URL('dist/', appDir)
 
     const args: {
       base: string
@@ -66,9 +67,9 @@ cli
           ...args,
           outDir: new URL('ssr/server/', baseOutDir).pathname
         })
-        const { prerender } = await import(
-          new URL('ssr/server/prerender.js', appDir).pathname
-        )
+        prerender = (
+          await import(new URL('ssr/server/prerender.js', appDir).pathname)
+        ).prerender
         prerender({
           outDir: new URL('static/', baseOutDir).pathname,
           templatePath: new URL('static/index.html', baseOutDir).pathname,
@@ -100,7 +101,7 @@ cli
     if (options.host === true) {
       options.host = '0.0.0.0'
     }
-    let { createServer } = await import('./dev.js')
+    const { createServer } = await import('./dev.js')
     switch (options.mode) {
       case 'ssr':
         ;({ server, vite } = await createServer({
@@ -123,7 +124,7 @@ cli
   })
 
 cli.command('test').action(async (options) => {
-  let { test } = await import('./test.js')
+  const { test } = await import('./test.js')
 
   let appDir: URL
   if (options.appDir) {
