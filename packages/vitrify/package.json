@@ -1,6 +1,6 @@
 {
   "name": "vitrify",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "author": "Stefan van Herwijnen",
   "description": "Pre-configured Vite CLI for your framework",
@@ -85,7 +85,7 @@
     "typescript": "^4.6.3",
     "unplugin-vue-components": "^0.19.2",
     "vite": "^2.9.1",
-    "vitrify": "^0.1.0",
+    "vitrify": "^0.1.1",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"
   },
