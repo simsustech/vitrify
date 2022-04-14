@@ -1,0 +1,56 @@
+{
+  "name": "vitrify-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=12.2.0"
+  },
+  "scripts": {
+    "build": "run-s build:vitrify build:create-vitrify",
+    "build:vitrify": "cd packages/vitrify && pnpm run build",
+    "build:create-vitrify": "cd packages/create-vitrify && pnpm run build",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "version": "changeset version",
+    "publish": "changeset publish",
+    "lint": "eslint packages/*/src/",
+    "test:vitrify": "cd packages/vitrify && pnpm run test",
+    "test:create-vitrify": "cd packages/create-vitrify && pnpm run test",
+    "test": "run-s test:vitrify test:create-vitrify"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "changesets": "^1.0.2",
+    "eslint": "^8.13.0",
+    "eslint-define-config": "^1.3.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.6.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged --concurrent false",
+    "commit-msg": ""
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --ignore-unknown"
+    ],
+    "packages/*/{src,types}/**/*.ts": [
+      "eslint --ext .ts"
+    ],
+    "packages/**/*.d.ts": [
+      "eslint --ext .ts"
+    ]
+  },
+  "packageManager": "pnpm@6.32.3",
+  "pnpm": {
+    "overrides": {
+      "vitrify": "workspace:*"
+    }
+  }
+}

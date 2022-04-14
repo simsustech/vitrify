@@ -1,0 +1,47 @@
+{
+  "name": "create-vitrify",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Stefan van Herwijnen",
+  "type": "module",
+  "bin": {
+    "create-vitrify": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "main": "dist/cli.js",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/create-vitrify"
+  },
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
+  "homepage": "https://github.com/simsustech/vitrify/tree/main/packages/create-vitrify#readme",
+  "dependencies": {
+    "handlebars": "^4.7.7",
+    "inquirer": "^8.2.2",
+    "minimist": "^1.2.6"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.1",
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^17.0.23",
+    "vite": "^2.9.1",
+    "vue": "^3.2.31"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

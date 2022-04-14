@@ -1,0 +1,47 @@
+{
+  "name": "quasar-plugin-{{ name }}",
+  "description": "{{ description }}",
+  "author": "{{ author }}",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./dist/quasar-plugin-{{ name }}.es.js",
+    "./run/*": "./dist/run/*.js",
+    "./vite-plugin": "./dist/vite-plugin.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/types/index.d.ts"
+      ],
+      "vite-plugin": [
+        "./dist/vite-plugin.d.ts"
+      ],
+      "run/*": [
+        "./dist/run/*.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build:plugin": "vite build",
+    "build:run": "tsc -p tsconfig.build.run.json",
+    "build:vite-plugin": "tsc -p tsconfig.build.plugin.json",
+    "generate:types": "vue-tsc -p tsconfig.types.json",
+    "build": "pnpm run build:plugin && pnpm run build:run && pnpm run build:vite-plugin && pnpm run generate:types",
+    "install:plugin": "./dist/run/install.js",
+    "render": "./dist/run/render.js"
+  },
+  "dependencies": {
+    "unplugin-vue-components": "^0.18.5"
+  },
+  "devDependencies": {
+    "vitrify": "^0.1.0",
+    "@types/node": "^16.11.11",
+    "@types/ws": "^8.5.3",
+    "@vitejs/plugin-vue": "^2.2.4",
+    "typescript": "^4.6.2",
+    "vite": "^2.9.1",
+    "vue": "^3.2.31",
+    "vue-tsc": "^0.33.9"
+  }
+}

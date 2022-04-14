@@ -1,0 +1,19 @@
+import type { Plugin } from 'vite'
+
+export default async function QuasarVitePlugin (): Promise<Plugin> {
+  console.log('Running Quasar Vite Plugin')
+  return {
+    name: 'quasar-plugin-{{ name }}',
+    // @ts-ignore
+    config: async (config, { command }) => ({
+      quasar: {
+        // Extend quasar.conf
+      },
+      resolve: {
+        alias: [
+          { find: 'quasar-plugin-{{ name }}', replacement: new URL('../', import.meta.url) }
+        ]
+      }
+    })
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "quasar-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=12.2.0"
+  },
+  "scripts": {}
+}
