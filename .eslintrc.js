@@ -3,11 +3,7 @@ const { defineConfig } = require('eslint-define-config')
 module.exports = defineConfig({
   root: true,
 
-  extends: [
-    'eslint:recommended',
-    'plugin:import/recommended',
-    'plugin:@typescript-eslint/recommended'
-  ],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
@@ -57,17 +53,5 @@ module.exports = defineConfig({
         '@typescript-eslint/triple-slash-reference': 'off'
       }
     }
-  ],
-  plugins: ['import'],
-  settings: {
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx']
-    },
-    'import/resolver': {
-      typescript: {
-        alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-        project: 'packages/*/tsconfig.json'
-      }
-    }
-  }
+  ]
 })
