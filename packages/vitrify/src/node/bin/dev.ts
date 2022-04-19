@@ -23,9 +23,10 @@ export async function createServer({
   appDir?: URL
   publicDir?: URL
 }) {
-  const { appDir: tempAppDir, cliDir } = await import('../app-urls.js')
-  const cwd = appDir || tempAppDir
-  if (!appDir) appDir = tempAppDir
+  const { getAppDir, getCliDir, getCwd } = await import('../app-urls.js')
+  const cwd = getCwd()
+  const cliDir = getCliDir()
+  if (!appDir) appDir = getAppDir()
   const { fastifySsrPlugin } = await import(
     `../${framework}/fastify-ssr-plugin.js`
   )
@@ -47,6 +48,7 @@ export async function createServer({
     fs: {
       allow: [
         searchForWorkspaceRoot(process.cwd()),
+        searchForWorkspaceRoot(appDir.pathname),
         searchForWorkspaceRoot(cliDir.pathname)
         // appDir.pathname,
       ]

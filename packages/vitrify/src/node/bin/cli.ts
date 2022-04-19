@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import cac from 'cac'
-import { appDir as defaultAppDir, parsePath } from '../app-urls.js'
+import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls } from '../helpers/logger.js'
 import type { ViteDevServer } from 'vite'
 import type { Server } from 'net'
@@ -22,10 +22,11 @@ cli
       if (options.appDir.slice(-1) !== '/') options.appDir += '/'
       appDir = new URL(`file://${options.appDir}`)
     } else {
-      appDir = defaultAppDir
+      appDir = getAppDir()
     }
 
-    const baseOutDir = parsePath(options.outDir) || new URL('dist/', appDir)
+    const baseOutDir =
+      parsePath(options.outDir, appDir) || new URL('dist/', appDir)
 
     const args: {
       base: string
@@ -34,7 +35,7 @@ cli
     } = {
       base: options.base,
       appDir,
-      publicDir: parsePath(options.publicDir)
+      publicDir: parsePath(options.publicDir, appDir)
     }
 
     switch (options.mode) {
@@ -102,20 +103,21 @@ cli
       options.host = '0.0.0.0'
     }
     const { createServer } = await import('./dev.js')
+    const cwd = (await import('../app-urls.js')).getCwd()
     switch (options.mode) {
       case 'ssr':
         ;({ server, vite } = await createServer({
           mode: 'ssr',
           host: options.host,
-          appDir: parsePath(options.appDir),
-          publicDir: parsePath(options.publicDir)
+          appDir: parsePath(options.appDir, cwd),
+          publicDir: parsePath(options.publicDir, cwd)
         }))
         break
       default:
         ;({ server, vite } = await createServer({
           host: options.host,
-          appDir: parsePath(options.appDir),
-          publicDir: parsePath(options.publicDir)
+          appDir: parsePath(options.appDir, cwd),
+          publicDir: parsePath(options.publicDir, cwd)
         }))
         break
     }
@@ -131,7 +133,7 @@ cli.command('test').action(async (options) => {
     if (options.appDir.slice(-1) !== '/') options.appDir += '/'
     appDir = new URL(`file://${options.appDir}`)
   } else {
-    appDir = defaultAppDir
+    appDir = getAppDir()
   }
   await test({
     appDir

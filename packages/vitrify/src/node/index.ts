@@ -50,16 +50,24 @@ export const baseConfig = async ({
   framework?: 'vue'
   pwa?: boolean
 }): Promise<InlineConfig> => {
-  const {
-    appDir: tempAppDir,
-    cliDir,
-    cliViteDir,
-    srcDir
-  } = await import('./app-urls.js')
-  const cwd = appDir || tempAppDir
+  const { getAppDir, getCliDir, getCliViteDir, getSrcDir, getCwd } =
+    await import('./app-urls.js')
+  if (!appDir) {
+    appDir = getAppDir()
+  }
+  const srcDir = getSrcDir(appDir)
+  const cwd = getCwd()
+  const cliDir = getCliDir()
+  const cliViteDir = getCliViteDir(cliDir)
+  // const {
+  //   appDir: tempAppDir,
+  //   cliDir,
+  //   cliViteDir,
+  //   srcDir
+  // } = await import('./app-urls.js')
+  // const cwd = appDir || tempAppDir
   const frameworkDir = new URL(`${framework}/`, cliViteDir)
 
-  if (!appDir) appDir = tempAppDir
   // const localPackages = ['vue', 'vue-router', 'quasar']
   const localPackages = ['vue', 'vue-router']
   const cliPackages = ['vitest']
@@ -96,6 +104,7 @@ export const baseConfig = async ({
   let vitrifyConfig:
     | VitrifyConfig
     | (({ mode, command }: { mode: string; command: string }) => VitrifyConfig)
+
   try {
     vitrifyConfig = (
       await import(new URL('vitrify.config.js', appDir).pathname)
@@ -107,7 +116,7 @@ export const baseConfig = async ({
     console.log('No vitrify.config.js file found, using defaults')
     vitrifyConfig = {}
   }
-  const { productName = 'Product name' } = JSON.parse(
+  let { productName = 'Product name' } = JSON.parse(
     readFileSync(new URL('package.json', appDir).pathname, {
       encoding: 'utf-8'
     })
@@ -115,14 +124,6 @@ export const baseConfig = async ({
 
   const fastifySetup =
     vitrifyConfig.vitrify?.fastify?.setup || ((fastify: FastifyInstance) => {})
-
-  const sass = []
-  const sassVariables = vitrifyConfig.vitrify?.sassVariables
-  if (sassVariables) {
-    for (const variable in sassVariables) {
-      sass.push(`${variable}: ${sassVariables[variable]}`)
-    }
-  }
 
   const ssrTransformCustomDir = () => {
     return {
@@ -149,6 +150,8 @@ export const baseConfig = async ({
   let onMountedHooks: OnMountedHook[]
   let globalCss: string[]
   let staticImports: StaticImports
+  let sassVariables: Record<string, string>
+  let additionalData: string[]
 
   const plugins: UserConfig['plugins'] = [
     vuePlugin({
@@ -178,7 +181,7 @@ export const baseConfig = async ({
     //   // quasarDir: packageUrls.quasar
     // }),
     {
-      name: 'vitrify-virtual-modules',
+      name: 'vitrify-setup',
       enforce: 'post',
       config: async (config: VitrifyConfig, env) => {
         bootFunctions = config.vitrify?.bootFunctions || []
@@ -186,6 +189,30 @@ export const baseConfig = async ({
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
+        sassVariables = config.vitrify?.sass?.variables || {}
+        additionalData = config.vitrify?.sass?.additionalData || []
+
+        return {
+          css: {
+            preprocessorOptions: {
+              sass: {
+                additionalData: [
+                  ...Object.entries(sassVariables).map(
+                    ([key, value]) => `${key}: ${value}`
+                  ),
+                  ...additionalData
+                  // config.css?.preprocessorOptions?.sass.additionalData
+                ].join('\n')
+              }
+            }
+          }
+        }
+      },
+      configResolved: (config) => {
+        if (process.env.DEBUG) {
+          console.log(config.css?.preprocessorOptions?.sass.additionalData)
+          console.log(config.optimizeDeps)
+        }
       },
       resolveId(id) {
         if (VIRTUAL_MODULES.includes(id)) return id
@@ -223,6 +250,20 @@ export const baseConfig = async ({
     plugins.unshift({
       name: 'html-transform',
       enforce: 'pre',
+      config: (config: VitrifyConfig, env) => {
+        if (config.vitrify?.productName)
+          productName = config.vitrify?.productName
+      },
+      transform: (code, id) => {
+        if (id.endsWith('App.vue')) {
+          code =
+            code +
+            `<style lang="sass">
+// do not remove, required for additionalData import
+</style>`
+        }
+        return code
+      },
       transformIndexHtml: {
         enforce: 'pre',
         transform: (html) => {
@@ -322,13 +363,13 @@ export const baseConfig = async ({
               }
             }
     },
-    css: {
-      preprocessorOptions: {
-        sass: {
-          additionalData: [...sass].join('\n') + '\n'
-        }
-      }
-    },
+    // css: {
+    //   preprocessorOptions: {
+    //     sass: {
+    //       additionalData: sass ? [...sass].join('\n') : undefined
+    //     }
+    //   }
+    // },
     ssr: {
       // Create a SSR bundle
       noExternal: [
@@ -345,4 +386,4 @@ export const baseConfig = async ({
   return mergeConfig(config, vitrifyConfig)
 }
 
-export type { VitrifyConfig, VitrifyPlugin, VitrifyContext }
+export type { VitrifyConfig, VitrifyPlugin, VitrifyContext, BootFunction }

@@ -150,7 +150,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             // @ts-ignore
             const quasarPlugins = await import('virtual:quasar-plugins')
             // @ts-ignore
-            const directives = await import('quasar/directives')
+            const directives = await import('quasar/src/directives.js')
 
             app.use(
               staticImports.Quasar,
@@ -174,6 +174,9 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             },
             hooks: {
               onMounted: onMountedHooks
+            },
+            sass: {
+              additionalData: [`@import 'quasar/src/css/index.sass'`]
             }
           }
         }
@@ -325,19 +328,19 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             __QUASAR_SSR_CLIENT__: ssr === 'client',
             __QUASAR_SSR_PWA__: ssr === 'client' && pwa
           },
-          css: {
-            preprocessorOptions: {
-              sass: {
-                additionalData:
-                  [
-                    // ...extras.map(extra => `@import "@quasar/extras/${extra}/${extra}.css"`),
-                    // ...extras.map(extra => `@import ${new URL(`${extra}/${extra}.css`, urls?.packages?.['@quasar/extras']).pathname}`) || [],
-                    config.css?.preprocessorOptions?.sass?.additionalData,
-                    `@import 'quasar/src/css/index.sass'`
-                  ].join('\n') + '\n'
-              }
-            }
-          },
+          // css: {
+          //   preprocessorOptions: {
+          //     sass: {
+          //       additionalData: `@import 'quasar/src/css/index.sass'`
+          //       // [
+          //       //   // ...extras.map(extra => `@import "@quasar/extras/${extra}/${extra}.css"`),
+          //       //   // ...extras.map(extra => `@import ${new URL(`${extra}/${extra}.css`, urls?.packages?.['@quasar/extras']).pathname}`) || [],
+          //       //   // config.css?.preprocessorOptions?.sass?.additionalData,
+          //       //   `@import 'quasar/src/css/index.sass'`
+          //       // ].join('\n')
+          //     }
+          //   }
+          // },
           ssr: {
             noExternal: ['quasar']
           }
@@ -372,6 +375,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           export * from 'quasar/src/components.js';
           export * from 'quasar/src/composables.js';
           export * from 'quasar/src/directives.js';
+          export * from 'quasar/src/utils.js';
           export { default as Quasar } from 'quasar/src/vue-plugin.js'`
         }
         return null

@@ -8,17 +8,19 @@ export const getPkgJsonDir = (dir: URL): URL => {
   }
   return getPkgJsonDir(new URL('..', dir))
 }
-export const appDir = getPkgJsonDir(new URL(`file://${process.cwd()}/`))
-export const cliDir = getPkgJsonDir(new URL('./', import.meta.url))
-export const cliViteDir = new URL('src/vite/', cliDir)
-export const srcDir = new URL('src/', appDir)
+export const getAppDir = () =>
+  getPkgJsonDir(new URL(`file://${process.cwd()}/`))
+export const getCliDir = () => getPkgJsonDir(new URL('./', import.meta.url))
+export const getCliViteDir = (cliDir: URL) => new URL('src/vite/', cliDir)
+export const getSrcDir = (appDir: URL) => new URL('src/', appDir)
+export const getCwd = () => new URL(`file://${process.cwd()}/`)
 // export const quasarDir = getPkgJsonDir(new URL('./', await resolve('quasar', appDir.href)))
 
-export const parsePath = (path: string) => {
+export const parsePath = (path: string, basePath: URL) => {
   if (path) {
     if (path.slice(-1) !== '/') path += '/'
     if (path.startsWith('.')) {
-      return new URL(path, appDir)
+      return new URL(path, basePath)
     } else if (path) {
       return new URL(`file://${path}`)
     }
@@ -26,8 +28,11 @@ export const parsePath = (path: string) => {
   return
 }
 
-export const projectURLs = {
-  src: (path: string) => new URL(path, srcDir),
-  app: (path: string) => new URL(path, appDir),
-  cli: (path: string) => new URL(path, cliDir)
+export const getProjectURLs = (appDir: URL, cliDir: URL) => {
+  const srcDir = getSrcDir(appDir)
+  return {
+    src: (path: string) => new URL(path, srcDir),
+    app: (path: string) => new URL(path, appDir),
+    cli: (path: string) => new URL(path, cliDir)
+  }
 }

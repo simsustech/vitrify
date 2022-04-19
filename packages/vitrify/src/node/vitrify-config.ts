@@ -48,7 +48,10 @@ export interface VitrifyConfig extends UserConfig {
     /**
      * Global SASS variables
      */
-    sassVariables?: Record<string, string>
+    sass?: {
+      variables?: Record<string, string>
+      additionalData?: string[]
+    }
     fastify?: {
       /**
        * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.

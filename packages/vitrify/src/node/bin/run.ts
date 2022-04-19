@@ -1,9 +1,6 @@
-import { projectURLs } from '../app-urls.js'
 import { promises as fs } from 'fs'
 import readline from 'readline'
-const pkg = JSON.parse(
-  (await fs.readFile(projectURLs.cli('package.json'), 'utf-8')).toString()
-)
+import { getAppDir, getCliDir, getProjectURLs } from '../app-urls.js'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -14,11 +11,17 @@ export interface VitrifyContext {
   vitrify: {
     version: string
   }
-  projectURLs: typeof projectURLs
+  projectURLs: ReturnType<typeof getProjectURLs>
 }
 
 export async function run(filePath: string) {
   const { run } = await import(filePath)
+  const appDir = getAppDir()
+  const cliDir = getCliDir()
+  const projectURLs = getProjectURLs(appDir, cliDir)
+  const pkg = JSON.parse(
+    (await fs.readFile(projectURLs.cli('package.json'), 'utf-8')).toString()
+  )
 
   if (!run)
     throw new Error(
