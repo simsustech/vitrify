@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.2.1
+
+### Patch Changes
+
+- 58370de: Fix prerendering and add a frameworks folder
+- c03bb1c: Fix Quasar SSR injection and retrieval of product name from VitrifyConfig
+
 ## 0.2.0
 
 ### Minor Changes
