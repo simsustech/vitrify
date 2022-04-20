@@ -250,10 +250,6 @@ export const baseConfig = async ({
     plugins.unshift({
       name: 'html-transform',
       enforce: 'pre',
-      config: (config: VitrifyConfig, env) => {
-        if (config.vitrify?.productName)
-          productName = config.vitrify?.productName
-      },
       transform: (code, id) => {
         if (id.endsWith('App.vue')) {
           code =
@@ -281,6 +277,22 @@ export const baseConfig = async ({
           html = html
             .replace('<!--entry-script-->', entryScript)
             .replace('<!--product-name-->', productName)
+          return html
+        }
+      }
+    })
+
+    plugins.unshift({
+      name: 'product-name',
+      enforce: 'post',
+      config: (config: VitrifyConfig, env) => {
+        if (config.vitrify?.productName)
+          productName = config.vitrify?.productName
+      },
+      transformIndexHtml: {
+        enforce: 'post',
+        transform: (html) => {
+          html = html.replace('<!--product-name-->', productName)
           return html
         }
       }
@@ -341,6 +353,7 @@ export const baseConfig = async ({
           ? {
               input: [
                 new URL('ssr/entry-server.ts', frameworkDir).pathname,
+                new URL('ssr/prerender.ts', frameworkDir).pathname,
                 new URL('ssr/server.ts', frameworkDir).pathname
               ],
               output: {
