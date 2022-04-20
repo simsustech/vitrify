@@ -69,7 +69,7 @@ cli
           outDir: new URL('ssr/server/', baseOutDir).pathname
         })
         prerender = (
-          await import(new URL('ssr/server/prerender.js', appDir).pathname)
+          await import(new URL('ssr/server/prerender.mjs', baseOutDir).pathname)
         ).prerender
         prerender({
           outDir: new URL('static/', baseOutDir).pathname,
