@@ -103,8 +103,7 @@
   },
   "files": [
     "dist",
-    "src/node/frameworks",
-    "src/vite",
+    "src",
     "!dist/**/*.test.js",
     "!dist/**/test.js"
   ]
