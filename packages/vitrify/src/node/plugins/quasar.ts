@@ -376,7 +376,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           export * from 'quasar/src/composables.js';
           export * from 'quasar/src/directives.js';
           export * from 'quasar/src/utils.js';
-          export { default as Quasar } from 'quasar/src/vue-plugin.js'`
+          export { default as Quasar } from 'quasar/src/install-quasar.js'`
         }
         return null
       }
