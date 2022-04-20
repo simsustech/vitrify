@@ -103,7 +103,7 @@
   },
   "files": [
     "dist",
-    "src/node/helpers/ssr.ts",
+    "src/node/frameworks",
     "src/vite",
     "!dist/**/*.test.js",
     "!dist/**/test.js"

@@ -1,4 +1,4 @@
-import { fastifySsrPlugin } from '../../../node/vue/fastify-ssr-plugin.js'
+import { fastifySsrPlugin } from '../../../node/frameworks/vue/fastify-ssr-plugin.js'
 import ssrFunctions from 'virtual:ssr-functions'
 
 export { fastifySsrPlugin, ssrFunctions }

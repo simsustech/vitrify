@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
-import type { SsrFunction } from '../vitrify-config.js'
+import type { SsrFunction } from '../../vitrify-config.js'
 // import { setup } from 'virtual:fastify-setup'
 import { fastifySsrPlugin } from './fastify-ssr-plugin.js'
 // import { getPkgJsonDir } from '../app-urls.js'

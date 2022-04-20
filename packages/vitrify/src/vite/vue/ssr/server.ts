@@ -1,4 +1,4 @@
-import { createApp } from '../../../node/vue/server.js'
+import { createApp } from '../../../node/frameworks/vue/server.js'
 import { getAppDir } from '../../../node/app-urls.js'
 import { setup } from 'virtual:fastify-setup'
 import ssrFunctions from 'virtual:ssr-functions'

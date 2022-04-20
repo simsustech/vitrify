@@ -7,7 +7,7 @@ import fastifyStatic from 'fastify-static'
 import { readFileSync } from 'fs'
 // import { injectSsrContext } from '../helpers/ssr.js'
 import type { ViteDevServer } from 'vite'
-import type { SsrFunction } from '../vitrify-config.js'
+import type { SsrFunction } from '../../vitrify-config.js'
 
 export interface FastifySsrOptions {
   baseUrl?: string
