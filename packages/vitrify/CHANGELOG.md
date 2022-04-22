@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.2.4
+
+### Patch Changes
+
+- f3e278b: fix(vitrify): move unplugin-vue-components to dependencies
+
 ## 0.2.3
 
 ### Patch Changes
