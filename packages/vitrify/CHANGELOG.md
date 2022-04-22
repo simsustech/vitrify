@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.2.2
+
+### Patch Changes
+
+- f2fffed: vitrify: update package.json files
+
 ## 0.2.1
 
 ### Patch Changes
