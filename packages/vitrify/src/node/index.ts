@@ -364,6 +364,8 @@ export const baseConfig = async ({
                 manualChunks: (id) => {
                   if (id.includes('fastify-ssr-plugin')) {
                     return 'fastify-ssr-plugin'
+                  } else if (id.includes('prerender')) {
+                    return 'prerender'
                   } else if (id.includes('node_modules')) {
                     return 'vendor'
                   }
