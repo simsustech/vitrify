@@ -24,6 +24,8 @@ const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
     import('./plugins/quasar.js').then((module) => module.QuasarPlugin)
 }
 
+const manualChunks = ['prerender', 'fastify-ssr-plugin', 'server']
+
 export const VIRTUAL_MODULES = [
   'virtual:fastify-setup',
   'virtual:boot-functions',
@@ -362,10 +364,10 @@ export const baseConfig = async ({
                 chunkFileNames: '[name].mjs',
                 format: 'es',
                 manualChunks: (id) => {
-                  if (id.includes('fastify-ssr-plugin')) {
-                    return 'fastify-ssr-plugin'
-                  } else if (id.includes('prerender')) {
-                    return 'prerender'
+                  if (id.includes('vitrify/src/vite/')) {
+                    const name = id.split('/').at(-1)?.split('.').at(0)
+                    console.log(name)
+                    if (manualChunks.includes(id)) return name
                   } else if (id.includes('node_modules')) {
                     return 'vendor'
                   }
