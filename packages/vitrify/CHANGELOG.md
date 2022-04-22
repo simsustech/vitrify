@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.2.3
+
+### Patch Changes
+
+- e27cba0: fix(ssr): create a separate chunk for prerender file
+
 ## 0.2.2
 
 ### Patch Changes
