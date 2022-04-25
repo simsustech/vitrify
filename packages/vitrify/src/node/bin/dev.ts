@@ -28,7 +28,7 @@ export async function createServer({
   const cliDir = getCliDir()
   if (!appDir) appDir = getAppDir()
   const { fastifySsrPlugin } = await import(
-    `../${framework}/fastify-ssr-plugin.js`
+    `../frameworks/${framework}/fastify-ssr-plugin.js`
   )
 
   /**
