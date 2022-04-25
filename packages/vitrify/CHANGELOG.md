@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.2.5
+
+### Patch Changes
+
+- 2c36071: fix(vitrify): only create manual chunks for files inside src/vite
+
 ## 0.2.4
 
 ### Patch Changes
