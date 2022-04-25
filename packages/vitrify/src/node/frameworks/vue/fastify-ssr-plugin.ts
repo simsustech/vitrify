@@ -7,7 +7,7 @@ import fastifyStatic from 'fastify-static'
 import { readFileSync } from 'fs'
 // import { injectSsrContext } from '../helpers/ssr.js'
 import type { ViteDevServer } from 'vite'
-import type { SsrFunction } from '../../vitrify-config.js'
+import type { OnRenderedHook, SsrFunction } from '../../vitrify-config.js'
 
 export interface FastifySsrOptions {
   baseUrl?: string
@@ -19,7 +19,7 @@ export interface FastifySsrOptions {
   cliDir?: URL
   appDir?: URL
   productName?: string
-  ssrFunctions?: SsrFunction[]
+  onRenderedHooks?: OnRenderedHook[]
 }
 
 const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
@@ -119,8 +119,8 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         .replace(`<!--preload-links-->`, preloadLinks)
         .replace(`<!--app-html-->`, appHtml)
 
-      if (options.ssrFunctions?.length) {
-        for (const ssrFunction of options.ssrFunctions) {
+      if (options.onRenderedHooks?.length) {
+        for (const ssrFunction of options.onRenderedHooks) {
           html = ssrFunction(html, ssrContext)
         }
       }

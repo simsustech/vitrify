@@ -4,6 +4,7 @@ import Components from 'unplugin-vue-components/vite'
 // import { prepareQuasarConf } from './quasar-conf-file.js'
 import type {
   BootFunction,
+  OnBootHook,
   OnMountedHook,
   VitrifyConfig
 } from '../vitrify-config.js'
@@ -143,7 +144,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           }
         ]
 
-        const bootFunctions: BootFunction[] = [
+        const onBootHooks: OnBootHook[] = [
           async ({ app, ssrContext, staticImports }) => {
             // @ts-ignore
             // const quasarVuePlugin = (await import('quasar/vue-plugin')).default
@@ -166,14 +167,14 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         return {
           vitrify: {
             urls,
-            bootFunctions,
-            ssrFunctions: [injectSsrContext],
             globalCss,
             staticImports: {
               quasar: ['Quasar']
             },
             hooks: {
-              onMounted: onMountedHooks
+              onBoot: onBootHooks,
+              onMounted: onMountedHooks,
+              onRendered: [injectSsrContext]
             },
             sass: {
               additionalData: [`@import 'quasar/src/css/index.sass'`]

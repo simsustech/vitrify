@@ -1,8 +1,8 @@
 export default function ({ mode, command }) {
   return {
     vitrify: {
-      fastify: {
-        // Fastify configuration for SSR
+      hooks: {
+        // Vitrify hooks
       },
       sassVariables: {
         $primary: '#000000'

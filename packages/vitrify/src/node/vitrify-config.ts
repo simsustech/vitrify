@@ -12,6 +12,15 @@ export type BootFunction = ({
   ssrContext: Record<string, unknown>
   staticImports: Record<string, any>
 }) => Promise<void> | void
+export type OnBootHook = ({
+  app,
+  ssrContext,
+  staticImports
+}: {
+  app: any
+  ssrContext: Record<string, unknown>
+  staticImports: Record<string, any>
+}) => Promise<void> | void
 export type OnMountedHook = (
   instance: ComponentInternalInstance
 ) => Promise<void> | void
@@ -20,6 +29,11 @@ export type SsrFunction = (
   html: string,
   ssrContext: Record<string, any>
 ) => string
+export type OnRenderedHook = (
+  html: string,
+  ssrContext: Record<string, any>
+) => string
+export type OnSetupHook = (fastify: FastifyInstance) => any
 
 export interface VitrifyConfig extends UserConfig {
   vitrify?: {
@@ -30,20 +44,32 @@ export interface VitrifyConfig extends UserConfig {
     /**
      * Functions which run after initializing the app
      */
-    bootFunctions?: BootFunction[]
+    // bootFunctions?: BootFunction[]
     /**
      * Functions which run on the server after rendering the app
      */
-    ssrFunctions?: SsrFunction[]
+    // ssrFunctions?: SsrFunction[]
     /**
      * Static imports in the app: packageName: [imports]
      */
     staticImports?: StaticImports
     hooks?: {
       /**
+       * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.
+       */
+      onSetup?: OnSetupHook[]
+      /**
        * Functions which run in the onMounted hook of the app
        */
-      onMounted: OnMountedHook[]
+      onMounted?: OnMountedHook[]
+      /**
+       * Functions which run after initializing the app
+       */
+      onBoot?: OnBootHook[]
+      /**
+       * Functions which run after rendering the app (SSR)
+       */
+      onRendered?: OnRenderedHook[]
     }
     /**
      * Global SASS variables
@@ -52,12 +78,12 @@ export interface VitrifyConfig extends UserConfig {
       variables?: Record<string, string>
       additionalData?: string[]
     }
-    fastify?: {
-      /**
-       * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.
-       */
-      setup: (fastify: FastifyInstance) => any
-    }
+    // fastify?: {
+    //   /**
+    //    * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.
+    //    */
+    //   setup: (fastify: FastifyInstance) => any
+    // }
     /**
      * Product name of the application. Will be used for the HTML title tag
      */

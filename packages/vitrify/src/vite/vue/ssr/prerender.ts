@@ -1,4 +1,4 @@
 import { prerender } from '../../../node/frameworks/vue/prerender.js'
-import ssrFunctions from 'virtual:ssr-functions'
+import { onRendered } from 'virtual:vitrify-hooks'
 
-export { prerender, ssrFunctions }
+export { prerender, onRendered }

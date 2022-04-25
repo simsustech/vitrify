@@ -1,7 +1,7 @@
 import { fastifySsrPlugin } from '../../../node/frameworks/vue/fastify-ssr-plugin.js'
-import ssrFunctions from 'virtual:ssr-functions'
+import { onRendered } from 'virtual:vitrify-hooks'
 
-export { fastifySsrPlugin, ssrFunctions }
+export { fastifySsrPlugin, onRendered }
 
 // import { FastifyPluginCallback, FastifyRequest, FastifyReply } from 'fastify'
 // import fastifyStatic from 'fastify-static'

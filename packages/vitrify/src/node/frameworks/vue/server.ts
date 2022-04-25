@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
-import type { SsrFunction } from '../../vitrify-config.js'
+import type { OnRenderedHook, SsrFunction } from '../../vitrify-config.js'
 // import { setup } from 'virtual:fastify-setup'
 import { fastifySsrPlugin } from './fastify-ssr-plugin.js'
 // import { getPkgJsonDir } from '../app-urls.js'
@@ -9,12 +9,12 @@ export const createApp = ({
   setup,
   appDir,
   baseUrl,
-  ssrFunctions
+  onRenderedHooks
 }: {
   setup: (fastify: FastifyInstance) => any
   appDir: URL
   baseUrl?: string
-  ssrFunctions?: SsrFunction[]
+  onRenderedHooks?: OnRenderedHook[]
 }) => {
   const app = fastify({
     logger: true
@@ -23,7 +23,7 @@ export const createApp = ({
   app.register(fastifySsrPlugin, {
     baseUrl,
     appDir,
-    ssrFunctions
+    onRenderedHooks
   })
 
   setup(app)

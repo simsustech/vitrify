@@ -4,14 +4,15 @@ import {
   createSSRApp,
   createApp as createVueApp,
   h,
-  onMounted,
+  onMounted as onMountedVue,
   getCurrentInstance
 } from 'vue'
 // import { Quasar, useQuasar } from 'quasar'
 // import quasarPlugins from 'virtual:quasar-plugins'
 // import bootFunctions from 'virtual:quasar-boot'
-import bootFunctions from 'virtual:boot-functions'
-import onMountedHooks from 'virtual:on-mounted-hooks'
+import { onBoot, onMounted } from 'virtual:vitrify-hooks'
+// import bootFunctions from 'virtual:boot-functions'
+// import onMountedHooks from 'virtual:on-mounted-hooks'
 // import 'virtual:quasar-extras'
 // import * as directives from 'quasar/directives'
 import routes from 'src/router/routes'
@@ -34,8 +35,8 @@ export async function createApp(
     setup(props) {
       const instance = getCurrentInstance()
 
-      onMounted(async () => {
-        for (let fn of onMountedHooks) {
+      onMountedVue(async () => {
+        for (let fn of onMounted) {
           await fn(instance, staticImports)
         }
         // onAppMounted()
@@ -81,7 +82,7 @@ export async function createApp(
     app.provide(key, provide[key])
   }
 
-  for (let fn of bootFunctions) {
+  for (let fn of onBoot) {
     await fn({ app, ssrContext, staticImports })
   }
 

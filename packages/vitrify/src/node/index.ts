@@ -10,7 +10,9 @@ import type {
   BootFunction,
   OnMountedHook,
   VitrifyConfig,
-  SsrFunction
+  OnRenderedHook,
+  OnBootHook,
+  OnSetupHook
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
@@ -27,10 +29,11 @@ const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
 const manualChunks = ['prerender', 'fastify-ssr-plugin', 'server']
 
 export const VIRTUAL_MODULES = [
-  'virtual:fastify-setup',
-  'virtual:boot-functions',
-  'virtual:ssr-functions',
-  'virtual:on-mounted-hooks',
+  // 'virtual:fastify-setup',
+  // 'virtual:boot-functions',
+  // 'virtual:ssr-functions',
+  // 'virtual:on-mounted-hooks',
+  'virtual:vitrify-hooks',
   'virtual:global-css',
   'virtual:static-imports'
 ]
@@ -124,8 +127,8 @@ export const baseConfig = async ({
     })
   )
 
-  const fastifySetup =
-    vitrifyConfig.vitrify?.fastify?.setup || ((fastify: FastifyInstance) => {})
+  // const fastifySetup =
+  //   vitrifyConfig.vitrify?.hooks?.setup || ((fastify: FastifyInstance) => {})
 
   const ssrTransformCustomDir = () => {
     return {
@@ -147,9 +150,10 @@ export const baseConfig = async ({
     }
   }
 
-  let bootFunctions: BootFunction[]
-  let ssrFunctions: SsrFunction[]
+  let onBootHooks: OnBootHook[]
+  let onRenderedHooks: OnRenderedHook[]
   let onMountedHooks: OnMountedHook[]
+  let onSetupHooks: OnSetupHook[]
   let globalCss: string[]
   let staticImports: StaticImports
   let sassVariables: Record<string, string>
@@ -186,9 +190,10 @@ export const baseConfig = async ({
       name: 'vitrify-setup',
       enforce: 'post',
       config: async (config: VitrifyConfig, env) => {
-        bootFunctions = config.vitrify?.bootFunctions || []
-        ssrFunctions = config.vitrify?.ssrFunctions || []
+        onBootHooks = config.vitrify?.hooks?.onBoot || []
+        onRenderedHooks = config.vitrify?.hooks?.onRendered || []
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
+        onSetupHooks = config?.vitrify?.hooks?.onSetup || []
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
         sassVariables = config.vitrify?.sass?.variables || {}
@@ -221,20 +226,30 @@ export const baseConfig = async ({
         return
       },
       load(id) {
-        if (id === 'virtual:fastify-setup') {
-          return `export const setup = ${String(fastifySetup)}`
-        } else if (id === 'virtual:boot-functions') {
-          return `export default [${bootFunctions
+        // if (id === 'virtual:fastify-setup') {
+        //   return `export const setup = ${String(fastifySetup)}`
+        //   // } else if (id === 'virtual:boot-functions') {
+        //   //   return `export default [${onBootHooks
+        //   //     .map((fn) => `${String(fn)}`)
+        //   //     .join(', ')}]`
+        // } else
+        if (id === 'virtual:vitrify-hooks') {
+          return `export const onBoot = [${onBootHooks
             .map((fn) => `${String(fn)}`)
-            .join(', ')}]`
-        } else if (id === 'virtual:ssr-functions') {
-          return `export default [${ssrFunctions
-            .map((fn) => `${String(fn)}`)
-            .join(', ')}]`
-        } else if (id === 'virtual:on-mounted-hooks') {
-          return `export default [${onMountedHooks
-            .map((fn) => `${String(fn)}`)
-            .join(', ')}]`
+            .join(', ')}]
+            export const onMounted = [${onMountedHooks
+              .map((fn) => `${String(fn)}`)
+              .join(', ')}]
+            export const onRendered = [${onRenderedHooks
+              .map((fn) => `${String(fn)}`)
+              .join(', ')}]
+            export const onSetup = [${onSetupHooks
+              .map((fn) => `${String(fn)}`)
+              .join(', ')}]`
+          // } else if (id === 'virtual:on-mounted-hooks') {
+          //   return `export default [${onMountedHooks
+          //     .map((fn) => `${String(fn)}`)
+          //     .join(', ')}]`
         } else if (id === 'virtual:global-css') {
           return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
         } else if (id === 'virtual:static-imports') {
