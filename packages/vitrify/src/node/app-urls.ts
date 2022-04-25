@@ -14,7 +14,6 @@ export const getCliDir = () => getPkgJsonDir(new URL('./', import.meta.url))
 export const getCliViteDir = (cliDir: URL) => new URL('src/vite/', cliDir)
 export const getSrcDir = (appDir: URL) => new URL('src/', appDir)
 export const getCwd = () => new URL(`file://${process.cwd()}/`)
-// export const quasarDir = getPkgJsonDir(new URL('./', await resolve('quasar', appDir.href)))
 
 export const parsePath = (path: string, basePath: URL) => {
   if (path) {

@@ -84,51 +84,7 @@ export async function createServer({
       vite,
       productName
     })
-    // await app.register(middie)
-    // app.use(vite.middlewares)
 
-    // app.get('*', async (req, res) => {
-    //   try {
-    //     // const url = req.originalUrl
-    //     const url = req.raw.url
-    //     let template
-    //     let render
-    //     const ssrContext = {
-    //       req,
-    //       res
-    //     }
-    //     // always read fresh template in dev
-    //     // template = readFileSync(resolve('index.html'), 'utf-8')
-    //     template = readFileSync(new URL('index.html', cliDir)).toString()
-
-    //     // template = await vite.transformIndexHtml(url, template)
-    //     const entryUrl = new URL('ssr/entry-server.ts', cliDir).pathname
-    //     render = (await vite.ssrLoadModule(entryUrl)).render
-    //     let manifest
-    //     // TODO: https://github.com/vitejs/vite/issues/2282
-    //     try {
-    //       manifest = {}
-    //     } catch (e) {
-    //       manifest = {}
-    //     }
-
-    //     const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
-    //     const html = template
-    //       .replace(`<!--preload-links-->`, preloadLinks)
-    //       .replace(`<!--app-html-->`, appHtml)
-    //       .replace('<!--product-name-->', productName)
-
-    //     res.code(200)
-    //     res.type('text/html')
-    //     res.send(html)
-    //     // res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
-    //   } catch (e: any) {
-    //     console.error(e.stack)
-    //     vite && vite.ssrFixStacktrace(e)
-    //     res.code(500)
-    //     res.send(e.stack)
-    //   }
-    // })
     await app.listen(port || 3000, host)
     server = app.server
   } else {

@@ -7,14 +7,7 @@ import {
   onMounted as onMountedVue,
   getCurrentInstance
 } from 'vue'
-// import { Quasar, useQuasar } from 'quasar'
-// import quasarPlugins from 'virtual:quasar-plugins'
-// import bootFunctions from 'virtual:quasar-boot'
 import { onBoot, onMounted } from 'virtual:vitrify-hooks'
-// import bootFunctions from 'virtual:boot-functions'
-// import onMountedHooks from 'virtual:on-mounted-hooks'
-// import 'virtual:quasar-extras'
-// import * as directives from 'quasar/directives'
 import routes from 'src/router/routes'
 import 'virtual:global-css'
 import * as staticImports from 'virtual:static-imports'
@@ -39,9 +32,6 @@ export async function createApp(
         for (let fn of onMounted) {
           await fn(instance, staticImports)
         }
-        // onAppMounted()
-        // const { proxy: { $q } } = getCurrentInstance()
-        // $q.onSSRHydrated !== void 0 && $q.onSSRHydrated()
       })
 
       return () => h(App, props)
@@ -63,11 +53,6 @@ export async function createApp(
 
     next()
   })
-
-  // app.use(Quasar, {
-  //   plugins: quasarPlugins,
-  //   directives
-  // }, ssrContext)
 
   let provide: Record<string, unknown> = {}
   if (import.meta.env.SSR) {

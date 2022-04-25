@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import { routesToPaths } from '../../helpers/routes.js'
-import type { OnRenderedHook, SsrFunction } from '../../vitrify-config.js'
+import type { OnRenderedHook } from '../../vitrify-config.js'
 
 export const prerender = async ({
   outDir,

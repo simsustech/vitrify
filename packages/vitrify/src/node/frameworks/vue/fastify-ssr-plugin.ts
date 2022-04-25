@@ -5,9 +5,8 @@ import type {
 } from 'fastify'
 import fastifyStatic from 'fastify-static'
 import { readFileSync } from 'fs'
-// import { injectSsrContext } from '../helpers/ssr.js'
 import type { ViteDevServer } from 'vite'
-import type { OnRenderedHook, SsrFunction } from '../../vitrify-config.js'
+import type { OnRenderedHook } from '../../vitrify-config.js'
 
 export interface FastifySsrOptions {
   baseUrl?: string
@@ -35,19 +34,15 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
 
     fastify.get('*', async (req, res) => {
       try {
-        // const url = req.originalUrl
         const url = req.raw.url
         const ssrContext = {
           req,
           res
         }
-        // always read fresh template in dev
-        // template = readFileSync(resolve('index.html'), 'utf-8')
         const template = readFileSync(
           new URL('index.html', options.cliDir)
         ).toString()
 
-        // template = await vite.transformIndexHtml(url, template)
         const entryUrl = new URL('ssr/entry-server.ts', options.cliDir).pathname
         const render = (await options.vite!.ssrLoadModule(entryUrl)).render
         let manifest
@@ -93,9 +88,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         provide
       }
 
-      // template = readFileSync(new URL('../client/index.html', import.meta.url).pathname).toString()
-      // manifest = JSON.parse(readFileSync(new URL('../client/ssr-manifest.json', import.meta.url)).toString())
-      // render = (await import(new URL('./entry-server.mjs', import.meta.url).pathname)).render
       const template = readFileSync(
         new URL('./dist/ssr/client/index.html', options.appDir).pathname
       ).toString()

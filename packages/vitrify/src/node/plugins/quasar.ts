@@ -76,43 +76,12 @@ export const injectSsrContext = (
       }${end}${ssrContext._meta.bodyTags || ''}`
     })
 
-// export interface Configuration {
-//   ssr?: 'server' | 'client' | 'ssg' | false
-// }
-
 export const QuasarPlugin: VitrifyPlugin = async ({
   ssr = false,
   pwa = false
 }): Promise<Plugin[]> => {
-  // const extraPlugins: Plugin[] = []
-  // const ctx = {
-  //   prod: process.env.MODE === 'production',
-  //   dev: process.env.MODE === 'development',
-  //   mode: {
-  //     ssr: !!ssr,
-  //     pwa: !!pwa
-  //   }
-  // }
-
-  // let bootFilePaths: Record<string, any> = {}
-  // let components: string[] = []
   let plugins: string[] = []
-  // let css: string[] = []
-  let extras: string[] = []
   return [
-    // {
-    //   name: 'legacy-support',
-    //   enforce: 'pre',
-    //   transform (code, id) {
-    //     /**
-    //      * ESM does not resolve an import to .default when there are multiple exports. The following is required to make the VuePlugin import of QCalendar work.
-    //      */
-    //     if (code.includes('app.use(VuePlugin)')) {
-    //       code = code.replace(/app\.use\(VuePlugin\)/g, `app.use(VuePlugin.install ? VuePlugin : VuePlugin.default)`)
-    //     }
-    //     return code
-    //   }
-    // },
     Components({
       resolvers: [QuasarResolver()]
     }),
@@ -146,8 +115,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
 
         const onBootHooks: OnBootHook[] = [
           async ({ app, ssrContext, staticImports }) => {
-            // @ts-ignore
-            // const quasarVuePlugin = (await import('quasar/vue-plugin')).default
             // @ts-ignore
             const quasarPlugins = await import('virtual:quasar-plugins')
             // @ts-ignore
@@ -186,22 +153,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
     {
       name: 'vite-plugin-quasar',
       enforce: 'post',
-      // transformIndexHtml: {
-      //   enforce: 'post',
-      //   transform: (html) => {
-      //     return html.replace(
-      //       '<!--product-name-->',
-      //       productName
-      //     )
-      //   }
-      // },
       config: async (config: VitrifyConfig, env) => {
-        // let appDir: URL
-        // let cliDir: URL
-        // let cwd: URL
-        // let quasarDir: URL
-        // let quasarConf: QuasarConf | undefined
-
         const { quasar: quasarConf, vitrify: { urls } = {} } = config
 
         const quasarPkgJsonPath = new URL(
@@ -211,33 +163,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         const { version } = JSON.parse(
           readFileSync(quasarPkgJsonPath, { encoding: 'utf-8' })
         )
-
-        // if (quasarConf?.boot) {
-        //   bootFilePaths = (quasarConf.boot as (Record<string, any> | string)[])
-        //     .filter(entry => {
-        //       if (typeof entry === 'object') return (entry.server && (ssr === 'server'))
-        //       else if (entry !== '') return true
-        //     })
-        //     .map(entry => {
-        //       if (typeof entry === 'string') return entry
-        //       else if (typeof entry === 'object') return entry.path
-        //     })
-        //     .reduce((acc, entry) => {
-        //       if (entry[0] === '~') {
-        //         const split = entry.substring(1).split('/')
-        //         const name = split[0].replace(/[|&;$%@"<>()+,]/g, "");
-        //         acc[name] = {
-        //           path: new URL(`node_modules/${entry.substring(1)}`, urls?.app).pathname
-        //         }
-        //       } else {
-        //         const name = entry.split('.')[0]
-        //         acc[name] = {
-        //           path: `src/boot/${entry}`
-        //         }
-        //       }
-        //       return acc
-        //     }, {})
-        // }
 
         /**
          * All components should have been auto-imported
@@ -249,14 +174,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           ]
           plugins = quasarConf?.framework.plugins
         }
-
-        // css = (quasarConf?.css || []).map((v => {
-        //   if (v[0] === '~') {
-        //     return v.slice(1)
-        //   }
-        //   return v
-        // })).map((v) => `@import '${v}'`)
-        extras = quasarConf?.extras || []
 
         return {
           resolve: {
@@ -303,11 +220,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                 find: 'quasar/src',
                 replacement: new URL('src/', urls?.packages?.quasar).pathname
               },
-              // ...extras.map(extra => ({
-              //   find: `@quasar/extras/${extra}/${extra}.css`,
-              //   replacement: new URL(`${extra}/${extra}.css`, urls?.packages?.['@quasar/extras']).pathname
-              // })
-              // ),
               {
                 find: 'quasar',
                 replacement: new URL('src/', urls?.packages?.quasar).pathname
@@ -317,8 +229,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                 replacement: new URL('.', urls?.packages?.['@quasar/extras'])
                   .pathname
               }
-              // { find: new RegExp('^quasar$'), replacement: new URL('src/index.all.js', urls?.packages?.quasar).pathname },
-              // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' },
             ]
           },
           define: {
@@ -329,19 +239,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             __QUASAR_SSR_CLIENT__: ssr === 'client',
             __QUASAR_SSR_PWA__: ssr === 'client' && pwa
           },
-          // css: {
-          //   preprocessorOptions: {
-          //     sass: {
-          //       additionalData: `@import 'quasar/src/css/index.sass'`
-          //       // [
-          //       //   // ...extras.map(extra => `@import "@quasar/extras/${extra}/${extra}.css"`),
-          //       //   // ...extras.map(extra => `@import ${new URL(`${extra}/${extra}.css`, urls?.packages?.['@quasar/extras']).pathname}`) || [],
-          //       //   // config.css?.preprocessorOptions?.sass?.additionalData,
-          //       //   `@import 'quasar/src/css/index.sass'`
-          //       // ].join('\n')
-          //     }
-          //   }
-          // },
           ssr: {
             noExternal: ['quasar']
           }

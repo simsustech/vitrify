@@ -2,7 +2,6 @@ import vuePlugin from '@vitejs/plugin-vue'
 import type { InlineConfig, UserConfig } from 'vite'
 import { mergeConfig } from 'vite'
 import { readFileSync } from 'fs'
-import { QuasarPlugin } from './plugins/quasar.js'
 import builtinModules from 'builtin-modules'
 import { resolve } from 'import-meta-resolve'
 import type {
@@ -16,7 +15,6 @@ import type {
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
-import type { FastifyInstance } from 'fastify'
 import { getPkgJsonDir } from './app-urls.js'
 
 const serverModules = ['fastify', 'middie']
@@ -29,10 +27,6 @@ const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
 const manualChunks = ['prerender', 'fastify-ssr-plugin', 'server']
 
 export const VIRTUAL_MODULES = [
-  // 'virtual:fastify-setup',
-  // 'virtual:boot-functions',
-  // 'virtual:ssr-functions',
-  // 'virtual:on-mounted-hooks',
   'virtual:vitrify-hooks',
   'virtual:global-css',
   'virtual:static-imports'
@@ -64,16 +58,8 @@ export const baseConfig = async ({
   const cwd = getCwd()
   const cliDir = getCliDir()
   const cliViteDir = getCliViteDir(cliDir)
-  // const {
-  //   appDir: tempAppDir,
-  //   cliDir,
-  //   cliViteDir,
-  //   srcDir
-  // } = await import('./app-urls.js')
-  // const cwd = appDir || tempAppDir
   const frameworkDir = new URL(`${framework}/`, cliViteDir)
 
-  // const localPackages = ['vue', 'vue-router', 'quasar']
   const localPackages = ['vue', 'vue-router']
   const cliPackages = ['vitest']
   const packageUrls: Record<string, URL> = {}
@@ -89,18 +75,6 @@ export const baseConfig = async ({
         new URL(await resolve(val, cliDir!.href))
       )
   })()
-
-  // if (appDir) {
-  //   srcDir = new URL('src/', appDir);
-  //   quasarDir = new URL(await resolve('quasar/', appDir.href));
-  //   ({ appDir: cwd, cliDir } = await import('./app-urls.js'))
-  // } else {
-  //   ({ appDir, cliDir, srcDir, quasarDir } = await import('./app-urls.js'))
-  //   cwd = appDir
-  // }
-  // vueDir = new URL('./', await resolve('vue', appDir.href));
-  // vueRouterDir = new URL('../', await resolve('vue-router', appDir.href));
-  // vitestDir = new URL('../', await resolve('vitest', cliDir.href));
 
   if (!publicDir) publicDir = new URL('public/', appDir)
   /**
@@ -126,9 +100,6 @@ export const baseConfig = async ({
       encoding: 'utf-8'
     })
   )
-
-  // const fastifySetup =
-  //   vitrifyConfig.vitrify?.hooks?.setup || ((fastify: FastifyInstance) => {})
 
   const ssrTransformCustomDir = () => {
     return {
@@ -181,11 +152,6 @@ export const baseConfig = async ({
       }
     }),
     ...frameworkPlugins,
-    // await QuasarPlugin({
-    //   ssr: ssr,
-    //   pwa: pwa
-    //   // quasarDir: packageUrls.quasar
-    // }),
     {
       name: 'vitrify-setup',
       enforce: 'post',
@@ -226,13 +192,6 @@ export const baseConfig = async ({
         return
       },
       load(id) {
-        // if (id === 'virtual:fastify-setup') {
-        //   return `export const setup = ${String(fastifySetup)}`
-        //   // } else if (id === 'virtual:boot-functions') {
-        //   //   return `export default [${onBootHooks
-        //   //     .map((fn) => `${String(fn)}`)
-        //   //     .join(', ')}]`
-        // } else
         if (id === 'virtual:vitrify-hooks') {
           return `export const onBoot = [${onBootHooks
             .map((fn) => `${String(fn)}`)
@@ -246,10 +205,6 @@ export const baseConfig = async ({
             export const onSetup = [${onSetupHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]`
-          // } else if (id === 'virtual:on-mounted-hooks') {
-          //   return `export default [${onMountedHooks
-          //     .map((fn) => `${String(fn)}`)
-          //     .join(', ')}]`
         } else if (id === 'virtual:global-css') {
           return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
         } else if (id === 'virtual:static-imports') {
@@ -322,9 +277,6 @@ export const baseConfig = async ({
     { find: 'cwd', replacement: cwd.pathname },
     { find: 'boot', replacement: new URL('boot/', srcDir).pathname },
     { find: 'assets', replacement: new URL('assets/', srcDir).pathname },
-    // ...Object.entries(packageUrls).map(([key, value]) => ({
-    //   find: key, replacement: value.pathname
-    // })),
     { find: 'vue', replacement: packageUrls['vue'].pathname },
     { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
     { find: 'vitrify', replacement: cliDir.pathname }
@@ -341,7 +293,6 @@ export const baseConfig = async ({
     vitrify: {
       productName,
       urls: {
-        // @ts-ignore
         app: appDir,
         cli: cliDir,
         src: srcDir,
@@ -395,13 +346,6 @@ export const baseConfig = async ({
               }
             }
     },
-    // css: {
-    //   preprocessorOptions: {
-    //     sass: {
-    //       additionalData: sass ? [...sass].join('\n') : undefined
-    //     }
-    //   }
-    // },
     ssr: {
       // Create a SSR bundle
       noExternal: [

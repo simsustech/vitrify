@@ -42,14 +42,6 @@ export interface VitrifyConfig extends UserConfig {
      */
     globalCss?: string[]
     /**
-     * Functions which run after initializing the app
-     */
-    // bootFunctions?: BootFunction[]
-    /**
-     * Functions which run on the server after rendering the app
-     */
-    // ssrFunctions?: SsrFunction[]
-    /**
      * Static imports in the app: packageName: [imports]
      */
     staticImports?: StaticImports
@@ -78,12 +70,6 @@ export interface VitrifyConfig extends UserConfig {
       variables?: Record<string, string>
       additionalData?: string[]
     }
-    // fastify?: {
-    //   /**
-    //    * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.
-    //    */
-    //   setup: (fastify: FastifyInstance) => any
-    // }
     /**
      * Product name of the application. Will be used for the HTML title tag
      */
