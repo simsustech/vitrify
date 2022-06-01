@@ -19,7 +19,7 @@ export type OnBootHook = ({
 }: {
   app: any
   ssrContext: Record<string, unknown>
-  staticImports: Record<string, any>
+  staticImports?: Record<string, any>
 }) => Promise<void> | void
 export type OnMountedHook = (
   instance: ComponentInternalInstance
@@ -33,8 +33,11 @@ export type OnRenderedHook = (
   html: string,
   ssrContext: Record<string, any>
 ) => string
-export type OnSetupHook = (fastify: FastifyInstance) => any
-
+// export type OnSetupHook = (
+//   fastify: FastifyInstance,
+//   staticImports?: Record<string, any>
+// ) => any
+export type OnSetupFile = URL
 export interface VitrifyConfig extends UserConfig {
   vitrify?: {
     /**
@@ -49,7 +52,7 @@ export interface VitrifyConfig extends UserConfig {
       /**
        * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.
        */
-      onSetup?: OnSetupHook[]
+      onSetup?: OnSetupFile[]
       /**
        * Functions which run in the onMounted hook of the app
        */

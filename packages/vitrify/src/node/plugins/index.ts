@@ -5,7 +5,7 @@ export type VitrifyPlugin = ({
   mode,
   command
 }: {
-  ssr?: 'server' | 'client' | 'ssg' | false
+  ssr?: 'server' | 'client' | 'ssg' | 'fastify' | false
   pwa?: boolean
   mode?: 'production' | 'development'
   command?: 'build' | 'dev' | 'test'

@@ -3,7 +3,7 @@ import App from './App.vue'
 import { Quasar } from 'quasar'
 import plugins from 'virtual:quasar-plugins'
 import createRouter from './router/index'
-import 'virtual:quasar-extras'
+// import 'virtual:quasar-extras'
 
 const router = createRouter()
 

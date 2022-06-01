@@ -9,7 +9,6 @@ import {
 } from 'vue'
 import { onBoot, onMounted } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
-import 'virtual:global-css'
 import * as staticImports from 'virtual:static-imports'
 
 interface ssrContext {

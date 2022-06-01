@@ -45,6 +45,13 @@ cli
           outDir: new URL('spa/', baseOutDir).pathname
         })
         break
+      case 'fastify':
+        await build({
+          ssr: 'fastify',
+          ...args,
+          outDir: new URL('server/', baseOutDir).pathname
+        })
+        break
       case 'ssr':
         await build({
           ssr: 'client',
@@ -96,6 +103,7 @@ cli
     { default: '127.0.0.1' }
   )
   .option('--appDir [appDir]', 'Application directory')
+  .option('--app [app]', 'Fastify app instance path')
   .option('--publicDir [publicDir]', 'Public directory')
   .action(async (options) => {
     let server: Server
@@ -105,12 +113,28 @@ cli
     }
     const { createServer } = await import('./dev.js')
     const cwd = (await import('../app-urls.js')).getCwd()
+    let app
+    const appPath = parsePath(options.app, cwd)?.pathname
+    if (appPath) {
+      app = await import(appPath)
+    }
+
     switch (options.mode) {
       case 'ssr':
         ;({ server, vite } = await createServer({
           mode: 'ssr',
           host: options.host,
           appDir: parsePath(options.appDir, cwd),
+          app,
+          publicDir: parsePath(options.publicDir, cwd)
+        }))
+        break
+      case 'fastify':
+        ;({ server, vite } = await createServer({
+          mode: 'fastify',
+          host: options.host,
+          appDir: parsePath(options.appDir, cwd),
+          app,
           publicDir: parsePath(options.publicDir, cwd)
         }))
         break

@@ -1,18 +1,26 @@
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
-import type { OnRenderedHook } from '../../vitrify-config.js'
-import { fastifySsrPlugin } from './fastify-ssr-plugin.js'
+import type { ViteDevServer } from 'vite'
+import { getCliDir, getCliViteDir } from '../../app-urls.js'
+import type { OnRenderedHook, OnSetupFile } from '../../vitrify-config.js'
+import type { FastifySsrPlugin } from './fastify-ssr-plugin.js'
 
 export const createApp = ({
-  setup,
+  onSetup,
   appDir,
   baseUrl,
-  onRenderedHooks
+  onRendered,
+  fastifySsrPlugin,
+  vitrifyDir,
+  mode
 }: {
-  setup: (fastify: FastifyInstance) => any
+  onSetup: OnSetupFile[]
   appDir: URL
   baseUrl?: string
-  onRenderedHooks?: OnRenderedHook[]
+  onRendered?: OnRenderedHook[]
+  fastifySsrPlugin: FastifySsrPlugin
+  vitrifyDir?: URL
+  mode: string
 }) => {
   const app = fastify({
     logger: true
@@ -21,10 +29,16 @@ export const createApp = ({
   app.register(fastifySsrPlugin, {
     baseUrl,
     appDir,
-    onRenderedHooks
+    onRendered,
+    vitrifyDir,
+    mode
   })
 
-  setup(app)
+  // if (onSetup?.length) {
+  //   for (const setup of onSetup) {
+  //     setup(app)
+  //   }
+  // }
 
   return app
 }

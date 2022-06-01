@@ -121,7 +121,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             const directives = await import('quasar/src/directives.js')
 
             app.use(
-              staticImports.Quasar,
+              staticImports?.Quasar,
               {
                 plugins: quasarPlugins,
                 directives

@@ -17,7 +17,7 @@ export const getCwd = () => new URL(`file://${process.cwd()}/`)
 
 export const parsePath = (path: string, basePath: URL) => {
   if (path) {
-    if (path.slice(-1) !== '/') path += '/'
+    if (!path.includes('.') && path.slice(-1) !== '/') path += '/'
     if (path.startsWith('.')) {
       return new URL(path, basePath)
     } else if (path) {

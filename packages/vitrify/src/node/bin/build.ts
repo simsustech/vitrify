@@ -3,7 +3,7 @@ import { baseConfig } from '../index.js'
 import { build as viteBuild } from 'vite'
 
 export async function build(opts: {
-  ssr?: 'client' | 'server' | 'ssg'
+  ssr?: 'client' | 'server' | 'ssg' | 'fastify'
   base?: string
   outDir?: string
   appDir?: URL

@@ -3,22 +3,23 @@ import type {
   FastifyRequest,
   FastifyReply
 } from 'fastify'
-import fastifyStatic from 'fastify-static'
+import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
-import type { ViteDevServer } from 'vite'
 import type { OnRenderedHook } from '../../vitrify-config.js'
-
+import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
 export interface FastifySsrOptions {
   baseUrl?: string
   provide?: (
     req: FastifyRequest,
     res: FastifyReply
   ) => Promise<Record<string, unknown>>
-  vite?: ViteDevServer
-  cliDir?: URL
+  vitrifyDir?: URL
+  // frameworkDir?: URL
   appDir?: URL
+  publicDir?: URL
   productName?: string
-  onRenderedHooks?: OnRenderedHook[]
+  onRendered?: OnRenderedHook[]
+  mode?: string
 }
 
 const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
@@ -26,25 +27,75 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
   options,
   done
 ) => {
-  if (import.meta.env.MODE === 'development') {
-    if (!options.vite) throw new Error('Option vite cannot be undefined')
+  options.vitrifyDir =
+    options.vitrifyDir || new URL('../../..', import.meta.url)
+  const frameworkDir = new URL('vite/vue', options.vitrifyDir)
+  options.baseUrl = options.baseUrl || '/'
+  if (
+    options.baseUrl.charAt(options.baseUrl.length - 1) !== '/' ||
+    options.baseUrl.charAt(0) !== '/'
+  )
+    throw new Error('baseUrl should start and end with a /')
+  if (options.mode === 'development') {
+    if (!options.vitrifyDir)
+      throw new Error('Option vitrifyDir cannot be undefined')
+    // if (!options.vite) throw new Error('Option vite cannot be undefined')
+    // const { resolve } = await import('import-meta-resolve')
+    // const cliDir = new URL('../', await resolve('vitrify', import.meta.url))
+    options.appDir = options.appDir || new URL('../../..', import.meta.url)
+
+    const { createServer, searchForWorkspaceRoot } = await import('vite')
+    const { baseConfig } = await import('vitrify')
+    const cliDir = options.vitrifyDir
+    const config = await baseConfig({
+      ssr: 'server',
+      command: 'dev',
+      mode: 'development',
+      appDir: options.appDir,
+      publicDir: options.publicDir || new URL('public', options.appDir)
+    })
+
+    config.server = {
+      middlewareMode: true,
+      fs: {
+        allow: [
+          searchForWorkspaceRoot(process.cwd()),
+          searchForWorkspaceRoot(options.appDir.pathname),
+          searchForWorkspaceRoot(cliDir.pathname)
+          // appDir.pathname,
+        ]
+      },
+      watch: {
+        // During tests we edit the files too fast and sometimes chokidar
+        // misses change events, so enforce polling for consistency
+        usePolling: true,
+        interval: 100
+      }
+    }
+    const vite = await createServer({
+      configFile: false,
+      ...config
+    })
+
+    console.log('Dev mode')
     const middie = (await import('middie')).default
     await fastify.register(middie)
-    fastify.use(options.vite.middlewares)
+    fastify.use(vite.middlewares)
 
-    fastify.get('*', async (req, res) => {
+    fastify.get(`${options.baseUrl}*`, async (req, res) => {
       try {
         const url = req.raw.url
         const ssrContext = {
           req,
           res
         }
+
         const template = readFileSync(
-          new URL('index.html', options.cliDir)
+          new URL('index.html', frameworkDir)
         ).toString()
 
-        const entryUrl = new URL('ssr/entry-server.ts', options.cliDir).pathname
-        const render = (await options.vite!.ssrLoadModule(entryUrl)).render
+        const entryUrl = new URL('ssr/entry-server.ts', frameworkDir).pathname
+        const render = (await vite!.ssrLoadModule(entryUrl)).render
         let manifest
         // TODO: https://github.com/vitejs/vite/issues/2282
         try {
@@ -53,11 +104,19 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
           manifest = {}
         }
 
+        const cssModules = [entryUrl]
+        // // @ts-ignore
+        // if (options.vite?.config.vitrify!.globalCss)
+        //   cssModules.push(...options.vite?.config.vitrify.globalCss)
+        const matchedModules = componentsModules(cssModules, vite!)
+        const css = collectCss(matchedModules)
+
         const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
         const html = template
           .replace(`<!--preload-links-->`, preloadLinks)
           .replace(`<!--app-html-->`, appHtml)
           .replace('<!--product-name-->', options.productName || 'Product name')
+          .replace('<!--dev-ssr-css-->', css)
 
         res.code(200)
         res.type('text/html')
@@ -65,13 +124,13 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         // res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e: any) {
         console.error(e.stack)
-        options.vite && options.vite.ssrFixStacktrace(e)
+        vite && vite.ssrFixStacktrace(e)
         res.code(500)
         res.send(e.stack)
       }
     })
   } else {
-    options.baseUrl = options.baseUrl || '/'
+    options.appDir = options.appDir || new URL('../../..', import.meta.url)
     fastify.register(fastifyStatic, {
       root: new URL('./dist/ssr/client', options.appDir).pathname,
       wildcard: false,
@@ -111,8 +170,8 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         .replace(`<!--preload-links-->`, preloadLinks)
         .replace(`<!--app-html-->`, appHtml)
 
-      if (options.onRenderedHooks?.length) {
-        for (const ssrFunction of options.onRenderedHooks) {
+      if (options.onRendered?.length) {
+        for (const ssrFunction of options.onRendered) {
           html = ssrFunction(html, ssrContext)
         }
       }
@@ -127,3 +186,4 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
 }
 
 export { fastifySsrPlugin }
+export type FastifySsrPlugin = typeof fastifySsrPlugin
