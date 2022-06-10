@@ -15,7 +15,7 @@
     "declaration": true,
     "declarationDir": "dist/types",
     "paths": {
-      "vitrify": ["./src/index"],
+      "vitrify": ["./src/node/index"],
       "vitrify/*": ["./src/*"]
     }
   },

@@ -1,6 +1,11 @@
 import vuePlugin from '@vitejs/plugin-vue'
 import type { InlineConfig, UserConfig } from 'vite'
+import { resolveConfig } from 'vite'
 import { mergeConfig } from 'vite'
+import { build } from 'esbuild'
+import fs from 'fs'
+import path from 'path'
+import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
 import builtinModules from 'builtin-modules'
 import { resolve } from 'import-meta-resolve'
@@ -11,13 +16,39 @@ import type {
   VitrifyConfig,
   OnRenderedHook,
   OnBootHook,
-  OnSetupHook
+  OnSetupFile
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
 import { getPkgJsonDir } from './app-urls.js'
+import type { RollupOptions } from 'rollup'
 
-const serverModules = ['fastify', 'middie']
+const serverModules = [
+  // 'fs',
+  // 'path',
+  // 'url',
+  // 'module',
+  // 'crypto',
+  // 'node:fs',
+  'util',
+  'node:url',
+  'node:util',
+  'node:fs',
+  'vitrify',
+  'vite',
+  'fastify',
+  'middie',
+  'knex',
+  'bcrypt',
+  'objection',
+  '@fastify/formbody',
+  '@fastify/static',
+  '@fastify/cors',
+  '@fastify/cookie',
+  'mercurius',
+  'jose',
+  'oidc-provider'
+]
 
 const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
   quasar: () =>
@@ -32,6 +63,64 @@ export const VIRTUAL_MODULES = [
   'virtual:static-imports'
 ]
 
+async function bundleConfigFile(
+  fileName: string,
+  isESM = false
+): Promise<{ code: string; dependencies: string[] }> {
+  const result = await build({
+    absWorkingDir: process.cwd(),
+    entryPoints: [fileName],
+    outfile: 'out.js',
+    write: false,
+    platform: 'node',
+    bundle: true,
+    format: 'esm',
+    sourcemap: 'inline',
+    metafile: true,
+    plugins: [
+      {
+        name: 'externalize-deps',
+        setup(build) {
+          build.onResolve({ filter: /.*/ }, (args) => {
+            const id = args.path
+            if (id[0] !== '.' && !path.isAbsolute(id)) {
+              return {
+                external: true
+              }
+            }
+          })
+        }
+      },
+      {
+        name: 'replace-import-meta',
+        setup(build) {
+          build.onLoad({ filter: /\.[jt]s$/ }, async (args) => {
+            const contents = await fs.promises.readFile(args.path, 'utf8')
+            return {
+              loader: args.path.endsWith('.ts') ? 'ts' : 'js',
+              contents: contents
+                .replace(
+                  /\bimport\.meta\.url\b/g,
+                  JSON.stringify(pathToFileURL(args.path).href)
+                )
+                .replace(
+                  /\b__dirname\b/g,
+                  JSON.stringify(path.dirname(args.path))
+                )
+                .replace(/\b__filename\b/g, JSON.stringify(args.path))
+            }
+          })
+        }
+      }
+    ]
+  })
+  const { text } = result.outputFiles[0]
+  return {
+    code: text,
+    dependencies: result.metafile ? Object.keys(result.metafile.inputs) : []
+  }
+}
+
 export const baseConfig = async ({
   ssr,
   appDir,
@@ -41,7 +130,7 @@ export const baseConfig = async ({
   framework = 'vue',
   pwa = false
 }: {
-  ssr?: 'client' | 'server' | 'ssg'
+  ssr?: 'client' | 'server' | 'ssg' | 'fastify'
   appDir?: URL
   publicDir?: URL
   command?: 'build' | 'dev' | 'test'
@@ -59,22 +148,7 @@ export const baseConfig = async ({
   const cliDir = getCliDir()
   const cliViteDir = getCliViteDir(cliDir)
   const frameworkDir = new URL(`${framework}/`, cliViteDir)
-
-  const localPackages = ['vue', 'vue-router']
-  const cliPackages = ['vitest']
-  const packageUrls: Record<string, URL> = {}
-  await (async () => {
-    for (const val of localPackages)
-      packageUrls[val] = getPkgJsonDir(
-        new URL(await resolve(val, appDir!.href))
-      )
-  })()
-  await (async () => {
-    for (const val of cliPackages)
-      packageUrls[val] = getPkgJsonDir(
-        new URL(await resolve(val, cliDir!.href))
-      )
-  })()
+  const fastifyDir = new URL('fastify/', cliViteDir)
 
   if (!publicDir) publicDir = new URL('public/', appDir)
   /**
@@ -82,24 +156,62 @@ export const baseConfig = async ({
    */
   let vitrifyConfig:
     | VitrifyConfig
-    | (({ mode, command }: { mode: string; command: string }) => VitrifyConfig)
+    | (({
+        mode,
+        command
+      }: {
+        mode: string
+        command: string
+      }) => Promise<VitrifyConfig> | VitrifyConfig)
 
   try {
-    vitrifyConfig = (
-      await import(new URL('vitrify.config.js', appDir).pathname)
-    ).default
+    if (fs.existsSync(new URL('vitrify.config.ts', appDir).pathname)) {
+      const configPath = new URL('vitrify.config.ts', appDir).pathname
+      const bundledConfig = await bundleConfigFile(
+        new URL('vitrify.config.ts', appDir).pathname
+      )
+      fs.writeFileSync(configPath + '.js', bundledConfig.code)
+      vitrifyConfig = (await import(configPath + '.js')).default
+      // fs.unlinkSync(configPath + '.js')
+    } else {
+      vitrifyConfig = (
+        await import(new URL('vitrify.config.js', appDir).pathname)
+      ).default
+    }
     if (typeof vitrifyConfig === 'function')
-      vitrifyConfig = vitrifyConfig({ mode, command })
+      vitrifyConfig = await vitrifyConfig({ mode, command })
   } catch (e) {
-    console.error(e)
-    console.log('No vitrify.config.js file found, using defaults')
+    console.log('No vitrify.config.(ts|js) file found, using defaults')
     vitrifyConfig = {}
   }
-  let { productName = 'Product name' } = JSON.parse(
-    readFileSync(new URL('package.json', appDir).pathname, {
-      encoding: 'utf-8'
-    })
-  )
+
+  const localPackages = ['vue', 'vue-router']
+  const cliPackages = []
+  const packageUrls: Record<string, URL> =
+    vitrifyConfig.vitrify?.urls?.packages || {}
+  await (async () => {
+    for (const val of localPackages)
+      packageUrls[val] = getPkgJsonDir(
+        new URL(await resolve(val, appDir!.href))
+      )
+  })()
+  // await (async () => {
+  //   for (const val of cliPackages)
+  //     packageUrls[val] = getPkgJsonDir(
+  //       new URL(await resolve(val, cliDir!.href))
+  //     )
+  // })()
+
+  let productName = 'Product name'
+  try {
+    ;({ productName } = JSON.parse(
+      readFileSync(new URL('package.json', appDir).pathname, {
+        encoding: 'utf-8'
+      })
+    ))
+  } catch (e) {
+    console.error('package.json not found')
+  }
 
   const ssrTransformCustomDir = () => {
     return {
@@ -124,7 +236,7 @@ export const baseConfig = async ({
   let onBootHooks: OnBootHook[]
   let onRenderedHooks: OnRenderedHook[]
   let onMountedHooks: OnMountedHook[]
-  let onSetupHooks: OnSetupHook[]
+  let onSetupFiles: OnSetupFile[]
   let globalCss: string[]
   let staticImports: StaticImports
   let sassVariables: Record<string, string>
@@ -132,6 +244,7 @@ export const baseConfig = async ({
 
   const plugins: UserConfig['plugins'] = [
     vuePlugin({
+      compiler: await import('vue/compiler-sfc'),
       template: {
         ssr: !!ssr,
         compilerOptions: {
@@ -159,7 +272,7 @@ export const baseConfig = async ({
         onBootHooks = config.vitrify?.hooks?.onBoot || []
         onRenderedHooks = config.vitrify?.hooks?.onRendered || []
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
-        onSetupHooks = config?.vitrify?.hooks?.onSetup || []
+        onSetupFiles = config?.vitrify?.hooks?.onSetup || []
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
         sassVariables = config.vitrify?.sass?.variables || {}
@@ -188,8 +301,16 @@ export const baseConfig = async ({
         }
       },
       resolveId(id) {
-        if (VIRTUAL_MODULES.includes(id)) return id
+        if (VIRTUAL_MODULES.includes(id))
+          return { id, moduleSideEffects: false }
         return
+      },
+      transform: (code, id) => {
+        if (id.endsWith('main.ts') && id.includes('vitrify')) {
+          code =
+            `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
+        }
+        return code
       },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
@@ -202,11 +323,27 @@ export const baseConfig = async ({
             export const onRendered = [${onRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
-            export const onSetup = [${onSetupHooks
-              .map((fn) => `${String(fn)}`)
-              .join(', ')}]`
-        } else if (id === 'virtual:global-css') {
-          return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
+            export const onSetup = []
+            ${onSetupFiles
+              .map(
+                (url, index) =>
+                  `import ${url.pathname
+                    .replaceAll('/', '')
+                    .replaceAll('.', '')} from '${
+                    url.pathname
+                  }'; onSetup.push(${url.pathname
+                    .replaceAll('/', '')
+                    .replaceAll('.', '')})`
+              )
+              .join('\n')}`
+          // export const onSetup = [${onSetupHooks
+          //   .map((fn) => `${String(fn)}`)
+          //   .join(', ')}]`
+          /**
+           * CSS imports in virtual files do not seem to work. Using transform() instead
+           */
+          // } else if (id === 'virtual:global-css') {
+          //   return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
         } else if (id === 'virtual:static-imports') {
           return `${Object.entries(staticImports)
             .map(
@@ -241,6 +378,9 @@ export const baseConfig = async ({
             case 'server':
             case 'client':
               entry = new URL('ssr/entry-client.ts', frameworkDir).pathname
+              break
+            case 'fastify':
+              entry = new URL('entry.ts', fastifyDir).pathname
               break
             default:
               entry = new URL('csr/entry.ts', frameworkDir).pathname
@@ -277,19 +417,87 @@ export const baseConfig = async ({
     { find: 'cwd', replacement: cwd.pathname },
     { find: 'boot', replacement: new URL('boot/', srcDir).pathname },
     { find: 'assets', replacement: new URL('assets/', srcDir).pathname },
-    { find: 'vue', replacement: packageUrls['vue'].pathname },
-    { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
-    { find: 'vitrify', replacement: cliDir.pathname }
+    ...Object.entries(packageUrls).map(([key, value]) => ({
+      find: key,
+      replacement: value.pathname
+    }))
+    // { find: 'vue', replacement: packageUrls['vue'].pathname },
+    // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
+    // { find: 'vitrify', replacement: cliDir.pathname }
   ]
   if (command === 'test')
     alias.push({
       find: 'vitest',
-      replacement: packageUrls.vitest.pathname
+      replacement: new URL(await resolve('vitest', cliDir!.href)).pathname
     })
 
+  let rollupOptions: RollupOptions
+  let noExternal: RegExp[] | string[] = []
+  const external = [...builtinModules, ...serverModules]
+  if (ssr === 'server') {
+    rollupOptions = {
+      input: [
+        new URL('ssr/entry-server.ts', frameworkDir).pathname,
+        new URL('ssr/prerender.ts', frameworkDir).pathname,
+        new URL('ssr/server.ts', frameworkDir).pathname
+      ],
+      external,
+      output: {
+        minifyInternalExports: false,
+        entryFileNames: '[name].mjs',
+        chunkFileNames: '[name].mjs',
+        // format: 'es',
+        manualChunks: (id) => {
+          if (id.includes('vitrify/src/vite/')) {
+            const name = id.split('/').at(-1)?.split('.').at(0)
+            if (name && manualChunks.includes(name)) return name
+          } else if (id.includes('node_modules')) {
+            return 'vendor'
+          }
+        }
+      }
+    }
+    // Create a SSR bundle
+    noExternal = [
+      new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
+      // new RegExp(`^(?!.*(${[...builtinModules, ...serverModules].join('|')}))`)
+    ]
+  } else if (ssr === 'fastify') {
+    rollupOptions = {
+      input: [new URL('server.ts', fastifyDir).pathname],
+      external,
+      output: {
+        minifyInternalExports: false,
+        entryFileNames: '[name].mjs',
+        chunkFileNames: '[name].mjs',
+        // format: 'es',
+        manualChunks: (id) => {
+          if (id.includes('vitrify/src/vite/')) {
+            const name = id.split('/').at(-1)?.split('.').at(0)
+            if (name && manualChunks.includes(name)) return name
+          } else if (id.includes('node_modules')) {
+            return 'vendor'
+          }
+        }
+      }
+    }
+    // Create a SSR bundle
+    noExternal = [
+      new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
+    ]
+  } else {
+    rollupOptions = {
+      // input: [new URL('index.html', frameworkDir).pathname],
+      // output: {
+      //   format: 'es'
+      // }
+    }
+  }
+
   const config = {
-    root: frameworkDir.pathname,
+    root: ssr === 'fastify' ? appDir.pathname : frameworkDir.pathname,
     publicDir: publicDir.pathname,
+    envDir: appDir.pathname,
     vitrify: {
       productName,
       urls: {
@@ -302,7 +510,7 @@ export const baseConfig = async ({
     },
     plugins,
     optimizeDeps: {
-      exclude: ['vue']
+      exclude: ['vue', ...serverModules, ...builtinModules]
     },
     resolve: {
       // Dedupe uses require which breaks ESM SSR builds
@@ -313,46 +521,42 @@ export const baseConfig = async ({
       alias
     },
     build: {
-      target: ssr === 'server' ? 'esnext' : 'modules',
-      ssr: ssr === 'server' ? true : false,
+      target: ssr === 'server' || ssr === 'fastify' ? 'esnext' : 'modules',
+      ssr: ssr === 'server' || ssr === 'fastify' ? true : false,
       ssrManifest: ssr === 'client' || ssr === 'ssg',
-      rollupOptions:
-        ssr === 'server'
-          ? {
-              input: [
-                new URL('ssr/entry-server.ts', frameworkDir).pathname,
-                new URL('ssr/prerender.ts', frameworkDir).pathname,
-                new URL('ssr/server.ts', frameworkDir).pathname
-              ],
-              output: {
-                minifyInternalExports: false,
-                entryFileNames: '[name].mjs',
-                chunkFileNames: '[name].mjs',
-                format: 'es',
-                manualChunks: (id) => {
-                  if (id.includes('vitrify/src/vite/')) {
-                    const name = id.split('/').at(-1)?.split('.').at(0)
-                    console.log(name)
-                    if (manualChunks.includes(id)) return name
-                  } else if (id.includes('node_modules')) {
-                    return 'vendor'
-                  }
-                }
-              }
-            }
-          : {
-              output: {
-                format: 'es'
-              }
-            }
+      rollupOptions
+      // ssr === 'server'
+      //   ? {
+      //       input: [
+      //         new URL('ssr/entry-server.ts', frameworkDir).pathname,
+      //         new URL('ssr/prerender.ts', frameworkDir).pathname,
+      //         new URL('ssr/server.ts', frameworkDir).pathname
+      //       ],
+      //       output: {
+      //         minifyInternalExports: false,
+      //         entryFileNames: '[name].mjs',
+      //         chunkFileNames: '[name].mjs',
+      //         format: 'es',
+      //         manualChunks: (id) => {
+      //           if (id.includes('vitrify/src/vite/')) {
+      //             const name = id.split('/').at(-1)?.split('.').at(0)
+      //             if (name && manualChunks.includes(name)) return name
+      //           } else if (id.includes('node_modules')) {
+      //             return 'vendor'
+      //           }
+      //         }
+      //       }
+      //     }
+      //   : {
+      //       output: {
+      //         format: 'es'
+      //       }
+      //     }
     },
     ssr: {
       // Create a SSR bundle
-      noExternal: [
-        new RegExp(
-          `^(?!.*(${[...builtinModules, ...serverModules].join('|')}))`
-        )
-      ]
+      external,
+      noExternal
     },
     define: {
       __BASE_URL__: `'/'`
