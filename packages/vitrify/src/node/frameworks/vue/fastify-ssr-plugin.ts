@@ -7,6 +7,7 @@ import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import type { OnRenderedHook } from '../../vitrify-config.js'
 import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
+import type { ViteDevServer } from 'vite'
 export interface FastifySsrOptions {
   baseUrl?: string
   provide?: (
@@ -14,6 +15,7 @@ export interface FastifySsrOptions {
     res: FastifyReply
   ) => Promise<Record<string, unknown>>
   vitrifyDir?: URL
+  vite?: ViteDevServer
   // frameworkDir?: URL
   appDir?: URL
   publicDir?: URL
@@ -29,7 +31,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
 ) => {
   options.vitrifyDir =
     options.vitrifyDir || new URL('../../..', import.meta.url)
-  const frameworkDir = new URL('vite/vue', options.vitrifyDir)
+  const frameworkDir = new URL('vite/vue/', options.vitrifyDir)
   options.baseUrl = options.baseUrl || '/'
   if (
     options.baseUrl.charAt(options.baseUrl.length - 1) !== '/' ||
@@ -78,7 +80,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     })
 
     console.log('Dev mode')
-    const middie = (await import('middie')).default
+    const middie = (await import('@fastify/middie')).default
     await fastify.register(middie)
     fastify.use(vite.middlewares)
 
@@ -139,7 +141,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     })
 
     fastify.get(`${options.baseUrl}*`, async (req, res) => {
-      const url = req.raw.url
+      const url = req.raw.url?.replace(options.baseUrl!, '/')
       const provide = options.provide ? await options.provide(req, res) : {}
       const ssrContext: Record<string, any> = {
         req,

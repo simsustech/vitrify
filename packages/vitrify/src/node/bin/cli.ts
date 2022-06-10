@@ -2,7 +2,13 @@
 import cac from 'cac'
 import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls } from '../helpers/logger.js'
-import type { ViteDevServer } from 'vite'
+import type {
+  ConfigEnv,
+  ResolvedConfig,
+  UserConfig,
+  UserConfigExport,
+  ViteDevServer
+} from 'vite'
 import type { Server } from 'net'
 
 const cli = cac('vitrify')
@@ -107,7 +113,7 @@ cli
   .option('--publicDir [publicDir]', 'Public directory')
   .action(async (options) => {
     let server: Server
-    let vite: ViteDevServer
+    let config: ResolvedConfig
     if (options.host === true) {
       options.host = '0.0.0.0'
     }
@@ -121,25 +127,23 @@ cli
 
     switch (options.mode) {
       case 'ssr':
-        ;({ server, vite } = await createServer({
+        ;({ server, config } = await createServer({
           mode: 'ssr',
           host: options.host,
           appDir: parsePath(options.appDir, cwd),
-          app,
           publicDir: parsePath(options.publicDir, cwd)
         }))
         break
       case 'fastify':
-        ;({ server, vite } = await createServer({
+        ;({ server, config } = await createServer({
           mode: 'fastify',
           host: options.host,
           appDir: parsePath(options.appDir, cwd),
-          app,
           publicDir: parsePath(options.publicDir, cwd)
         }))
         break
       default:
-        ;({ server, vite } = await createServer({
+        ;({ server, config } = await createServer({
           host: options.host,
           appDir: parsePath(options.appDir, cwd),
           publicDir: parsePath(options.publicDir, cwd)
@@ -147,7 +151,7 @@ cli
         break
     }
     console.log('Dev server running at:')
-    printHttpServerUrls(server, vite.config)
+    printHttpServerUrls(server, config)
   })
 
 cli.command('test').action(async (options) => {

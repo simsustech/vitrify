@@ -5,7 +5,7 @@ import { build as viteBuild } from 'vite'
 export async function build(opts: {
   ssr?: 'client' | 'server' | 'ssg' | 'fastify'
   base?: string
-  outDir?: string
+  outDir: string
   appDir?: URL
   publicDir?: URL
 }) {

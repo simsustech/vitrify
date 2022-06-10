@@ -4,7 +4,8 @@ import { getAppDir } from '../../../node/app-urls.js'
 import { onRendered, onSetup } from 'virtual:vitrify-hooks'
 import { fastifySsrPlugin } from './fastify-ssr-plugin.js'
 import type { ViteDevServer } from 'vite'
-import { resolve } from 'import-meta-resolve'
+import * as imr from 'import-meta-resolve'
+const { resolve } = imr
 // const appDir = getPkgJsonDir(import.meta.url)
 const getString = (str?: string) => str
 let baseUrl = getString(__BASE_URL__)

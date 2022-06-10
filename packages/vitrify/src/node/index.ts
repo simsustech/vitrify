@@ -1,5 +1,6 @@
 import vuePlugin from '@vitejs/plugin-vue'
 import type { InlineConfig, UserConfig } from 'vite'
+import { resolveConfig } from 'vite'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'
 import fs from 'fs'
@@ -29,7 +30,9 @@ const serverModules = [
   // 'module',
   // 'crypto',
   // 'node:fs',
-  // 'util',
+  'util',
+  'node:url',
+  'node:util',
   'node:fs',
   'vitrify',
   'vite',
@@ -178,7 +181,6 @@ export const baseConfig = async ({
     if (typeof vitrifyConfig === 'function')
       vitrifyConfig = await vitrifyConfig({ mode, command })
   } catch (e) {
-    console.error(e)
     console.log('No vitrify.config.(ts|js) file found, using defaults')
     vitrifyConfig = {}
   }
@@ -200,11 +202,16 @@ export const baseConfig = async ({
   //     )
   // })()
 
-  let { productName = 'Product name' } = JSON.parse(
-    readFileSync(new URL('package.json', appDir).pathname, {
-      encoding: 'utf-8'
-    })
-  )
+  let productName = 'Product name'
+  try {
+    ;({ productName } = JSON.parse(
+      readFileSync(new URL('package.json', appDir).pathname, {
+        encoding: 'utf-8'
+      })
+    ))
+  } catch (e) {
+    console.error('package.json not found')
+  }
 
   const ssrTransformCustomDir = () => {
     return {
@@ -237,6 +244,7 @@ export const baseConfig = async ({
 
   const plugins: UserConfig['plugins'] = [
     vuePlugin({
+      compiler: await import('vue/compiler-sfc'),
       template: {
         ssr: !!ssr,
         compilerOptions: {
@@ -438,7 +446,7 @@ export const baseConfig = async ({
         minifyInternalExports: false,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
-        format: 'es',
+        // format: 'es',
         manualChunks: (id) => {
           if (id.includes('vitrify/src/vite/')) {
             const name = id.split('/').at(-1)?.split('.').at(0)
@@ -462,7 +470,7 @@ export const baseConfig = async ({
         minifyInternalExports: false,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
-        format: 'es',
+        // format: 'es',
         manualChunks: (id) => {
           if (id.includes('vitrify/src/vite/')) {
             const name = id.split('/').at(-1)?.split('.').at(0)
@@ -479,14 +487,15 @@ export const baseConfig = async ({
     ]
   } else {
     rollupOptions = {
-      output: {
-        format: 'es'
-      }
+      // input: [new URL('index.html', frameworkDir).pathname],
+      // output: {
+      //   format: 'es'
+      // }
     }
   }
 
   const config = {
-    root: frameworkDir.pathname,
+    root: ssr === 'fastify' ? appDir.pathname : frameworkDir.pathname,
     publicDir: publicDir.pathname,
     envDir: appDir.pathname,
     vitrify: {

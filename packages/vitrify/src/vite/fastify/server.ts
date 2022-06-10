@@ -2,7 +2,7 @@ import Fastify from 'fastify'
 import { setup } from './entry'
 
 const fastify = Fastify()
-setup({ fastify })
+await setup({ fastify })
 
 fastify.listen({
   port: Number(process.env.PORT || 3000),

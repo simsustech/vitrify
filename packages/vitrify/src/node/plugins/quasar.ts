@@ -221,9 +221,14 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                 replacement: new URL('src/', urls?.packages?.quasar).pathname
               },
               {
-                find: 'quasar',
-                replacement: new URL('src/', urls?.packages?.quasar).pathname
+                find: new RegExp('^quasar$'),
+                replacement: new URL('src/index.all.js', urls?.packages?.quasar)
+                  .pathname
               },
+              // {
+              //   find: 'quasar',
+              //   replacement: new URL('src/index.all.js', urls?.packages?.quasar).pathname
+              // },
               {
                 find: `@quasar/extras`,
                 replacement: new URL('.', urls?.packages?.['@quasar/extras'])
@@ -251,7 +256,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       config: async (config, env) => ({
         resolve: {
           alias: [
-            { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
+            // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
           ]
         }
       }),

@@ -1,8 +1,20 @@
 import { createApp } from '../main.js'
 import { renderToString } from 'vue/server-renderer'
+import type { FastifyInstance } from 'fastify'
 // import * as ApolloSSR from '@vue/apollo-ssr'
 // import { ApolloClients } from '@vue/apollo-composable'
 // import serialize from 'serialize-javascript'
+
+import { onSetup } from 'virtual:vitrify-hooks'
+
+export const setup = async ({ fastify }: { fastify: FastifyInstance }) => {
+  if (onSetup?.length) {
+    for (const setup of onSetup) {
+      await setup(fastify)
+    }
+  }
+  return fastify
+}
 
 const initializeApp = async (url, ssrContext) => {
   const onRenderedList = []
