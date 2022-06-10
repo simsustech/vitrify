@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.4.0
+
+### Minor Changes
+
+- ae8e8f0: feat: added fastify mode for build and dev commands, fix: css in SSR dev mode should now work, fix: onSetup for fastify server now imports from file, feat: support vitrify.config.ts
+
 ## 0.3.0
 
 ### Minor Changes
