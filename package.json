@@ -13,6 +13,7 @@
     "build:create-vitrify": "cd packages/create-vitrify && pnpm run build",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
+    "changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
     "lint": "eslint packages/*/src/",
