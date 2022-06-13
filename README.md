@@ -2,14 +2,14 @@
 
 > Pre-configured Vite CLI for your framework
 
-Vitrify is an abstraction over Vite similar to how Vite is an abstraction over Rollup.
+Vitrify is an abstraction over Vite similar to how Vite is an abstraction over Rollup and esbuild.
 
 ## Features
 
 - ESM only
 - Fully compatible with Vite configuration.
-- Client-Side Rendering (CSR) and Server-Side Rendering (SSR) builds and development servers.
 - Integration with Fastify.
+- Client-Side Rendering (CSR), Server-Side Rendering (SSR) and Fastify server build and development modes.
 - Plugins for UI frameworks which can read their configuration from vitrify.config.js.
 - A few helpful [configuration options](./packages/vitrify/src/node/vitrify-config.ts)
 - Implements functional programming.

@@ -3,12 +3,12 @@
 > Pre-configured Vite CLI for your framework
 
 - Use a simple configuration file to configure and integrate required Vite plugins into your project.
-- Client-Side Rendering (CSR) and Server-Side Rendering (SSR) builds and development servers.
+- Client-Side Rendering (CSR), Server-Side Rendering (SSR) and Fastify server build and development modes.
 
 ## Features
 
 - Uses [Fastify](https://github.com/fastify/fastify-vite) for the development server and SSR production server.
-  - Generates a Fastify plugin to serve your server-side rendered application.
+- Generates a Fastify plugin to serve your server-side rendered application.
 - A [`run`](./src/node/bin/run.ts) command which injects context such as application paths into the script which you want to run.
 - A [`test`](./src/node/bin/test.ts) command which runs a pre-configured [Vitest](https://github.com/vitest-dev/vitest) instance.
 - An [extra plugin layer](./src/node/plugins/index.ts) which provides some extra context such as the SSR mode (client or server) and PWA mode. Used for UI frameworks which render differently based on these settings.
