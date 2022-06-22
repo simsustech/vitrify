@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.1
+
+### Patch Changes
+
+- dc69c57: Fix define of Quasar SSR constants; Fix HMR port in development config
+
 ## 0.5.0
 
 ### Minor Changes
