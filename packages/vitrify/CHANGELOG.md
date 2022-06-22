@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.0
+
+### Minor Changes
+
+- 2a7351f: Various SSR and development server fixes
+
 ## 0.4.0
 
 ### Minor Changes
