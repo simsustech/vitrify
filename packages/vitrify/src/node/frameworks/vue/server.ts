@@ -3,6 +3,7 @@ import fastify from 'fastify'
 import type { ViteDevServer } from 'vite'
 import { getCliDir, getCliViteDir } from '../../app-urls.js'
 import type { OnRenderedHook, OnSetupFile } from '../../vitrify-config.js'
+import type { FastifyCsrPlugin } from './fastify-csr-plugin.js'
 import type { FastifySsrPlugin } from './fastify-ssr-plugin.js'
 
 export const createApp = ({
@@ -10,7 +11,7 @@ export const createApp = ({
   appDir,
   baseUrl,
   onRendered,
-  fastifySsrPlugin,
+  fastifyPlugin,
   vitrifyDir,
   mode
 }: {
@@ -18,7 +19,7 @@ export const createApp = ({
   appDir: URL
   baseUrl?: string
   onRendered?: OnRenderedHook[]
-  fastifySsrPlugin: FastifySsrPlugin
+  fastifyPlugin: FastifySsrPlugin | FastifyCsrPlugin
   vitrifyDir?: URL
   mode: string
 }) => {
@@ -26,7 +27,7 @@ export const createApp = ({
     logger: true
   })
 
-  app.register(fastifySsrPlugin, {
+  app.register(fastifyPlugin, {
     baseUrl,
     appDir,
     onRendered,

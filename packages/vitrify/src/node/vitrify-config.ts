@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify'
-import type { UserConfig } from 'vite'
+import type { Alias, UserConfig } from 'vite'
 import type { QuasarConf } from './plugins/quasar.js'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
 
@@ -86,6 +86,18 @@ export interface VitrifyConfig extends UserConfig {
       src?: URL
       cwd?: URL
       packages?: Record<string, URL>
+    }
+    /**
+     * SSR specific configuration
+     */
+    ssr?: {
+      serverModules?: string[]
+    }
+    /**
+     * Development only configuration
+     */
+    dev?: {
+      alias?: Alias[]
     }
   }
   quasar?: QuasarConf

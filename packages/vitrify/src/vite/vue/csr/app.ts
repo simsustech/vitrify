@@ -2,7 +2,7 @@ import { createApp } from '../../../node/frameworks/vue/server.js'
 import { getAppDir } from '../../../node/app-urls.js'
 // import { setup } from 'virtual:fastify-setup'
 import { onRendered, onSetup } from 'virtual:vitrify-hooks'
-import { fastifySsrPlugin } from './fastify-ssr-plugin.js'
+import { fastifyCsrPlugin } from './fastify-csr-plugin.js'
 import type { ViteDevServer } from 'vite'
 import * as imr from 'import-meta-resolve'
 const { resolve } = imr
@@ -18,7 +18,7 @@ export const setupApp = async () => {
     appDir,
     baseUrl,
     onRendered,
-    fastifyPlugin: fastifySsrPlugin,
+    fastifyPlugin: fastifyCsrPlugin,
     vitrifyDir,
     mode: import.meta.env.MODE
   })

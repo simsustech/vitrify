@@ -16,11 +16,15 @@ export const componentsModules = (
   return matchedModules
 }
 
-export const collectCss = (
-  mods: Set<ModuleNode>,
+export const collectCss = ({
+  mods,
   styles = new Map<string, string>(),
   checkedComponents = new Set()
-) => {
+}: {
+  mods: Set<ModuleNode>
+  styles?: Map<string, string>
+  checkedComponents?: Set<unknown>
+}) => {
   for (const mod of mods) {
     if (
       (mod.file?.endsWith('.scss') ||
@@ -32,7 +36,11 @@ export const collectCss = (
     }
     if (mod.importedModules.size > 0 && !checkedComponents.has(mod.id)) {
       checkedComponents.add(mod.id)
-      collectCss(mod.importedModules, styles, checkedComponents)
+      collectCss({
+        mods: mod.importedModules,
+        styles,
+        checkedComponents
+      })
     }
   }
   let result = ''

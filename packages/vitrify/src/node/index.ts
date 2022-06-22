@@ -1,5 +1,5 @@
 import vuePlugin from '@vitejs/plugin-vue'
-import type { InlineConfig, UserConfig } from 'vite'
+import type { Alias, InlineConfig, UserConfig } from 'vite'
 import { resolveConfig } from 'vite'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'
@@ -23,7 +23,7 @@ import type { VitrifyPlugin } from './plugins/index.js'
 import { getPkgJsonDir } from './app-urls.js'
 import type { RollupOptions } from 'rollup'
 
-const serverModules = [
+const internalServerModules = [
   // 'fs',
   // 'path',
   // 'url',
@@ -34,20 +34,26 @@ const serverModules = [
   'node:url',
   'node:util',
   'node:fs',
+  'node:process',
   'vitrify',
+  'vitrify/dev',
+  // 'import-meta-resolve',
   'vite',
   'fastify',
-  'middie',
-  'knex',
-  'bcrypt',
-  'objection',
-  '@fastify/formbody',
-  '@fastify/static',
-  '@fastify/cors',
-  '@fastify/cookie',
-  'mercurius',
-  'jose',
-  'oidc-provider'
+  '@fastify',
+  'node'
+  // 'middie',
+  // 'knex',
+  // 'bcrypt',
+  // 'objection',
+  // '@fastify/formbody',
+  // '@fastify/static',
+  // '@fastify/cors',
+  // '@fastify/cookie',
+  // 'mercurius',
+  // 'jose',
+  // 'oidc-provider',
+  // 'node-fetch'
 ]
 
 const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
@@ -55,7 +61,20 @@ const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
     import('./plugins/quasar.js').then((module) => module.QuasarPlugin)
 }
 
-const manualChunks = ['prerender', 'fastify-ssr-plugin', 'server']
+const manualChunkNames = [
+  'prerender',
+  'fastify-ssr-plugin',
+  'fastify-csr-plugin',
+  'server'
+]
+const manualChunks = (id: string) => {
+  if (id.includes('vitrify/src/vite/')) {
+    const name = id.split('/').at(-1)?.split('.').at(0)
+    if (name && manualChunkNames.includes(name)) return name
+  } else if (id.includes('node_modules')) {
+    return 'vendor'
+  }
+}
 
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
@@ -125,6 +144,7 @@ export const baseConfig = async ({
   ssr,
   appDir,
   publicDir,
+  base = '/',
   command = 'build',
   mode = 'production',
   framework = 'vue',
@@ -133,6 +153,7 @@ export const baseConfig = async ({
   ssr?: 'client' | 'server' | 'ssg' | 'fastify'
   appDir?: URL
   publicDir?: URL
+  base?: string
   command?: 'build' | 'dev' | 'test'
   mode?: 'production' | 'development'
   framework?: 'vue'
@@ -172,7 +193,7 @@ export const baseConfig = async ({
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
       vitrifyConfig = (await import(configPath + '.js')).default
-      // fs.unlinkSync(configPath + '.js')
+      fs.unlinkSync(configPath + '.js')
     } else {
       vitrifyConfig = (
         await import(new URL('vitrify.config.js', appDir).pathname)
@@ -195,6 +216,7 @@ export const baseConfig = async ({
         new URL(await resolve(val, appDir!.href))
       )
   })()
+
   // await (async () => {
   //   for (const val of cliPackages)
   //     packageUrls[val] = getPkgJsonDir(
@@ -241,6 +263,13 @@ export const baseConfig = async ({
   let staticImports: StaticImports
   let sassVariables: Record<string, string>
   let additionalData: string[]
+  let serverModules: string[] = internalServerModules
+
+  if (vitrifyConfig.vitrify?.ssr?.serverModules)
+    serverModules = [
+      ...serverModules,
+      ...vitrifyConfig.vitrify.ssr.serverModules
+    ]
 
   const plugins: UserConfig['plugins'] = [
     vuePlugin({
@@ -411,7 +440,7 @@ export const baseConfig = async ({
     })
   }
 
-  const alias = [
+  const alias: Alias[] = [
     { find: 'src', replacement: srcDir.pathname },
     { find: 'app', replacement: appDir.pathname },
     { find: 'cwd', replacement: cwd.pathname },
@@ -425,15 +454,21 @@ export const baseConfig = async ({
     // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
     // { find: 'vitrify', replacement: cliDir.pathname }
   ]
+  if (mode === 'development' && vitrifyConfig.vitrify?.dev?.alias)
+    alias.push(...vitrifyConfig.vitrify.dev.alias)
+
   if (command === 'test')
     alias.push({
       find: 'vitest',
       replacement: new URL(await resolve('vitest', cliDir!.href)).pathname
     })
 
-  let rollupOptions: RollupOptions
-  let noExternal: RegExp[] | string[] = []
+  let rollupOptions: RollupOptions = {}
+  let noExternal: RegExp[] | string[] = [
+    new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
+  ]
   const external = [...builtinModules, ...serverModules]
+
   if (ssr === 'server') {
     rollupOptions = {
       input: [
@@ -446,15 +481,16 @@ export const baseConfig = async ({
         minifyInternalExports: false,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
-        // format: 'es',
-        manualChunks: (id) => {
-          if (id.includes('vitrify/src/vite/')) {
-            const name = id.split('/').at(-1)?.split('.').at(0)
-            if (name && manualChunks.includes(name)) return name
-          } else if (id.includes('node_modules')) {
-            return 'vendor'
-          }
-        }
+        format: 'es',
+        manualChunks
+        // manualChunks: (id) => {
+        //   if (id.includes('vitrify/src/vite/')) {
+        //     const name = id.split('/').at(-1)?.split('.').at(0)
+        //     if (name && manualChunks.includes(name)) return name
+        //   } else if (id.includes('node_modules')) {
+        //     return 'vendor'
+        //   }
+        // }
       }
     }
     // Create a SSR bundle
@@ -470,15 +506,16 @@ export const baseConfig = async ({
         minifyInternalExports: false,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
-        // format: 'es',
-        manualChunks: (id) => {
-          if (id.includes('vitrify/src/vite/')) {
-            const name = id.split('/').at(-1)?.split('.').at(0)
-            if (name && manualChunks.includes(name)) return name
-          } else if (id.includes('node_modules')) {
-            return 'vendor'
-          }
-        }
+        format: 'es',
+        manualChunks
+        // manualChunks: (id) => {
+        //   if (id.includes('vitrify/src/vite/')) {
+        //     const name = id.split('/').at(-1)?.split('.').at(0)
+        //     if (name && manualChunks.includes(name)) return name
+        //   } else if (id.includes('node_modules')) {
+        //     return 'vendor'
+        //   }
+        // }
       }
     }
     // Create a SSR bundle
@@ -487,16 +524,25 @@ export const baseConfig = async ({
     ]
   } else {
     rollupOptions = {
-      // input: [new URL('index.html', frameworkDir).pathname],
-      // output: {
-      //   format: 'es'
-      // }
+      input: [
+        new URL('index.html', frameworkDir).pathname
+        // new URL('csr/server.ts', frameworkDir).pathname
+      ],
+      external,
+      output: {
+        minifyInternalExports: false,
+        entryFileNames: '[name].mjs',
+        chunkFileNames: '[name].mjs',
+        format: 'es',
+        manualChunks
+      }
     }
   }
 
   const config = {
     root: ssr === 'fastify' ? appDir.pathname : frameworkDir.pathname,
     publicDir: publicDir.pathname,
+    base,
     envDir: appDir.pathname,
     vitrify: {
       productName,
@@ -513,11 +559,7 @@ export const baseConfig = async ({
       exclude: ['vue', ...serverModules, ...builtinModules]
     },
     resolve: {
-      // Dedupe uses require which breaks ESM SSR builds
-      // dedupe: [
-      //   'vue',
-      //   'vue-router'
-      // ],
+      dedupe: ['vue', 'vue-router'],
       alias
     },
     build: {
@@ -559,11 +601,13 @@ export const baseConfig = async ({
       noExternal
     },
     define: {
-      __BASE_URL__: `'/'`
+      __BASE_URL__: `'${base}'`
     }
   } as VitrifyConfig
 
   return mergeConfig(config, vitrifyConfig)
 }
+
+export const vitrifyDir = new URL('..', import.meta.url)
 
 export type { VitrifyConfig, VitrifyPlugin, VitrifyContext, BootFunction }

@@ -15,9 +15,10 @@
     "declaration": true,
     "declarationDir": "dist/types",
     "paths": {
-      "vitrify": ["./src/node/index"],
-      "vitrify/*": ["./src/*"]
+      "vitrify": ["./src/node/index.ts"],
+      "vitrify/*": ["./src/node/bin/*"]
     }
+    // "typeRoots": ["./"]
   },
   "include": ["src/node"]
 }

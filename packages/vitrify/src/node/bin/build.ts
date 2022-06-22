@@ -14,7 +14,8 @@ export async function build(opts: {
     mode: 'production',
     ssr: opts?.ssr,
     appDir: opts.appDir,
-    publicDir: opts.publicDir
+    publicDir: opts.publicDir,
+    base: opts.base
   })
 
   config.build = {
@@ -24,16 +25,16 @@ export async function build(opts: {
     emptyOutDir: !!opts.outDir
   }
 
-  if (opts.base) {
-    config.define = {
-      ...config.define,
-      __BASE_URL__: `'${opts.base}'`
-    }
-  }
+  // if (opts.base) {
+  //   config.define = {
+  //     ...config.define,
+  //     __BASE_URL__: `'${opts.base}'`
+  //   }
+  // }
 
   return viteBuild({
     configFile: false,
-    base: opts.base,
+    // base: opts.base,
     // logLevel: 'silent',
     ...config
   })

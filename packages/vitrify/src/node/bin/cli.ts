@@ -48,7 +48,7 @@ cli
       case 'csr':
         await build({
           ...args,
-          outDir: new URL('spa/', baseOutDir).pathname
+          outDir: new URL('csr/', baseOutDir).pathname
         })
         break
       case 'fastify':
@@ -128,7 +128,7 @@ cli
     switch (options.mode) {
       case 'ssr':
         ;({ server, config } = await createServer({
-          mode: 'ssr',
+          ssr: 'ssr',
           host: options.host,
           appDir: parsePath(options.appDir, cwd),
           publicDir: parsePath(options.publicDir, cwd)
@@ -136,7 +136,7 @@ cli
         break
       case 'fastify':
         ;({ server, config } = await createServer({
-          mode: 'fastify',
+          ssr: 'fastify',
           host: options.host,
           appDir: parsePath(options.appDir, cwd),
           publicDir: parsePath(options.publicDir, cwd)

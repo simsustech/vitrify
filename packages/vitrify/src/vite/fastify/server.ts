@@ -1,7 +1,9 @@
 import Fastify from 'fastify'
 import { setup } from './entry'
 
-const fastify = Fastify()
+const fastify = Fastify({
+  logger: true
+})
 await setup({ fastify })
 
 fastify.listen({
