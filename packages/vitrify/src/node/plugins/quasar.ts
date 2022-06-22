@@ -92,11 +92,17 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         const { ssr } = options || {}
         code = code
           .replaceAll('__QUASAR_SSR__', ssr ? ssr.toString() : 'false')
-          .replaceAll('__QUASAR_SSR_SERVER__', 'import.meta.env.SSR')
-          .replaceAll('__QUASAR_SSR_CLIENT__', '!import.meta.env.SSR')
+          .replaceAll(
+            '__QUASAR_SSR_SERVER__',
+            ssr ? 'import.meta.env.SSR' : 'false'
+          )
+          .replaceAll(
+            '__QUASAR_SSR_CLIENT__',
+            ssr ? '!import.meta.env.SSR' : 'false'
+          )
           .replaceAll(
             '__QUASAR_SSR_PWA__',
-            pwa ? '!import.meta.env.SSR' : 'false'
+            ssr && pwa ? '!import.meta.env.SSR' : 'false'
           )
 
         return code

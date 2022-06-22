@@ -56,7 +56,8 @@ export async function createVitrifyDevServer({
   config.server = {
     https: config.server?.https,
     hmr: {
-      protocol: config.server?.https ? 'wss' : 'ws'
+      protocol: config.server?.https ? 'wss' : 'ws',
+      port: 24678
     },
     port,
     // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
