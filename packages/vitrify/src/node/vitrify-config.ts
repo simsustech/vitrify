@@ -1,4 +1,3 @@
-import type { FastifyInstance } from 'fastify'
 import type { Alias, UserConfig } from 'vite'
 import type { QuasarConf } from './plugins/quasar.js'
 import type { ComponentInternalInstance } from '@vue/runtime-core'

@@ -21,39 +21,16 @@ import type {
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
 import { getPkgJsonDir } from './app-urls.js'
-import type { RollupOptions } from 'rollup'
+import type { ManualChunksOption, RollupOptions } from 'rollup'
 
 const internalServerModules = [
-  // 'fs',
-  // 'path',
-  // 'url',
-  // 'module',
-  // 'crypto',
-  // 'node:fs',
   'util',
-  'node:url',
-  'node:util',
-  'node:fs',
-  'node:process',
   'vitrify',
   'vitrify/dev',
-  // 'import-meta-resolve',
   'vite',
   'fastify',
-  '@fastify',
+  '@fastify/static',
   'node'
-  // 'middie',
-  // 'knex',
-  // 'bcrypt',
-  // 'objection',
-  // '@fastify/formbody',
-  // '@fastify/static',
-  // '@fastify/cors',
-  // '@fastify/cookie',
-  // 'mercurius',
-  // 'jose',
-  // 'oidc-provider',
-  // 'node-fetch'
 ]
 
 const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
@@ -67,10 +44,14 @@ const manualChunkNames = [
   'fastify-csr-plugin',
   'server'
 ]
-const manualChunks = (id: string) => {
+const manualChunks: ManualChunksOption = (id: string) => {
   if (id.includes('vitrify/src/vite/')) {
     const name = id.split('/').at(-1)?.split('.').at(0)
     if (name && manualChunkNames.includes(name)) return name
+  } else if (
+    VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
+  ) {
+    return VIRTUAL_MODULES.find((name) => id.includes(name))
   } else if (id.includes('node_modules')) {
     return 'vendor'
   }
@@ -471,6 +452,7 @@ export const baseConfig = async ({
 
   if (ssr === 'server') {
     rollupOptions = {
+      ...rollupOptions,
       input: [
         new URL('ssr/entry-server.ts', frameworkDir).pathname,
         new URL('ssr/prerender.ts', frameworkDir).pathname,
@@ -500,6 +482,7 @@ export const baseConfig = async ({
     ]
   } else if (ssr === 'fastify') {
     rollupOptions = {
+      ...rollupOptions,
       input: [new URL('server.ts', fastifyDir).pathname],
       external,
       output: {
@@ -524,10 +507,11 @@ export const baseConfig = async ({
     ]
   } else {
     rollupOptions = {
-      input: [
-        new URL('index.html', frameworkDir).pathname
-        // new URL('csr/server.ts', frameworkDir).pathname
-      ],
+      ...rollupOptions,
+      // input: [
+      //   new URL('index.html', frameworkDir).pathname
+      //   // new URL('csr/server.ts', frameworkDir).pathname
+      // ],
       external,
       output: {
         minifyInternalExports: false,
