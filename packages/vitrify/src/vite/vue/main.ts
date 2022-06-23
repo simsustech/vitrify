@@ -1,3 +1,5 @@
+// import 'vitrify.css'
+import 'vitrify.sass'
 import App from 'src/App.vue'
 import createRouter from 'src/router'
 import {

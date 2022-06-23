@@ -71,6 +71,7 @@ export interface VitrifyConfig extends UserConfig {
     sass?: {
       variables?: Record<string, string>
       additionalData?: string[]
+      global?: string[]
     }
     /**
      * Product name of the application. Will be used for the HTML title tag

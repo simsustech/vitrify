@@ -168,7 +168,8 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               onRendered: [injectSsrContext]
             },
             sass: {
-              additionalData: [`@import 'quasar/src/css/index.sass'`]
+              global: ['quasar/src/css/index.sass']
+              // additionalData: [`@import 'quasar/src/css/index.sass'`]
             }
           }
         }
@@ -232,7 +233,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                   urls?.packages?.quasar
                 ).pathname
               },
-
               {
                 find: 'quasar/directives',
                 replacement: new URL(
@@ -244,16 +244,17 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                 find: 'quasar/src',
                 replacement: new URL('src/', urls?.packages?.quasar).pathname
               },
-              {
-                find: new RegExp('^quasar$'),
-                replacement: new URL('src/index.all.js', urls?.packages?.quasar)
-                  .pathname
-              },
+              // {
+              //   find: new RegExp('^quasar$'),
+              //   replacement: new URL('src/index.all.js', urls?.packages?.quasar)
+              //     .pathname
+              // },
               {
                 find: `@quasar/extras`,
                 replacement: new URL('.', urls?.packages?.['@quasar/extras'])
                   .pathname
               }
+              // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
             ]
           },
           define: {
@@ -275,11 +276,11 @@ export const QuasarPlugin: VitrifyPlugin = async ({
     },
     {
       name: 'quasar-virtual-modules',
-      enforce: 'post',
+      enforce: 'pre',
       config: async (config, env) => ({
         resolve: {
           alias: [
-            { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
+            // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
           ]
         }
       }),
@@ -287,8 +288,8 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         switch (id) {
           case 'virtual:quasar-plugins':
             return 'virtual:quasar-plugins'
-          case 'virtual:quasar':
-            return { id: 'virtual:quasar', moduleSideEffects: false }
+          case 'quasar':
+            return { id: 'quasar', moduleSideEffects: false }
           default:
             return
         }
@@ -296,7 +297,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       load(id) {
         if (id === 'virtual:quasar-plugins') {
           return `export { ${plugins.join(',')} } from 'quasar'`
-        } else if (id === 'virtual:quasar') {
+        } else if (id === 'quasar') {
           return `export * from 'quasar/src/plugins.js';
           export * from 'quasar/src/components.js';
           export * from 'quasar/src/composables.js';

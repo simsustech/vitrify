@@ -61,7 +61,9 @@ const manualChunks: ManualChunksOption = (id: string) => {
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
   'virtual:global-css',
-  'virtual:static-imports'
+  'virtual:static-imports',
+  'vitrify.sass',
+  'vitrify.css'
 ]
 
 async function bundleConfigFile(
@@ -247,6 +249,7 @@ export const baseConfig = async ({
   let staticImports: StaticImports
   let sassVariables: Record<string, string>
   let additionalData: string[]
+  let globalSass: string[]
   let serverModules: string[] = internalServerModules
 
   if (vitrifyConfig.vitrify?.ssr?.serverModules)
@@ -289,20 +292,21 @@ export const baseConfig = async ({
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
         sassVariables = config.vitrify?.sass?.variables || {}
+        globalSass = config.vitrify?.sass?.global || []
         additionalData = config.vitrify?.sass?.additionalData || []
 
         return {
           css: {
             preprocessorOptions: {
-              sass: {
-                additionalData: [
-                  ...Object.entries(sassVariables).map(
-                    ([key, value]) => `${key}: ${value}`
-                  ),
-                  ...additionalData
-                  // config.css?.preprocessorOptions?.sass.additionalData
-                ].join('\n')
-              }
+              // sass: {
+              //   additionalData: [
+              //     ...Object.entries(sassVariables).map(
+              //       ([key, value]) => `${key}: ${value}`
+              //     )
+              //     // ...additionalData
+              //     // config.css?.preprocessorOptions?.sass.additionalData
+              //   ].join('\n')
+              // }
             }
           }
         }
@@ -314,8 +318,7 @@ export const baseConfig = async ({
         }
       },
       resolveId(id) {
-        if (VIRTUAL_MODULES.includes(id))
-          return { id, moduleSideEffects: false }
+        if (VIRTUAL_MODULES.includes(id)) return { id }
         return
       },
       transform: (code, id) => {
@@ -363,6 +366,15 @@ export const baseConfig = async ({
               ([key, value]) => `export { ${value.join(',')} } from '${key}';`
             )
             .join('\n')}`
+        } else if (id === 'vitrify.sass') {
+          return [
+            ...Object.entries(sassVariables).map(
+              ([key, value]) => `${key}: ${value}`
+            ),
+            ...globalSass.map((sass) => `@import '${sass}'`)
+          ].join('\n')
+        } else if (id === 'vitrify.css') {
+          return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
         }
         return null
       }

@@ -52,7 +52,6 @@ export async function createVitrifyDevServer({
 
   config.logLevel = logLevel
 
-  console.log(searchForWorkspaceRoot(appDir.pathname))
   config.server = {
     https: config.server?.https,
     hmr: {
