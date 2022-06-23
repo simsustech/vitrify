@@ -3,7 +3,7 @@ import type {
   FastifyRequest,
   FastifyReply
 } from 'fastify'
-import { fastifyStatic } from '@fastify/static'
+import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import type { OnRenderedHook } from '../../vitrify-config.js'
 import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
