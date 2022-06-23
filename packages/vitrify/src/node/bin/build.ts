@@ -22,7 +22,7 @@ export async function build(opts: {
 
   config.build = {
     ...config.build,
-    minify: false,
+    minify: !opts.debug,
     outDir: opts.outDir,
     emptyOutDir: !!opts.outDir
   }

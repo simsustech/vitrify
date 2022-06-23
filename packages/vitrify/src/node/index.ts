@@ -465,7 +465,7 @@ export const baseConfig = async ({
       ],
       external,
       output: {
-        minifyInternalExports: false,
+        minifyInternalExports: !debug,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
@@ -519,7 +519,7 @@ export const baseConfig = async ({
       // ],
       external,
       output: {
-        minifyInternalExports: false,
+        minifyInternalExports: !debug,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
