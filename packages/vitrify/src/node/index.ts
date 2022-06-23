@@ -9,6 +9,7 @@ import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
 import builtinModules from 'builtin-modules'
 import { resolve } from 'import-meta-resolve'
+import { visualizer } from 'rollup-plugin-visualizer'
 import type {
   StaticImports,
   BootFunction,
@@ -129,7 +130,8 @@ export const baseConfig = async ({
   command = 'build',
   mode = 'production',
   framework = 'vue',
-  pwa = false
+  pwa = false,
+  debug = false
 }: {
   ssr?: 'client' | 'server' | 'ssg' | 'fastify'
   appDir?: URL
@@ -139,6 +141,7 @@ export const baseConfig = async ({
   mode?: 'production' | 'development'
   framework?: 'vue'
   pwa?: boolean
+  debug?: boolean
 }): Promise<InlineConfig> => {
   const { getAppDir, getCliDir, getCliViteDir, getSrcDir, getCwd } =
     await import('./app-urls.js')
@@ -419,6 +422,8 @@ export const baseConfig = async ({
         }
       }
     })
+
+    if (debug) plugins.push(visualizer())
   }
 
   const alias: Alias[] = [

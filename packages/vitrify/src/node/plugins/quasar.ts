@@ -13,6 +13,7 @@ import type {
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
 import type { VitrifyPlugin } from './index.js'
 import { getPkgJsonDir } from '../app-urls.js'
+
 import { resolve } from 'import-meta-resolve'
 
 export interface QuasarConf {
@@ -248,10 +249,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                 replacement: new URL('src/index.all.js', urls?.packages?.quasar)
                   .pathname
               },
-              // {
-              //   find: 'quasar',
-              //   replacement: new URL('src/index.all.js', urls?.packages?.quasar).pathname
-              // },
               {
                 find: `@quasar/extras`,
                 replacement: new URL('.', urls?.packages?.['@quasar/extras'])
@@ -282,7 +279,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       config: async (config, env) => ({
         resolve: {
           alias: [
-            // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
+            { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
           ]
         }
       }),

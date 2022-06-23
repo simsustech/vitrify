@@ -20,6 +20,7 @@ cli
   .option('--appDir [appDir]', 'App directory')
   .option('--publicDir [publicDir]', 'Public directory')
   .option('--productName [productName]', 'Product name')
+  .option('--debug', 'Debug build')
   .action(async (options) => {
     const { build } = await import('./build.js')
     let appDir: URL
@@ -38,10 +39,12 @@ cli
       base: string
       appDir?: URL
       publicDir?: URL
+      debug?: boolean
     } = {
       base: options.base,
       appDir,
-      publicDir: parsePath(options.publicDir, appDir)
+      publicDir: parsePath(options.publicDir, appDir),
+      debug: options.debug
     }
 
     switch (options.mode) {
