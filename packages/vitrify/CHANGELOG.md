@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.2
+
+### Patch Changes
+
+- 1f71c74: Add a --debug option for build, fix Quasar bundle size, fix unnecessary loading of sideEffects by creating manual chunks for virtual modules"
+
 ## 0.5.1
 
 ### Patch Changes
