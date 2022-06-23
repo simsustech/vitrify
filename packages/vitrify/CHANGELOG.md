@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.3
+
+### Patch Changes
+
+- a8e0471: Fix duplicate CSS imports of Quasar, reduced bundle size
+
 ## 0.5.2
 
 ### Patch Changes
