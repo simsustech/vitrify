@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.3.2
+
+### Patch Changes
+
+- 1fd4020: Replace import-meta-resolve by a naive resolving algorithm, fixes compilation errors
+
 ## 0.3.1
 
 ### Patch Changes
