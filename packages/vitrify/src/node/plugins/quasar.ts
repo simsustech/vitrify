@@ -12,9 +12,9 @@ import type {
 // import { QuasarResolver } from '../resolver.js';
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
 import type { VitrifyPlugin } from './index.js'
-import { getPkgJsonDir } from '../app-urls.js'
+import { getPkgJsonDir, resolve } from '../app-urls.js'
 
-import { resolve } from 'import-meta-resolve'
+// import { resolve } from 'import-meta-resolve'
 
 export interface QuasarConf {
   ctx: Record<string, any>
@@ -123,7 +123,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         await (async () => {
           for (const val of localPackages)
             urls!.packages![val] = getPkgJsonDir(
-              new URL(await resolve(val, urls!.app!.href))
+              new URL(await resolve(val, urls!.app!))
             )
         })()
 

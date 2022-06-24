@@ -1,6 +1,14 @@
 // import { resolve } from 'import-meta-resolve'
 import { existsSync } from 'fs'
 
+export const resolve = (packageName: string, base: URL) => {
+  const packageUrl = new URL(`./node_modules/${packageName}/`, base)
+  if (existsSync(packageUrl.pathname)) {
+    return new URL('./', packageUrl)
+  }
+  throw new Error(`Package ${packageName} not found in ${base.pathname}.`)
+}
+
 export const getPkgJsonDir = (dir: URL): URL => {
   const pkgJsonPath = new URL('package.json', dir)
   if (existsSync(pkgJsonPath.pathname)) {

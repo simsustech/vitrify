@@ -8,7 +8,7 @@ import path from 'path'
 import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
 import builtinModules from 'builtin-modules'
-import { resolve } from 'import-meta-resolve'
+// import { resolve } from 'import-meta-resolve'
 import { visualizer } from 'rollup-plugin-visualizer'
 import type {
   StaticImports,
@@ -21,7 +21,7 @@ import type {
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
-import { getPkgJsonDir } from './app-urls.js'
+import { getPkgJsonDir, resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
 
 const internalServerModules = [
@@ -198,9 +198,7 @@ export const baseConfig = async ({
     vitrifyConfig.vitrify?.urls?.packages || {}
   await (async () => {
     for (const val of localPackages)
-      packageUrls[val] = getPkgJsonDir(
-        new URL(await resolve(val, appDir!.href))
-      )
+      packageUrls[val] = getPkgJsonDir(new URL(await resolve(val, appDir)))
   })()
 
   // await (async () => {
@@ -458,7 +456,7 @@ export const baseConfig = async ({
   if (command === 'test')
     alias.push({
       find: 'vitest',
-      replacement: new URL(await resolve('vitest', cliDir!.href)).pathname
+      replacement: new URL(await resolve('vitest', cliDir)).pathname
     })
 
   let rollupOptions: RollupOptions = {}
