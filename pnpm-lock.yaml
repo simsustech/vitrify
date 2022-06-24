@@ -132,6 +132,7 @@ importers:
       fastify: 4.0.0
       glob: 8.0.3
       happy-dom: 5.2.0
+      import-meta-resolve: 2.0.3
       local-pkg: 0.4.1
       magic-string: 0.26.2
       merge-deep: 3.0.3
@@ -149,7 +150,6 @@ importers:
       '@types/node': 17.0.41
       '@types/ws': 8.5.3
       '@vue/runtime-core': 3.2.37
-      import-meta-resolve: 2.0.3
       quasar: 2.7.1
       rollup: 2.75.6
       typescript: 4.7.3
@@ -1258,7 +1258,7 @@ packages:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
     dependencies:
       semver: 7.3.7
-    dev: true
+    dev: false
 
   /cac/6.7.12:
     resolution: {integrity: sha512-rM7E2ygtMkJqD9c7WnFU6fruFcN3xe4FM5yUmgxhZzIKJk4uHl9U/fhwdajGFQbQuv43FAUo1Fe8gX/oIKDeSA==}
@@ -2795,7 +2795,7 @@ packages:
     resolution: {integrity: sha512-fpAppnBpZ3ymQ/dPP97TNsco1HB5+V9SYJ3chY50PP8xn4U/w+Y6ovWBmTImB/prmGsTjzPh8pQYY+EVBlr9mw==}
     dependencies:
       builtins: 5.0.1
-    dev: true
+    dev: false
 
   /imurmurhash/0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
