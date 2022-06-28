@@ -86,29 +86,23 @@ export const QuasarPlugin: VitrifyPlugin = async ({
     Components({
       resolvers: [QuasarResolver()]
     }),
-    // {
-    //   name: 'vite-plugin-quasar-transform',
-    //   enforce: 'pre',
-    //   transform: (code, id, options) => {
-    //     const { ssr: transformSsr } = options || {}
-    //     code = code
-    //       .replaceAll('__QUASAR_SSR__', ssr ? ssr.toString() : 'false')
-    //       .replaceAll(
-    //         '__QUASAR_SSR_SERVER__',
-    //         transformSsr ? 'import.meta.env.SSR' : 'false'
-    //       )
-    //       .replaceAll(
-    //         '__QUASAR_SSR_CLIENT__',
-    //         ssr ? '!import.meta.env.SSR' : 'false'
-    //       )
-    //       .replaceAll(
-    //         '__QUASAR_SSR_PWA__',
-    //         ssr && pwa ? '!import.meta.env.SSR' : 'false'
-    //       )
+    {
+      name: 'vite-plugin-quasar-transform',
+      enforce: 'pre',
+      transform: (code, id, options) => {
+        const { ssr: transformSsr } = options || {}
+        code = code
+          .replaceAll('__QUASAR_SSR__', ssr ? 'true' : 'false')
+          .replaceAll('__QUASAR_SSR_SERVER__', 'import.meta.env.SSR')
+          .replaceAll('__QUASAR_SSR_CLIENT__', '!import.meta.env.SSR')
+          .replaceAll(
+            '__QUASAR_SSR_PWA__',
+            pwa ? '!import.meta.env.SSR' : 'false'
+          )
 
-    //     return code
-    //   }
-    // },
+        return code
+      }
+    },
     {
       name: 'vite-plugin-quasar-setup',
       enforce: 'pre',
@@ -271,18 +265,18 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             ]
           },
           optimizeDeps: {
-            exclude: ['quasar']
+            // exclude: ['quasar']
           },
           define: {
             __DEV__: process.env.NODE_ENV !== 'production' || true,
-            __QUASAR_VERSION__: `'${version}'`,
-            __QUASAR_SSR__: !!ssr,
-            // __QUASAR_SSR_SERVER__: ssr === 'server',
-            __QUASAR_SSR_SERVER__: `import.meta.env.SSR`,
-            // __QUASAR_SSR_CLIENT__: ssr === 'client',
-            __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
-            // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
-            __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
+            __QUASAR_VERSION__: `'${version}'`
+            // __QUASAR_SSR__: !!ssr,
+            // // __QUASAR_SSR_SERVER__: ssr === 'server',
+            // __QUASAR_SSR_SERVER__: `import.meta.env.SSR`,
+            // // __QUASAR_SSR_CLIENT__: ssr === 'client',
+            // __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
+            // // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
+            // __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
           },
           ssr: {
             noExternal: ['quasar']
