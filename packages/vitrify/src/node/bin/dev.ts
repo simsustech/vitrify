@@ -60,7 +60,7 @@ export async function createVitrifyDevServer({
     },
     port,
     // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
-    middlewareMode: ssr ? 'ssr' : false,
+    middlewareMode: ssr ? true : false,
     fs: {
       strict: false, // https://github.com/vitejs/vite/issues/8175
       allow: [
@@ -78,6 +78,8 @@ export async function createVitrifyDevServer({
     },
     host
   }
+  if (ssr) config.appType = 'custom'
+
   const vitrifyDevServer = await (
     await import('vite')
   ).createServer({
