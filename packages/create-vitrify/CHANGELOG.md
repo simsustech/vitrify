@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.3.5
+
+### Patch Changes
+
+- 8f7d7e5: Fix hydration errors
+
 ## 0.3.4
 
 ### Patch Changes
