@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.5
+
+### Patch Changes
+
+- a9e1ff6: fix: add @vue/server-renderer dependency and add @fastify/middie to internalServerModules
+
 ## 0.5.4
 
 ### Patch Changes
