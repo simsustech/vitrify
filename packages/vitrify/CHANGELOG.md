@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.8
+
+### Patch Changes
+
+- 8f7d7e5: Fix hydration errors
+
 ## 0.5.7
 
 ### Patch Changes
