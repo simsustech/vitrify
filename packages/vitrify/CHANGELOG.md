@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.6
+
+### Patch Changes
+
+- 9715393: Fix rendering errors by aliasing @vue/server-renderer to the local package
+
 ## 0.5.5
 
 ### Patch Changes
