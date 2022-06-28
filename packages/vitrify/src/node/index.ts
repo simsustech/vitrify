@@ -31,6 +31,8 @@ const internalServerModules = [
   'vite',
   'fastify',
   '@fastify/static',
+  '@fastify/middie',
+  '@fastify',
   'node'
 ]
 
