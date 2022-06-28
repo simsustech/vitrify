@@ -86,29 +86,29 @@ export const QuasarPlugin: VitrifyPlugin = async ({
     Components({
       resolvers: [QuasarResolver()]
     }),
-    {
-      name: 'vite-plugin-quasar-transform',
-      enforce: 'pre',
-      transform: (code, id, options) => {
-        const { ssr } = options || {}
-        code = code
-          .replaceAll('__QUASAR_SSR__', ssr ? ssr.toString() : 'false')
-          .replaceAll(
-            '__QUASAR_SSR_SERVER__',
-            ssr ? 'import.meta.env.SSR' : 'false'
-          )
-          .replaceAll(
-            '__QUASAR_SSR_CLIENT__',
-            ssr ? '!import.meta.env.SSR' : 'false'
-          )
-          .replaceAll(
-            '__QUASAR_SSR_PWA__',
-            ssr && pwa ? '!import.meta.env.SSR' : 'false'
-          )
+    // {
+    //   name: 'vite-plugin-quasar-transform',
+    //   enforce: 'pre',
+    //   transform: (code, id, options) => {
+    //     const { ssr: transformSsr } = options || {}
+    //     code = code
+    //       .replaceAll('__QUASAR_SSR__', ssr ? ssr.toString() : 'false')
+    //       .replaceAll(
+    //         '__QUASAR_SSR_SERVER__',
+    //         transformSsr ? 'import.meta.env.SSR' : 'false'
+    //       )
+    //       .replaceAll(
+    //         '__QUASAR_SSR_CLIENT__',
+    //         ssr ? '!import.meta.env.SSR' : 'false'
+    //       )
+    //       .replaceAll(
+    //         '__QUASAR_SSR_PWA__',
+    //         ssr && pwa ? '!import.meta.env.SSR' : 'false'
+    //       )
 
-        return code
-      }
-    },
+    //     return code
+    //   }
+    // },
     {
       name: 'vite-plugin-quasar-setup',
       enforce: 'pre',
@@ -143,7 +143,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             // @ts-ignore
             const quasarPlugins = await import('virtual:quasar-plugins')
             // @ts-ignore
-            const directives = await import('quasar/src/directives.js')
+            const directives = await import('virtual:quasar-directives')
 
             app.use(
               staticImports?.Quasar,
@@ -253,6 +253,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               //   find: 'quasar/src',
               //   replacement: new URL('src/', urls?.packages?.quasar).pathname
               // }
+              {
+                find: new RegExp('^quasar$'),
+                replacement: 'quasar/src/index.all.js'
+              }
               // {
               //   find: new RegExp('^quasar$'),
               //   replacement: new URL('src/index.all.js', urls?.packages?.quasar)
@@ -266,16 +270,19 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
             ]
           },
+          optimizeDeps: {
+            exclude: ['quasar']
+          },
           define: {
             __DEV__: process.env.NODE_ENV !== 'production' || true,
-            __QUASAR_VERSION__: `'${version}'`
-            // __QUASAR_SSR__: !!ssr,
-            // // __QUASAR_SSR_SERVER__: ssr === 'server',
-            // __QUASAR_SSR_SERVER__: `import.meta.env.SSR`,
-            // // __QUASAR_SSR_CLIENT__: ssr === 'client',
-            // __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
-            // // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
-            // __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
+            __QUASAR_VERSION__: `'${version}'`,
+            __QUASAR_SSR__: !!ssr,
+            // __QUASAR_SSR_SERVER__: ssr === 'server',
+            __QUASAR_SSR_SERVER__: `import.meta.env.SSR`,
+            // __QUASAR_SSR_CLIENT__: ssr === 'client',
+            __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
+            // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
+            __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
           },
           ssr: {
             noExternal: ['quasar']
@@ -297,6 +304,8 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         switch (id) {
           case 'virtual:quasar-plugins':
             return 'virtual:quasar-plugins'
+          case 'virtual:quasar-directives':
+            return 'virtual:quasar-directives'
           case 'quasar':
             return { id: 'quasar', moduleSideEffects: false }
           default:
@@ -306,13 +315,15 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       load(id) {
         if (id === 'virtual:quasar-plugins') {
           return `export { ${plugins.join(',')} } from 'quasar'`
+        } else if (id === 'virtual:quasar-directives') {
+          return `export * from 'quasar/src/directives'`
         } else if (id === 'quasar') {
-          return `export * from 'quasar/src/plugins.js';
-          export * from 'quasar/src/components.js';
-          export * from 'quasar/src/composables.js';
-          export * from 'quasar/src/directives.js';
-          export * from 'quasar/src/utils.js';
-          export { default as Quasar } from 'quasar/src/install-quasar.js'`
+          return `export * from 'quasar/src/plugins';
+          export * from 'quasar/src/components';
+          export * from 'quasar/src/composables';
+          export * from 'quasar/src/directives';
+          export * from 'quasar/src/utils';
+          export { default as Quasar } from 'quasar/src/install-quasar'`
         }
         return null
       }

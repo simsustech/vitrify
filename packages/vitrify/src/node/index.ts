@@ -542,7 +542,8 @@ export const baseConfig = async ({
   }
 
   const config = {
-    root: ssr === 'fastify' ? appDir.pathname : frameworkDir.pathname,
+    // root: ssr === 'fastify' ? appDir.pathname : frameworkDir.pathname,
+    root: appDir.pathname,
     publicDir: publicDir.pathname,
     base,
     envDir: appDir.pathname,
@@ -558,7 +559,7 @@ export const baseConfig = async ({
     },
     plugins,
     optimizeDeps: {
-      exclude: ['vue', ...serverModules, ...builtinModules]
+      exclude: ['vue', 'vue-router', ...serverModules, ...builtinModules]
     },
     resolve: {
       dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
