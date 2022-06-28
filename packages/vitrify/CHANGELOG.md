@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.7
+
+### Patch Changes
+
+- f034563: Remove all manually resolved aliases and problematic package.json import
+
 ## 0.5.6
 
 ### Patch Changes
