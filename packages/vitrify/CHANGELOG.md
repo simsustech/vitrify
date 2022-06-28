@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.9
+
+### Patch Changes
+
+- 818041e: Fix Quasar treeshaking
+
 ## 0.5.8
 
 ### Patch Changes
