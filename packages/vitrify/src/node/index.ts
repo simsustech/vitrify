@@ -194,7 +194,8 @@ export const baseConfig = async ({
     vitrifyConfig = {}
   }
 
-  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
+  // const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
+  const localPackages: string[] = []
   const cliPackages = []
   const packageUrls: Record<string, URL> =
     vitrifyConfig.vitrify?.urls?.packages || {}
@@ -560,7 +561,7 @@ export const baseConfig = async ({
       exclude: ['vue', ...serverModules, ...builtinModules]
     },
     resolve: {
-      dedupe: ['vue', 'vue-router'],
+      dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
       alias
     },
     build: {

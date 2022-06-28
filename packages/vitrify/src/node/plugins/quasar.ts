@@ -119,7 +119,8 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           (extra) => `@quasar/extras/${extra}/${extra}.css`
         )
 
-        const localPackages = ['@quasar/extras', 'quasar']
+        // const localPackages = ['@quasar/extras', 'quasar']
+        const localPackages: string[] = []
         await (async () => {
           for (const val of localPackages)
             urls!.packages![val] = getPkgJsonDir(
@@ -181,13 +182,20 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       config: async (config: VitrifyConfig, env) => {
         const { quasar: quasarConf, vitrify: { urls } = {} } = config
 
-        const quasarPkgJsonPath = new URL(
-          'package.json',
-          urls?.packages?.quasar
-        ).pathname
-        const { version } = JSON.parse(
-          readFileSync(quasarPkgJsonPath, { encoding: 'utf-8' })
-        )
+        // const quasarPkgJsonPath = new URL(
+        //   'package.json',
+        //   urls?.packages?.quasar
+        // ).pathname
+        // const { version } = JSON.parse(
+        //   readFileSync(quasarPkgJsonPath, { encoding: 'utf-8' })
+        // )
+        // const { version } = await import('quasar/package.json', {
+        //   assert: { type: 'json' }
+        // })
+        /**
+         * Importing package.json is problematic
+         */
+        const version = '?'
 
         /**
          * All components should have been auto-imported
@@ -202,58 +210,59 @@ export const QuasarPlugin: VitrifyPlugin = async ({
 
         return {
           resolve: {
+            dedupe: ['quasar', '@quasar/extras'],
             alias: [
-              {
-                find: 'quasar/wrappers',
-                replacement: new URL('quasar-wrappers.ts', urls?.cli).pathname
-              },
-              {
-                find: 'quasar/vue-plugin',
-                replacement: new URL(
-                  'src/vue-plugin.js',
-                  urls?.packages?.quasar
-                ).pathname
-              },
-              {
-                find: 'quasar/plugins',
-                replacement: new URL('src/plugins.js', urls?.packages?.quasar)
-                  .pathname
-              },
-              {
-                find: 'quasar/components',
-                replacement: new URL(
-                  'src/components.js',
-                  urls?.packages?.quasar
-                ).pathname
-              },
-              {
-                find: 'quasar/composables',
-                replacement: new URL(
-                  'src/composables.js',
-                  urls?.packages?.quasar
-                ).pathname
-              },
-              {
-                find: 'quasar/directives',
-                replacement: new URL(
-                  'src/directives.js',
-                  urls?.packages?.quasar
-                ).pathname
-              },
-              {
-                find: 'quasar/src',
-                replacement: new URL('src/', urls?.packages?.quasar).pathname
-              },
+              // {
+              //   find: 'quasar/wrappers',
+              //   replacement: new URL('quasar-wrappers.ts', urls?.cli).pathname
+              // },
+              // {
+              //   find: 'quasar/vue-plugin',
+              //   replacement: new URL(
+              //     'src/vue-plugin.js',
+              //     urls?.packages?.quasar
+              //   ).pathname
+              // },
+              // {
+              //   find: 'quasar/plugins',
+              //   replacement: new URL('src/plugins.js', urls?.packages?.quasar)
+              //     .pathname
+              // },
+              // {
+              //   find: 'quasar/components',
+              //   replacement: new URL(
+              //     'src/components.js',
+              //     urls?.packages?.quasar
+              //   ).pathname
+              // },
+              // {
+              //   find: 'quasar/composables',
+              //   replacement: new URL(
+              //     'src/composables.js',
+              //     urls?.packages?.quasar
+              //   ).pathname
+              // },
+              // {
+              //   find: 'quasar/directives',
+              //   replacement: new URL(
+              //     'src/directives.js',
+              //     urls?.packages?.quasar
+              //   ).pathname
+              // },
+              // {
+              //   find: 'quasar/src',
+              //   replacement: new URL('src/', urls?.packages?.quasar).pathname
+              // }
               // {
               //   find: new RegExp('^quasar$'),
               //   replacement: new URL('src/index.all.js', urls?.packages?.quasar)
               //     .pathname
               // },
-              {
-                find: `@quasar/extras`,
-                replacement: new URL('.', urls?.packages?.['@quasar/extras'])
-                  .pathname
-              }
+              // {
+              //   find: `@quasar/extras`,
+              //   replacement: new URL('.', urls?.packages?.['@quasar/extras'])
+              //     .pathname
+              // }
               // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
             ]
           },
