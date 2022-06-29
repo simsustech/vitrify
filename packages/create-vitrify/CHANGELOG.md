@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.3.6
+
+### Patch Changes
+
+- 975fda2: Add critical CSS generation when prerendering
+
 ## 0.3.5
 
 ### Patch Changes
