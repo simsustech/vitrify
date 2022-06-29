@@ -33,7 +33,8 @@ const internalServerModules = [
   '@fastify/static',
   '@fastify/middie',
   '@fastify',
-  'node'
+  'node',
+  'critters'
 ]
 
 const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
