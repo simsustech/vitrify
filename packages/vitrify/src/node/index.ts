@@ -48,7 +48,12 @@ const manualChunkNames = [
   'fastify-csr-plugin',
   'server'
 ]
-const manualChunks: ManualChunksOption = (id: string) => {
+
+const moduleChunks = {
+  vue: ['vue', '@vue'],
+  quasar: ['quasar']
+}
+const manualChunks: ManualChunksOption = (id, api) => {
   if (id.includes('vitrify/src/vite/')) {
     const name = id.split('/').at(-1)?.split('.').at(0)
     if (name && manualChunkNames.includes(name)) return name
@@ -57,6 +62,10 @@ const manualChunks: ManualChunksOption = (id: string) => {
   ) {
     return VIRTUAL_MODULES.find((name) => id.includes(name))
   } else if (id.includes('node_modules')) {
+    const name = Object.entries(moduleChunks).find(([chunkName, moduleNames]) =>
+      moduleNames.some((name) => id.includes(`${name}/`))
+    )
+    if (name) return name[0]
     return 'vendor'
   }
 }
