@@ -1,7 +1,6 @@
 import { promises as fs } from 'fs'
 import { routesToPaths } from '../../helpers/routes.js'
 import type { OnRenderedHook } from '../../vitrify-config.js'
-import Critters from 'critters'
 
 export const prerender = async ({
   outDir,
@@ -24,7 +23,7 @@ export const prerender = async ({
   const paths = routesToPaths(routes).filter(
     (i) => !i.includes(':') && !i.includes('*')
   )
-  const critters = new Critters({
+  const critters = new (await import('critters')).default({
     path: outDir,
     logLevel: 'warn',
     external: true,

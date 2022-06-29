@@ -195,14 +195,14 @@ export const baseConfig = async ({
     vitrifyConfig = {}
   }
 
-  // const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
-  const localPackages: string[] = []
+  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
+  // const localPackages: string[] = []
   const cliPackages = []
   const packageUrls: Record<string, URL> =
     vitrifyConfig.vitrify?.urls?.packages || {}
   await (async () => {
     for (const val of localPackages)
-      packageUrls[val] = getPkgJsonDir(new URL(await resolve(val, appDir)))
+      packageUrls[val] = getPkgJsonDir(new URL(resolve(val, appDir)))
   })()
 
   // await (async () => {
@@ -563,7 +563,7 @@ export const baseConfig = async ({
       exclude: ['vue', 'vue-router', ...serverModules, ...builtinModules]
     },
     resolve: {
-      dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
+      // dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
       alias
     },
     build: {
@@ -613,5 +613,5 @@ export const baseConfig = async ({
 }
 
 export const vitrifyDir = new URL('..', import.meta.url)
-
+export { prerender } from './frameworks/vue/prerender.js'
 export type { VitrifyConfig, VitrifyPlugin, VitrifyContext, BootFunction }
