@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.5.10
+
+### Patch Changes
+
+- 1473cae: Exclude quasar from optimizeDeps (fixes SSR dev mode)
+
 ## 0.5.9
 
 ### Patch Changes
