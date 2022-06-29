@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.0
+
+### Minor Changes
+
+- 975fda2: Add critical CSS generation when prerendering
+
 ## 0.5.10
 
 ### Patch Changes
