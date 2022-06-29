@@ -256,10 +256,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                   'node_modules/quasar/src/',
                   config.vitrify?.urls?.app
                 ).pathname
-              },
-              {
-                find: new RegExp('^quasar$'),
-                replacement: 'virtual:quasar'
               }
               // {
               //   find: 'quasar',
@@ -282,7 +278,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             ]
           },
           optimizeDeps: {
-            // exclude: ['quasar']
+            exclude: ['quasar']
           },
           define: {
             __DEV__: process.env.NODE_ENV !== 'production' || true,
@@ -307,6 +303,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       config: async (config, env) => ({
         resolve: {
           alias: [
+            {
+              find: new RegExp('^quasar$'),
+              replacement: 'virtual:quasar'
+            }
             // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
           ]
         }
