@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.4
+
+### Patch Changes
+
+- eebc9d6: Traverse upwards when resolving packages
+
 ## 0.6.3
 
 ### Patch Changes
