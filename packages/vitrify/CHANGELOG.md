@@ -1,5 +1,13 @@
 # vitrify
 
+## 0.6.1
+
+### Patch Changes
+
+- 7097f43: Create manual chunks for vue and quasar to prevent vendor.mjs from getting too large
+- cee8ff4: Fix SSR dev mode and onRendered is now integrated into entry-server
+- af64563: Dynamically import critters to prevent cjs bundling errors
+
 ## 0.6.0
 
 ### Minor Changes
