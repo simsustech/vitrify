@@ -24,7 +24,7 @@ cli
   .action(async (options) => {
     const { build } = await import('./build.js')
     let appDir: URL
-    let prerender, onRenderedHooks
+    let prerender
     if (options.appDir) {
       if (options.appDir.slice(-1) !== '/') options.appDir += '/'
       appDir = new URL(`file://${options.appDir}`)
@@ -84,7 +84,7 @@ cli
           ...args,
           outDir: new URL('ssr/server/', baseOutDir).pathname
         })
-        ;({ prerender, onRenderedHooks } = await import(
+        ;({ prerender } = await import(
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
         prerender({
@@ -93,8 +93,7 @@ cli
           manifestPath: new URL('static/ssr-manifest.json', baseOutDir)
             .pathname,
           entryServerPath: new URL('ssr/server/entry-server.mjs', baseOutDir)
-            .pathname,
-          onRenderedHooks
+            .pathname
         })
         break
       default:

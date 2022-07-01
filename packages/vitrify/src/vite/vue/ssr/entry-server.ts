@@ -5,7 +5,7 @@ import type { FastifyInstance } from 'fastify'
 // import { ApolloClients } from '@vue/apollo-composable'
 // import serialize from 'serialize-javascript'
 
-import { onSetup } from 'virtual:vitrify-hooks'
+import { onSetup, onRendered } from 'virtual:vitrify-hooks'
 
 export const setup = async ({ fastify }: { fastify: FastifyInstance }) => {
   if (onSetup?.length) {
@@ -66,6 +66,12 @@ export async function render(url, manifest, ssrContext) {
   // which we can then use to determine what files need to be preloaded for this
   // request.
   const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
+
+  if (onRendered?.length) {
+    for (const ssrFunction of onRendered) {
+      html = ssrFunction(html, ssrContext)
+    }
+  }
 
   return [html, preloadLinks]
 }

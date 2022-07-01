@@ -4,7 +4,6 @@ import type {
   FastifyReply
 } from 'fastify'
 import fastifyStatic from '@fastify/static'
-import type { OnRenderedHook } from '../../vitrify-config.js'
 import type { ViteDevServer } from 'vite'
 
 export interface FastifySsrOptions {
@@ -19,7 +18,6 @@ export interface FastifySsrOptions {
   appDir?: URL
   publicDir?: URL
   productName?: string
-  onRendered?: OnRenderedHook[]
   mode?: string
 }
 
