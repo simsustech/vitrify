@@ -13,6 +13,7 @@
     "./*": "./dist/*.js",
     "./build": "./dist/bin/build.js",
     "./dev": "./dist/bin/dev.js",
+    "./prerender": "./dist/prerender.js",
     "./helpers/*": "./dist/helpers/*.js",
     "./vite/*": "./src/vite/*"
   },
@@ -29,6 +30,9 @@
       ],
       "dev": [
         "./dist/types/bin/dev.d.ts"
+      ],
+      "prerender": [
+        "./dist/types/prerender.d.ts"
       ],
       "help": [
         "./dist/types/bin/help.d.ts"
