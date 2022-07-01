@@ -1,11 +1,13 @@
 // import { resolve } from 'import-meta-resolve'
 import { existsSync } from 'fs'
 
-export const resolve = (packageName: string, base: URL) => {
+export const resolve = (packageName: string, base: URL, counter = 0): URL => {
   const packageUrl = new URL(`./node_modules/${packageName}/`, base)
   if (existsSync(packageUrl.pathname)) {
     return new URL('./', packageUrl)
   }
+  if (counter < 10)
+    return resolve(packageName, new URL('../', base), counter + 1)
   throw new Error(`Package ${packageName} not found in ${base.pathname}.`)
 }
 
