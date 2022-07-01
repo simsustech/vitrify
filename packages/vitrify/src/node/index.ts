@@ -572,7 +572,7 @@ export const baseConfig = async ({
       exclude: ['vue', 'vue-router', ...serverModules, ...builtinModules]
     },
     resolve: {
-      // dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
+      dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
       alias
     },
     build: {
