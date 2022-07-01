@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.3
+
+### Patch Changes
+
+- 86bb2f6: Remove onSetup from entry-server
+
 ## 0.6.2
 
 ### Patch Changes
