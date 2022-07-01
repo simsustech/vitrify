@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.2
+
+### Patch Changes
+
+- 3bb618c: Add a prerender exports field to vitrify
+
 ## 0.6.1
 
 ### Patch Changes
