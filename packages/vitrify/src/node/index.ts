@@ -462,6 +462,10 @@ export const baseConfig = async ({
     {
       find: new RegExp('^vue$'),
       replacement: 'vue/dist/vue.runtime.esm-bundler.js'
+    },
+    {
+      find: new RegExp('^vue-router$'),
+      replacement: 'vue-router/dist/vue-router.esm-bundler.js'
     }
     // { find: 'vue', replacement: packageUrls['vue'].pathname },
     // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
