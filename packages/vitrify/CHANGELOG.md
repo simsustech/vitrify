@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.7
+
+### Patch Changes
+
+- 71ccb15: Remove quasar/src alias
+
 ## 0.6.6
 
 ### Patch Changes
