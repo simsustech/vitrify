@@ -1,5 +1,5 @@
 import { createApp } from '../main.js'
-import { renderToString } from '@vue/server-renderer'
+import { renderToString } from 'vue/server-renderer'
 
 import { onRendered } from 'virtual:vitrify-hooks'
 

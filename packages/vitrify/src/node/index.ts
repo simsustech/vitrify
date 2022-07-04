@@ -204,8 +204,8 @@ export const baseConfig = async ({
     vitrifyConfig = {}
   }
 
-  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
-  // const localPackages: string[] = []
+  // const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
+  const localPackages: string[] = []
   const cliPackages = []
   const packageUrls: Record<string, URL> =
     vitrifyConfig.vitrify?.urls?.packages || {}
@@ -271,25 +271,25 @@ export const baseConfig = async ({
 
   const plugins: UserConfig['plugins'] = [
     vuePlugin({
-      compiler: await import('vue/compiler-sfc'),
-      template: {
-        ssr: !!ssr,
-        compilerOptions: {
-          directiveTransforms: {
-            'close-popup': ssrTransformCustomDir,
-            intersection: ssrTransformCustomDir,
-            ripple: ssrTransformCustomDir,
-            mutation: ssrTransformCustomDir,
-            morph: ssrTransformCustomDir,
-            scroll: ssrTransformCustomDir,
-            'scroll-fire': ssrTransformCustomDir,
-            'touch-hold': ssrTransformCustomDir,
-            'touch-pan': ssrTransformCustomDir,
-            'touch-repeat': ssrTransformCustomDir,
-            'touch-swipe': ssrTransformCustomDir
-          }
-        }
-      }
+      // compiler: await import('vue/compiler-sfc'),
+      // template: {
+      //   ssr: !!ssr,
+      //   compilerOptions: {
+      //     directiveTransforms: {
+      //       'close-popup': ssrTransformCustomDir,
+      //       intersection: ssrTransformCustomDir,
+      //       ripple: ssrTransformCustomDir,
+      //       mutation: ssrTransformCustomDir,
+      //       morph: ssrTransformCustomDir,
+      //       scroll: ssrTransformCustomDir,
+      //       'scroll-fire': ssrTransformCustomDir,
+      //       'touch-hold': ssrTransformCustomDir,
+      //       'touch-pan': ssrTransformCustomDir,
+      //       'touch-repeat': ssrTransformCustomDir,
+      //       'touch-swipe': ssrTransformCustomDir
+      //     }
+      //   }
+      // }
     }),
     ...frameworkPlugins,
     {
@@ -458,7 +458,11 @@ export const baseConfig = async ({
     ...Object.entries(packageUrls).map(([key, value]) => ({
       find: key,
       replacement: value.pathname
-    }))
+    })),
+    {
+      find: new RegExp('^vue$'),
+      replacement: 'vue/dist/vue.runtime.esm-bundler.js'
+    }
     // { find: 'vue', replacement: packageUrls['vue'].pathname },
     // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
     // { find: 'vitrify', replacement: cliDir.pathname }

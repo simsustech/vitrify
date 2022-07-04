@@ -66,11 +66,11 @@ importers:
     specifiers:
       '@fastify/middie': ^8.0.0
       '@fastify/static': ^6.4.0
-      '@quasar/extras': ^1.14.1
+      '@quasar/extras': ^1.14.2
       '@types/connect': ^3.4.35
       '@types/glob': ^7.2.0
       '@types/merge-deep': ^3.0.0
-      '@types/node': ^18.0.0
+      '@types/node': ^18.0.1
       '@types/ws': ^8.5.3
       '@vitejs/plugin-vue': ^3.0.0-alpha.1
       '@vue/runtime-core': ^3.2.37
@@ -80,22 +80,22 @@ importers:
       chalk: ^5.0.1
       critters: ^0.0.16
       cross-env: ^7.0.3
-      esbuild: ^0.14.47
+      esbuild: ^0.14.48
       fastify: ^4.2.0
       glob: ^8.0.3
-      happy-dom: ^5.3.4
+      happy-dom: ^6.0.0
       magic-string: ^0.26.2
       merge-deep: ^3.0.3
-      quasar: ^2.7.3
+      quasar: ^2.7.4
       readline: ^1.3.0
       rollup: ^2.75.7
       rollup-plugin-visualizer: ^5.6.0
       sass: 1.53.0
-      ts-node: ^10.8.1
+      ts-node: ^10.8.2
       typescript: ^4.7.4
-      unplugin-vue-components: ^0.20.1
+      unplugin-vue-components: ^0.21.0
       vite: ^3.0.0-beta.0
-      vitest: ^0.16.0
+      vitest: ^0.17.0
       vue: ^3.2.37
       vue-router: ^4.0.16
     dependencies:
@@ -112,21 +112,21 @@ importers:
       esbuild: 0.14.48
       fastify: 4.2.0
       glob: 8.0.3
-      happy-dom: 5.4.0
+      happy-dom: 6.0.0
       magic-string: 0.26.2
       merge-deep: 3.0.3
       readline: 1.3.0
       rollup-plugin-visualizer: 5.6.0_rollup@2.75.7
       sass: 1.53.0
-      ts-node: 10.8.1_qiyc72axg2v44xl4yovan2v55u
-      unplugin-vue-components: 0.20.1_x4hayimuqf742kjyan2xesbjca
+      ts-node: 10.8.2_qqrtuuv3y2pz7xoxv47yka6pmi
+      unplugin-vue-components: 0.21.0_x4hayimuqf742kjyan2xesbjca
       vite: 3.0.0-beta.5_sass@1.53.0
-      vitest: 0.16.0_bihdjqgecolafhq65f4yeblura
+      vitest: 0.17.0_37qif4ykp7lhfpx2vuz6y52w5a
     devDependencies:
       '@types/connect': 3.4.35
       '@types/glob': 7.2.0
       '@types/merge-deep': 3.0.0
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
       '@types/ws': 8.5.3
       '@vue/runtime-core': 3.2.37
       quasar: 2.7.4
@@ -446,10 +446,10 @@ packages:
       '@commitlint/execute-rule': 16.2.1
       '@commitlint/resolve-extends': 16.2.1
       '@commitlint/types': 16.2.1
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
       chalk: 4.1.2
       cosmiconfig: 7.0.1
-      cosmiconfig-typescript-loader: 2.0.2_qiyc72axg2v44xl4yovan2v55u
+      cosmiconfig-typescript-loader: 2.0.2_qqrtuuv3y2pz7xoxv47yka6pmi
       lodash: 4.17.21
       resolve-from: 5.0.0
       typescript: 4.7.4
@@ -690,26 +690,26 @@ packages:
   /@types/concat-stream/1.6.1:
     resolution: {integrity: sha512-eHE4cQPoj6ngxBZMvVf6Hw7Mh4jMW4U9lpGmS5GBPB9RYxlFg+CHaVN7ErNY4W9XfLIEn20b4VDYaIrbq0q4uA==}
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
     dev: false
 
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
     dev: true
 
   /@types/form-data/0.0.33:
     resolution: {integrity: sha512-8BSvG1kGm83cyJITQMZSulnl6QV8jqAGreJsc5tPu1Jq0vTSOiY/k24Wx82JRpWwZSqrala6sd5rWi6aNXvqcw==}
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
     dev: false
 
   /@types/glob/7.2.0:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
     dev: true
 
   /@types/inquirer/8.2.1:
@@ -757,8 +757,8 @@ packages:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
     dev: true
 
-  /@types/node/18.0.0:
-    resolution: {integrity: sha512-cHlGmko4gWLVI27cGJntjs/Sj8th9aYwplmZFwmmgYQQvL5NUsgVJG7OddLvNfLqYS31KFN0s3qlaD9qCaxACA==}
+  /@types/node/18.0.1:
+    resolution: {integrity: sha512-CmR8+Tsy95hhwtZBKJBs0/FFq4XX7sDZHlGGf+0q+BRZfMbOTkzkj0AFAuTyXbObDIoanaBBW0+KEW+m3N16Wg==}
 
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
@@ -783,13 +783,13 @@ packages:
   /@types/through/0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
     dev: true
 
   /@types/ws/8.5.3:
     resolution: {integrity: sha512-6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==}
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.30.4_eewxtjj33uq4o73zpcjsegq3l4:
@@ -1497,16 +1497,16 @@ packages:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: false
 
-  /cosmiconfig-typescript-loader/2.0.2_qiyc72axg2v44xl4yovan2v55u:
+  /cosmiconfig-typescript-loader/2.0.2_qqrtuuv3y2pz7xoxv47yka6pmi:
     resolution: {integrity: sha512-KmE+bMjWMXJbkWCeY4FJX/npHuZPNr9XF9q9CIQ/bpFwi1qHfCmSiKarrCcRa0LO4fWjk93pVoeRtJAkTGcYNw==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@types/node': '*'
       typescript: '>=3'
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
       cosmiconfig: 7.0.1
-      ts-node: 10.8.1_qiyc72axg2v44xl4yovan2v55u
+      ts-node: 10.8.2_qqrtuuv3y2pz7xoxv47yka6pmi
       typescript: 4.7.4
     transitivePeerDependencies:
       - '@swc/core'
@@ -2726,8 +2726,8 @@ packages:
       uglify-js: 3.16.2
     dev: false
 
-  /happy-dom/5.4.0:
-    resolution: {integrity: sha512-JxXpBvEUdyCqfRHzHJKtiJ+6+WzTIL6kFCteAOEy13QEnHMD/D5uUIVVw3a4TmQroJriz0gnll4Uv1qZeSz/rA==}
+  /happy-dom/6.0.0:
+    resolution: {integrity: sha512-Nk+hyCemZGIyQ0gDLyb6K1PFOHepfec101dG93z5g8+LIYSUZWT3FDzWUIUwfYkcAnaRCM9hMDgmR2pFLUYE9w==}
     dependencies:
       css.escape: 1.5.1
       he: 1.2.0
@@ -4620,8 +4620,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-node/10.8.1_qiyc72axg2v44xl4yovan2v55u:
-    resolution: {integrity: sha512-Wwsnao4DQoJsN034wePSg5nZiw4YKXf56mPIAeD6wVmiv+RytNSWqc2f3fKvcUoV+Yn2+yocD71VOfQHbmVX4g==}
+  /ts-node/10.8.2_qqrtuuv3y2pz7xoxv47yka6pmi:
+    resolution: {integrity: sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
@@ -4639,7 +4639,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
       acorn: 8.7.1
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -4767,8 +4767,8 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  /unplugin-vue-components/0.20.1_x4hayimuqf742kjyan2xesbjca:
-    resolution: {integrity: sha512-I70rKUvnJXxBvvTvKhjMV6jXh48BdiUNn2jcQiTdZjqBA3Xgkze31tdc4KBX46yryIy0y6pVaZ9gVBNPrF785g==}
+  /unplugin-vue-components/0.21.0_x4hayimuqf742kjyan2xesbjca:
+    resolution: {integrity: sha512-U7uOMNmRJ2eAv9CNjP8QRvxs6nAe3FVQUEIUphC1FGguBp3BWSLgGAcSHaX2nQy0gFoDY2mLF2M52W/t/eDaKg==}
     engines: {node: '>=14'}
     peerDependencies:
       '@babel/parser': ^7.15.8
@@ -4924,16 +4924,19 @@ packages:
       fsevents: 2.3.2
     dev: false
 
-  /vitest/0.16.0_bihdjqgecolafhq65f4yeblura:
-    resolution: {integrity: sha512-Ntp6jrM8wf2NMtamMBLkRBBdeqHkgAH/WMh5Xryts1j2ft2D8QZQbiSVFkSl4WmEQzcPP0YM069g/Ga1vtnEtg==}
+  /vitest/0.17.0_37qif4ykp7lhfpx2vuz6y52w5a:
+    resolution: {integrity: sha512-5YO9ubHo0Zg35mea3+zZAr4sCku32C3usvIH5COeJB48TZV/R0J9aGNtGOOqEWZYfOKP0pGZUvTokne3x/QEFg==}
     engines: {node: '>=v14.16.0'}
     hasBin: true
     peerDependencies:
+      '@edge-runtime/vm': '*'
       '@vitest/ui': '*'
       c8: '*'
       happy-dom: '*'
       jsdom: '*'
     peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
       '@vitest/ui':
         optional: true
       c8:
@@ -4945,10 +4948,10 @@ packages:
     dependencies:
       '@types/chai': 4.3.1
       '@types/chai-subset': 1.3.3
-      '@types/node': 18.0.0
+      '@types/node': 18.0.1
       chai: 4.3.6
       debug: 4.3.4
-      happy-dom: 5.4.0
+      happy-dom: 6.0.0
       local-pkg: 0.4.1
       tinypool: 0.2.1
       tinyspy: 0.3.3
