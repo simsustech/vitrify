@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.9
+
+### Patch Changes
+
+- e977a76: Add vue-router to moduleChunks
+
 ## 0.6.8
 
 ### Patch Changes
