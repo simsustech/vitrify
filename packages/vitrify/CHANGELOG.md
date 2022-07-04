@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.6
+
+### Patch Changes
+
+- c4d1f36: Fix vue alias
+
 ## 0.6.5
 
 ### Patch Changes
