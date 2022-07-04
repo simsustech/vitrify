@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.8
+
+### Patch Changes
+
+- 64bf58c: Update vue-router and fix types
+
 ## 0.6.7
 
 ### Patch Changes
