@@ -257,7 +257,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               //   ).pathname
               // },
               {
-                find: 'quasar/src',
+                find: 'quasar/src/',
                 replacement: new URL(
                   'node_modules/quasar/src/',
                   config.vitrify?.urls?.app
