@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.11
+
+### Patch Changes
+
+- 537bdb7: Make renderToString an argument and import dynamically if not defined
+
 ## 0.6.10
 
 ### Patch Changes
