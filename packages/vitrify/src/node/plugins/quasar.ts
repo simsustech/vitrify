@@ -256,13 +256,13 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               //     urls?.packages?.quasar
               //   ).pathname
               // },
-              {
-                find: 'quasar/src/',
-                replacement: new URL(
-                  'node_modules/quasar/src/',
-                  config.vitrify?.urls?.app
-                ).pathname
-              }
+              // {
+              //   find: 'quasar/src/',
+              //   replacement: new URL(
+              //     'node_modules/quasar/src/',
+              //     config.vitrify?.urls?.app
+              //   ).pathname
+              // }
               // {
               //   find: 'quasar',
               //   replacement: new URL(
