@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.10
+
+### Patch Changes
+
+- 9c22676: Create manual chunk for vitrify internals
+
 ## 0.6.9
 
 ### Patch Changes
