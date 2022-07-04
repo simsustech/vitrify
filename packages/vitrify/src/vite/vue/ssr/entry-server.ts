@@ -1,5 +1,5 @@
 import { createApp } from '../main.js'
-import { renderToString } from 'vue/server-renderer'
+// import { renderToString } from 'vue/server-renderer'
 
 import { onRendered } from 'virtual:vitrify-hooks'
 
@@ -37,7 +37,9 @@ export const getRoutes = async () =>
     })
   ).routes
 
-export async function render(url, manifest, ssrContext) {
+export async function render(url, manifest, ssrContext, renderToString) {
+  if (!renderToString)
+    renderToString = (await import('vue/server-renderer')).renderToString
   const { app, router } = await initializeApp(url, ssrContext)
 
   const ctx = {

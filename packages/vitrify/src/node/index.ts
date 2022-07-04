@@ -56,8 +56,7 @@ const moduleChunks = {
 const manualChunks: ManualChunksOption = (id, api) => {
   if (id.includes('vitrify/src/')) {
     const name = id.split('/').at(-1)?.split('.').at(0)
-    if (name && manualChunkNames.includes(name)) return name
-    return 'vitrify'
+    return name
   } else if (
     VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
   ) {
@@ -578,16 +577,10 @@ export const baseConfig = async ({
     },
     plugins,
     optimizeDeps: {
-      exclude: [
-        'vue',
-        'vue-router',
-        'vue/server-renderer',
-        ...serverModules,
-        ...builtinModules
-      ]
+      exclude: ['vue', 'vue-router', ...serverModules, ...builtinModules]
     },
     resolve: {
-      dedupe: ['vue', '@vue/server-renderer', 'vue-router'],
+      dedupe: ['vue', 'vue-router'],
       alias
     },
     build: {
