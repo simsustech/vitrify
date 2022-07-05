@@ -1,12 +1,12 @@
 // https://github.com/antfu/vite-ssg/blob/462722203dade87365a519d847fcd881ee16a7f4/src/node/utils.ts#L13
-import type { RouteRecord } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
-export const routesToPaths = (routes?: RouteRecord[]) => {
+export const routesToPaths = (routes?: RouteRecordRaw[]) => {
   if (!routes) return ['/']
 
   const paths: Set<string> = new Set()
 
-  const getPaths = (routes: RouteRecord[], prefix = '') => {
+  const getPaths = (routes: RouteRecordRaw[], prefix = '') => {
     // remove trailing slash
     prefix = prefix.replace(/\/$/g, '')
     for (const route of routes) {
