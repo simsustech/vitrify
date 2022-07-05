@@ -74,7 +74,6 @@ importers:
       '@types/ws': ^8.5.3
       '@vitejs/plugin-vue': ^3.0.0-alpha.1
       '@vue/runtime-core': ^3.2.37
-      '@vue/server-renderer': ^3.2.37
       builtin-modules: ^3.3.0
       cac: ^6.7.12
       chalk: ^5.0.1
@@ -111,7 +110,7 @@ importers:
       esbuild: 0.14.48
       fastify: 4.2.0
       glob: 8.0.3
-      happy-dom: 6.0.0
+      happy-dom: 6.0.2
       magic-string: 0.26.2
       merge-deep: 3.0.3
       readline: 1.3.0
@@ -120,7 +119,7 @@ importers:
       ts-node: 10.8.2_qqrtuuv3y2pz7xoxv47yka6pmi
       unplugin-vue-components: 0.21.0_uc44ofsvriwyks6fjvnum7bpee
       vite: 3.0.0-beta.6_sass@1.53.0
-      vitest: 0.17.0_37qif4ykp7lhfpx2vuz6y52w5a
+      vitest: 0.17.0_nzm4h3w7rupd67bwkxmesy6h44
     devDependencies:
       '@types/connect': 3.4.35
       '@types/glob': 7.2.0
@@ -128,12 +127,11 @@ importers:
       '@types/node': 18.0.1
       '@types/ws': 8.5.3
       '@vue/runtime-core': 3.2.37
-      '@vue/server-renderer': 3.2.37_vue@3.2.37
       quasar: 2.7.5
       rollup: 2.75.7
       typescript: 4.7.4
       vue: 3.2.37
-      vue-router: 4.1.0_vue@3.2.37
+      vue-router: 4.1.1_vue@3.2.37
 
 packages:
 
@@ -537,7 +535,7 @@ packages:
       ajv: 6.12.6
       debug: 4.3.4
       espree: 9.3.2
-      globals: 13.15.0
+      globals: 13.16.0
       ignore: 5.2.0
       import-fresh: 3.3.0
       js-yaml: 4.1.0
@@ -547,8 +545,8 @@ packages:
       - supports-color
     dev: true
 
-  /@fastify/ajv-compiler/3.1.1:
-    resolution: {integrity: sha512-sn01z9hluLu4ZKUEWK/gdCOU+QJTa6r7YpwD2l7lATgfwrJD/sMSe+zX03UWWebI9kdMmK18gj4Fhi0I3LtLnQ==}
+  /@fastify/ajv-compiler/3.1.2:
+    resolution: {integrity: sha512-m2nzzQJeuVmeGOB9rnII9sZiY8AZ02a9WMQfMBfK1jxdFnxm3FPYKGbYpPjODj4halNogwpolyugbTNpnDCi0A==}
     dependencies:
       ajv: 8.11.0
       ajv-formats: 2.1.1
@@ -562,7 +560,7 @@ packages:
   /@fastify/fast-json-stringify-compiler/4.0.0:
     resolution: {integrity: sha512-9pCi6c6tmGt/qfuf2koZQuSIG6ckP9q3mz+JoMmAq9eQ4EtA92sWoK7E0LJUn2FFTS/hp5kag+4+dWsV5ZfcXg==}
     dependencies:
-      fast-json-stringify: 5.0.5
+      fast-json-stringify: 5.0.6
     dev: false
 
   /@fastify/middie/8.0.0:
@@ -783,7 +781,7 @@ packages:
   /@types/through/0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
     dependencies:
-      '@types/node': 18.0.1
+      '@types/node': 17.0.45
     dev: true
 
   /@types/ws/8.5.3:
@@ -2249,7 +2247,7 @@ packages:
       file-entry-cache: 6.0.1
       functional-red-black-tree: 1.0.1
       glob-parent: 6.0.2
-      globals: 13.15.0
+      globals: 13.16.0
       ignore: 5.2.0
       import-fresh: 3.3.0
       imurmurhash: 0.1.4
@@ -2371,8 +2369,8 @@ packages:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
     dev: true
 
-  /fast-json-stringify/5.0.5:
-    resolution: {integrity: sha512-NGXE7I6dBcSTM1pprcLEIQ6nHp424mDn8ABleM17Sp7XkyPLlbIDed41/VhUiqnLICX7XiOoFsNHx/nnJ8qhig==}
+  /fast-json-stringify/5.0.6:
+    resolution: {integrity: sha512-iZM2VJ19wBOjznp9AQ3PEXTAvwcwJXDsz5xEoTs+31s/lCyOYrqHicXHzt0VoLz16pZStsWx3HIvRFB6AQaWeA==}
     dependencies:
       ajv: 8.11.0
       ajv-formats: 2.1.1
@@ -2401,7 +2399,7 @@ packages:
   /fastify/4.2.0:
     resolution: {integrity: sha512-0QXEp+8ceKc0fwVakeBLM/1Ss/+fc7a3auuygT+1GjbSAgHfwqxSucUuu0rYjziu32UgEZXfjItYN/a89HWKhw==}
     dependencies:
-      '@fastify/ajv-compiler': 3.1.1
+      '@fastify/ajv-compiler': 3.1.2
       '@fastify/error': 3.0.0
       '@fastify/fast-json-stringify-compiler': 4.0.0
       abstract-logging: 2.0.1
@@ -2682,8 +2680,8 @@ packages:
       ini: 1.3.8
     dev: true
 
-  /globals/13.15.0:
-    resolution: {integrity: sha512-bpzcOlgDhMG070Av0Vy5Owklpv1I6+j96GhUI7Rh7IzDCKLzboflLrrfqMu8NquDbiR4EOQk7XzJwqVJxicxog==}
+  /globals/13.16.0:
+    resolution: {integrity: sha512-A1lrQfpNF+McdPOnnFqY3kSN0AFTy485bTi1bkLk4mVPODIUEcSfhHgRqA+QdXPksrSTTztYXx37NFV+GpGk3Q==}
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.20.2
@@ -2722,8 +2720,8 @@ packages:
       uglify-js: 3.16.2
     dev: false
 
-  /happy-dom/6.0.0:
-    resolution: {integrity: sha512-Nk+hyCemZGIyQ0gDLyb6K1PFOHepfec101dG93z5g8+LIYSUZWT3FDzWUIUwfYkcAnaRCM9hMDgmR2pFLUYE9w==}
+  /happy-dom/6.0.2:
+    resolution: {integrity: sha512-NLPdk85xDRRYmOo3FjQ4KILNTH0geVofs1jW6x8IVO3PSl6bSLbB89DcLZGlkSYNLMJ8fggwd0v5v6gZidriXA==}
     dependencies:
       css.escape: 1.5.1
       he: 1.2.0
@@ -4895,7 +4893,7 @@ packages:
       fsevents: 2.3.2
     dev: false
 
-  /vitest/0.17.0_37qif4ykp7lhfpx2vuz6y52w5a:
+  /vitest/0.17.0_nzm4h3w7rupd67bwkxmesy6h44:
     resolution: {integrity: sha512-5YO9ubHo0Zg35mea3+zZAr4sCku32C3usvIH5COeJB48TZV/R0J9aGNtGOOqEWZYfOKP0pGZUvTokne3x/QEFg==}
     engines: {node: '>=v14.16.0'}
     hasBin: true
@@ -4922,7 +4920,7 @@ packages:
       '@types/node': 18.0.1
       chai: 4.3.6
       debug: 4.3.4
-      happy-dom: 6.0.0
+      happy-dom: 6.0.2
       local-pkg: 0.4.1
       tinypool: 0.2.1
       tinyspy: 0.3.3
@@ -4935,8 +4933,8 @@ packages:
       - terser
     dev: false
 
-  /vue-router/4.1.0_vue@3.2.37:
-    resolution: {integrity: sha512-A+dYO0ZXLJFZ40ebW3XtqehCW0Wv2xNH4lFddOByDja4NtItEdyirrShTlvD3UA4xc5a5mG2RRI30BusYpOb9g==}
+  /vue-router/4.1.1_vue@3.2.37:
+    resolution: {integrity: sha512-Wp1mEf2xCwT0ez7o9JvgpfBp9JGnVb+dPERzXDbugTatzJAJ60VWOhJKifQty85k+jOreoFHER4r5fu062PhPw==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
