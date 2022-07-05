@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.6.12
+
+### Patch Changes
+
+- 9a6b8bd: Remove @vue/server-renderer dependency (should fix "Server rendering context not provided" error)
+- dedfbae: Fix vue-router types compilation errors
+
 ## 0.6.11
 
 ### Patch Changes
