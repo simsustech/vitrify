@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.14
+
+### Patch Changes
+
+- c68c3dd: Fix quasar/src alias...
+
 ## 0.6.13
 
 ### Patch Changes
