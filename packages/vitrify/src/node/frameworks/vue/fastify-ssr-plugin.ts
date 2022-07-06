@@ -183,7 +183,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       if (!ssrContext.initialState) ssrContext.initialState = {}
       ssrContext.initialState.provide = provide
 
-      let html = template
+      const html = template
         .replace(`<!--preload-links-->`, preloadLinks)
         .replace(`<!--app-html-->`, appHtml)
 

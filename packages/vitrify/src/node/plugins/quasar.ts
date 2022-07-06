@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs'
-import type { Plugin } from 'vite'
+import type { Plugin} from 'vite';
+import { resolvePackageData } from 'vite'
 import Components from 'unplugin-vue-components/vite'
 // import { prepareQuasarConf } from './quasar-conf-file.js'
 import type {
@@ -119,13 +120,16 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           (extra) => `@quasar/extras/${extra}/${extra}.css`
         )
 
-        // const localPackages = ['@quasar/extras', 'quasar']
-        const localPackages: string[] = []
+        const localPackages = ['@quasar/extras', 'quasar']
+        // const localPackages: string[] = []
         await (async () => {
-          for (const val of localPackages)
-            urls!.packages![val] = getPkgJsonDir(
-              new URL(await resolve(val, urls!.app!))
+          for (const val of localPackages) {
+            const pkg = resolvePackageData(
+              val,
+              config.vitrify!.urls!.app!.pathname
             )
+            if (pkg) urls!.packages![val] = new URL(`file://${pkg.dir}/`)
+          }
         })()
 
         const onMountedHooks: OnMountedHook[] = [
@@ -256,13 +260,13 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               //     urls?.packages?.quasar
               //   ).pathname
               // },
-              // {
-              //   find: 'quasar/src/',
-              //   replacement: new URL(
-              //     'node_modules/quasar/src/',
-              //     config.vitrify?.urls?.app
-              //   ).pathname
-              // }
+              {
+                find: 'quasar/src',
+                replacement: new URL(
+                  './src',
+                  config.vitrify!.urls!.packages!.quasar
+                ).pathname
+              }
               // {
               //   find: 'quasar',
               //   replacement: new URL(

@@ -1,6 +1,6 @@
 import vuePlugin from '@vitejs/plugin-vue'
-import type { Alias, InlineConfig, UserConfig } from 'vite'
-import { resolveConfig } from 'vite'
+import type { Alias, InlineConfig, UserConfig } from 'vite';
+import { resolvePackageData } from 'vite'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'
 import fs from 'fs'
@@ -50,22 +50,24 @@ const manualChunkNames = [
 ]
 
 const moduleChunks = {
-  vue: ['vue', '@vue', 'vue-router'],
-  quasar: ['quasar']
+  vue: ['vue', 'vue-router'],
+  quasar: ['quasar', '@quasar']
 }
-const manualChunks: ManualChunksOption = (id, api) => {
-  if (id.includes('vitrify/src/')) {
+const manualChunks: ManualChunksOption = (id: string) => {
+  const matchedModule = Object.entries(moduleChunks).find(
+    ([chunkName, moduleNames]) =>
+      moduleNames.some((moduleName) => id.includes(moduleName + '/'))
+  )
+  if (id.includes('vitrify/src/vite/')) {
     const name = id.split('/').at(-1)?.split('.').at(0)
-    return name
+    if (name && manualChunkNames.includes(name)) return name
+  } else if (matchedModule) {
+    return matchedModule[0]
   } else if (
     VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
   ) {
     return VIRTUAL_MODULES.find((name) => id.includes(name))
   } else if (id.includes('node_modules')) {
-    const name = Object.entries(moduleChunks).find(([chunkName, moduleNames]) =>
-      moduleNames.some((name) => id.includes(`${name}/`))
-    )
-    if (name) return name[0]
     return 'vendor'
   }
 }
@@ -204,14 +206,16 @@ export const baseConfig = async ({
     vitrifyConfig = {}
   }
 
-  // const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
-  const localPackages: string[] = []
+  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
+  // const localPackages: string[] = []
   const cliPackages = []
   const packageUrls: Record<string, URL> =
     vitrifyConfig.vitrify?.urls?.packages || {}
   await (async () => {
-    for (const val of localPackages)
-      packageUrls[val] = getPkgJsonDir(new URL(resolve(val, appDir)))
+    for (const val of localPackages) {
+      const pkg = resolvePackageData(val, appDir.pathname)
+      if (pkg) packageUrls![val] = new URL(`file://${pkg.dir}/`)
+    }
   })()
 
   // await (async () => {
@@ -458,15 +462,19 @@ export const baseConfig = async ({
     ...Object.entries(packageUrls).map(([key, value]) => ({
       find: key,
       replacement: value.pathname
-    })),
-    {
-      find: new RegExp('^vue$'),
-      replacement: 'vue/dist/vue.runtime.esm-bundler.js'
-    },
-    {
-      find: new RegExp('^vue-router$'),
-      replacement: 'vue-router/dist/vue-router.esm-bundler.js'
-    }
+    }))
+    // {
+    //   find: new RegExp('^vue$'),
+    //   replacement: 'vue/dist/vue.runtime.esm-bundler.js'
+    // },
+    // {
+    //   find: new RegExp('^vue/server-renderer$'),
+    //   replacement: 'vue/server-renderer/index.mjs'
+    // },
+    // {
+    //   find: new RegExp('^vue-router$'),
+    //   replacement: 'vue-router/dist/vue-router.esm-bundler.js'
+    // }
     // { find: 'vue', replacement: packageUrls['vue'].pathname },
     // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
     // { find: 'vitrify', replacement: cliDir.pathname }
