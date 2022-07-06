@@ -50,7 +50,7 @@ const manualChunkNames = [
 ]
 
 const moduleChunks = {
-  vue: ['vue', 'vue-router'],
+  vue: ['vue', '@vue', 'vue-router'],
   quasar: ['quasar', '@quasar']
 }
 const manualChunks: ManualChunksOption = (id: string) => {
