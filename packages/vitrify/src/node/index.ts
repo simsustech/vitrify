@@ -58,7 +58,7 @@ const manualChunks: ManualChunksOption = (id: string) => {
     ([chunkName, moduleNames]) =>
       moduleNames.some((moduleName) => id.includes(moduleName + '/'))
   )
-  if (id.includes('vitrify/src/vite/')) {
+  if (id.includes('vitrify/src/')) {
     const name = id.split('/').at(-1)?.split('.').at(0)
     if (name && manualChunkNames.includes(name)) return name
   } else if (matchedModule) {
