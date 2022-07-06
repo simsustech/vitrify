@@ -261,9 +261,9 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               //   ).pathname
               // },
               {
-                find: 'quasar/src',
+                find: 'quasar/src/',
                 replacement: new URL(
-                  './src',
+                  './src/',
                   config.vitrify!.urls!.packages!.quasar
                 ).pathname
               }
@@ -300,10 +300,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             // __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
             // // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
             // __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
-          },
-          ssr: {
-            noExternal: ['quasar']
           }
+          // ssr: {
+          //   noExternal: ['quasar']
+          // }
         }
       }
     },
@@ -344,6 +344,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           export * from 'quasar/src/composables.js';
           export * from 'quasar/src/directives.js';
           export * from 'quasar/src/utils.js';
+          export * from 'quasar/src/composables.js';
           export { default as Quasar } from 'quasar/src/install-quasar.js'`
         }
         return null
