@@ -1,5 +1,5 @@
 import vuePlugin from '@vitejs/plugin-vue'
-import type { Alias, InlineConfig, UserConfig } from 'vite';
+import type { Alias, InlineConfig, UserConfig } from 'vite'
 import { resolvePackageData } from 'vite'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'

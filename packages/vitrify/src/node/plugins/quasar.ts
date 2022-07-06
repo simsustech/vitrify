@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import type { Plugin} from 'vite';
+import type { Plugin } from 'vite'
 import { resolvePackageData } from 'vite'
 import Components from 'unplugin-vue-components/vite'
 // import { prepareQuasarConf } from './quasar-conf-file.js'
