@@ -1,7 +1,7 @@
 import { createApp } from '../main.js'
 // import { renderToString } from 'vue/server-renderer'
 
-import { onRendered } from 'virtual:vitrify-hooks'
+// import { onRendered } from 'virtual:vitrify-hooks'
 
 const initializeApp = async (url, ssrContext) => {
   const onRenderedList = []
@@ -48,12 +48,6 @@ export async function render(url, manifest, ssrContext, renderToString) {
   let html = await renderToString(app, ctx)
 
   const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
-
-  if (onRendered?.length) {
-    for (const ssrFunction of onRendered) {
-      html = ssrFunction(html, ssrContext)
-    }
-  }
 
   return [html, preloadLinks]
 }

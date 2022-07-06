@@ -61,13 +61,14 @@ const manualChunks: ManualChunksOption = (id: string) => {
   if (id.includes('vitrify/src/')) {
     const name = id.split('/').at(-1)?.split('.').at(0)
     if (name && manualChunkNames.includes(name)) return name
-  } else if (matchedModule) {
-    return matchedModule[0]
   } else if (
     VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
   ) {
     return VIRTUAL_MODULES.find((name) => id.includes(name))
   } else if (id.includes('node_modules')) {
+    if (matchedModule) {
+      return matchedModule[0]
+    }
     return 'vendor'
   }
 }
@@ -459,22 +460,28 @@ export const baseConfig = async ({
     { find: 'cwd', replacement: cwd.pathname },
     { find: 'boot', replacement: new URL('boot/', srcDir).pathname },
     { find: 'assets', replacement: new URL('assets/', srcDir).pathname },
-    ...Object.entries(packageUrls).map(([key, value]) => ({
-      find: key,
-      replacement: value.pathname
-    }))
-    // {
-    //   find: new RegExp('^vue$'),
-    //   replacement: 'vue/dist/vue.runtime.esm-bundler.js'
-    // },
+    // ...Object.entries(packageUrls).map(([key, value]) => ({
+    //   find: key,
+    //   replacement: value.pathname
+    // }))
+    {
+      find: new RegExp('^vue$'),
+      replacement: new URL(
+        './dist/vue.runtime.esm-bundler.js',
+        packageUrls['vue']
+      ).pathname
+    },
     // {
     //   find: new RegExp('^vue/server-renderer$'),
     //   replacement: 'vue/server-renderer/index.mjs'
     // },
-    // {
-    //   find: new RegExp('^vue-router$'),
-    //   replacement: 'vue-router/dist/vue-router.esm-bundler.js'
-    // }
+    {
+      find: new RegExp('^vue-router$'),
+      replacement: new URL(
+        './dist/vue-router.esm-bundler.js',
+        packageUrls['vue-router']
+      ).pathname
+    }
     // { find: 'vue', replacement: packageUrls['vue'].pathname },
     // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
     // { find: 'vitrify', replacement: cliDir.pathname }

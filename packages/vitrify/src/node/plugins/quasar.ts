@@ -266,7 +266,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                   './src/',
                   config.vitrify!.urls!.packages!.quasar
                 ).pathname
-              }
+              },
               // {
               //   find: 'quasar',
               //   replacement: new URL(
@@ -274,11 +274,11 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               //     config.vitrify?.urls?.app
               //   )
               // }
-              // {
-              //   find: new RegExp('^quasar$'),
-              //   replacement: new URL('src/index.all.js', urls?.packages?.quasar)
-              //     .pathname
-              // },
+              {
+                find: new RegExp('^quasar$'),
+                replacement: new URL('src/index.all.js', urls?.packages?.quasar)
+                  .pathname
+              }
               // {
               //   find: `@quasar/extras`,
               //   replacement: new URL('.', urls?.packages?.['@quasar/extras'])
@@ -300,10 +300,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             // __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
             // // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
             // __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
+          },
+          ssr: {
+            noExternal: ['quasar']
           }
-          // ssr: {
-          //   noExternal: ['quasar']
-          // }
         }
       }
     },
@@ -313,10 +313,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       config: async (config, env) => ({
         resolve: {
           alias: [
-            {
-              find: new RegExp('^quasar$'),
-              replacement: 'virtual:quasar'
-            }
+            // {
+            //   find: new RegExp('^quasar$'),
+            //   replacement: 'virtual:quasar'
+            // }
             // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
           ]
         }

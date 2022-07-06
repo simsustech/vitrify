@@ -7,6 +7,7 @@ import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
 import type { ViteDevServer } from 'vite'
+import { OnRenderedHook } from 'src/node/vitrify-config.js'
 
 export interface FastifySsrOptions {
   baseUrl?: string
@@ -17,6 +18,7 @@ export interface FastifySsrOptions {
   vitrifyDir?: URL
   vite?: ViteDevServer
   // frameworkDir?: URL
+  onRendered?: OnRenderedHook[]
   appDir?: URL
   publicDir?: URL
   productName?: string
@@ -88,7 +90,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     //   ...config
     // })
 
-    console.log('Dev mode')
     if (!('use' in fastify)) {
       const middie = (await import('@fastify/middie')).default
       await fastify.register(middie)
@@ -98,9 +99,12 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     fastify.get(`${options.baseUrl}*`, async (req, res) => {
       try {
         const url = req.raw.url?.replace(options.baseUrl!, '/')
+        const provide = options.provide ? await options.provide(req, res) : {}
+
         const ssrContext = {
           req,
-          res
+          res,
+          provide
         }
 
         let template = readFileSync(
@@ -129,11 +133,18 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         })
 
         const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
-        const html = template
+        let html = template
           .replace(`<!--preload-links-->`, preloadLinks)
           .replace(`<!--app-html-->`, appHtml)
           .replace('<!--product-name-->', options.productName || 'Product name')
           .replace('<!--dev-ssr-css-->', css)
+
+        if (options.onRendered?.length) {
+          for (const ssrFunction of options.onRendered) {
+            console.log(ssrFunction)
+            html = ssrFunction(html, ssrContext)
+          }
+        }
 
         res.code(200)
         res.type('text/html')
@@ -183,9 +194,15 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       if (!ssrContext.initialState) ssrContext.initialState = {}
       ssrContext.initialState.provide = provide
 
-      const html = template
+      let html = template
         .replace(`<!--preload-links-->`, preloadLinks)
         .replace(`<!--app-html-->`, appHtml)
+
+      if (options.onRendered?.length) {
+        for (const ssrFunction of options.onRendered) {
+          html = ssrFunction(html, ssrContext)
+        }
+      }
 
       res.code(200)
       res.type('text/html')
