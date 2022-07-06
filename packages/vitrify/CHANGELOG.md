@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.15
+
+### Patch Changes
+
+- 1d40a80: Fix manual chunking
+
 ## 0.6.14
 
 ### Patch Changes
