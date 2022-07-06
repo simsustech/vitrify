@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.13
+
+### Patch Changes
+
+- 6dac566: Use resolvePackageData from vite for package resolution
+
 ## 0.6.12
 
 ### Patch Changes
