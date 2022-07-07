@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.6.17
+
+### Patch Changes
+
+- 9e73ec0: Add onRendered to prerender
+
 ## 0.6.16
 
 ### Patch Changes
