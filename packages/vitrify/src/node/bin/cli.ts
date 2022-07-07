@@ -25,6 +25,7 @@ cli
     const { build } = await import('./build.js')
     let appDir: URL
     let prerender
+    let onRendered
     if (options.appDir) {
       if (options.appDir.slice(-1) !== '/') options.appDir += '/'
       appDir = new URL(`file://${options.appDir}`)
@@ -84,16 +85,18 @@ cli
           ...args,
           outDir: new URL('ssr/server/', baseOutDir).pathname
         })
-        ;({ prerender } = await import(
+        ;({ prerender, onRendered } = await import(
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
+        console.log(onRendered)
         prerender({
           outDir: new URL('static/', baseOutDir).pathname,
           templatePath: new URL('static/index.html', baseOutDir).pathname,
           manifestPath: new URL('static/ssr-manifest.json', baseOutDir)
             .pathname,
           entryServerPath: new URL('ssr/server/entry-server.mjs', baseOutDir)
-            .pathname
+            .pathname,
+          onRendered
         })
         break
       default:

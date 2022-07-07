@@ -1,16 +1,19 @@
 import { promises as fs } from 'fs'
+import type { OnRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 
 export const prerender = async ({
   outDir,
   templatePath,
   manifestPath,
-  entryServerPath
+  entryServerPath,
+  onRendered
 }: {
   outDir: string
   templatePath: string
   manifestPath: string
   entryServerPath: string
+  onRendered: OnRenderedHook[]
 }) => {
   const promises = []
   const template = (await fs.readFile(templatePath)).toString()
@@ -40,6 +43,12 @@ export const prerender = async ({
     let html = template
       .replace(`<!--preload-links-->`, preloadLinks)
       .replace(`<!--app-html-->`, appHtml)
+
+    if (onRendered?.length) {
+      for (const ssrFunction of onRendered) {
+        html = ssrFunction(html, ssrContext)
+      }
+    }
 
     html = await critters.process(html)
 
