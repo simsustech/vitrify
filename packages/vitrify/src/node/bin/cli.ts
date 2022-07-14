@@ -88,7 +88,7 @@ cli
         ;({ prerender, onRendered } = await import(
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
-        console.log(onRendered)
+
         prerender({
           outDir: new URL('static/', baseOutDir).pathname,
           templatePath: new URL('static/index.html', baseOutDir).pathname,

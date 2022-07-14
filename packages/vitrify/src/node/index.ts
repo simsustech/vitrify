@@ -75,7 +75,6 @@ const manualChunks: ManualChunksOption = (id: string) => {
 
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
-  'virtual:global-css',
   'virtual:static-imports',
   'vitrify.sass',
   'vitrify.css'
@@ -312,19 +311,19 @@ export const baseConfig = async ({
         additionalData = config.vitrify?.sass?.additionalData || []
 
         return {
-          css: {
-            preprocessorOptions: {
-              // sass: {
-              //   additionalData: [
-              //     ...Object.entries(sassVariables).map(
-              //       ([key, value]) => `${key}: ${value}`
-              //     )
-              //     // ...additionalData
-              //     // config.css?.preprocessorOptions?.sass.additionalData
-              //   ].join('\n')
-              // }
-            }
-          }
+          // css: {
+          //   preprocessorOptions: {
+          //     sass: {
+          //       additionalData: [
+          //         ...Object.entries(sassVariables).map(
+          //           ([key, value]) => `${key}: ${value}`
+          //         )
+          //         // ...additionalData
+          //         // config.css?.preprocessorOptions?.sass.additionalData
+          //       ].join('\n')
+          //     }
+          //   }
+          // }
         }
       },
       configResolved: (config) => {
@@ -337,13 +336,13 @@ export const baseConfig = async ({
         if (VIRTUAL_MODULES.includes(id)) return { id }
         return
       },
-      transform: (code, id) => {
-        if (id.endsWith('main.ts') && id.includes('vitrify')) {
-          code =
-            `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
-        }
-        return code
-      },
+      // transform: (code, id) => {
+      //   if (id.endsWith('main.ts') && id.includes('vitrify')) {
+      //     code =
+      //       `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
+      //   }
+      //   return code
+      // },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
           return `export const onBoot = [${onBootHooks
@@ -390,7 +389,7 @@ export const baseConfig = async ({
             ...globalSass.map((sass) => `@import '${sass}'`)
           ].join('\n')
         } else if (id === 'vitrify.css') {
-          return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
+          return `${globalCss.map((css) => `@import '${css}'`).join('\n')}`
         }
         return null
       }
