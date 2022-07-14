@@ -1,4 +1,4 @@
-import 'vitrify.css'
+// import 'vitrify.css'
 import 'vitrify.sass'
 import App from 'src/App.vue'
 import createRouter from 'src/router'
@@ -49,7 +49,7 @@ export async function createApp(
   // Workaround to fix hydration errors when serving html files directly
   router.beforeEach((to, from, next) => {
     if (to.path.endsWith('.html')) {
-      next({ path: to.path.replace('.html', '') })
+      return next({ path: to.path.replace('.html', '') })
     }
 
     next()

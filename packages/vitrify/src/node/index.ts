@@ -327,6 +327,12 @@ export const baseConfig = async ({
           // }
         }
       },
+      configureServer(server) {
+        server.middlewares.use('/', (req, res, next) => {
+          if (req.url?.endsWith('.html')) req.url = req.url.replace('.html', '')
+          next()
+        })
+      },
       configResolved: (config) => {
         if (process.env.DEBUG) {
           console.log(config.css?.preprocessorOptions?.sass.additionalData)
@@ -337,13 +343,13 @@ export const baseConfig = async ({
         if (VIRTUAL_MODULES.includes(id)) return { id }
         return
       },
-      // transform: (code, id) => {
-      //   if (id.endsWith('main.ts') && id.includes('vitrify')) {
-      //     code =
-      //       `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
-      //   }
-      //   return code
-      // },
+      transform: (code, id) => {
+        if (id.endsWith('main.ts') && id.includes('vitrify')) {
+          code =
+            `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
+        }
+        return code
+      },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
           return `export const onBoot = [${onBootHooks
