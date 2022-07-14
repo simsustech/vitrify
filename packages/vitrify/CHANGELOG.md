@@ -1,5 +1,13 @@
 # vitrify
 
+## 0.6.18
+
+### Patch Changes
+
+- d29cb47: Revert the use of vitrify.css as icons do not seem to work
+- 32e3c93: Fix Quasar framework.lang configuration
+- f3d8827: Use vitrify.css for global CSS
+
 ## 0.6.17
 
 ### Patch Changes
