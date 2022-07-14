@@ -39,6 +39,7 @@ export type OnRenderedHook = (
 export type OnSetupFile = URL
 export interface VitrifyConfig extends UserConfig {
   vitrify?: {
+    lang?: string
     /**
      * Global CSS imports
      */

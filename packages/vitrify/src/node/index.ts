@@ -76,6 +76,7 @@ const manualChunks: ManualChunksOption = (id: string) => {
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
   'virtual:static-imports',
+  'virtual:vitrify-config',
   'vitrify.sass',
   'vitrify.css'
 ]
@@ -390,6 +391,8 @@ export const baseConfig = async ({
           ].join('\n')
         } else if (id === 'vitrify.css') {
           return `${globalCss.map((css) => `@import '${css}'`).join('\n')}`
+        } else if (id === 'virtual:vitrify-config') {
+          return `export default ${JSON.stringify(vitrifyConfig)}`
         }
         return null
       }

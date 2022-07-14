@@ -25,6 +25,7 @@ export interface QuasarConf {
     components?: string[]
     directives?: string[]
     plugins?: string[]
+    lang?: string
   }
   animations: string[]
   extras: string[]
@@ -83,6 +84,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
   pwa = false
 }): Promise<Plugin[]> => {
   let plugins: string[] = []
+  let quasarConf: QuasarConf
   return [
     Components({
       resolvers: [QuasarResolver()]
@@ -148,12 +150,15 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             const quasarPlugins = await import('virtual:quasar-plugins')
             // @ts-ignore
             const directives = await import('virtual:quasar-directives')
-
+            // @ts-ignore
+            const { default: lang } = await import('virtual:quasar-lang')
+            console.log(lang)
             app.use(
               staticImports?.Quasar,
               {
                 plugins: quasarPlugins,
-                directives
+                directives,
+                lang
               },
               ssrContext
             )
@@ -184,8 +189,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       name: 'vite-plugin-quasar',
       enforce: 'post',
       config: async (config: VitrifyConfig, env) => {
-        const { quasar: quasarConf, vitrify: { urls } = {} } = config
-
+        const { quasar, vitrify: { urls } = {} } = config
+        if (quasar) quasarConf = quasar
+        if (!quasarConf.framework.lang && config.vitrify?.lang)
+          quasarConf.framework.lang = config.vitrify.lang
         // const quasarPkgJsonPath = new URL(
         //   'package.json',
         //   urls?.packages?.quasar
@@ -327,6 +334,8 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             return 'virtual:quasar-plugins'
           case 'virtual:quasar-directives':
             return 'virtual:quasar-directives'
+          case 'virtual:quasar-lang':
+            return 'virtual:quasar-lang'
           case 'virtual:quasar':
             return { id: 'virtual:quasar', moduleSideEffects: false }
           default:
@@ -338,6 +347,11 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           return `export { ${plugins.join(',')} } from 'quasar'`
         } else if (id === 'virtual:quasar-directives') {
           return `export * from 'quasar/src/directives.js'`
+        } else if (id === 'virtual:quasar-lang') {
+          return `import lang from 'quasar/lang/${
+            quasarConf?.framework?.lang || 'en-US'
+          }';
+          export default lang`
         } else if (id === 'virtual:quasar') {
           return `export * from 'quasar/src/plugins.js';
           export * from 'quasar/src/components.js';
