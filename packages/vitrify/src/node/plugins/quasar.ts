@@ -152,7 +152,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             const directives = await import('virtual:quasar-directives')
             // @ts-ignore
             const { default: lang } = await import('virtual:quasar-lang')
-            console.log(lang)
+
             app.use(
               staticImports?.Quasar,
               {

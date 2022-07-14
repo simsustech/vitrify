@@ -21,7 +21,7 @@ import type {
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
-import { getPkgJsonDir, resolve } from './app-urls.js'
+import { resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
 
 const internalServerModules = [
@@ -237,13 +237,6 @@ export const baseConfig = async ({
     console.error('package.json not found')
   }
 
-  const ssrTransformCustomDir = () => {
-    return {
-      props: [],
-      needRuntime: true
-    }
-  }
-
   const frameworkPlugins = []
   for (const framework of Object.keys(configPluginMap)) {
     if (Object.keys(vitrifyConfig).includes(framework)) {
@@ -275,27 +268,7 @@ export const baseConfig = async ({
     ]
 
   const plugins: UserConfig['plugins'] = [
-    vuePlugin({
-      // compiler: await import('vue/compiler-sfc'),
-      // template: {
-      //   ssr: !!ssr,
-      //   compilerOptions: {
-      //     directiveTransforms: {
-      //       'close-popup': ssrTransformCustomDir,
-      //       intersection: ssrTransformCustomDir,
-      //       ripple: ssrTransformCustomDir,
-      //       mutation: ssrTransformCustomDir,
-      //       morph: ssrTransformCustomDir,
-      //       scroll: ssrTransformCustomDir,
-      //       'scroll-fire': ssrTransformCustomDir,
-      //       'touch-hold': ssrTransformCustomDir,
-      //       'touch-pan': ssrTransformCustomDir,
-      //       'touch-repeat': ssrTransformCustomDir,
-      //       'touch-swipe': ssrTransformCustomDir
-      //     }
-      //   }
-      // }
-    }),
+    vuePlugin(),
     ...frameworkPlugins,
     {
       name: 'vitrify-setup',
@@ -311,21 +284,7 @@ export const baseConfig = async ({
         globalSass = config.vitrify?.sass?.global || []
         additionalData = config.vitrify?.sass?.additionalData || []
 
-        return {
-          // css: {
-          //   preprocessorOptions: {
-          //     sass: {
-          //       additionalData: [
-          //         ...Object.entries(sassVariables).map(
-          //           ([key, value]) => `${key}: ${value}`
-          //         )
-          //         // ...additionalData
-          //         // config.css?.preprocessorOptions?.sass.additionalData
-          //       ].join('\n')
-          //     }
-          //   }
-          // }
-        }
+        return {}
       },
       configureServer(server) {
         server.middlewares.use('/', (req, res, next) => {
@@ -374,14 +333,6 @@ export const baseConfig = async ({
                     .replaceAll('.', '')})`
               )
               .join('\n')}`
-          // export const onSetup = [${onSetupHooks
-          //   .map((fn) => `${String(fn)}`)
-          //   .join(', ')}]`
-          /**
-           * CSS imports in virtual files do not seem to work. Using transform() instead
-           */
-          // } else if (id === 'virtual:global-css') {
-          //   return `${globalCss.map((css) => `import '${css}'`).join('\n')}`
         } else if (id === 'virtual:static-imports') {
           return `${Object.entries(staticImports)
             .map(
@@ -408,16 +359,16 @@ export const baseConfig = async ({
     plugins.unshift({
       name: 'html-transform',
       enforce: 'pre',
-      transform: (code, id) => {
-        if (id.endsWith('App.vue')) {
-          code =
-            code +
-            `<style lang="sass">
-// do not remove, required for additionalData import
-</style>`
-        }
-        return code
-      },
+      //       transform: (code, id) => {
+      //         if (id.endsWith('App.vue')) {
+      //           code =
+      //             code +
+      //             `<style lang="sass">
+      // // do not remove, required for additionalData import
+      // </style>`
+      //         }
+      //         return code
+      //       },
       transformIndexHtml: {
         enforce: 'pre',
         transform: (html) => {
@@ -479,10 +430,6 @@ export const baseConfig = async ({
         packageUrls['vue']
       ).pathname
     },
-    // {
-    //   find: new RegExp('^vue/server-renderer$'),
-    //   replacement: 'vue/server-renderer/index.mjs'
-    // },
     {
       find: new RegExp('^vue-router$'),
       replacement: new URL(
@@ -490,9 +437,6 @@ export const baseConfig = async ({
         packageUrls['vue-router']
       ).pathname
     }
-    // { find: 'vue', replacement: packageUrls['vue'].pathname },
-    // { find: 'vue-router', replacement: packageUrls['vue-router'].pathname },
-    // { find: 'vitrify', replacement: cliDir.pathname }
   ]
   if (mode === 'development' && vitrifyConfig.vitrify?.dev?.alias)
     alias.push(...vitrifyConfig.vitrify.dev.alias)
@@ -524,20 +468,11 @@ export const baseConfig = async ({
         chunkFileNames: '[name].mjs',
         format: 'es',
         manualChunks
-        // manualChunks: (id) => {
-        //   if (id.includes('vitrify/src/vite/')) {
-        //     const name = id.split('/').at(-1)?.split('.').at(0)
-        //     if (name && manualChunks.includes(name)) return name
-        //   } else if (id.includes('node_modules')) {
-        //     return 'vendor'
-        //   }
-        // }
       }
     }
     // Create a SSR bundle
     noExternal = [
       new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
-      // new RegExp(`^(?!.*(${[...builtinModules, ...serverModules].join('|')}))`)
     ]
   } else if (ssr === 'fastify') {
     rollupOptions = {
@@ -550,14 +485,6 @@ export const baseConfig = async ({
         chunkFileNames: '[name].mjs',
         format: 'es',
         manualChunks
-        // manualChunks: (id) => {
-        //   if (id.includes('vitrify/src/vite/')) {
-        //     const name = id.split('/').at(-1)?.split('.').at(0)
-        //     if (name && manualChunks.includes(name)) return name
-        //   } else if (id.includes('node_modules')) {
-        //     return 'vendor'
-        //   }
-        // }
       }
     }
     // Create a SSR bundle
@@ -567,10 +494,6 @@ export const baseConfig = async ({
   } else {
     rollupOptions = {
       ...rollupOptions,
-      // input: [
-      //   new URL('index.html', frameworkDir).pathname
-      //   // new URL('csr/server.ts', frameworkDir).pathname
-      // ],
       external,
       output: {
         minifyInternalExports: !debug,
@@ -583,7 +506,6 @@ export const baseConfig = async ({
   }
 
   const config = {
-    // root: ssr === 'fastify' ? appDir.pathname : frameworkDir.pathname,
     root: appDir.pathname,
     publicDir: publicDir.pathname,
     base,
@@ -611,33 +533,6 @@ export const baseConfig = async ({
       ssr: ssr === 'server' || ssr === 'fastify' ? true : false,
       ssrManifest: ssr === 'client' || ssr === 'ssg',
       rollupOptions
-      // ssr === 'server'
-      //   ? {
-      //       input: [
-      //         new URL('ssr/entry-server.ts', frameworkDir).pathname,
-      //         new URL('ssr/prerender.ts', frameworkDir).pathname,
-      //         new URL('ssr/server.ts', frameworkDir).pathname
-      //       ],
-      //       output: {
-      //         minifyInternalExports: false,
-      //         entryFileNames: '[name].mjs',
-      //         chunkFileNames: '[name].mjs',
-      //         format: 'es',
-      //         manualChunks: (id) => {
-      //           if (id.includes('vitrify/src/vite/')) {
-      //             const name = id.split('/').at(-1)?.split('.').at(0)
-      //             if (name && manualChunks.includes(name)) return name
-      //           } else if (id.includes('node_modules')) {
-      //             return 'vendor'
-      //           }
-      //         }
-      //       }
-      //     }
-      //   : {
-      //       output: {
-      //         format: 'es'
-      //       }
-      //     }
     },
     ssr: {
       // Create a SSR bundle
