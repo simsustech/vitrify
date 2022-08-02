@@ -15,7 +15,7 @@ export const createApp = ({
   vitrifyDir,
   mode
 }: {
-  onSetup: OnSetupFile[]
+  onSetup: ((fastify: FastifyInstance) => void)[]
   appDir: URL
   baseUrl?: string
   fastifyPlugin: FastifySsrPlugin | FastifyCsrPlugin
@@ -35,11 +35,11 @@ export const createApp = ({
     mode
   })
 
-  // if (onSetup?.length) {
-  //   for (const setup of onSetup) {
-  //     setup(app)
-  //   }
-  // }
+  if (onSetup?.length) {
+    for (const setup of onSetup) {
+      setup(app)
+    }
+  }
 
   return app
 }
