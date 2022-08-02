@@ -461,7 +461,7 @@ export const baseConfig = async ({
       ],
       external,
       output: {
-        minifyInternalExports: !debug,
+        minifyInternalExports: false,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
@@ -494,7 +494,7 @@ export const baseConfig = async ({
       ...rollupOptions,
       external,
       output: {
-        minifyInternalExports: !debug,
+        minifyInternalExports: false,
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
