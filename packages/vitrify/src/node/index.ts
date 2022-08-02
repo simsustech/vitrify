@@ -332,9 +332,10 @@ export const baseConfig = async ({
               .join('\n')}`
         } else if (id === 'virtual:static-imports') {
           return `${Object.entries(staticImports)
-            .map(
-              ([key, value]) => `export { ${value.join(',')} } from '${key}';`
-            )
+            .map(([key, value]) => {
+              const deduped = [...new Set(value)]
+              return `export { ${deduped.join(',')} } from '${key}';`
+            })
             .join('\n')}`
         } else if (id === 'vitrify.sass') {
           return [
