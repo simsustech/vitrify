@@ -322,16 +322,13 @@ export const baseConfig = async ({
               .join(', ')}]
             export const onSetup = []
             ${onSetupFiles
-              .map(
-                (url, index) =>
-                  `import ${url.pathname
-                    .replaceAll('/', '')
-                    .replaceAll('.', '')} from '${
-                    url.pathname
-                  }'; onSetup.push(${url.pathname
-                    .replaceAll('/', '')
-                    .replaceAll('.', '')})`
-              )
+              .map((url, index) => {
+                const varName = url.pathname
+                  .replaceAll('/', '')
+                  .replaceAll('.', '')
+                  .replaceAll('-', '')
+                return `import ${varName} from '${url.pathname}'; onSetup.push(${varName})`
+              })
               .join('\n')}`
         } else if (id === 'virtual:static-imports') {
           return `${Object.entries(staticImports)
