@@ -1,13 +1,11 @@
 import type { LogLevel, InlineConfig } from 'vite'
-import { ViteDevServer, mergeConfig } from 'vite'
 import { searchForWorkspaceRoot } from 'vite'
 import { baseConfig } from '../index.js'
 import type { Server } from 'net'
-import type { FastifyInstance } from 'fastify/types/instance'
 import fastify from 'fastify'
+import type { FastifyServerOptions } from 'fastify'
 import { fastifySsrPlugin } from '../frameworks/vue/fastify-ssr-plugin.js'
-import type { ServerOptions } from 'https'
-import type { OnRenderedHook } from '../vitrify-config.js'
+import type { OnRenderedHook, VitrifyConfig } from '../vitrify-config.js'
 
 export async function createVitrifyDevServer({
   port = 3000,
@@ -130,6 +128,7 @@ export async function createServer({
   let setup
   let server: Server
   let onRendered: OnRenderedHook[]
+  let vitrifyConfig: VitrifyConfig
 
   console.log(`Development mode: ${ssr ? ssr : 'csr'}`)
   if (ssr) {
@@ -138,11 +137,13 @@ export async function createServer({
         ? new URL('src/vite/fastify/entry.ts', cliDir).pathname
         : new URL(`src/vite/${framework}/ssr/app.ts`, cliDir).pathname
 
-    ;({ setup, onRendered } = await vite.ssrLoadModule(entryUrl))
+    ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
+    console.log(vitrifyConfig)
     const app = fastify({
       logger: false,
-      https: vite.config.server.https as ServerOptions
-    })
+      https: vite.config.server.https,
+      ...vitrifyConfig.vitrify?.ssr?.fastify
+    } as FastifyServerOptions)
     if (process.env) process.env.MODE = 'development'
     if (setup) {
       await setup({

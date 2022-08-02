@@ -1,8 +1,9 @@
 import Fastify from 'fastify'
-import { setup } from './entry'
+import { setup, vitrifyConfig } from './entry'
 
 const fastify = Fastify({
-  logger: true
+  logger: true,
+  ...vitrifyConfig.vitrify?.ssr.fastify
 })
 await setup({ fastify })
 
