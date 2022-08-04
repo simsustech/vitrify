@@ -254,7 +254,7 @@ export const baseConfig = async ({
   let onRenderedHooks: OnRenderedHook[]
   let onMountedHooks: OnMountedHook[]
   let onSetupFiles: OnSetupFile[]
-  let globalCss: string[]
+  let globalCss: string[] = []
   let staticImports: StaticImports
   let sassVariables: Record<string, string>
   let additionalData: string[]
@@ -273,7 +273,7 @@ export const baseConfig = async ({
     {
       name: 'vitrify-setup',
       enforce: 'post',
-      config: async (config: VitrifyConfig, env) => {
+      config: (config: VitrifyConfig, env) => {
         onBootHooks = config.vitrify?.hooks?.onBoot || []
         onRenderedHooks = config.vitrify?.hooks?.onRendered || []
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
@@ -283,8 +283,7 @@ export const baseConfig = async ({
         sassVariables = config.vitrify?.sass?.variables || {}
         globalSass = config.vitrify?.sass?.global || []
         additionalData = config.vitrify?.sass?.additionalData || []
-
-        return {}
+        return
       },
       configureServer(server) {
         server.middlewares.use('/', (req, res, next) => {
@@ -294,8 +293,7 @@ export const baseConfig = async ({
       },
       configResolved: (config) => {
         if (process.env.DEBUG) {
-          console.log(config.css?.preprocessorOptions?.sass.additionalData)
-          console.log(config.optimizeDeps)
+          console.log(config)
         }
       },
       resolveId(id) {
@@ -398,6 +396,7 @@ export const baseConfig = async ({
       config: (config: VitrifyConfig, env) => {
         if (config.vitrify?.productName)
           productName = config.vitrify?.productName
+        return
       },
       transformIndexHtml: {
         enforce: 'post',

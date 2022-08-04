@@ -1,22 +1,13 @@
-import { readFileSync } from 'fs'
 import type { Plugin } from 'vite'
 import { resolvePackageData } from 'vite'
 import Components from 'unplugin-vue-components/vite'
-// import { prepareQuasarConf } from './quasar-conf-file.js'
 import type {
-  BootFunction,
   OnBootHook,
   OnMountedHook,
   VitrifyConfig
 } from '../vitrify-config.js'
-// import { quasarDir as defaultQuasarDir } from '../app-urls.js'
-// import { QuasarResolver } from '../resolver.js';
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
 import type { VitrifyPlugin } from './index.js'
-import { getPkgJsonDir, resolve } from '../app-urls.js'
-
-// import { resolve } from 'import-meta-resolve'
-
 export interface QuasarConf {
   ctx: Record<string, any>
   css: string[]
@@ -165,44 +156,10 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           }
         ]
 
-        return {
-          vitrify: {
-            urls,
-            globalCss,
-            staticImports: {
-              quasar: ['Quasar']
-            },
-            hooks: {
-              onBoot: onBootHooks,
-              onMounted: onMountedHooks,
-              onRendered: [injectSsrContext]
-            },
-            sass: {
-              global: ['quasar/src/css/index.sass']
-              // additionalData: [`@import 'quasar/src/css/index.sass'`]
-            }
-          }
-        }
-      }
-    },
-    {
-      name: 'vite-plugin-quasar',
-      enforce: 'post',
-      config: async (config: VitrifyConfig, env) => {
-        const { quasar, vitrify: { urls } = {} } = config
         if (quasar) quasarConf = quasar
         if (!quasarConf.framework.lang && config.vitrify?.lang)
           quasarConf.framework.lang = config.vitrify.lang
-        // const quasarPkgJsonPath = new URL(
-        //   'package.json',
-        //   urls?.packages?.quasar
-        // ).pathname
-        // const { version } = JSON.parse(
-        //   readFileSync(quasarPkgJsonPath, { encoding: 'utf-8' })
-        // )
-        // const { version } = await import('quasar/package.json', {
-        //   assert: { type: 'json' }
-        // })
+
         /**
          * Importing package.json is problematic
          */
@@ -220,53 +177,24 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         }
 
         return {
-          // build: {
-          //   rollupOptions: {
-          //     treeshake: {
-          //       moduleSideEffects: 'no-external'
-          //     }
-          //   }
-          // },
+          vitrify: {
+            urls,
+            globalCss,
+            staticImports: {
+              quasar: ['Quasar']
+            },
+            hooks: {
+              onBoot: onBootHooks,
+              onMounted: onMountedHooks,
+              onRendered: [injectSsrContext]
+            },
+            sass: {
+              global: ['quasar/src/css/index.sass']
+              // additionalData: [`@import 'quasar/src/css/index.sass'`]
+            }
+          },
           resolve: {
-            // dedupe: ['quasar', '@quasar/extras'],
             alias: [
-              // {
-              //   find: 'quasar/wrappers',
-              //   replacement: new URL('quasar-wrappers.ts', urls?.cli).pathname
-              // },
-              // {
-              //   find: 'quasar/vue-plugin',
-              //   replacement: new URL(
-              //     'src/vue-plugin.js',
-              //     urls?.packages?.quasar
-              //   ).pathname
-              // },
-              // {
-              //   find: 'quasar/plugins',
-              //   replacement: new URL('src/plugins.js', urls?.packages?.quasar)
-              //     .pathname
-              // },
-              // {
-              //   find: 'quasar/components',
-              //   replacement: new URL(
-              //     'src/components.js',
-              //     urls?.packages?.quasar
-              //   ).pathname
-              // },
-              // {
-              //   find: 'quasar/composables',
-              //   replacement: new URL(
-              //     'src/composables.js',
-              //     urls?.packages?.quasar
-              //   ).pathname
-              // },
-              // {
-              //   find: 'quasar/directives',
-              //   replacement: new URL(
-              //     'src/directives.js',
-              //     urls?.packages?.quasar
-              //   ).pathname
-              // },
               {
                 find: 'quasar/src/',
                 replacement: new URL(
@@ -274,24 +202,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
                   config.vitrify!.urls!.packages!.quasar
                 ).pathname
               }
-              // {
-              //   find: 'quasar',
-              //   replacement: new URL(
-              //     'node_modules/quasar',
-              //     config.vitrify?.urls?.app
-              //   )
-              // }
-              // {
-              //   find: new RegExp('^quasar$'),
-              //   replacement: new URL('src/index.all.js', urls?.packages?.quasar)
-              //     .pathname
-              // }
-              // {
-              //   find: `@quasar/extras`,
-              //   replacement: new URL('.', urls?.packages?.['@quasar/extras'])
-              //     .pathname
-              // }
-              // { find: new RegExp('^quasar$'), replacement: 'virtual:quasar' }
             ]
           },
           optimizeDeps: {
@@ -300,13 +210,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           define: {
             __DEV__: process.env.NODE_ENV !== 'production' || true,
             __QUASAR_VERSION__: `'${version}'`
-            // __QUASAR_SSR__: !!ssr,
-            // // __QUASAR_SSR_SERVER__: ssr === 'server',
-            // __QUASAR_SSR_SERVER__: `import.meta.env.SSR`,
-            // // __QUASAR_SSR_CLIENT__: ssr === 'client',
-            // __QUASAR_SSR_CLIENT__: `!import.meta.env.SSR`,
-            // // __QUASAR_SSR_PWA__: ssr === 'client' && pwa
-            // __QUASAR_SSR_PWA__: pwa ? `!import.meta.env.SSR` : false
           },
           ssr: {
             noExternal: ['quasar']

@@ -138,7 +138,6 @@ export async function createServer({
         : new URL(`src/vite/${framework}/ssr/app.ts`, cliDir).pathname
 
     ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
-    console.log(vitrifyConfig)
     const app = fastify({
       logger: false,
       https: vite.config.server.https,

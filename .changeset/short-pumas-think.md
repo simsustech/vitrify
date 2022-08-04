@@ -1,0 +1,5 @@
+---
+'vitrify': patch
+---
+
+Cleanup
