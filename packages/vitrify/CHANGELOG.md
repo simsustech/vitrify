@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.7.2
+
+### Patch Changes
+
+- f6c40d8: Only import Vitrify during development mode in SSR plugin
+
 ## 0.7.1
 
 ### Patch Changes
