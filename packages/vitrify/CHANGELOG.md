@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.7.1
+
+### Patch Changes
+
+- 05f0ea3: Add onSetup to server initialization
+- e738725: Cleanup
+
 ## 0.7.0
 
 ### Minor Changes
