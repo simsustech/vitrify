@@ -30,9 +30,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
   options,
   done
 ) => {
-  options.vitrifyDir =
-    options.vitrifyDir || (await import('vitrify')).vitrifyDir
-  const frameworkDir = new URL('src/vite/vue/', options.vitrifyDir)
   options.baseUrl = options.baseUrl || '/'
   options.mode = options.mode || process.env.MODE || import.meta.env.MODE
   options.appDir = options.appDir || new URL('../../..', import.meta.url)
@@ -43,6 +40,9 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
   )
     throw new Error('baseUrl should start and end with a /')
   if (options.mode === 'development') {
+    options.vitrifyDir =
+      options.vitrifyDir || (await import('vitrify')).vitrifyDir
+    const frameworkDir = new URL('src/vite/vue/', options.vitrifyDir)
     // if (!options.vitrifyDir)
     //   throw new Error('Option vitrifyDir cannot be undefined')
     // if (!options.vite) throw new Error('Option vite cannot be undefined')
