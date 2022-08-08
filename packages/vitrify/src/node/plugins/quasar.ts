@@ -84,20 +84,20 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       name: 'vite-plugin-quasar-transform',
       enforce: 'pre',
       transform: (code, id, options) => {
-        const { ssr: transformSsr } = options || {}
+        const { ssr } = options || {}
         code = code
           .replaceAll('__QUASAR_SSR__', ssr ? 'true' : 'false')
           .replaceAll(
             '__QUASAR_SSR_SERVER__',
-            ssr === 'server' ? 'import.meta.env.SSR' : 'false'
+            ssr ? '(import.meta.env.SSR === true)' : 'false'
           )
           .replaceAll(
             '__QUASAR_SSR_CLIENT__',
-            ssr ? '!import.meta.env.SSR' : 'false'
+            ssr ? '(import.meta.env.SSR === false)' : 'false'
           )
           .replaceAll(
             '__QUASAR_SSR_PWA__',
-            ssr && pwa ? '!import.meta.env.SSR' : 'false'
+            ssr && pwa ? '(import.meta.env.SSR === false)' : 'false'
           )
 
         return code
