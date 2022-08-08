@@ -23,4 +23,5 @@ export const setupApp = async () => {
   })
 }
 
+export { default as vitrifyConfig } from 'virtual:vitrify-config'
 export { onRendered }
