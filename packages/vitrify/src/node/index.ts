@@ -23,6 +23,7 @@ import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
 import { resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
+import envPlugin from '@vitrify/plugin-env'
 
 const internalServerModules = [
   'util',
@@ -269,6 +270,7 @@ export const baseConfig = async ({
 
   const plugins: UserConfig['plugins'] = [
     vuePlugin(),
+    envPlugin(),
     ...frameworkPlugins,
     {
       name: 'vitrify-setup',

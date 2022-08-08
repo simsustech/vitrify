@@ -1,0 +1,38 @@
+{
+  "name": "@vitrify/plugin-env",
+  "version": "0.0.1",
+  "author": "simsustech",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/plugin-env"
+  },
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
+  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/plugin-env#readme",
+  "peerDependencies": {
+    "vite": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4",
+    "vite": "^3.0.0"
+  }
+}
