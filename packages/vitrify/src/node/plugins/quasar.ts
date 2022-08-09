@@ -17,6 +17,7 @@ export interface QuasarConf {
     directives?: string[]
     plugins?: string[]
     lang?: string
+    iconSet?: string
   }
   animations: string[]
   extras: string[]
@@ -143,13 +144,16 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             const directives = await import('virtual:quasar-directives')
             // @ts-ignore
             const { default: lang } = await import('virtual:quasar-lang')
+            // @ts-ignore
+            const { default: iconSet } = await import('virtual:quasar-iconSet')
 
             app.use(
               staticImports?.Quasar,
               {
                 plugins: quasarPlugins,
                 directives,
-                lang
+                lang,
+                iconSet
               },
               ssrContext
             )
@@ -239,6 +243,8 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             return 'virtual:quasar-directives'
           case 'virtual:quasar-lang':
             return 'virtual:quasar-lang'
+          case 'virtual:quasar-iconSet':
+            return 'virtual:quasar-iconSet'
           case 'virtual:quasar':
             return { id: 'virtual:quasar', moduleSideEffects: false }
           default:
@@ -255,6 +261,11 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             quasarConf?.framework?.lang || 'en-US'
           }';
           export default lang`
+        } else if (id === 'virtual:quasar-iconSet') {
+          return `import iconSet from 'quasar/icon-set/${
+            quasarConf?.framework.iconSet || 'material-icons'
+          }';
+          export default iconSet`
         } else if (id === 'virtual:quasar') {
           return `export * from 'quasar/src/plugins.js';
           export * from 'quasar/src/components.js';
