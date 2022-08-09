@@ -1,5 +1,16 @@
 # vitrify
 
+## 0.8.0
+
+### Minor Changes
+
+- 45974ac: @vitrify/plugin-env: isomorphic environment variable retrieval
+
+### Patch Changes
+
+- Updated dependencies [45974ac]
+  - @vitrify/plugin-env@0.1.0
+
 ## 0.7.2
 
 ### Patch Changes
