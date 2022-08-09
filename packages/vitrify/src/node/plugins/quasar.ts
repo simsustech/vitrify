@@ -109,7 +109,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
       config: async (config: VitrifyConfig, env): Promise<VitrifyConfig> => {
         const { vitrify: { urls } = {}, quasar } = config
 
-        const globalCss = quasar?.extras.map(
+        const globalCss = quasar?.extras?.map(
           (extra) => `@quasar/extras/${extra}/${extra}.css`
         )
 
