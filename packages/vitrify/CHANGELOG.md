@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.9.0
+
+### Minor Changes
+
+- 73b0a26: Add framework.iconSet to Quasar options
+
+### Patch Changes
+
+- 2fef4f7: Add getFirstOpenPort() function to prevent Websocket port errors in Vite
+
 ## 0.8.0
 
 ### Minor Changes
