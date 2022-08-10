@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.9.1
+
+### Patch Changes
+
+- e966f19: Fix Quasar SSR constant definition (should depend on the build command, not the transform SSR value)
+
 ## 0.9.0
 
 ### Minor Changes
