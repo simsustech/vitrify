@@ -6,6 +6,14 @@ import fastify from 'fastify'
 import type { FastifyServerOptions } from 'fastify'
 import { fastifySsrPlugin } from '../frameworks/vue/fastify-ssr-plugin.js'
 import type { OnRenderedHook, VitrifyConfig } from '../vitrify-config.js'
+import isPortReachable from 'is-port-reachable'
+
+const getFirstOpenPort = async (portNumber: number): Promise<number> => {
+  if (!(await isPortReachable(portNumber, { host: 'localhost' }))) {
+    return portNumber
+  }
+  return getFirstOpenPort(portNumber + 1)
+}
 
 export async function createVitrifyDevServer({
   port = 3000,
@@ -55,7 +63,7 @@ export async function createVitrifyDevServer({
     https: config.server?.https,
     hmr: {
       protocol: config.server?.https ? 'wss' : 'ws',
-      port: 24678
+      port: await getFirstOpenPort(24678)
     },
     port,
     // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
