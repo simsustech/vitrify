@@ -7,6 +7,7 @@ import type { FastifyServerOptions } from 'fastify'
 import { fastifySsrPlugin } from '../frameworks/vue/fastify-ssr-plugin.js'
 import type { OnRenderedHook, VitrifyConfig } from '../vitrify-config.js'
 import isPortReachable from 'is-port-reachable'
+import { exitLogs } from '../helpers/logger.js'
 
 const getFirstOpenPort = async (portNumber: number): Promise<number> => {
   if (!(await isPortReachable(portNumber, { host: 'localhost' }))) {
@@ -59,11 +60,21 @@ export async function createVitrifyDevServer({
 
   config.logLevel = logLevel
 
+  config.define = {
+    ...config.define,
+    __HOST__: `'${host}'`
+  }
+
+  const wsPort = await getFirstOpenPort(24678)
+  exitLogs.push(
+    `[warning] HTTPS mode enabled. Visit https://{hostname}:${wsPort} to enable a security exception for HMR.`
+  )
+
   config.server = {
     https: config.server?.https,
     hmr: {
       protocol: config.server?.https ? 'wss' : 'ws',
-      port: await getFirstOpenPort(24678)
+      port: wsPort
     },
     port,
     // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
@@ -161,7 +172,8 @@ export async function createServer({
       await app.register(fastifySsrPlugin, {
         appDir,
         mode: 'development',
-        onRendered
+        onRendered,
+        host
       })
     }
     await app.listen({

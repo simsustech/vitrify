@@ -539,6 +539,7 @@ export const baseConfig = async ({
       noExternal
     },
     define: {
+      __HOST__: 'localhost',
       __BASE_URL__: `'${base}'`
     }
   } as VitrifyConfig

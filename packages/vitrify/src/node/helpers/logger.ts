@@ -6,6 +6,8 @@ import os from 'os'
 import type { Hostname } from '../helpers/utils.js'
 import { resolveHostname } from '../helpers/utils.js'
 
+export const exitLogs: string[] = []
+
 export function printHttpServerUrls(
   server: Server,
   config: ResolvedConfig

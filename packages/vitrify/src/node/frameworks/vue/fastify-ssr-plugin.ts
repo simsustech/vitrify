@@ -23,6 +23,7 @@ export interface FastifySsrOptions {
   publicDir?: URL
   productName?: string
   mode?: string
+  host?: string
 }
 
 const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
@@ -55,7 +56,8 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       appDir: options.appDir,
       ssr: 'ssr',
       framework: 'vue',
-      base: options.baseUrl
+      base: options.baseUrl,
+      host: options.host
     })
     // const { createServer, searchForWorkspaceRoot } = await import('vite')
     // const { baseConfig } = await import('vitrify')

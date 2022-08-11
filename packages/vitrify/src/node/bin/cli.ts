@@ -1,14 +1,8 @@
 #!/usr/bin/env node
 import cac from 'cac'
 import { getAppDir, parsePath } from '../app-urls.js'
-import { printHttpServerUrls } from '../helpers/logger.js'
-import type {
-  ConfigEnv,
-  ResolvedConfig,
-  UserConfig,
-  UserConfigExport,
-  ViteDevServer
-} from 'vite'
+import { printHttpServerUrls, exitLogs } from '../helpers/logger.js'
+import type { ResolvedConfig } from 'vite'
 import type { Server } from 'net'
 
 const cli = cac('vitrify')
@@ -157,6 +151,9 @@ cli
     }
     console.log('Dev server running at:')
     printHttpServerUrls(server, config)
+    for (const line of exitLogs) {
+      config.logger.warn(line)
+    }
   })
 
 cli.command('test').action(async (options) => {
