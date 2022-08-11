@@ -9,9 +9,9 @@ import type {
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
 import type { VitrifyPlugin } from './index.js'
 export interface QuasarConf {
-  ctx: Record<string, any>
-  css: string[]
-  boot: string[]
+  ctx?: Record<string, any>
+  css?: string[]
+  boot?: string[]
   framework: {
     components?: string[]
     directives?: string[]
@@ -19,8 +19,8 @@ export interface QuasarConf {
     lang?: string
     iconSet?: string
   }
-  animations: string[]
-  extras: string[]
+  // animations: string[]
+  extras?: string[]
 }
 
 export const injectSsrContext = (
