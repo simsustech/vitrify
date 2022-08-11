@@ -1,6 +1,6 @@
 {
   "name": "vitrify",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "license": "MIT",
   "author": "Stefan van Herwijnen",
   "description": "Pre-configured Vite CLI for your framework",
