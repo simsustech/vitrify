@@ -55,6 +55,7 @@ export async function createApp(
     next()
   })
 
+  let initialState: Record<string, any>
   let provide: Record<string, unknown> = {}
   if (import.meta.env.SSR) {
     if (ssrContext?.provide) {
@@ -62,7 +63,11 @@ export async function createApp(
     }
   } else {
     // @ts-ignore
-    provide = window.__INITIAL_STATE__?.provide
+    if (window.__INITIAL_STATE__) {
+      // @ts-ignore
+      initialState = JSON.parse(window.__INITIAL_STATE__)
+      provide = initialState.provide
+    }
   }
   for (let key in provide) {
     app.provide(key, provide[key])
