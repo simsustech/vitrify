@@ -1,9 +1,10 @@
 # Vitrify
 
-> Pre-configured Vite CLI for your framework
+> Vite as your Full Stack development tool
 
 - Use a simple configuration file to configure and integrate required Vite plugins into your project.
-- Client-Side Rendering (CSR), Server-Side Rendering (SSR) and Fastify server build and development modes.
+- Client-Side Rendering (CSR), Server-Side Rendering (SSR), Static Site Generation (SSG) and Fastify server build and development modes.
+- Run both your frontend- and backend code through Vite at development and build time.
 
 ## Features
 
@@ -73,14 +74,24 @@ Options:
     node/bin/cli.ts-->node/bin/dev.ts;
     node/bin/cli.ts-->node/bin/test.ts;
     node/bin/cli.ts-->node/bin/run.ts;
-    node/bin/build.ts-->node/index.ts{Load baseConfig};
-    node/bin/dev.ts-->node/index.ts{Load baseConfig};
-    node/index.ts-->vitrify.config.js{Load vitrify.config.js};
+    node/bin/build.ts-->node/index.ts
+    node/bin/dev.ts-->node/index.ts
+    node/index.ts{Load baseConfig}-->vitrify.config.js{Load vitrify.config.js};
+    subgraph baseconfig
     vitrify.config.js-->node/plugins{Load plugins};
-    node/plugins-->framework{Load framework entrypoints from vite/...};
-    framework-->merge{Merge vitrify.config.js with Vitrify configuration};
-    merge-->build{Build the application};
-    merge-->dev{Spin up dev server};
+    node/plugins-->merge{Merge vitrify.config.js with Vitrify configuration};
+    end
+    merge-- mode: fastify -->frameworkFastify{Load framework entrypoints from fastify/...};
+    merge-- mode: csr/ssr/ssg -->framework{Load framework entrypoints from vite/...};
+    frameworkFastify-->fastifyBuild{Build the application};
+    frameworkFastify-->fastifyDev{Start Fastify dev server};
+    fastifySetup{onSetup / onRendered}-->fastifyDev
+    fastifySetup{onSetup / onRendered}-->fastifyBuild
+    framework-->build{Build the application};
+    build-- mode: ssg -->prerender{Run prerender.js}
+    framework-->dev{Start Vite dev server};
+    frameworkSetup{onBoot / onMounted}-->dev
+    frameworkSetup{onBoot / onMounted}-->build
     node/bin/test.ts-->test{Run a pre-configured Vitest instance};
     node/bin/run.ts-->run{Inject context into script and run script};
 ```

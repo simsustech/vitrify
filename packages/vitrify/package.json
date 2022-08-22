@@ -3,7 +3,7 @@
   "version": "0.9.1",
   "license": "MIT",
   "author": "Stefan van Herwijnen",
-  "description": "Pre-configured Vite CLI for your framework",
+  "description": "Vite as your Full Stack development tool",
   "type": "module",
   "bin": {
     "vitrify": "./dist/bin/cli.js"
@@ -110,5 +110,10 @@
     "src",
     "!dist/**/*.test.js",
     "!dist/**/test.js"
+  ],
+  "keywords": [
+    "vite",
+    "full stack",
+    "fastify"
   ]
 }

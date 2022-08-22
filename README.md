@@ -1,35 +1,32 @@
 # Vitrify
 
-> Pre-configured Vite CLI for your framework
+> Vite as your Full Stack development tool
 
-Vitrify is an abstraction over Vite similar to how Vite is an abstraction over Rollup and esbuild.
+Vitrify is an abstraction over Vite similar to how Vite is an abstraction over Rollup and esbuild. It enables you to use Vite as your full-stack development tool.
 
 ## Features
 
 - ESM only
 - Fully compatible with Vite configuration.
 - Integration with Fastify.
-- Client-Side Rendering (CSR), Server-Side Rendering (SSR) and Fastify server build and development modes.
+- Client-Side Rendering (CSR), Server-Side Rendering (SSR), Static Site Generator (SSG) and Fastify server build and development modes.
 - Plugins for UI frameworks which can read their configuration from vitrify.config.js.
 - A few helpful [configuration options](./packages/vitrify/src/node/vitrify-config.ts)
 - Implements functional programming.
 - Fully typed.
 
-## Supported frameworks
+## Supported frontend frameworks
 
 - [Vue](https://vuejs.org/)
   - [Quasar](https://quasar.dev/)
 
 ## Packages
 
-| Package                                   | Version                                                                                                            |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| [vitrify](packages/vitrify)               | [![vitrify version](https://img.shields.io/npm/v/vitrify.svg?label=%20)](packages/vitrify/README.md)               |
-| [create-vitrify](packages/create-vitrify) | [![vitrify version](https://img.shields.io/npm/v/create-vitrify.svg?label=%20)](packages/create-vitrify/README.md) |
-
-## Why
-
-I needed some specific features not available in Quasar CLI (Webpack at that time) so I decided to take a deep-dive and try and port it to Vite. In the process I took a leap forward and solely focused on ESM, switched to pnpm and created a modular build tool with improved versions of Quasar CLI's features (SSR, SASS variables, boot files, automatic component registration, app extensions).
+| Package                                   | Version                                                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| [vitrify](packages/vitrify)               | [![vitrify version](https://img.shields.io/npm/v/vitrify.svg?label=%20)](packages/vitrify/README.md)                      |
+| [create-vitrify](packages/create-vitrify) | [![create-vitrify version](https://img.shields.io/npm/v/create-vitrify.svg?label=%20)](packages/create-vitrify/README.md) |
+| [plugin-env](packages/plugin-env)         | [![pugin-env version](https://img.shields.io/npm/v/@vitrify/plugin-env.svg?label=%20)](packages/plugin-env/README.md)     |
 
 ## Credits
 
