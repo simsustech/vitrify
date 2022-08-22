@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.9.2
+
+### Patch Changes
+
+- 3acefb9: Fix nested secure development servers in SSR mode, Fix initial state injection
+
 ## 0.9.1
 
 ### Patch Changes
