@@ -7,7 +7,8 @@ import {
   createApp as createVueApp,
   h,
   onMounted as onMountedVue,
-  getCurrentInstance
+  getCurrentInstance,
+  ref
 } from 'vue'
 import { onBoot, onMounted } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
@@ -17,6 +18,10 @@ interface ssrContext {
   ssr: boolean
   provide?: Record<string, unknown>
   [key: string]: unknown
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 export async function createApp(
@@ -56,7 +61,7 @@ export async function createApp(
   })
 
   let initialState: Record<string, any>
-  let provide: Record<string, unknown> = {}
+  let provide: Record<string, any> = {}
   if (import.meta.env.SSR) {
     if (ssrContext?.provide) {
       provide = ssrContext?.provide
@@ -70,7 +75,16 @@ export async function createApp(
     }
   }
   for (let key in provide) {
-    app.provide(key, provide[key])
+    if (provide[key].value) {
+      const refValue = ref(provide[key].value)
+      app.provide(key, refValue)
+      app.provide(
+        `update${capitalizeFirstLetter(key)}`,
+        (val: any) => (refValue.value = val)
+      )
+    } else {
+      app.provide(key, provide[key])
+    }
   }
 
   for (let fn of onBoot) {

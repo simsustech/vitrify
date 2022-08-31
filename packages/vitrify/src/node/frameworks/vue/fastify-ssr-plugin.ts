@@ -13,7 +13,7 @@ export interface FastifySsrOptions {
   provide?: (
     req: FastifyRequest,
     res: FastifyReply
-  ) => Promise<Record<string, unknown>>
+  ) => Promise<Record<string, unknown | { value: unknown }>>
   vitrifyDir?: URL
   vite?: ViteDevServer
   // frameworkDir?: URL
