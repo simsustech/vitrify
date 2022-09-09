@@ -205,6 +205,7 @@ export const baseConfig = async ({
       vitrifyConfig = await vitrifyConfig({ mode, command })
   } catch (e) {
     console.log('No vitrify.config.(ts|js) file found, using defaults')
+    if (process.env.DEBUG) console.error(e)
     vitrifyConfig = {}
   }
 
@@ -409,6 +410,7 @@ export const baseConfig = async ({
       }
     })
 
+    // @ts-ignore
     if (debug) plugins.push(visualizer())
   }
 
