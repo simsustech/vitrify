@@ -8,6 +8,7 @@ export async function test(opts: { appDir: URL }) {
   })
 
   await startVitest(
+    'test',
     [],
     {
       root: opts.appDir.pathname,
