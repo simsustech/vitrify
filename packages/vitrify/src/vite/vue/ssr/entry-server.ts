@@ -1,4 +1,4 @@
-import { createApp } from '../main.js'
+import { createApp } from '../main'
 // import { renderToString } from 'vue/server-renderer'
 
 // import { onRendered } from 'virtual:vitrify-hooks'

@@ -1,3 +1,3 @@
-import { fastifyCsrPlugin } from '../../../node/frameworks/vue/fastify-csr-plugin.js'
+import { fastifyCsrPlugin } from '../../../node/frameworks/vue/fastify-csr-plugin'
 
 export { fastifyCsrPlugin }

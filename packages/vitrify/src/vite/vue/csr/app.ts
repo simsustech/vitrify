@@ -2,7 +2,7 @@ import { createApp } from '../../../node/frameworks/vue/server.js'
 import { getAppDir } from '../../../node/app-urls.js'
 // import { setup } from 'virtual:fastify-setup'
 import { onSetup } from 'virtual:vitrify-hooks'
-import { fastifyCsrPlugin } from './fastify-csr-plugin.js'
+import { fastifyCsrPlugin } from './fastify-csr-plugin'
 import type { ViteDevServer } from 'vite'
 
 // const appDir = getPkgJsonDir(import.meta.url)
