@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.10.0
+
+### Minor Changes
+
+- 01cb0c9: Add support for reactive provide/inject variables
+
+### Patch Changes
+
+- b217135: Fix .ts imports in Vite
+
 ## 0.9.2
 
 ### Patch Changes
