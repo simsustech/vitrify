@@ -5,38 +5,30 @@
   "author": "Stefan van Herwijnen",
   "description": "Vite as your Full Stack development tool",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "bin": {
     "vitrify": "./dist/bin/cli.js"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./*": "./dist/*.js",
-    "./build": "./dist/bin/build.js",
-    "./dev": "./dist/bin/dev.js",
-    "./prerender": "./dist/prerender.js",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./build": {
+      "types": "./dist/types/bin/build.d.ts",
+      "import": "./dist/bin/build.js"
+    },
+    "./dev": {
+      "types": "./dist/types/bin/dev.d.ts",
+      "import": "./dist/bin/dev.js"
+    },
+    "./prerender": {
+      "types": "./dist/types/bin/prerender.d.ts",
+      "import": "./dist/bin/prerender.js"
+    },
     "./helpers/*": "./dist/helpers/*.js",
-    "./vite/*": "./src/vite/*"
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/types/index.d.ts"
-      ],
-      "helpers/*": [
-        "./dist/types/helpers/*.d.ts"
-      ],
-      "build": [
-        "./dist/types/bin/build.d.ts"
-      ],
-      "dev": [
-        "./dist/types/bin/dev.d.ts"
-      ],
-      "prerender": [
-        "./dist/types/prerender.d.ts"
-      ],
-      "help": [
-        "./dist/types/bin/help.d.ts"
-      ]
+    "./client": {
+      "types": "./client.d.ts"
     }
   },
   "engines": {
