@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.10.2
+
+### Patch Changes
+
+- 1afcf32: Move global SASS to additionalData
+
 ## 0.10.1
 
 ### Patch Changes
