@@ -31,6 +31,10 @@
     "url": "https://github.com/simsustech/vitrify/issues"
   },
   "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/plugin-env#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "peerDependencies": {
     "vite": "^3.0.9"
   },
