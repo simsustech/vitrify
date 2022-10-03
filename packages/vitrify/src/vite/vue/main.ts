@@ -11,7 +11,6 @@ import { onBoot, onMounted } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
 import 'vitrify.sass'
-import 'vitrify.css'
 import App from 'src/App.vue'
 
 interface ssrContext {
