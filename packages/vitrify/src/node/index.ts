@@ -286,7 +286,20 @@ export const baseConfig = async ({
         sassVariables = config.vitrify?.sass?.variables || {}
         globalSass = config.vitrify?.sass?.global || []
         additionalData = config.vitrify?.sass?.additionalData || []
-        return
+        return {
+          css: {
+            preprocessorOptions: {
+              sass: {
+                additionalData: [
+                  ...Object.entries(sassVariables).map(
+                    ([key, value]) => `${key}: ${value}`
+                  ),
+                  ...globalSass.map((sass) => `@import '${sass}'`)
+                ].join('\n')
+              }
+            }
+          }
+        }
       },
       configureServer(server) {
         server.middlewares.use('/', (req, res, next) => {
@@ -338,14 +351,15 @@ export const baseConfig = async ({
               return `export { ${deduped.join(',')} } from '${key}';`
             })
             .join('\n')}`
-        } else if (id === 'vitrify.sass') {
-          return [
-            ...Object.entries(sassVariables).map(
-              ([key, value]) => `${key}: ${value}`
-            ),
-            ...globalSass.map((sass) => `@import '${sass}'`)
-          ].join('\n')
         }
+        // else if (id === 'vitrify.sass') {
+        //   return [
+        //     ...Object.entries(sassVariables).map(
+        //       ([key, value]) => `${key}: ${value}`
+        //     ),
+        //     ...globalSass.map((sass) => `@import '${sass}'`)
+        //   ].join('\n')
+        // }
         // else if (id === 'vitrify.css') {
         //   return `${globalCss.map((css) => `@import '${css}'`).join('\n')}`
         // }
