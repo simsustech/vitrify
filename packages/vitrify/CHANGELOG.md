@@ -1,5 +1,14 @@
 # vitrify
 
+## 0.10.1
+
+### Patch Changes
+
+- d46bfe2: Add typescript client types
+- d46bfe2: Fix CSS import order
+- Updated dependencies [d46bfe2]
+  - @vitrify/plugin-env@0.1.1
+
 ## 0.10.0
 
 ### Minor Changes
