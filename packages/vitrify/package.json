@@ -1,6 +1,6 @@
 {
   "name": "vitrify",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "license": "MIT",
   "author": "Stefan van Herwijnen",
   "description": "Vite as your Full Stack development tool",
@@ -52,7 +52,7 @@
     "@fastify/static": "^6.5.0",
     "@quasar/extras": "^1.15.2",
     "@vitejs/plugin-vue": "^3.1.0",
-    "@vitrify/plugin-env": "^0.1.0",
+    "@vitrify/plugin-env": "^0.1.1",
     "builtin-modules": "^3.3.0",
     "cac": "^6.7.14",
     "chalk": "^5.0.1",
