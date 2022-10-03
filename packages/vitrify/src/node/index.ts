@@ -345,9 +345,11 @@ export const baseConfig = async ({
             ),
             ...globalSass.map((sass) => `@import '${sass}'`)
           ].join('\n')
-        } else if (id === 'vitrify.css') {
-          return `${globalCss.map((css) => `@import '${css}'`).join('\n')}`
-        } else if (id === 'virtual:vitrify-config') {
+        }
+        // else if (id === 'vitrify.css') {
+        //   return `${globalCss.map((css) => `@import '${css}'`).join('\n')}`
+        // }
+        else if (id === 'virtual:vitrify-config') {
           return `export default ${JSON.stringify(vitrifyConfig)}`
         }
         return null
