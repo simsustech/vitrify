@@ -1,6 +1,3 @@
-// import 'vitrify.css'
-import 'vitrify.sass'
-import App from 'src/App.vue'
 import createRouter from 'src/router'
 import {
   createSSRApp,
@@ -13,6 +10,9 @@ import {
 import { onBoot, onMounted } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
+import 'vitrify.sass'
+import 'vitrify.css'
+import App from 'src/App.vue'
 
 interface ssrContext {
   ssr: boolean
