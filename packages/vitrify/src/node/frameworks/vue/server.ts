@@ -24,7 +24,9 @@ export const createApp = ({
   mode: string
 }) => {
   const app = fastify({
-    logger: true
+    logger: {
+      level: process.env.DEBUG ? 'debug' : process.env.PINO_LOG_LEVEL || 'info'
+    }
   })
 
   app.register(fastifyPlugin, {
