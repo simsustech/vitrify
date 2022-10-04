@@ -28,7 +28,8 @@ export const prerender = async ({
     logLevel: 'warn',
     external: true,
     inlineFonts: true,
-    preloadFonts: true
+    preloadFonts: true,
+    preload: 'swap'
   })
   for (const url of paths) {
     const filename =
