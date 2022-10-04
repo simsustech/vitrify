@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.10.3
+
+### Patch Changes
+
+- 8786fa7: Fix critical CSS preloadstrategy
+
 ## 0.10.2
 
 ### Patch Changes
