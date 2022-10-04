@@ -1,3 +1,4 @@
+import 'vitrify.sass'
 import createRouter from 'src/router'
 import {
   createSSRApp,
