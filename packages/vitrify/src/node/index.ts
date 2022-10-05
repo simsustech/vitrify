@@ -304,7 +304,7 @@ export const baseConfig = async ({
         return
       },
       transform: (code, id) => {
-        if (id.endsWith('main.ts') && id.includes('vitrify')) {
+        if (id.includes('main.ts') && id.includes('vitrify')) {
           code =
             `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
         }
