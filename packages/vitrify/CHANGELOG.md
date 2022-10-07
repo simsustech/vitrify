@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.10.4
+
+### Patch Changes
+
+- 9e4c3c6: Fix loading of manifest during prerender
+
 ## 0.10.3
 
 ### Patch Changes
