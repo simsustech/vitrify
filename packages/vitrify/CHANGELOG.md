@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.10.5
+
+### Patch Changes
+
+- 5e6ec0d: Fix CSS/SASS issues by manually appending preload links to head and injecting SASS into a RootComponent SFC by using a vite transform"
+
 ## 0.10.4
 
 ### Patch Changes
