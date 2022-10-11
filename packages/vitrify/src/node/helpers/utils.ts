@@ -35,3 +35,9 @@ export function resolveHostname(
 
   return { host, name }
 }
+
+export const appendToHead = (preloadLinks: string, html: string) =>
+  html.replace(/<\/head>/, preloadLinks + '</head>')
+
+export const appendToBody = (links: string, html: string) =>
+  html.replace(/<\/body>/, links + '</body>')

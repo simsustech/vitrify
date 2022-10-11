@@ -270,6 +270,30 @@ export const baseConfig = async ({
     ]
 
   const plugins: UserConfig['plugins'] = [
+    {
+      name: 'vitrify-transforms',
+      enforce: 'pre',
+      transform: (code, id) => {
+        if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
+          code =
+            `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
+        }
+        if (['RootComponent.vue', 'vitrify'].every((val) => id.includes(val))) {
+          const sass = [
+            ...Object.entries(sassVariables).map(
+              ([key, value]) => `${key}: ${value}`
+            ),
+            ...globalSass.map((sass) => `@import '${sass}'`)
+          ].join('\n')
+          code = code.replace(
+            /<style lang="sass">(.*?)<\/style>/,
+            '<style lang="sass">' + sass + '</style>'
+          )
+          // code = code.replace(/<\/style>/, sass + '</style>')
+        }
+        return code
+      }
+    },
     vuePlugin(),
     envPlugin(),
     ...frameworkPlugins,
@@ -303,13 +327,24 @@ export const baseConfig = async ({
         if (VIRTUAL_MODULES.includes(id)) return { id }
         return
       },
-      transform: (code, id) => {
-        if (id.includes('main.ts') && id.includes('vitrify')) {
-          code =
-            `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
-        }
-        return code
-      },
+      // transform: (code, id) => {
+      //   if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
+      //     code =
+      //       `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
+      //   }
+      //   if (['RootComponent.vue', 'vitrify'].every((val) => id.includes(val))) {
+      //     console.log('lksdflkjsdf')
+      //     const sass = [
+      //       ...Object.entries(sassVariables).map(
+      //         ([key, value]) => `${key}: ${value}`
+      //       ),
+      //       ...globalSass.map((sass) => `@import '${sass}'`)
+      //     ].join('\n')
+      //     code = code.replace(/<\/style>/, sass + '</style>')
+      //     console.log(code)
+      //   }
+      //   return code
+      // },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
           return `export const onBoot = [${onBootHooks

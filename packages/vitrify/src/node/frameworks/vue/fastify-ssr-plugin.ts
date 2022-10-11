@@ -6,8 +6,9 @@ import type {
 import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
+import { appendToHead } from '../../helpers/utils.js'
 import type { ViteDevServer } from 'vite'
-import type { OnRenderedHook } from 'src/node/vitrify-config.js'
+import type { OnRenderedHook } from '../../vitrify-config.js'
 export interface FastifySsrOptions {
   baseUrl?: string
   provide?: (
@@ -139,7 +140,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         ssrContext.initialState.provide = provide
 
         let html = template
-          .replace(`<!--preload-links-->`, preloadLinks)
           .replace(`<!--app-html-->`, appHtml)
           .replace('<!--product-name-->', options.productName || 'Product name')
           .replace('<!--dev-ssr-css-->', css)
@@ -149,6 +149,8 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
             __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
             </script>`
           )
+
+        html = appendToHead(preloadLinks, html)
 
         if (options.onRendered?.length) {
           for (const ssrFunction of options.onRendered) {
@@ -204,15 +206,14 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       if (!ssrContext.initialState) ssrContext.initialState = {}
       ssrContext.initialState.provide = provide
 
-      let html = template
-        .replace(`<!--preload-links-->`, preloadLinks)
-        .replace(`<!--app-html-->`, appHtml)
-        .replace(
-          '<!--initial-state-->',
-          `<script>
+      let html = template.replace(`<!--app-html-->`, appHtml).replace(
+        '<!--initial-state-->',
+        `<script>
           __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
           </script>`
-        )
+      )
+
+      html = appendToHead(preloadLinks, html)
 
       if (options.onRendered?.length) {
         for (const ssrFunction of options.onRendered) {

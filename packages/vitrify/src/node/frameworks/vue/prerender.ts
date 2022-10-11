@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import type { OnRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
+import { appendToHead, appendToBody } from '../../helpers/utils.js'
 
 export const prerender = async ({
   outDir,
@@ -28,8 +29,7 @@ export const prerender = async ({
     logLevel: 'warn',
     external: true,
     inlineFonts: true,
-    preloadFonts: true,
-    preload: 'swap'
+    preloadFonts: true
   })
   for (const url of paths) {
     const filename =
@@ -41,9 +41,10 @@ export const prerender = async ({
     }
     const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
 
-    let html = template
-      .replace(`<!--preload-links-->`, preloadLinks)
-      .replace(`<!--app-html-->`, appHtml)
+    let html = template.replace(`<!--app-html-->`, appHtml)
+
+    html = appendToHead(preloadLinks, html)
+    // html = appendToBody(preloadLinks, html)
 
     if (onRendered?.length) {
       for (const ssrFunction of onRendered) {

@@ -1,4 +1,4 @@
-import 'vitrify.sass'
+// import 'vitrify.sass'
 import createRouter from 'src/router'
 import {
   createSSRApp,
@@ -12,7 +12,7 @@ import { onBoot, onMounted } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
 import App from 'src/App.vue'
-
+import RootComponent from './RootComponent.vue'
 interface ssrContext {
   ssr: boolean
   provide?: Record<string, unknown>
@@ -28,20 +28,20 @@ export async function createApp(
   ssrContext?: ssrContext
 ) {
   let app
-  const RootComponent = {
-    name: 'AppWrapper',
-    setup(props) {
-      const instance = getCurrentInstance()
+  // const RootComponent = {
+  //   name: 'AppWrapper',
+  //   setup(props) {
+  //     const instance = getCurrentInstance()
 
-      onMountedVue(async () => {
-        for (let fn of onMounted) {
-          await fn(instance, staticImports)
-        }
-      })
+  //     onMountedVue(async () => {
+  //       for (let fn of onMounted) {
+  //         await fn(instance, staticImports)
+  //       }
+  //     })
 
-      return () => h(App, props)
-    }
-  }
+  //     return () => h(App, props)
+  //   }
+  // }
   if (ssr) {
     app = createSSRApp(RootComponent)
   } else {
