@@ -66,10 +66,11 @@ export async function createVitrifyDevServer({
   }
 
   const wsPort = await getFirstOpenPort(24678)
-  exitLogs.push(
-    `[warning] HTTPS mode enabled. Visit https://{hostname}:${wsPort} to enable a security exception for HMR.`
-  )
-
+  if (config.server?.https) {
+    exitLogs.push(
+      `[warning] HTTPS mode enabled. Visit https://{hostname}:${wsPort} to enable a security exception for HMR.`
+    )
+  }
   config.server = {
     https: config.server?.https,
     hmr: {
