@@ -24,4 +24,5 @@ onMountedVue(async () => {
 const render = () => h(App, props)
 </script>
 
+<style></style>
 <style lang="sass"></style>

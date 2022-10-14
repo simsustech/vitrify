@@ -274,21 +274,27 @@ export const baseConfig = async ({
       name: 'vitrify-transforms',
       enforce: 'pre',
       transform: (code, id) => {
-        if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
-          code =
-            `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
-        }
+        // if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
+        //   code =
+        //     `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
+        // }
         if (['RootComponent.vue', 'vitrify'].every((val) => id.includes(val))) {
+          const css = `${globalCss
+            .map((css) => `@import '${css}';`)
+            .join('\n')}\n`
+
           const sass = [
             ...Object.entries(sassVariables).map(
               ([key, value]) => `${key}: ${value}`
             ),
             ...globalSass.map((sass) => `@import '${sass}'`)
           ].join('\n')
-          code = code.replace(
-            /<style lang="sass">(.*?)<\/style>/,
-            '<style lang="sass">' + sass + '</style>'
-          )
+          code = code
+            .replace(/<style>(.*?)<\/style>/, '<style>' + css + '</style>')
+            .replace(
+              /<style lang="sass">(.*?)<\/style>/,
+              '<style lang="sass">' + sass + '</style>'
+            )
           // code = code.replace(/<\/style>/, sass + '</style>')
         }
         return code

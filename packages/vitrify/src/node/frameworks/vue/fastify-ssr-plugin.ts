@@ -125,14 +125,11 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
           manifest = {}
         }
 
-        const cssModules = [entryUrl]
-        // // @ts-ignore
-        // if (options.vite?.config.vitrify!.globalCss)
-        //   cssModules.push(...options.vite?.config.vitrify.globalCss)
-        const matchedModules = componentsModules(cssModules, vite!)
-        const css = collectCss({
-          mods: matchedModules
-        })
+        // const cssModules = [entryUrl]
+        // const matchedModules = componentsModules(cssModules, vite!)
+        // const css = collectCss({
+        //   mods: matchedModules
+        // })
 
         const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
 
@@ -142,7 +139,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         let html = template
           .replace(`<!--app-html-->`, appHtml)
           .replace('<!--product-name-->', options.productName || 'Product name')
-          .replace('<!--dev-ssr-css-->', css)
+          // .replace('<!--dev-ssr-css-->', css)
           .replace(
             '<!--initial-state-->',
             `<script>
