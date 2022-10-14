@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.10.6
+
+### Patch Changes
+
+- d188545: Fix CSS injection in SSR dev mode
+
 ## 0.10.5
 
 ### Patch Changes
