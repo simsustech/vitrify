@@ -149,7 +149,8 @@ export const baseConfig = async ({
   mode = 'production',
   framework = 'vue',
   pwa = false,
-  debug = false
+  debug = false,
+  productName
 }: {
   ssr?: 'client' | 'server' | 'ssg' | 'fastify'
   appDir?: URL
@@ -160,6 +161,7 @@ export const baseConfig = async ({
   framework?: 'vue'
   pwa?: boolean
   debug?: boolean
+  productName?: string
 }): Promise<InlineConfig> => {
   const { getAppDir, getCliDir, getCliViteDir, getSrcDir, getCwd } =
     await import('./app-urls.js')
@@ -228,15 +230,18 @@ export const baseConfig = async ({
   //     )
   // })()
 
-  let productName = 'Product name'
-  try {
-    ;({ productName } = JSON.parse(
-      readFileSync(new URL('package.json', appDir).pathname, {
-        encoding: 'utf-8'
-      })
-    ))
-  } catch (e) {
-    console.error('package.json not found')
+  if (!productName) {
+    try {
+      ;({ productName } = JSON.parse(
+        readFileSync(new URL('package.json', appDir).pathname, {
+          encoding: 'utf-8'
+        })
+      ))
+    } catch (e) {
+      console.error('package.json not found')
+      productName = 'Product name'
+    }
+  } else {
   }
 
   const frameworkPlugins = []
@@ -428,30 +433,30 @@ export const baseConfig = async ({
               entry = new URL('csr/entry.ts', frameworkDir).pathname
           }
           const entryScript = `<script type="module" src="${entry}"></script>`
-          html = html
-            .replace('<!--entry-script-->', entryScript)
-            .replace('<!--product-name-->', productName)
+          html = html.replace('<!--entry-script-->', entryScript)
+          if (productName)
+            html = html.replace('<!--product-name-->', productName)
           return html
         }
       }
     })
 
-    plugins.unshift({
-      name: 'product-name',
-      enforce: 'post',
-      config: (config: VitrifyConfig, env) => {
-        if (config.vitrify?.productName)
-          productName = config.vitrify?.productName
-        return
-      },
-      transformIndexHtml: {
-        enforce: 'post',
-        transform: (html) => {
-          html = html.replace('<!--product-name-->', productName)
-          return html
-        }
-      }
-    })
+    // plugins.unshift({
+    //   name: 'product-name',
+    //   enforce: 'post',
+    //   config: (config: VitrifyConfig, env) => {
+    //     if (config.vitrify?.productName)
+    //       productName = config.vitrify?.productName
+    //     return
+    //   },
+    //   transformIndexHtml: {
+    //     enforce: 'post',
+    //     transform: (html) => {
+    //       html = html.replace('<!--product-name-->', productName)
+    //       return html
+    //     }
+    //   }
+    // })
 
     // @ts-ignore
     if (debug) plugins.push(visualizer())

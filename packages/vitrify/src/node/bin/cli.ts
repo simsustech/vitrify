@@ -35,11 +35,13 @@ cli
       appDir?: URL
       publicDir?: URL
       debug?: boolean
+      productName?: string
     } = {
       base: options.base,
       appDir,
       publicDir: parsePath(options.publicDir, appDir),
-      debug: options.debug
+      debug: options.debug,
+      productName: options.productName
     }
 
     switch (options.mode) {

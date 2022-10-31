@@ -9,6 +9,7 @@ export async function build(opts: {
   appDir?: URL
   publicDir?: URL
   debug?: boolean
+  productName?: string
 }) {
   const config = await baseConfig({
     command: 'build',
@@ -17,7 +18,8 @@ export async function build(opts: {
     appDir: opts.appDir,
     publicDir: opts.publicDir,
     base: opts.base,
-    debug: opts.debug
+    debug: opts.debug,
+    productName: opts.productName
   })
 
   config.build = {
