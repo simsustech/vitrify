@@ -5,13 +5,13 @@
   "author": "Stefan van Herwijnen",
   "description": "Vite as your Full Stack development tool",
   "type": "module",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "bin": {
     "vitrify": "./dist/bin/cli.js"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js"
     },
     "./build": {
