@@ -6,7 +6,12 @@ import type {
 import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
-import { appendToHead } from '../../helpers/utils.js'
+import {
+  addOrReplaceAppDiv,
+  addOrReplaceTitle,
+  appendToBody,
+  appendToHead
+} from '../../helpers/utils.js'
 import type { ViteDevServer } from 'vite'
 import type { OnRenderedHook } from '../../vitrify-config.js'
 export interface FastifySsrOptions {
@@ -136,18 +141,36 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         if (!ssrContext.initialState) ssrContext.initialState = {}
         ssrContext.initialState.provide = provide
 
-        let html = template
-          .replace(`<!--app-html-->`, appHtml)
-          .replace('<!--product-name-->', options.productName || 'Product name')
-          // .replace('<!--dev-ssr-css-->', css)
-          .replace(
-            '<!--initial-state-->',
-            `<script>
-            __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
-            </script>`
+        const initialStateScript = `
+        <script>
+        __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
+        </script>`
+        const renderHtml = (html: string) => {
+          return appendToHead(
+            preloadLinks,
+            appendToBody(
+              initialStateScript,
+              addOrReplaceTitle(
+                options.productName || 'Product name',
+                addOrReplaceAppDiv(appHtml, html)
+              )
+            )
           )
+        }
 
-        html = appendToHead(preloadLinks, html)
+        let html = renderHtml(template)
+        // let html = template
+        //   .replace(`<!--app-html-->`, appHtml)
+        //   .replace('<!--product-name-->', options.productName || 'Product name')
+        //   // .replace('<!--dev-ssr-css-->', css)
+        //   .replace(
+        //     '<!--initial-state-->',
+        //     `<script>
+        //     __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
+        //     </script>`
+        //   )
+
+        // html = appendToHead(preloadLinks, html)
 
         if (options.onRendered?.length) {
           for (const ssrFunction of options.onRendered) {
@@ -203,14 +226,27 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       if (!ssrContext.initialState) ssrContext.initialState = {}
       ssrContext.initialState.provide = provide
 
-      let html = template.replace(`<!--app-html-->`, appHtml).replace(
-        '<!--initial-state-->',
-        `<script>
-          __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
-          </script>`
-      )
+      const initialStateScript = `
+      <script>
+      __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
+      </script>`
+      const renderHtml = (html: string) => {
+        return appendToHead(
+          preloadLinks,
+          appendToBody(initialStateScript, addOrReplaceAppDiv(appHtml, html))
+        )
+      }
 
-      html = appendToHead(preloadLinks, html)
+      let html = renderHtml(template)
+
+      // let html = template.replace(`<!--app-html-->`, appHtml).replace(
+      //   '<!--initial-state-->',
+      //   `<script>
+      //     __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
+      //     </script>`
+      // )
+
+      // html = appendToHead(preloadLinks, html)
 
       if (options.onRendered?.length) {
         for (const ssrFunction of options.onRendered) {

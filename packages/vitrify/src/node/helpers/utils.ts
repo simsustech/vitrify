@@ -36,8 +36,24 @@ export function resolveHostname(
   return { host, name }
 }
 
-export const appendToHead = (preloadLinks: string, html: string) =>
-  html.replace(/<\/head>/, preloadLinks + '</head>')
+export const appendToHead = (content: string, html: string) =>
+  html.replace(/<\/head>/, content + '</head>')
 
-export const appendToBody = (links: string, html: string) =>
-  html.replace(/<\/body>/, links + '</body>')
+export const appendToBody = (content: string, html: string) =>
+  html.replace(/<\/body>/, content + '</body>')
+
+export const addOrReplaceTitle = (title: string, html: string) => {
+  const currentTitle = html.match(/<title>.*<\/title>/)
+  const newTitle = `<title>${title}</title>`
+  if (currentTitle) html = html.replace(/<title>.*<\/title>/, newTitle)
+  else html = appendToHead(newTitle, html)
+  return html
+}
+
+export const addOrReplaceAppDiv = (content: string, html: string) => {
+  const currentAppDiv = html.match(/<div id="app">.*<\/div>/)
+  const newAppDiv = `<div id="app">${content}</div>`
+  if (currentAppDiv) html = html.replace(/<div id="app">.*<\/div>/, newAppDiv)
+  else html = appendToBody(newAppDiv, html)
+  return html
+}

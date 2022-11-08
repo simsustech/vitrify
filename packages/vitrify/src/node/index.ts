@@ -24,6 +24,7 @@ import type { VitrifyPlugin } from './plugins/index.js'
 import { resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
 import envPlugin from '@vitrify/plugin-env'
+import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
 
 const internalServerModules = [
   'util',
@@ -433,9 +434,10 @@ export const baseConfig = async ({
               entry = new URL('csr/entry.ts', frameworkDir).pathname
           }
           const entryScript = `<script type="module" src="${entry}"></script>`
-          html = html.replace('<!--entry-script-->', entryScript)
-          if (productName)
-            html = html.replace('<!--product-name-->', productName)
+          // html = html.replace('<!--entry-script-->', entryScript)
+          html = appendToBody(entryScript, html)
+          if (productName) html = addOrReplaceTitle(productName, html)
+          // html = html.replace('<!--product-name-->', productName)
           return html
         }
       }
