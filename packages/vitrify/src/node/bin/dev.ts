@@ -159,7 +159,11 @@ export async function createServer({
 
     ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
     const app = fastify({
-      logger: false,
+      logger: {
+        level: process.env.DEBUG
+          ? 'debug'
+          : process.env.PINO_LOG_LEVEL || 'info'
+      },
       https: vite.config.server.https,
       ...vitrifyConfig.vitrify?.ssr?.fastify
     } as FastifyServerOptions)
