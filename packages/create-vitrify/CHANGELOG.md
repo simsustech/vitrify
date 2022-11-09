@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.4.0
+
+### Minor Changes
+
+- 7ecf044: Add Fastify logger in SSR dev mode, inject html without replacing comments, update create-vitrify templates
+
 ## 0.3.6
 
 ### Patch Changes
