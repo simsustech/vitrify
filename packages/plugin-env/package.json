@@ -1,7 +1,7 @@
 {
   "name": "@vitrify/plugin-env",
   "version": "0.1.1",
-  "author": "simsustech",
+  "author": "Stefan van Herwijnen",
   "type": "module",
   "files": [
     "dist"

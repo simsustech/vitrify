@@ -1,7 +1,7 @@
 {
   "name": "@vitrify/tools",
   "version": "0.1.0",
-  "author": "simsustech",
+  "author": "Stefan van Herwijnen",
   "type": "module",
   "files": [
     "dist"
@@ -30,12 +30,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/simsustech/vitrify.git",
-    "directory": "packages/render-tools"
+    "directory": "packages/tools"
   },
   "bugs": {
     "url": "https://github.com/simsustech/vitrify/issues"
   },
-  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/render-tools#readme",
+  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/tools#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
