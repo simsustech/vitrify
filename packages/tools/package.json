@@ -1,0 +1,50 @@
+{
+  "name": "@vitrify/tools",
+  "version": "0.1.0",
+  "author": "simsustech",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./render": {
+      "types": "./dist/types/render/index.d.ts",
+      "import": "./dist/render/index.js"
+    },
+    "./parse": {
+      "types": "./dist/types/parse/index.d.ts",
+      "import": "./dist/parse/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/render-tools"
+  },
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
+  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/render-tools#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "typescript": "^4.8.2"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.7"
+  }
+}

@@ -20,6 +20,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const name = 'Error404'
-</script>
+<scirpt lang="ts">
+export default {
+  name: 'Error404Page'
+}
+</scirpt>
+
+<script setup lang="ts"></script>

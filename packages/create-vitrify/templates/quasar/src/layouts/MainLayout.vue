@@ -2,14 +2,9 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round aria-label="Menu" @click="toggleLeftDrawer">
+          <q-icon :name="matMenu" />
+        </q-btn>
 
         <q-toolbar-title> Quasar App </q-toolbar-title>
 
@@ -32,6 +27,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { matMenu } from '@quasar/extras/material-icons'
 
 const $q = useQuasar()
 const leftDrawerOpen = ref(false)

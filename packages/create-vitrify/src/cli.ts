@@ -1,4 +1,8 @@
-import { renderTemplate } from './index.js'
+import {
+  renderDirectory,
+  renderPackageJson,
+  renderTsconfigJson
+} from '@vitrify/tools/render'
 import parseArgs from 'minimist'
 import type { QuestionCollection } from 'inquirer'
 import inquirer from 'inquirer'
@@ -6,17 +10,12 @@ import { promises } from 'fs'
 import { templates } from './templates.js'
 const escape = (val: any) => JSON.stringify(val).slice(1, -1)
 
-// const templates = (await promises.readdir(new URL('../templates/', import.meta.url), { withFileTypes: true }))
-//   .filter((file) => file.isDirectory())
-//   .map((file) => file.name)
-
 const argv = parseArgs(process.argv.slice(2), {
   string: ['template']
 })
 
 let questions: QuestionCollection[] = []
 if (!argv.template) {
-  // throw new Error('Please provide a template argument: --template')
   questions = [
     ...questions,
     {
@@ -69,13 +68,37 @@ questions = [
 ]
 const answers = await inquirer.prompt(questions)
 
+interface TemplateVariables {
+  template: string
+  name: string
+  productName: string
+  description: string
+  author: string
+}
 const cwdUrl = new URL('', `file://${process.cwd()}/`)
-const templateVariables = answers
-const templateUrl =
-  // @ts-ignore
-  templates[answers.template].url || templates[argv.template].url
-renderTemplate({
-  templateUrl,
+const templateVariables = answers as TemplateVariables
+// @ts-ignore
+const template = templates[answers.template] || templates[argv.template]
+
+const directoryUrl = template.url
+const outputDir = new URL(`./${answers.name}/`, cwdUrl)
+
+await renderDirectory({
+  directoryUrl,
   templateVariables,
-  outputDir: new URL(`./${answers.name}/`, cwdUrl)
+  outputDir
 })
+
+promises.writeFile(
+  new URL('./package.json', outputDir),
+  renderPackageJson({
+    ...templateVariables,
+    version: '0.1.0',
+    license: 'UNLICENSED',
+    ...template.pkgJson
+  })
+)
+promises.writeFile(
+  new URL('./tsconfig.json', outputDir),
+  renderTsconfigJson(template.tsconfigJson)
+)

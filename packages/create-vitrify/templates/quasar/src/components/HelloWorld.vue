@@ -10,7 +10,12 @@
   </q-card>
 </template>
 
+<script lang="ts">
+export default {
+  name: 'HelloWorldComponent'
+}
+</script>
+
 <script lang="ts" setup>
 import logo from 'src/assets/quasar-logo-vertical.svg'
-const name = 'HelloWorld'
 </script>

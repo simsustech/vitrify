@@ -1,0 +1,23 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/home/stefan/HomeLaptop/Projects/simsustech/vitrify"
+  },
+  "1 error pnpm": {
+    "code": "ELIFECYCLE",
+    "errno": "ENOENT",
+    "syscall": "spawn",
+    "file": "sh",
+    "pkgid": "@vitrify/render-tools@0.1.0",
+    "stage": "build",
+    "script": "tsc",
+    "pkgname": "@vitrify/render-tools",
+    "err": {
+      "name": "pnpm",
+      "message": "@vitrify/render-tools@0.1.0 build: `tsc`\nspawn ENOENT",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: @vitrify/render-tools@0.1.0 build: `tsc`\nspawn ENOENT\n    at ChildProcess.<anonymous> (/snapshot/dist/pnpm.cjs)\n    at ChildProcess.emit (events.js:400:28)\n    at maybeClose (internal/child_process.js:1088:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:296:5)"
+    }
+  },
+  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
+}

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src"
+  },
+  "extends": "./tsconfig.node.json",
+  "include": ["./src/vite-plugin.ts"]
+}
