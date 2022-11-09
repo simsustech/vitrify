@@ -36,7 +36,10 @@ const internalServerModules = [
   '@fastify/middie',
   '@fastify',
   'node',
-  'critters'
+  'critters',
+  'node-fetch',
+  'ws',
+  'abort-controller'
 ]
 
 const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
