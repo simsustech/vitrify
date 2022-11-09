@@ -26,7 +26,6 @@ export interface FastifySsrOptions {
   onRendered?: OnRenderedHook[]
   appDir?: URL
   publicDir?: URL
-  productName?: string
   mode?: string
   host?: string
 }
@@ -148,13 +147,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
         const renderHtml = (html: string) => {
           return appendToHead(
             preloadLinks,
-            appendToBody(
-              initialStateScript,
-              addOrReplaceTitle(
-                options.productName || 'Product name',
-                addOrReplaceAppDiv(appHtml, html)
-              )
-            )
+            appendToBody(initialStateScript, addOrReplaceAppDiv(appHtml, html))
           )
         }
 
