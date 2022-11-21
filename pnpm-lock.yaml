@@ -54,6 +54,7 @@ importers:
       vite: ^3.0.0-beta.0
       vue: ^3.2.37
     dependencies:
+      '@vitrify/tools': link:../tools
       handlebars: 4.7.7
       inquirer: 8.2.5
       latest-version: 7.0.0
@@ -62,7 +63,6 @@ importers:
       '@types/inquirer': 8.2.5
       '@types/minimist': 1.2.2
       '@types/node': 17.0.45
-      '@vitrify/tools': link:../tools
       typescript: 4.8.4
       vite: 3.2.3_@types+node@17.0.45
       vue: 3.2.43
