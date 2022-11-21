@@ -61,6 +61,7 @@ export const templates: Templates = {
         '@vitejs/plugin-vue',
         '@typescript-eslint/eslint-plugin',
         '@typescript-eslint/parser',
+        'critters',
         'eslint',
         'eslint-config-prettier',
         'eslint-plugin-prettier-vue',
