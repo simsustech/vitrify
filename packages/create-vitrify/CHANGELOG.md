@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.4.1
+
+### Patch Changes
+
+- f04f365: Make @vitrify/tools a dependency of create-vitrify instead of devDependency
+
 ## 0.4.0
 
 ### Minor Changes
