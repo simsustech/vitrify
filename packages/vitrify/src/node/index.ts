@@ -8,7 +8,6 @@ import path from 'path'
 import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
 import builtinModules from 'builtin-modules'
-// import { resolve } from 'import-meta-resolve'
 import { visualizer } from 'rollup-plugin-visualizer'
 import type {
   StaticImports,
@@ -25,6 +24,8 @@ import { resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
 import envPlugin from '@vitrify/plugin-env'
 import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
+import type { ComponentResolver } from 'unplugin-vue-components'
+import Components from 'unplugin-vue-components/vite'
 
 const internalServerModules = [
   'util',
@@ -45,6 +46,16 @@ const internalServerModules = [
 const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
   quasar: () =>
     import('./plugins/quasar.js').then((module) => module.QuasarPlugin)
+}
+
+const configResolverMap: Record<
+  string,
+  () => Promise<ComponentResolver | ComponentResolver[]>
+> = {
+  quasar: () =>
+    import('unplugin-vue-components/resolvers').then((module) =>
+      module.QuasarResolver()
+    )
 }
 
 const manualChunkNames = [
@@ -249,15 +260,18 @@ export const baseConfig = async ({
   }
 
   const frameworkPlugins = []
+  const resolvers = []
   for (const framework of Object.keys(configPluginMap)) {
     if (Object.keys(vitrifyConfig).includes(framework)) {
       const plugin = await configPluginMap[framework]()
+      const resolver = await configResolverMap[framework]()
       frameworkPlugins.push(
         await plugin({
           ssr,
           pwa
         })
       )
+      resolvers.push(resolver)
     }
   }
 
@@ -325,6 +339,7 @@ export const baseConfig = async ({
         sassVariables = config.vitrify?.sass?.variables || {}
         globalSass = config.vitrify?.sass?.global || []
         additionalData = config.vitrify?.sass?.additionalData || []
+
         return
       },
       configureServer(server) {
@@ -404,7 +419,17 @@ export const baseConfig = async ({
         }
         return null
       }
-    }
+    },
+    Components({
+      exclude: [
+        new RegExp(
+          `[\\/]node_modules[\\/].*[\\/]!(${serverModules.join('|')})`
+        ),
+        /[\\/]\.git[\\/]/,
+        /[\\/]\.nuxt[\\/]/
+      ],
+      resolvers
+    })
   ]
   if (command !== 'test') {
     plugins.unshift({

@@ -2,6 +2,7 @@ import type { Alias, UserConfig } from 'vite'
 import type { QuasarConf } from './plugins/quasar.js'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
 import type { FastifyServerOptions } from 'fastify'
+import { ComponentResolver } from 'unplugin-vue-components'
 
 export type BootFunction = ({
   app,
@@ -105,5 +106,9 @@ export interface VitrifyConfig extends UserConfig {
   }
   quasar?: QuasarConf
 }
+
+export type VitrifyConfigAsync =
+  | VitrifyConfig
+  | ((mode: string, command: string) => Promise<VitrifyConfig>)
 
 export const defineConfig = (config: VitrifyConfig) => config

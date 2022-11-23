@@ -6,7 +6,6 @@ import type {
   OnMountedHook,
   VitrifyConfig
 } from '../vitrify-config.js'
-import { QuasarResolver } from 'unplugin-vue-components/resolvers'
 import type { VitrifyPlugin } from './index.js'
 export interface QuasarConf {
   ctx?: Record<string, any>
@@ -78,9 +77,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
   let plugins: string[] = []
   let quasarConf: QuasarConf
   return [
-    Components({
-      resolvers: [QuasarResolver()]
-    }),
     {
       name: 'vite-plugin-quasar-transform',
       enforce: 'pre',
