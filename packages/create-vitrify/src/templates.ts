@@ -40,7 +40,8 @@ export const templates: Templates = {
       scripts: {
         dev: 'vitrify dev',
         'dev:ssr': 'vitrify dev -m ssr',
-        build: 'vitrify build',
+        build: 'run-s build:csr',
+        'build:csr': 'vitrify build',
         'build:ssr': 'vitrify build -m ssr',
         'build:ssg': 'vitrify build -m ssg',
         test: 'vitrify test',
@@ -68,10 +69,23 @@ export const templates: Templates = {
         'eslint-plugin-vue',
         'devcert',
         'fastify',
+        'npm-run-all',
         'typescript',
         'vite',
         'vitrify'
-      ])
+      ]),
+      exports: {
+        '.': {
+          types: './dist/types/index.d.ts',
+          import: './dist/index.js'
+        },
+        './fastify-ssr-plugin': {
+          import: './dist/ssr/server/fastify-ssr-plugin.mjs'
+        },
+        './hooks': {
+          import: './dist/ssr/server/virtual_vitrify-hooks.mjs'
+        }
+      }
     },
     tsconfigJson: {
       paths: {
