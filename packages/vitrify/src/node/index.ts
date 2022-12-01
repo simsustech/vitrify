@@ -422,6 +422,8 @@ export const baseConfig = async ({
                   .replaceAll('/', '')
                   .replaceAll('.', '')
                   .replaceAll('-', '')
+                  .replaceAll('_', '')
+                  .replaceAll('+', '')
                 return `import ${varName} from '${url.pathname}'; onSetup.push(${varName})`
               })
               .join('\n')}`
