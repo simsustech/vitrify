@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.4.2
+
+### Patch Changes
+
+- 3d57e77: Fix package.json for Quasar project
+
 ## 0.4.1
 
 ### Patch Changes

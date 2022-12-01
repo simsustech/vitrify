@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.1
+
+### Patch Changes
+
+- dacc241: Move unplugin-vue-components from plugin to root
+
 ## 0.11.0
 
 ### Minor Changes
