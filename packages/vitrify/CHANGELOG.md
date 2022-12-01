@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.3
+
+### Patch Changes
+
+- 78b6314: Add manualChunks config option and move env plugin to tools
+
 ## 0.11.2
 
 ### Patch Changes
