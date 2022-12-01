@@ -69,25 +69,54 @@ const moduleChunks = {
   vue: ['vue', '@vue', 'vue-router'],
   quasar: ['quasar', '@quasar']
 }
-const manualChunks: ManualChunksOption = (id: string) => {
-  const matchedModule = Object.entries(moduleChunks).find(
-    ([chunkName, moduleNames]) =>
-      moduleNames.some((moduleName) => id.includes(moduleName + '/'))
-  )
-  if (id.includes('vitrify/src/')) {
-    const name = id.split('/').at(-1)?.split('.').at(0)
-    if (name && manualChunkNames.includes(name)) return name
-  } else if (
-    VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
-  ) {
-    return VIRTUAL_MODULES.find((name) => id.includes(name))
-  } else if (id.includes('node_modules')) {
-    if (matchedModule) {
-      return matchedModule[0]
+const manualChunksFn = (manualChunkList?: string[]): ManualChunksOption => {
+  return (id: string) => {
+    const matchedModule = Object.entries(moduleChunks).find(
+      ([chunkName, moduleNames]) =>
+        moduleNames.some((moduleName) => id.includes(moduleName + '/'))
+    )
+    if (id.includes('vitrify/src/')) {
+      const name = id.split('/').at(-1)?.split('.').at(0)
+      if (name && manualChunkNames.includes(name)) return name
+    } else if (
+      VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
+    ) {
+      return VIRTUAL_MODULES.find((name) => id.includes(name))
+    } else if (manualChunkList?.some((file) => id.includes(file))) {
+      return manualChunkList.find((file) => id.includes(file))
+    } else if (id.includes('node_modules')) {
+      if (matchedModule) {
+        return matchedModule[0]
+      }
+      return 'vendor'
     }
-    return 'vendor'
   }
 }
+
+// const manualChunks: ManualChunksOption = (
+//   id: string,
+//   manualChunkList?: string[]
+// ) => {
+//   const matchedModule = Object.entries(moduleChunks).find(
+//     ([chunkName, moduleNames]) =>
+//       moduleNames.some((moduleName) => id.includes(moduleName + '/'))
+//   )
+//   if (id.includes('vitrify/src/')) {
+//     const name = id.split('/').at(-1)?.split('.').at(0)
+//     if (name && manualChunkNames.includes(name)) return name
+//   } else if (
+//     VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
+//   ) {
+//     return VIRTUAL_MODULES.find((name) => id.includes(name))
+//   } else if (manualChunkList?.some((file) => id.includes(file))) {
+//     return manualChunkList.find((file) => id.includes(file))
+//   } else if (id.includes('node_modules')) {
+//     if (matchedModule) {
+//       return matchedModule[0]
+//     }
+//     return 'vendor'
+//   }
+// }
 
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
@@ -546,7 +575,7 @@ export const baseConfig = async ({
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
-        manualChunks
+        manualChunks: manualChunksFn(vitrifyConfig?.vitrify?.manualChunks)
       }
     }
     // Create a SSR bundle
@@ -563,7 +592,7 @@ export const baseConfig = async ({
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
-        manualChunks
+        manualChunks: manualChunksFn(vitrifyConfig?.vitrify?.manualChunks)
       }
     }
     // Create a SSR bundle
@@ -579,7 +608,7 @@ export const baseConfig = async ({
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
-        manualChunks
+        manualChunks: manualChunksFn(vitrifyConfig?.vitrify?.manualChunks)
       }
     }
   }

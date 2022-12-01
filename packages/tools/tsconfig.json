@@ -5,7 +5,7 @@
     "module": "esnext",
     "moduleResolution": "nodenext",
     "baseUrl": "./",
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "declaration": true,
     "outDir": "./dist",
     "declarationDir": "./dist/types",

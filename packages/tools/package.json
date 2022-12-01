@@ -19,6 +19,10 @@
     "./parse": {
       "types": "./dist/types/parse/index.d.ts",
       "import": "./dist/parse/index.js"
+    },
+    "./env": {
+      "types": "./dist/types/env/index.d.ts",
+      "import": "./dist/env/index.js"
     }
   },
   "scripts": {
@@ -42,7 +46,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.2",
+    "vite": "^3.2.4"
   },
   "dependencies": {
     "handlebars": "^4.7.7"

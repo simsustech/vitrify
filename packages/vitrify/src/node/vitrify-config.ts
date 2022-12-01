@@ -103,6 +103,10 @@ export interface VitrifyConfig extends UserConfig {
     dev?: {
       alias?: Alias[]
     }
+    /**
+     * Files which should be a seperate chunk
+     */
+    manualChunks?: string[]
   }
   quasar?: QuasarConf
 }
