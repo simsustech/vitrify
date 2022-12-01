@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.2
+
+### Patch Changes
+
+- a3f6dae: Fix **HOST** definition, inject it as a string
+
 ## 0.11.1
 
 ### Patch Changes
