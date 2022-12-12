@@ -8,10 +8,9 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "run-s build:tools build:plugin-env build:vitrify build:create-vitrify",
+    "build": "run-s build:tools build:vitrify build:create-vitrify",
     "build:vitrify": "cd packages/vitrify && pnpm run build",
     "build:tools": "cd packages/tools && pnpm run build",
-    "build:plugin-env": "cd packages/plugin-env && pnpm run build",
     "build:create-vitrify": "cd packages/create-vitrify && pnpm run build",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
@@ -59,8 +58,7 @@
   "packageManager": "pnpm@6.32.3",
   "pnpm": {
     "overrides": {
-      "vitrify": "workspace:*",
-      "@vitrify/plugin-env": "workspace:*"
+      "vitrify": "workspace:*"
     }
   }
 }
