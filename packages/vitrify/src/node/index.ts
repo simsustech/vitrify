@@ -22,7 +22,6 @@ import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
 import { resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
-import envPlugin from '@vitrify/plugin-env'
 import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
 import type { ComponentResolver } from 'unplugin-vue-components'
 import Components from 'unplugin-vue-components/vite'
@@ -281,6 +280,7 @@ export const baseConfig = async ({
           encoding: 'utf-8'
         })
       ))
+      if (!productName) productName = vitrifyConfig.vitrify?.productName
     } catch (e) {
       console.error('package.json not found')
       productName = 'Product name'
@@ -353,7 +353,6 @@ export const baseConfig = async ({
       }
     },
     vuePlugin(),
-    envPlugin(),
     ...frameworkPlugins,
     {
       name: 'vitrify-setup',
