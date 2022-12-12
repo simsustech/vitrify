@@ -2,18 +2,21 @@ import { readFileSync } from 'fs'
 
 const env = {
   read: (envVar: string) => {
-    let result = import.meta.env[envVar]
-    if (!result && import.meta.env.SSR) {
-      result = process.env[envVar]
+    let result
+    if (import.meta.env) {
+      result = import.meta.env[envVar]
     }
-    if (!result) {
+    if (!result && process && process.env[envVar]) {
+      result = process.env[envVar]
+    } else if (!result && process && process.env[envVar + '_FILE']) {
       result = process.env[envVar + '_FILE']
     }
-    if (result && result.startsWith('/run/secrets') && import.meta.env.SSR) {
+    if (result && result.startsWith('/run/secrets')) {
       try {
         result = readFileSync(result, 'utf-8')
       } catch (e) {}
     }
+
     return result
   }
 }

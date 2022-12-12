@@ -52,7 +52,6 @@
     "@fastify/static": "^6.5.0",
     "@quasar/extras": "^1.15.2",
     "@vitejs/plugin-vue": "^3.1.0",
-    "@vitrify/plugin-env": "^0.1.1",
     "builtin-modules": "^3.3.0",
     "cac": "^6.7.14",
     "chalk": "^5.0.1",
