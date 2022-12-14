@@ -51,6 +51,7 @@ const fastifyCsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     console.log('Dev mode')
     if (!('use' in fastify)) {
       const middie = (await import('@fastify/middie')).default
+      // @ts-ignore
       await fastify.register(middie)
     }
     fastify.use(vite.middlewares)
