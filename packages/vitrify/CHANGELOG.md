@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.4
+
+### Patch Changes
+
+- 905d0c4: Fix onSetup imports
+
 ## 0.11.3
 
 ### Patch Changes
