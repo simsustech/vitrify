@@ -2,7 +2,6 @@ lockfileVersion: 5.4
 
 overrides:
   vitrify: workspace:*
-  '@vitrify/plugin-env': workspace:*
 
 importers:
 
