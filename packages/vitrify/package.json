@@ -99,8 +99,7 @@
   "files": [
     "dist",
     "src",
-    "!dist/**/*.test.js",
-    "!dist/**/test.js"
+    "!dist/**/*.test.js"
   ],
   "keywords": [
     "vite",
