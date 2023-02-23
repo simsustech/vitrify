@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.5
+
+### Patch Changes
+
+- dcf3d1e: Retrieve product name from vitrify config; deprecate plugin-env
+
 ## 0.11.4
 
 ### Patch Changes
