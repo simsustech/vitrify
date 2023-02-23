@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.6
+
+### Patch Changes
+
+- 1f4922c: Add ajv dependency
+
 ## 0.11.5
 
 ### Patch Changes
