@@ -306,7 +306,6 @@ export const baseConfig = async ({
   let globalCss: string[] = []
   let staticImports: StaticImports
   let sassVariables: Record<string, string>
-  let additionalData: string[]
   let globalSass: string[]
   let serverModules: string[] = internalServerModules
 
@@ -361,7 +360,6 @@ export const baseConfig = async ({
         staticImports = config.vitrify?.staticImports || {}
         sassVariables = config.vitrify?.sass?.variables || {}
         globalSass = config.vitrify?.sass?.global || []
-        additionalData = config.vitrify?.sass?.additionalData || []
 
         return
       },
@@ -460,16 +458,6 @@ export const baseConfig = async ({
     plugins.unshift({
       name: 'html-transform',
       enforce: 'pre',
-      //       transform: (code, id) => {
-      //         if (id.endsWith('App.vue')) {
-      //           code =
-      //             code +
-      //             `<style lang="sass">
-      // // do not remove, required for additionalData import
-      // </style>`
-      //         }
-      //         return code
-      //       },
       transformIndexHtml: {
         enforce: 'pre',
         transform: (html) => {
