@@ -14,6 +14,11 @@ import type {
   BootFunction,
   OnMountedHook,
   VitrifyConfig,
+  VitrifyConfigAsync,
+  VitrifyCommands,
+  VitrifyModes,
+  VitrifyUIFrameworks,
+  VitrifySSRModes,
   OnRenderedHook,
   OnBootHook,
   OnSetupFile
@@ -195,13 +200,13 @@ export const baseConfig = async ({
   debug = false,
   productName
 }: {
-  ssr?: 'client' | 'server' | 'ssg' | 'fastify'
+  ssr?: VitrifySSRModes
   appDir?: URL
   publicDir?: URL
   base?: string
-  command?: 'build' | 'dev' | 'test'
-  mode?: 'production' | 'development'
-  framework?: 'vue'
+  command?: VitrifyCommands
+  mode?: VitrifyModes
+  framework?: VitrifyUIFrameworks
   pwa?: boolean
   debug?: boolean
   productName?: string
@@ -219,18 +224,8 @@ export const baseConfig = async ({
   const fastifyDir = new URL('fastify/', cliViteDir)
 
   if (!publicDir) publicDir = new URL('public/', appDir)
-  /**
-   * TODO:Perform some manual check if command is run inside a Quasar Project
-   */
-  let vitrifyConfig:
-    | VitrifyConfig
-    | (({
-        mode,
-        command
-      }: {
-        mode: string
-        command: string
-      }) => Promise<VitrifyConfig> | VitrifyConfig)
+
+  let vitrifyConfig: VitrifyConfig | VitrifyConfigAsync
 
   try {
     if (fs.existsSync(new URL('vitrify.config.ts', appDir).pathname)) {
@@ -659,4 +654,10 @@ export const baseConfig = async ({
 
 export const vitrifyDir = new URL('..', import.meta.url)
 export { prerender } from './frameworks/vue/prerender.js'
-export type { VitrifyConfig, VitrifyPlugin, VitrifyContext, BootFunction }
+export type {
+  VitrifyConfig,
+  VitrifyConfigAsync,
+  VitrifyPlugin,
+  VitrifyContext,
+  BootFunction
+}

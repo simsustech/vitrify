@@ -111,8 +111,17 @@ export interface VitrifyConfig extends UserConfig {
   quasar?: QuasarConf
 }
 
-export type VitrifyConfigAsync =
-  | VitrifyConfig
-  | ((mode: string, command: string) => Promise<VitrifyConfig>)
+export type VitrifyCommands = 'build' | 'dev' | 'test'
+export type VitrifyModes = 'production' | 'development'
+export type VitrifyUIFrameworks = 'vue'
+export type VitrifySSRModes = 'client' | 'server' | 'ssg' | 'fastify'
+
+export type VitrifyConfigAsync = ({
+  mode,
+  command
+}: {
+  mode: VitrifyModes
+  command: VitrifyCommands
+}) => Promise<VitrifyConfig>
 
 export const defineConfig = (config: VitrifyConfig) => config
