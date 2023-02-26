@@ -26,22 +26,18 @@ export const renderAll = async ({
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name)
 
-  for (let file of files) {
-    const fileContent = await promises.readFile(
-      new URL(`./${file}`, inputPath),
-      'utf-8'
-    )
-    let output
-    if (file.endsWith('.hbs')) {
-      const template = Handlebars.compile(fileContent)
-      output = template(templateVariables)
-    } else {
-      output = fileContent
-    }
-    if (file.startsWith('_')) file = file.replace('_', '.')
+  for (const file of files) {
+    const fileInputPath = new URL(`./${file}`, inputPath)
     const fileOutputPath = new URL(file.replace('.hbs', ''), outputPath)
-
-    await promises.writeFile(fileOutputPath, output, 'utf-8')
+    if (file.endsWith('.hbs')) {
+      await render({
+        inputPath: fileInputPath,
+        outputPath: new URL(file.replace('.hbs', ''), outputPath),
+        templateVariables
+      })
+    } else {
+      await promises.copyFile(fileInputPath, fileOutputPath)
+    }
   }
 
   let p: Promise<unknown>[] = []
