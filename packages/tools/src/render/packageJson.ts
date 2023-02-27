@@ -7,19 +7,19 @@ const PKG_JSON_TEMPLATE = Handlebars.compile(`{
   {{#if private}}
   "private": true,
   {{/if}}
-  "name": "{{ name }}",
-  "productName": "{{ productName }}",
-  "version": "{{ version }}",
-  "description": "{{ description }}",
-  "license": "{{ license }}",
-  "author": "{{ author }}",
+  "name": "{{{  name  }}}",
+  "productName": "{{{  productName  }}}",
+  "version": "{{{  version  }}}",
+  "description": "{{{  description  }}}",
+  "license": "{{{  license  }}}",
+  "author": "{{{  author  }}}",
   "type": "module",
   "exports": {
     {{#if exports}}
     {{#each exports}}
-    "{{@key}}": {
+    "{{{ @key }}}": {
       {{#each this}}
-      "{{@key}}": "{{this}}"{{#unless @last}},{{/unless}}
+      "{{{ @key }}}": "{{{ this }}}"{{#unless @last}},{{/unless}}
       {{/each}}
     }{{#unless @last}},{{/unless}}
     {{/each}}
@@ -36,36 +36,36 @@ const PKG_JSON_TEMPLATE = Handlebars.compile(`{
   "scripts": {
   {{#each scripts}}
   {{#if @last}}
-    "{{@key}}": "{{this}}"
+    "{{{ @key }}}": "{{{ this }}}"
   {{else}}
-    "{{@key}}": "{{this}}",
+    "{{{ @key }}}": "{{{ this }}}",
   {{/if}}
   {{/each}}
   },
   "dependencies": {
   {{#each dependencies}}
   {{#if @last}}
-    "{{@key}}": "{{this}}"
+    "{{{ @key }}}": "{{{ this }}}"
   {{else}}
-    "{{@key}}": "{{this}}",
+    "{{{ @key }}}": "{{{ this }}}",
   {{/if}}
   {{/each}}
   },
   "devDependencies": {
   {{#each devDependencies}}
   {{#if @last}}
-    "{{@key}}": "{{this}}"
+    "{{{ @key }}}": "{{{ this }}}"
   {{else}}
-    "{{@key}}": "{{this}}",
+    "{{{ @key }}}": "{{{ this }}}",
   {{/if}}
   {{/each}}
   },
   "peerDependencies": {
   {{#each peerDependencies}}
   {{#if @last}}
-    "{{@key}}": "{{this}}"
+    "{{{ @key }}}": "{{{ this }}}"
   {{else}}
-    "{{@key}}": "{{this}}",
+    "{{{ @key }}}": "{{{ this }}}",
   {{/if}}
   {{/each}}
   }
