@@ -1,5 +1,0 @@
----
-'vitrify': patch
----
-
-Fix prerendering
