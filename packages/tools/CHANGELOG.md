@@ -1,5 +1,12 @@
 # @vitrify/tools
 
+## 0.1.3
+
+### Patch Changes
+
+- c836280: (tools): only render .hbs file, copy the others
+- e2f91b3: (tools): do not escape input ingenerated package.json
+
 ## 0.1.2
 
 ### Patch Changes
