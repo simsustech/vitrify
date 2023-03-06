@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.7
+
+### Patch Changes
+
+- 7bec813: Fix prerendering
+
 ## 0.11.6
 
 ### Patch Changes
