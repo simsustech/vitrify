@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.4.3
+
+### Patch Changes
+
+- 5b569c3: (create-vitrify): add node env to CLI script
+
 ## 0.4.2
 
 ### Patch Changes
