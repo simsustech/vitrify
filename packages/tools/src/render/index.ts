@@ -26,8 +26,9 @@ export const renderAll = async ({
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name)
 
-  for (const file of files) {
+  for (let file of files) {
     const fileInputPath = new URL(`./${file}`, inputPath)
+    if (file.startsWith('_')) file = file.replace('_', '.')
     const fileOutputPath = new URL(file.replace('.hbs', ''), outputPath)
     if (file.endsWith('.hbs')) {
       await render({
