@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.1.4
+
+### Patch Changes
+
+- e1c104a: fix(tools): replace \_ with . for copying hidden files
+
 ## 0.1.3
 
 ### Patch Changes
