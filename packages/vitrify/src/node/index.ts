@@ -235,7 +235,9 @@ export const baseConfig = async ({
         fileURLToPath(new URL('vitrify.config.ts', appDir))
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
-      vitrifyConfig = (await import(configPath + '.js')).default
+      // @ts-ignore
+      vitrifyConfig = (await import('file://' + configPath + '.js')).default
+      // vitrifyConfig = (await import(configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
       vitrifyConfig = (
@@ -413,13 +415,20 @@ export const baseConfig = async ({
               .map((url, index) => {
                 const varName = fileURLToPath(url)
                   .replaceAll('/', '')
+                  .replaceAll(':', '')
+                  .replaceAll('\\', '')
                   .replaceAll('.', '')
                   .replaceAll('-', '')
                   .replaceAll('_', '')
                   .replaceAll('+', '')
-                return `import ${varName} from '${fileURLToPath(
-                  url
-                )}'; onSetup.push(${varName})`
+
+                return `import ${varName} from '${
+                  new URL(url, appDir).pathname
+                }'; onSetup.push(${varName})`
+
+                // return `import ${varName} from '${fileURLToPath(
+                //   url
+                // )}'; onSetup.push(${varName})`
               })
               .join('\n')}`
         } else if (id === 'virtual:static-imports') {
@@ -479,7 +488,15 @@ export const baseConfig = async ({
             default:
               entry = fileURLToPath(new URL('csr/entry.ts', frameworkDir))
           }
-          const entryScript = `<script type="module" src="${entry}"></script>`
+          let entryScript
+          if (process.platform === 'win32') {
+            const split = entry.split('node_modules')
+            entryScript = `<script type="module" src="node_modules${split.at(
+              -1
+            )}"></script>`
+          } else {
+            entryScript = `<script type="module" src="${entry}"></script>`
+          }
           // html = html.replace('<!--entry-script-->', entryScript)
           html = appendToBody(entryScript, html)
           if (productName) html = addOrReplaceTitle(productName, html)
