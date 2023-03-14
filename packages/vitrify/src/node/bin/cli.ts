@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import cac from 'cac'
+import { fileURLToPath } from 'url'
 import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls, exitLogs } from '../helpers/logger.js'
 import type { ResolvedConfig } from 'vite'
@@ -48,50 +49,52 @@ cli
       case 'csr':
         await build({
           ...args,
-          outDir: new URL('csr/', baseOutDir).pathname
+          outDir: fileURLToPath(new URL('csr/', baseOutDir))
         })
         break
       case 'fastify':
         await build({
           ssr: 'fastify',
           ...args,
-          outDir: new URL('server/', baseOutDir).pathname
+          outDir: fileURLToPath(new URL('server/', baseOutDir))
         })
         break
       case 'ssr':
         await build({
           ssr: 'client',
           ...args,
-          outDir: new URL('ssr/client/', baseOutDir).pathname
+          outDir: fileURLToPath(new URL('ssr/client/', baseOutDir))
         })
         await build({
           ssr: 'server',
           ...args,
-          outDir: new URL('ssr/server/', baseOutDir).pathname
+          outDir: fileURLToPath(new URL('ssr/server/', baseOutDir))
         })
         break
       case 'ssg':
         await build({
           ssr: 'client',
           ...args,
-          outDir: new URL('static/', baseOutDir).pathname
+          outDir: fileURLToPath(new URL('static/', baseOutDir))
         })
         await build({
           ssr: 'server',
           ...args,
-          outDir: new URL('ssr/server/', baseOutDir).pathname
+          outDir: fileURLToPath(new URL('ssr/server/', baseOutDir))
         })
         ;({ prerender, onRendered } = await import(
-          new URL('ssr/server/prerender.mjs', baseOutDir).pathname
+          fileURLToPath(new URL('ssr/server/prerender.mjs', baseOutDir))
         ))
 
         prerender({
-          outDir: new URL('static/', baseOutDir).pathname,
-          templatePath: new URL('static/index.html', baseOutDir).pathname,
-          manifestPath: new URL('static/ssr-manifest.json', baseOutDir)
-            .pathname,
-          entryServerPath: new URL('ssr/server/entry-server.mjs', baseOutDir)
-            .pathname,
+          outDir: fileURLToPath(new URL('static/', baseOutDir)),
+          templatePath: fileURLToPath(new URL('static/index.html', baseOutDir)),
+          manifestPath: fileURLToPath(
+            new URL('static/ssr-manifest.json', baseOutDir)
+          ),
+          entryServerPath: fileURLToPath(
+            new URL('ssr/server/entry-server.mjs', baseOutDir)
+          ),
           onRendered
         })
         break
@@ -121,8 +124,10 @@ cli
     const { createServer } = await import('./dev.js')
     const cwd = (await import('../app-urls.js')).getCwd()
     let app
-    const appPath = parsePath(options.app, cwd)?.pathname
-    if (appPath) {
+    const appURL = parsePath(options.app, cwd)
+    let appPath: string
+    if (appURL) {
+      appPath = fileURLToPath(appURL)
       app = await import(appPath)
     }
 
@@ -176,7 +181,7 @@ cli.command('test').action(async (options) => {
 cli.command('run <file>').action(async (file, options) => {
   const { run } = await import('./run.js')
   const filePath = new URL(file, `file://${process.cwd()}/`)
-  await run(filePath.pathname)
+  await run(fileURLToPath(filePath))
 })
 
 // Default

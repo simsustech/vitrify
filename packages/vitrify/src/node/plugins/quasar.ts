@@ -1,5 +1,6 @@
 import type { Plugin } from 'vite'
 import { resolvePackageData } from 'vite'
+import { fileURLToPath } from 'url'
 import Components from 'unplugin-vue-components/vite'
 import type {
   OnBootHook,
@@ -115,7 +116,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
           for (const val of localPackages) {
             const pkg = resolvePackageData(
               val,
-              config.vitrify!.urls!.app!.pathname
+              fileURLToPath(config.vitrify!.urls!.app!)
             )
             if (pkg) urls!.packages![val] = new URL(`file://${pkg.dir}/`)
           }
@@ -196,10 +197,9 @@ export const QuasarPlugin: VitrifyPlugin = async ({
             alias: [
               {
                 find: 'quasar/src/',
-                replacement: new URL(
-                  './src/',
-                  config.vitrify!.urls!.packages!.quasar
-                ).pathname
+                replacement: fileURLToPath(
+                  new URL('./src/', config.vitrify!.urls!.packages!.quasar)
+                )
               }
             ]
           },

@@ -5,7 +5,7 @@ import type {
 } from 'fastify'
 import fastifyStatic from '@fastify/static'
 import type { ViteDevServer } from 'vite'
-
+import { fileURLToPath } from 'url'
 export interface FastifySsrOptions {
   baseUrl?: string
   provide?: (
@@ -58,7 +58,7 @@ const fastifyCsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
   } else {
     options.appDir = options.appDir || new URL('../../..', import.meta.url)
     fastify.register(fastifyStatic, {
-      root: new URL('./dist/csr', options.appDir).pathname,
+      root: fileURLToPath(new URL('./dist/csr', options.appDir)),
       wildcard: false,
       index: false,
       prefix: options.baseUrl

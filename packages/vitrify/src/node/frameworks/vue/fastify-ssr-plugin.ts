@@ -5,6 +5,7 @@ import type {
 } from 'fastify'
 import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
 import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
 import {
   addOrReplaceAppDiv,
@@ -48,11 +49,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
     options.vitrifyDir =
       options.vitrifyDir || (await import('vitrify')).vitrifyDir
     const frameworkDir = new URL('src/vite/vue/', options.vitrifyDir)
-    // if (!options.vitrifyDir)
-    //   throw new Error('Option vitrifyDir cannot be undefined')
-    // if (!options.vite) throw new Error('Option vite cannot be undefined')
-    // const { resolve } = await import('import-meta-resolve')
-    // const cliDir = new URL('../', await resolve('vitrify', import.meta.url))
+
     options.appDir = options.appDir || new URL('../../..', import.meta.url)
 
     const { createVitrifyDevServer } = await import('vitrify/dev')
@@ -63,38 +60,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       base: options.baseUrl,
       host: options.host
     })
-    // const { createServer, searchForWorkspaceRoot } = await import('vite')
-    // const { baseConfig } = await import('vitrify')
-    // const cliDir = options.vitrifyDir
-    // const config = await baseConfig({
-    //   ssr: 'server',
-    //   command: 'dev',
-    //   mode: 'development',
-    //   appDir: options.appDir,
-    //   publicDir: options.publicDir || new URL('public', options.appDir)
-    // })
-
-    // config.server = {
-    //   middlewareMode: true,
-    //   fs: {
-    //     allow: [
-    //       searchForWorkspaceRoot(process.cwd()),
-    //       searchForWorkspaceRoot(options.appDir.pathname),
-    //       searchForWorkspaceRoot(cliDir.pathname)
-    //       // appDir.pathname,
-    //     ]
-    //   },
-    //   watch: {
-    //     // During tests we edit the files too fast and sometimes chokidar
-    //     // misses change events, so enforce polling for consistency
-    //     usePolling: true,
-    //     interval: 100
-    //   }
-    // }
-    // const vite = await createServer({
-    //   configFile: false,
-    //   ...config
-    // })
 
     if (!('use' in fastify)) {
       const middie = (await import('@fastify/middie')).default
@@ -120,7 +85,9 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
 
         template = await vite.transformIndexHtml(url!, template)
 
-        const entryUrl = new URL('ssr/entry-server.ts', frameworkDir).pathname
+        const entryUrl = fileURLToPath(
+          new URL('ssr/entry-server.ts', frameworkDir)
+        )
         const render = (await vite!.ssrLoadModule(entryUrl)).render
         let manifest
         // TODO: https://github.com/vitejs/vite/issues/2282
@@ -186,7 +153,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
   } else {
     options.appDir = options.appDir || new URL('../../..', import.meta.url)
     fastify.register(fastifyStatic, {
-      root: new URL('./dist/ssr/client', options.appDir).pathname,
+      root: fileURLToPath(new URL('./dist/ssr/client', options.appDir)),
       wildcard: false,
       index: false,
       prefix: options.baseUrl
@@ -202,7 +169,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       }
 
       const template = readFileSync(
-        new URL('./dist/ssr/client/index.html', options.appDir).pathname
+        fileURLToPath(new URL('./dist/ssr/client/index.html', options.appDir))
       ).toString()
       const manifest = JSON.parse(
         readFileSync(
@@ -211,7 +178,9 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       )
       const render = (
         await import(
-          new URL('./dist/ssr/server/entry-server.mjs', options.appDir).pathname
+          fileURLToPath(
+            new URL('./dist/ssr/server/entry-server.mjs', options.appDir)
+          )
         )
       ).render
 

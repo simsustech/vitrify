@@ -9,6 +9,7 @@ import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
 import builtinModules from 'builtin-modules'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { fileURLToPath } from 'url'
 import type {
   StaticImports,
   BootFunction,
@@ -228,17 +229,17 @@ export const baseConfig = async ({
   let vitrifyConfig: VitrifyConfig | VitrifyConfigAsync
 
   try {
-    if (fs.existsSync(new URL('vitrify.config.ts', appDir).pathname)) {
-      const configPath = new URL('vitrify.config.ts', appDir).pathname
+    if (fs.existsSync(fileURLToPath(new URL('vitrify.config.ts', appDir)))) {
+      const configPath = fileURLToPath(new URL('vitrify.config.ts', appDir))
       const bundledConfig = await bundleConfigFile(
-        new URL('vitrify.config.ts', appDir).pathname
+        fileURLToPath(new URL('vitrify.config.ts', appDir))
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
       vitrifyConfig = (await import(configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
       vitrifyConfig = (
-        await import(new URL('vitrify.config.js', appDir).pathname)
+        await import(fileURLToPath(new URL('vitrify.config.js', appDir)))
       ).default
     }
     if (typeof vitrifyConfig === 'function')
@@ -256,7 +257,7 @@ export const baseConfig = async ({
     vitrifyConfig.vitrify?.urls?.packages || {}
   await (async () => {
     for (const val of localPackages) {
-      const pkg = resolvePackageData(val, appDir.pathname)
+      const pkg = resolvePackageData(val, fileURLToPath(appDir))
       if (pkg) packageUrls![val] = new URL(`file://${pkg.dir}/`)
     }
   })()
@@ -271,7 +272,7 @@ export const baseConfig = async ({
   if (!productName) {
     try {
       ;({ productName } = JSON.parse(
-        readFileSync(new URL('package.json', appDir).pathname, {
+        readFileSync(fileURLToPath(new URL('package.json', appDir)), {
           encoding: 'utf-8'
         })
       ))
@@ -410,13 +411,15 @@ export const baseConfig = async ({
             export const onSetup = []
             ${onSetupFiles
               .map((url, index) => {
-                const varName = url.pathname
+                const varName = fileURLToPath(url)
                   .replaceAll('/', '')
                   .replaceAll('.', '')
                   .replaceAll('-', '')
                   .replaceAll('_', '')
                   .replaceAll('+', '')
-                return `import ${varName} from '${url.pathname}'; onSetup.push(${varName})`
+                return `import ${varName} from '${fileURLToPath(
+                  url
+                )}'; onSetup.push(${varName})`
               })
               .join('\n')}`
         } else if (id === 'virtual:static-imports') {
@@ -466,13 +469,15 @@ export const baseConfig = async ({
             case 'ssg':
             case 'server':
             case 'client':
-              entry = new URL('ssr/entry-client.ts', frameworkDir).pathname
+              entry = fileURLToPath(
+                new URL('ssr/entry-client.ts', frameworkDir)
+              )
               break
             case 'fastify':
-              entry = new URL('entry.ts', fastifyDir).pathname
+              entry = fileURLToPath(new URL('entry.ts', fastifyDir))
               break
             default:
-              entry = new URL('csr/entry.ts', frameworkDir).pathname
+              entry = fileURLToPath(new URL('csr/entry.ts', frameworkDir))
           }
           const entryScript = `<script type="module" src="${entry}"></script>`
           // html = html.replace('<!--entry-script-->', entryScript)
@@ -506,28 +511,26 @@ export const baseConfig = async ({
   }
 
   const alias: Alias[] = [
-    { find: 'src', replacement: srcDir.pathname },
-    { find: 'app', replacement: appDir.pathname },
-    { find: 'cwd', replacement: cwd.pathname },
-    { find: 'boot', replacement: new URL('boot/', srcDir).pathname },
-    { find: 'assets', replacement: new URL('assets/', srcDir).pathname },
+    { find: 'src', replacement: fileURLToPath(srcDir) },
+    { find: 'app', replacement: fileURLToPath(appDir) },
+    { find: 'cwd', replacement: fileURLToPath(cwd) },
+    { find: 'boot', replacement: fileURLToPath(new URL('boot/', srcDir)) },
+    { find: 'assets', replacement: fileURLToPath(new URL('assets/', srcDir)) },
     // ...Object.entries(packageUrls).map(([key, value]) => ({
     //   find: key,
     //   replacement: value.pathname
     // }))
     {
       find: new RegExp('^vue$'),
-      replacement: new URL(
-        './dist/vue.runtime.esm-bundler.js',
-        packageUrls['vue']
-      ).pathname
+      replacement: fileURLToPath(
+        new URL('./dist/vue.runtime.esm-bundler.js', packageUrls['vue'])
+      )
     },
     {
       find: new RegExp('^vue-router$'),
-      replacement: new URL(
-        './dist/vue-router.esm-bundler.js',
-        packageUrls['vue-router']
-      ).pathname
+      replacement: fileURLToPath(
+        new URL('./dist/vue-router.esm-bundler.js', packageUrls['vue-router'])
+      )
     }
   ]
   if (mode === 'development' && vitrifyConfig.vitrify?.dev?.alias)
@@ -536,7 +539,7 @@ export const baseConfig = async ({
   if (command === 'test')
     alias.push({
       find: 'vitest',
-      replacement: new URL(await resolve('vitest', cliDir)).pathname
+      replacement: fileURLToPath(new URL(await resolve('vitest', cliDir)))
     })
 
   let rollupOptions: RollupOptions = {}
@@ -549,9 +552,9 @@ export const baseConfig = async ({
     rollupOptions = {
       ...rollupOptions,
       input: [
-        new URL('ssr/entry-server.ts', frameworkDir).pathname,
-        new URL('ssr/prerender.ts', frameworkDir).pathname,
-        new URL('ssr/server.ts', frameworkDir).pathname
+        fileURLToPath(new URL('ssr/entry-server.ts', frameworkDir)),
+        fileURLToPath(new URL('ssr/prerender.ts', frameworkDir)),
+        fileURLToPath(new URL('ssr/server.ts', frameworkDir))
       ],
       external,
       output: {
@@ -569,7 +572,7 @@ export const baseConfig = async ({
   } else if (ssr === 'fastify') {
     rollupOptions = {
       ...rollupOptions,
-      input: [new URL('server.ts', fastifyDir).pathname],
+      input: [fileURLToPath(new URL('server.ts', fastifyDir))],
       external,
       output: {
         minifyInternalExports: false,
@@ -598,10 +601,10 @@ export const baseConfig = async ({
   }
 
   const config = {
-    root: appDir.pathname,
-    publicDir: publicDir.pathname,
+    root: fileURLToPath(appDir),
+    publicDir: fileURLToPath(publicDir),
     base,
-    envDir: appDir.pathname,
+    envDir: fileURLToPath(appDir),
     vitrify: {
       productName,
       urls: {

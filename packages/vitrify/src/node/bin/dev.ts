@@ -8,6 +8,7 @@ import { fastifySsrPlugin } from '../frameworks/vue/fastify-ssr-plugin.js'
 import type { OnRenderedHook, VitrifyConfig } from '../vitrify-config.js'
 import isPortReachable from 'is-port-reachable'
 import { exitLogs } from '../helpers/logger.js'
+import { fileURLToPath } from 'url'
 
 const getFirstOpenPort = async (portNumber: number): Promise<number> => {
   if (!(await isPortReachable(portNumber, { host: 'localhost' }))) {
@@ -84,9 +85,9 @@ export async function createVitrifyDevServer({
       strict: false, // https://github.com/vitejs/vite/issues/8175
       allow: [
         searchForWorkspaceRoot(process.cwd()),
-        searchForWorkspaceRoot(appDir.pathname),
-        searchForWorkspaceRoot(cliDir.pathname),
-        appDir.pathname
+        searchForWorkspaceRoot(fileURLToPath(appDir)),
+        searchForWorkspaceRoot(fileURLToPath(cliDir)),
+        fileURLToPath(appDir)
       ]
     },
     watch: {
@@ -154,8 +155,8 @@ export async function createServer({
   if (ssr) {
     const entryUrl =
       ssr === 'fastify'
-        ? new URL('src/vite/fastify/entry.ts', cliDir).pathname
-        : new URL(`src/vite/${framework}/ssr/app.ts`, cliDir).pathname
+        ? fileURLToPath(new URL('src/vite/fastify/entry.ts', cliDir))
+        : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
     const app = fastify({
