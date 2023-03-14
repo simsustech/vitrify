@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.9
+
+### Patch Changes
+
+- baef41f: fix(vitrify): fix paths for Windows platform
+
 ## 0.11.8
 
 ### Patch Changes
