@@ -1,6 +1,6 @@
 {
   "name": "vitrify",
-  "version": "0.11.7",
+  "version": "0.11.8",
   "license": "MIT",
   "author": "Stefan van Herwijnen",
   "description": "Vite as your Full Stack development tool",
