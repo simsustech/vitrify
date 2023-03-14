@@ -83,8 +83,13 @@ cli
           outDir: fileURLToPath(new URL('ssr/server/', baseOutDir))
         })
         ;({ prerender, onRendered } = await import(
-          fileURLToPath(new URL('ssr/server/prerender.mjs', baseOutDir))
+          // @ts-ignore
+          new URL('ssr/server/prerender.mjs', baseOutDir)
         ))
+
+        // ;({ prerender, onRendered } = await import(
+        //   fileURLToPath(new URL('ssr/server/prerender.mjs', baseOutDir))
+        // ))
 
         prerender({
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
@@ -92,9 +97,7 @@ cli
           manifestPath: fileURLToPath(
             new URL('static/ssr-manifest.json', baseOutDir)
           ),
-          entryServerPath: fileURLToPath(
-            new URL('ssr/server/entry-server.mjs', baseOutDir)
-          ),
+          entryServerPath: new URL('ssr/server/entry-server.mjs', baseOutDir),
           onRendered
         })
         break
