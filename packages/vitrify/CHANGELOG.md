@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.10
+
+### Patch Changes
+
+- 39de004: fix(vitrify): fix import paths for Windows platform
+
 ## 0.11.9
 
 ### Patch Changes
