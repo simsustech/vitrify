@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.11.8
+
+### Patch Changes
+
+- 86cc92a: fix(vitrify): replace .pathname with fileURLToPath
+
 ## 0.11.7
 
 ### Patch Changes
