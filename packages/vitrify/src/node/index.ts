@@ -247,9 +247,8 @@ export const baseConfig = async ({
     if (typeof vitrifyConfig === 'function')
       vitrifyConfig = await vitrifyConfig({ mode, command })
   } catch (e) {
-    console.log('No vitrify.config.(ts|js) file found, using defaults')
-    if (process.env.DEBUG) console.error(e)
-    vitrifyConfig = {}
+    console.log('No valid vitrify.config.(ts|js) file found.')
+    throw e
   }
 
   const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
