@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.12.0
+
+### Minor Changes
+
+- 4e30225: feat(vitrify): add live reload functionality in fastify mode
+
+### Patch Changes
+
+- 5152fd9: fix(vitrify): throw error when no valid vitrify.conf is found
+
 ## 0.11.10
 
 ### Patch Changes
