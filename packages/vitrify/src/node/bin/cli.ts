@@ -3,8 +3,9 @@ import cac from 'cac'
 import { fileURLToPath } from 'url'
 import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls, exitLogs } from '../helpers/logger.js'
-import type { ResolvedConfig } from 'vite'
+import type { ResolvedConfig, ViteDevServer } from 'vite'
 import type { Server } from 'net'
+import type { FastifyInstance } from 'fastify'
 
 const cli = cac('vitrify')
 cli
@@ -116,23 +117,18 @@ cli
     { default: '127.0.0.1' }
   )
   .option('--appDir [appDir]', 'Application directory')
-  .option('--app [app]', 'Fastify app instance path')
+  // .option('--app [app]', 'Fastify app instance path')
   .option('--publicDir [publicDir]', 'Public directory')
   .action(async (options) => {
     let server: Server
     let config: ResolvedConfig
+    let vite: ViteDevServer
     if (options.host === true) {
       options.host = '0.0.0.0'
     }
     const { createServer } = await import('./dev.js')
     const cwd = (await import('../app-urls.js')).getCwd()
-    let app
-    const appURL = parsePath(options.app, cwd)
-    let appPath: string
-    if (appURL) {
-      appPath = fileURLToPath(appURL)
-      app = await import(appPath)
-    }
+    let app: FastifyInstance | undefined
 
     switch (options.mode) {
       case 'ssr':
@@ -144,7 +140,7 @@ cli
         }))
         break
       case 'fastify':
-        ;({ server, config } = await createServer({
+        ;({ app, server, config, vite } = await createServer({
           ssr: 'fastify',
           host: options.host,
           appDir: parsePath(options.appDir, cwd),

@@ -1,4 +1,4 @@
-import type { LogLevel, InlineConfig } from 'vite'
+import type { LogLevel, InlineConfig, ViteDevServer } from 'vite'
 import { searchForWorkspaceRoot } from 'vite'
 import { baseConfig } from '../index.js'
 import type { Server } from 'net'
@@ -9,6 +9,13 @@ import type { OnRenderedHook, VitrifyConfig } from '../vitrify-config.js'
 import isPortReachable from 'is-port-reachable'
 import { exitLogs } from '../helpers/logger.js'
 import { fileURLToPath } from 'url'
+import type { FastifyInstance } from 'fastify'
+
+declare module 'vite' {
+  interface ViteDevServer {
+    fastifyRestart: () => Promise<void>
+  }
+}
 
 const getFirstOpenPort = async (portNumber: number): Promise<number> => {
   if (!(await isPortReachable(portNumber, { host: 'localhost' }))) {
@@ -118,7 +125,8 @@ export async function createServer({
   framework = 'vue',
   host,
   appDir,
-  publicDir
+  publicDir,
+  vite
 }: {
   port?: number
   logLevel?: LogLevel
@@ -128,6 +136,7 @@ export async function createServer({
   host?: string
   appDir?: URL
   publicDir?: URL
+  vite?: ViteDevServer
 }) {
   const { getAppDir, getCliDir, getCliViteDir, getCwd } = await import(
     '../app-urls.js'
@@ -136,17 +145,20 @@ export async function createServer({
   appDir = appDir || getAppDir()
   const cliDir = getCliDir()
 
-  const vite = await createVitrifyDevServer({
-    port,
-    logLevel,
-    ssr,
-    framework,
-    host,
-    appDir,
-    publicDir
-  })
+  if (!vite) {
+    vite = await createVitrifyDevServer({
+      port,
+      logLevel,
+      ssr,
+      framework,
+      host,
+      appDir,
+      publicDir
+    })
+  }
 
   let setup
+  let app: FastifyInstance | undefined
   let server: Server
   let onRendered: OnRenderedHook[]
   let vitrifyConfig: VitrifyConfig
@@ -159,7 +171,7 @@ export async function createServer({
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
-    const app = fastify({
+    app = fastify({
       logger: {
         level: process.env.DEBUG
           ? 'debug'
@@ -187,8 +199,23 @@ export async function createServer({
       host
     })
     server = app.server
+
+    if (ssr === 'fastify') {
+      vite.fastifyRestart = async function () {
+        if (vite && app && (await app.ready())) {
+          await app.close()
+          ;({ app, server } = await createServer({
+            ssr: 'fastify',
+            host: host,
+            appDir,
+            publicDir,
+            vite
+          }))
+        }
+      }
+    }
   } else {
     server = (await vite.listen()).httpServer as Server
   }
-  return { server, config: vite.config }
+  return { app, server, config: vite.config, vite }
 }

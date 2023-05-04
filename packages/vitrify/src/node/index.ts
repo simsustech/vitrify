@@ -369,6 +369,9 @@ export const baseConfig = async ({
 
         return
       },
+      async handleHotUpdate({ server }) {
+        if (server.fastifyRestart) await server.fastifyRestart()
+      },
       configureServer(server) {
         server.middlewares.use('/', (req, res, next) => {
           if (req.url?.endsWith('.html')) req.url = req.url.replace('.html', '')
