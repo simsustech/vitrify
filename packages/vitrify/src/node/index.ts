@@ -226,7 +226,8 @@ export const baseConfig = async ({
 
   if (!publicDir) publicDir = new URL('public/', appDir)
 
-  let vitrifyConfig: VitrifyConfig | VitrifyConfigAsync
+  let rawVitrifyConfig: VitrifyConfig | VitrifyConfigAsync
+  let vitrifyConfig: VitrifyConfig
 
   try {
     if (fs.existsSync(fileURLToPath(new URL('vitrify.config.ts', appDir)))) {
@@ -236,16 +237,19 @@ export const baseConfig = async ({
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
       // @ts-ignore
-      vitrifyConfig = (await import('file://' + configPath + '.js')).default
+      rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
       // vitrifyConfig = (await import(configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
-      vitrifyConfig = (
+      rawVitrifyConfig = (
         await import(fileURLToPath(new URL('vitrify.config.js', appDir)))
       ).default
     }
-    if (typeof vitrifyConfig === 'function')
-      vitrifyConfig = await vitrifyConfig({ mode, command })
+    if (typeof rawVitrifyConfig === 'function') {
+      vitrifyConfig = await rawVitrifyConfig({ mode, command })
+    } else {
+      vitrifyConfig = rawVitrifyConfig
+    }
   } catch (e) {
     console.log('No valid vitrify.config.(ts|js) file found.')
     throw e
