@@ -72,7 +72,7 @@ export interface VitrifyConfig extends UserConfig {
      * Global SASS variables
      */
     sass?: {
-      variables?: Record<string, string>
+      variables?: Record<string, string | undefined>
       global?: string[]
     }
     /**

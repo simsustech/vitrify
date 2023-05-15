@@ -311,7 +311,7 @@ export const baseConfig = async ({
   let onSetupFiles: OnSetupFile[]
   let globalCss: string[] = []
   let staticImports: StaticImports
-  let sassVariables: Record<string, string>
+  let sassVariables: Record<string, string | undefined>
   let globalSass: string[]
   let serverModules: string[] = internalServerModules
 
@@ -336,9 +336,9 @@ export const baseConfig = async ({
             .join('\n')}\n`
 
           const sass = [
-            ...Object.entries(sassVariables).map(
-              ([key, value]) => `${key}: ${value}`
-            ),
+            ...Object.entries(sassVariables)
+              .filter(([key, value]) => value)
+              .map(([key, value]) => `${key}: ${value}`),
             ...globalSass.map((sass) => `@import '${sass}'`)
           ].join('\n')
           code = code
