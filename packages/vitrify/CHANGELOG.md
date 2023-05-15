@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.12.1
+
+### Patch Changes
+
+- 111526d: fix(vitrify): check if sassVariables are defined before applying
+
 ## 0.12.0
 
 ### Minor Changes
