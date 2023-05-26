@@ -74,7 +74,7 @@ export async function createApp(
     }
   }
   for (let key in provide) {
-    if (provide[key].value) {
+    if (provide[key]?.value) {
       const refValue = ref(provide[key].value)
       app.provide(key, refValue)
       app.provide(
