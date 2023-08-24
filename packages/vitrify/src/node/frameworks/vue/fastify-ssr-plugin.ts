@@ -156,6 +156,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       root: fileURLToPath(new URL('./dist/ssr/client', options.appDir)),
       wildcard: false,
       index: false,
+      preCompressed: true,
       prefix: options.baseUrl
     })
 
