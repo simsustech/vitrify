@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.12.2
+
+### Patch Changes
+
+- da26057: fix(vitrify): precompress assets served by fastify-static in ssr plugin
+- 135a658: fix(vitrify): fix 'cannot read from undefined' error in main.ts
+
 ## 0.12.1
 
 ### Patch Changes
