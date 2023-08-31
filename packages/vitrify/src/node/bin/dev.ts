@@ -202,7 +202,8 @@ export async function createServer({
 
     if (ssr === 'fastify') {
       vite.fastifyRestart = async function () {
-        if (vite && app && (await app.ready())) {
+        if (vite && app) {
+          await app.ready()
           await app.close()
           ;({ app, server } = await createServer({
             ssr: 'fastify',
