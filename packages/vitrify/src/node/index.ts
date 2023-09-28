@@ -322,10 +322,6 @@ export const baseConfig = async ({
       ...vitrifyConfig.vitrify.ssr.serverModules
     ]
 
-  const vitrifyDefine: Record<string, string> = {
-    __IS_PWA__: `${isPwa}`
-  }
-
   const plugins: UserConfig['plugins'] = [
     {
       name: 'vitrify-transforms',
@@ -353,10 +349,6 @@ export const baseConfig = async ({
               '<style lang="sass">' + sass + '</style>'
             )
           // code = code.replace(/<\/style>/, sass + '</style>')
-        }
-
-        for (const key in vitrifyDefine) {
-          code = code.replaceAll(key, vitrifyDefine[key])
         }
 
         return code
@@ -662,7 +654,8 @@ export const baseConfig = async ({
     },
     define: {
       __HOST__: `'localhost'`,
-      __BASE_URL__: `'${base}'`
+      __BASE_URL__: `'${base}'`,
+      __IS_PWA__: `${isPwa}`
     }
   } as VitrifyConfig
 
