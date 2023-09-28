@@ -31,6 +31,7 @@ import type { ManualChunksOption, RollupOptions } from 'rollup'
 import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
 import type { ComponentResolver } from 'unplugin-vue-components'
 import Components from 'unplugin-vue-components/vite'
+import { VitePWA } from 'vite-plugin-pwa'
 
 const internalServerModules = [
   'util',
@@ -197,7 +198,6 @@ export const baseConfig = async ({
   command = 'build',
   mode = 'production',
   framework = 'vue',
-  pwa = false,
   debug = false,
   productName
 }: {
@@ -208,7 +208,6 @@ export const baseConfig = async ({
   command?: VitrifyCommands
   mode?: VitrifyModes
   framework?: VitrifyUIFrameworks
-  pwa?: boolean
   debug?: boolean
   productName?: string
 }): Promise<InlineConfig> => {
@@ -289,6 +288,8 @@ export const baseConfig = async ({
   } else {
   }
 
+  const isPwa = !!vitrifyConfig.vitrify?.pwa || false
+
   const frameworkPlugins = []
   const resolvers = []
   for (const framework of Object.keys(configPluginMap)) {
@@ -298,7 +299,7 @@ export const baseConfig = async ({
       frameworkPlugins.push(
         await plugin({
           ssr,
-          pwa
+          pwa: isPwa
         })
       )
       resolvers.push(resolver)
@@ -320,6 +321,10 @@ export const baseConfig = async ({
       ...serverModules,
       ...vitrifyConfig.vitrify.ssr.serverModules
     ]
+
+  const vitrifyDefine: Record<string, string> = {
+    __IS_PWA__: `${isPwa}`
+  }
 
   const plugins: UserConfig['plugins'] = [
     {
@@ -349,6 +354,11 @@ export const baseConfig = async ({
             )
           // code = code.replace(/<\/style>/, sass + '</style>')
         }
+
+        for (const key in vitrifyDefine) {
+          code = code.replaceAll(key, vitrifyDefine[key])
+        }
+
         return code
       }
     },
@@ -387,24 +397,6 @@ export const baseConfig = async ({
         if (VIRTUAL_MODULES.includes(id)) return { id }
         return
       },
-      // transform: (code, id) => {
-      //   if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
-      //     code =
-      //       `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
-      //   }
-      //   if (['RootComponent.vue', 'vitrify'].every((val) => id.includes(val))) {
-      //     console.log('lksdflkjsdf')
-      //     const sass = [
-      //       ...Object.entries(sassVariables).map(
-      //         ([key, value]) => `${key}: ${value}`
-      //       ),
-      //       ...globalSass.map((sass) => `@import '${sass}'`)
-      //     ].join('\n')
-      //     code = code.replace(/<\/style>/, sass + '</style>')
-      //     console.log(code)
-      //   }
-      //   return code
-      // },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
           return `export const onBoot = [${onBootHooks
@@ -472,6 +464,17 @@ export const baseConfig = async ({
       resolvers
     })
   ]
+  if (isPwa) {
+    plugins.unshift(
+      VitePWA({
+        injectRegister: null,
+        workbox: {
+          globPatterns: ['**/*.{js,mjs,css,html,ico,png,svg,pdf}']
+        },
+        ...vitrifyConfig.vitrify?.pwa
+      })
+    )
+  }
   if (command !== 'test') {
     plugins.unshift({
       name: 'html-transform',

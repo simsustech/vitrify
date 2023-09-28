@@ -2,6 +2,7 @@ import type { Alias, UserConfig } from 'vite'
 import type { QuasarConf } from './plugins/quasar.js'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
 import type { FastifyServerOptions } from 'fastify'
+import type { VitePWAOptions } from 'vite-plugin-pwa'
 import { ComponentResolver } from 'unplugin-vue-components'
 
 export type BootFunction = ({
@@ -106,6 +107,10 @@ export interface VitrifyConfig extends UserConfig {
      * Files which should be a seperate chunk
      */
     manualChunks?: string[]
+    /**
+     * Enables vite-plugin-pwa
+     */
+    pwa?: Partial<VitePWAOptions>
   }
   quasar?: QuasarConf
 }

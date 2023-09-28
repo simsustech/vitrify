@@ -62,6 +62,7 @@ export const templates: Templates = {
         '@vitejs/plugin-vue',
         '@typescript-eslint/eslint-plugin',
         '@typescript-eslint/parser',
+        '@types/node',
         'critters',
         'eslint',
         'eslint-config-prettier',
@@ -72,7 +73,8 @@ export const templates: Templates = {
         'npm-run-all',
         'typescript',
         'vite',
-        'vitrify'
+        'vitrify',
+        'workbox-window'
       ]),
       exports: {
         '.': {
@@ -112,6 +114,9 @@ export const templates: Templates = {
           types: './dist/types/index.d.ts',
           import: './dist/index.js',
           src: './src/ui/index.ts'
+        },
+        './css': {
+          import: './dist/style.css'
         },
         './vite-plugin': {
           types: './dist/vite-plugin.d.ts',
