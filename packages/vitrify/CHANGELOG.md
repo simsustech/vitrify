@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.13.0
+
+### Minor Changes
+
+- 8829902: feat(vitrify): add PWA support with vite-plugin-pwa
+
+### Patch Changes
+
+- 6b56a09: fix(vitrify): await app.ready in fastify development mode
+
 ## 0.12.2
 
 ### Patch Changes
