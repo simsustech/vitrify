@@ -327,10 +327,13 @@ export const baseConfig = async ({
       name: 'vitrify-transforms',
       enforce: 'pre',
       transform: (code, id) => {
-        // if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
-        //   code =
-        //     `${globalCss.map((css) => `import '${css}'`).join('\n')}\n` + code
-        // }
+        if (['main.ts', 'vitrify'].every((val) => id.includes(val))) {
+          if (!isPwa)
+            code = code.replace(
+              /\/\/ @vitrify-pwa-only((.|\n)*)\/\/ @vitrify-pwa-only-end/,
+              ''
+            )
+        }
         if (['RootComponent.vue', 'vitrify'].every((val) => id.includes(val))) {
           const css = `${globalCss
             .map((css) => `@import '${css}';`)
@@ -564,11 +567,7 @@ export const baseConfig = async ({
   let noExternal: RegExp[] | string[] = [
     new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
   ]
-  const external = [
-    ...builtinModules,
-    ...serverModules,
-    'virtual:pwa-register/vue'
-  ]
+  const external = [...builtinModules, ...serverModules]
 
   if (ssr === 'server') {
     rollupOptions = {

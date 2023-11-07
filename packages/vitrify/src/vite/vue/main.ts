@@ -78,10 +78,14 @@ export async function createApp(
     await fn({ app, ssrContext, staticImports })
   }
 
-  if (__IS_PWA__ && typeof window !== 'undefined') {
-    const { registerPWA } = await import('./pwa.js')
-    registerPWA(router)
+  // @vitrify-pwa-only
+  if (__IS_PWA__) {
+    if (typeof window !== 'undefined') {
+      const { registerPWA } = await import('./pwa.js')
+      registerPWA(router)
+    }
   }
+  // @vitrify-pwa-only-end
 
   return { app, router, routes }
 }
