@@ -564,7 +564,11 @@ export const baseConfig = async ({
   let noExternal: RegExp[] | string[] = [
     new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
   ]
-  const external = [...builtinModules, ...serverModules]
+  const external = [
+    ...builtinModules,
+    ...serverModules,
+    'virtual:pwa-register/vue'
+  ]
 
   if (ssr === 'server') {
     rollupOptions = {
