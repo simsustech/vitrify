@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.13.1
+
+### Patch Changes
+
+- acaf16b: fix(vitrify): add vite-plugin-pwa to rollupOptions external
+
 ## 0.13.0
 
 ### Minor Changes
