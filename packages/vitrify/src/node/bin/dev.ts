@@ -205,7 +205,7 @@ export async function createServer({
         if (vite && app) {
           await app.ready()
           await app.close()
-          ;({ app, server } = await createServer({
+          ;({ app, server, vite } = await createServer({
             ssr: 'fastify',
             host: host,
             appDir,
