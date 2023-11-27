@@ -96,7 +96,7 @@ cli
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
           templatePath: fileURLToPath(new URL('static/index.html', baseOutDir)),
           manifestPath: fileURLToPath(
-            new URL('static/ssr-manifest.json', baseOutDir)
+            new URL('static/.vite/ssr-manifest.json', baseOutDir)
           ),
           entryServerPath: new URL('ssr/server/entry-server.mjs', baseOutDir),
           onRendered

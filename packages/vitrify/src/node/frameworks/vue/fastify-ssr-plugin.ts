@@ -174,7 +174,7 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       ).toString()
       const manifest = JSON.parse(
         readFileSync(
-          new URL('./dist/ssr/client/ssr-manifest.json', options.appDir)
+          new URL('./dist/ssr/client/.vite/ssr-manifest.json', options.appDir)
         ).toString()
       )
       const render = (
