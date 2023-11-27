@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.13.2
+
+### Patch Changes
+
+- 7d33df0: fix(vitrify): use transform to remove pwa only code in non-pwa mode
+- 7d33df0: fix(vitrify): rearrange PWA import to prevent build errors
+
 ## 0.13.1
 
 ### Patch Changes
