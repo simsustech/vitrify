@@ -1,6 +1,6 @@
 import vuePlugin from '@vitejs/plugin-vue'
 import type { Alias, InlineConfig, UserConfig } from 'vite'
-import { resolvePackageData } from 'vite'
+import { findDepPkgJsonPath } from 'vitefu'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'
 import fs from 'fs'
@@ -261,8 +261,8 @@ export const baseConfig = async ({
     vitrifyConfig.vitrify?.urls?.packages || {}
   await (async () => {
     for (const val of localPackages) {
-      const pkg = resolvePackageData(val, fileURLToPath(appDir))
-      if (pkg) packageUrls![val] = new URL(`file://${pkg.dir}/`)
+      const pkgDir = await findDepPkgJsonPath(val, fileURLToPath(appDir))
+      if (pkgDir) packageUrls![val] = new URL(`file://${pkgDir}`)
     }
   })()
 
@@ -475,8 +475,8 @@ export const baseConfig = async ({
       name: 'html-transform',
       enforce: 'pre',
       transformIndexHtml: {
-        enforce: 'pre',
-        transform: (html) => {
+        order: 'pre',
+        handler: (html) => {
           let entry: string
           switch (ssr) {
             case 'ssg':

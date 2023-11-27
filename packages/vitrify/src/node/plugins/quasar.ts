@@ -1,13 +1,12 @@
 import type { Plugin } from 'vite'
-import { resolvePackageData } from 'vite'
 import { fileURLToPath } from 'url'
-import Components from 'unplugin-vue-components/vite'
 import type {
   OnBootHook,
   OnMountedHook,
   VitrifyConfig
 } from '../vitrify-config.js'
 import type { VitrifyPlugin } from './index.js'
+import { findDepPkgJsonPath } from 'vitefu'
 export interface QuasarConf {
   ctx?: Record<string, any>
   css?: string[]
@@ -114,11 +113,11 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         // const localPackages: string[] = []
         await (async () => {
           for (const val of localPackages) {
-            const pkg = resolvePackageData(
+            const pkgDir = await findDepPkgJsonPath(
               val,
               fileURLToPath(config.vitrify!.urls!.app!)
             )
-            if (pkg) urls!.packages![val] = new URL(`file://${pkg.dir}/`)
+            if (pkgDir) urls!.packages![val] = new URL(`file://${pkgDir}`)
           }
         })()
 
