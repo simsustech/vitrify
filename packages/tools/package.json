@@ -45,11 +45,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@types/node": "^18.11.9",
-    "typescript": "^4.8.2",
-    "vite": "^3.2.4"
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.2"
   },
   "dependencies": {
-    "handlebars": "^4.7.7"
+    "handlebars": "^4.7.8"
   }
 }
