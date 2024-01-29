@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.14.0
+
+### Minor Changes
+
+- d8b98ff: feat(vitrify): update to vite v5
+
 ## 0.13.2
 
 ### Patch Changes
