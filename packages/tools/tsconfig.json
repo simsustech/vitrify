@@ -3,7 +3,7 @@
     "target": "esnext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "esnext",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "Bundler",
     "baseUrl": "./",
     "types": ["node", "vite/client"],
     "declaration": true,
