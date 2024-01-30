@@ -1,8 +1,4 @@
-import type {
-  FastifyPluginCallback,
-  FastifyRequest,
-  FastifyReply
-} from 'fastify'
+import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify'
 import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
@@ -31,10 +27,9 @@ export interface FastifySsrOptions {
   host?: string
 }
 
-const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
+const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
   fastify,
-  options,
-  done
+  options
 ) => {
   options.baseUrl = options.baseUrl || '/'
   options.mode = options.mode || process.env.MODE || import.meta.env.MODE
@@ -223,8 +218,6 @@ const fastifySsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       res.send(html)
     })
   }
-
-  done()
 }
 
 export { fastifySsrPlugin }

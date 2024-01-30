@@ -1,8 +1,4 @@
-import type {
-  FastifyPluginCallback,
-  FastifyRequest,
-  FastifyReply
-} from 'fastify'
+import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify'
 import fastifyStatic from '@fastify/static'
 import type { ViteDevServer } from 'vite'
 import { fileURLToPath } from 'url'
@@ -21,10 +17,9 @@ export interface FastifySsrOptions {
   mode?: string
 }
 
-const fastifyCsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
+const fastifyCsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
   fastify,
-  options,
-  done
+  options
 ) => {
   options.vitrifyDir =
     options.vitrifyDir || (await import('vitrify')).vitrifyDir
@@ -64,7 +59,6 @@ const fastifyCsrPlugin: FastifyPluginCallback<FastifySsrOptions> = async (
       prefix: options.baseUrl
     })
   }
-  done()
 }
 
 export { fastifyCsrPlugin }
