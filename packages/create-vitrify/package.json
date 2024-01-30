@@ -1,6 +1,6 @@
 {
   "name": "create-vitrify",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "license": "MIT",
   "author": "Stefan van Herwijnen",
   "type": "module",
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/simsustech/vitrify/tree/main/packages/create-vitrify#readme",
   "dependencies": {
-    "@vitrify/tools": "^0.1.0",
+    "@vitrify/tools": "^0.1.5",
     "handlebars": "^4.7.7",
     "inquirer": "^8.2.2",
     "latest-version": "^7.0.0",

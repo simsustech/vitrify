@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.14.1
+
+### Patch Changes
+
+- 70bebe1: Update packages
+
 ## 0.14.0
 
 ### Minor Changes
