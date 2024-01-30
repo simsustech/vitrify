@@ -5,7 +5,7 @@
     "lib": ["esnext", "DOM"],
     "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "declaration": true,
     "outDir": "dist",
     "emitDeclarationOnly": true,

@@ -13,24 +13,17 @@ export default defineConfig(async ({ command, mode }) => ({
   build: {
     // minify: false,
     lib: {
-      fileName: 'ui',
+      fileName: (format, entryName) => {
+        return entryName + '.js'
+      },
       formats: ['es'],
       entry: './src/ui/index.ts'
     },
     minify: false,
     emptyOutDir: true,
     rollupOptions: {
-      /**
-       * For building subpath exports
-       */
-      // input: {
-      //   subodule: new URL(
-      //     './src/ui/submodule/index.ts',
-      //     import.meta.url
-      //   ).pathname
-      // },
-      output: {
-        entryFileNames: '[name].js'
+      input: {
+        ui: new URL('./src/ui/index.ts', import.meta.url).pathname
       },
       /**
        * Add (UI) frameworks that are used

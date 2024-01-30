@@ -28,17 +28,20 @@ export default async function ({
     config(config, { mode }) {
       if (mode === 'development' || buildFromSrc) {
         const alias = Object.entries(exports)
+          .filter(([key, val]) => {
+            return val.src
+          })
           .map(([key, val]) => {
             return {
-              find: name + key.slice(1),
+              find: new RegExp(
+                `^${
+                  name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + key.slice(1)
+                }$`
+              ),
+              // name: name + key.slice(1),
               replacement: new URL('.' + val.src, import.meta.url).pathname
             }
           })
-          .sort(
-            (a, b) =>
-              (b.find.match(/\//g) || []).length -
-              (a.find.match(/\//g) || []).length
-          )
 
         return {
           resolve: {
