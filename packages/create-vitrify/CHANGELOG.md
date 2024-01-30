@@ -1,5 +1,13 @@
 # create-vitrify
 
+## 0.4.4
+
+### Patch Changes
+
+- 70bebe1: Update packages
+- Updated dependencies [70bebe1]
+  - @vitrify/tools@0.1.5
+
 ## 0.4.3
 
 ### Patch Changes
