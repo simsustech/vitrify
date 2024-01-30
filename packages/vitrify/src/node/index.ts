@@ -531,16 +531,38 @@ export const baseConfig = async ({
     if (debug) plugins.push(visualizer())
   }
 
+  // Vue now only exports CJS for Node
+  // Add the deps as devDependency
+  const vueInternalPkgs = [
+    '@vue/runtime-dom',
+    '@vue/runtime-core',
+    '@vue/reactivity',
+    '@vue/shared',
+    '@vue/server-renderer'
+  ]
+
+  const vuePkgAliases: Alias[] = []
+  for (const pkg of vueInternalPkgs) {
+    const specifier = pkg.split('/').at(-1)
+    const pkgJsonPath = await findDepPkgJsonPath(pkg, fileURLToPath(appDir!))
+    if (pkgJsonPath)
+      vuePkgAliases.push({
+        find: pkg,
+        replacement: fileURLToPath(
+          new URL(
+            `./dist/${specifier}.esm-bundler.js`,
+            `file://${pkgJsonPath}` || ''
+          )
+        )
+      })
+  }
+
   const alias: Alias[] = [
     { find: 'src', replacement: fileURLToPath(srcDir) },
     { find: 'app', replacement: fileURLToPath(appDir) },
     { find: 'cwd', replacement: fileURLToPath(cwd) },
     { find: 'boot', replacement: fileURLToPath(new URL('boot/', srcDir)) },
     { find: 'assets', replacement: fileURLToPath(new URL('assets/', srcDir)) },
-    // ...Object.entries(packageUrls).map(([key, value]) => ({
-    //   find: key,
-    //   replacement: value.pathname
-    // }))
     {
       find: new RegExp('^vue$'),
       replacement: fileURLToPath(
@@ -552,7 +574,8 @@ export const baseConfig = async ({
       replacement: fileURLToPath(
         new URL('./dist/vue-router.esm-bundler.js', packageUrls['vue-router'])
       )
-    }
+    },
+    ...vuePkgAliases
   ]
   if (mode === 'development' && vitrifyConfig.vitrify?.dev?.alias)
     alias.push(...vitrifyConfig.vitrify.dev.alias)
