@@ -1,7 +1,4 @@
 import { createApp } from '../main'
-// import { renderToString } from 'vue/server-renderer'
-
-// import { onRendered } from 'virtual:vitrify-hooks'
 
 const initializeApp = async (url, ssrContext) => {
   const onRenderedList = []
@@ -14,7 +11,6 @@ const initializeApp = async (url, ssrContext) => {
   })
 
   const { app, router, routes } = await createApp('server', ssrContext)
-  // set the router to the desired URL before rendering
 
   router.push({ path: url })
   ssrContext.initialState = {}

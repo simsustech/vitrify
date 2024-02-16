@@ -2,10 +2,8 @@ import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify'
 import fastifyStatic from '@fastify/static'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
-import { componentsModules, collectCss } from '../../helpers/collect-css-ssr.js'
 import {
   addOrReplaceAppDiv,
-  addOrReplaceTitle,
   appendToBody,
   appendToHead
 } from '../../helpers/utils.js'

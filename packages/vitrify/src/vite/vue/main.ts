@@ -1,17 +1,8 @@
-// import 'vitrify.sass'
 import createRouter from 'src/router'
-import {
-  createSSRApp,
-  createApp as createVueApp,
-  h,
-  onMounted as onMountedVue,
-  getCurrentInstance,
-  ref
-} from 'vue'
-import { onBoot, onMounted } from 'virtual:vitrify-hooks'
+import { createSSRApp, createApp as createVueApp, ref } from 'vue'
+import { onBoot } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
-import App from 'src/App.vue'
 
 import RootComponent from './RootComponent.vue'
 interface ssrContext {

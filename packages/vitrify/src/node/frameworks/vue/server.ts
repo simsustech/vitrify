@@ -1,7 +1,5 @@
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
-import type { ViteDevServer } from 'vite'
-import { getCliDir, getCliViteDir } from '../../app-urls.js'
 import type { OnRenderedHook, OnSetupFile } from '../../vitrify-config.js'
 import type { FastifyCsrPlugin } from './fastify-csr-plugin.js'
 import type { FastifySsrPlugin } from './fastify-ssr-plugin.js'
