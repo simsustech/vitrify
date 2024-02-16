@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.14.2
+
+### Patch Changes
+
+- 16256e9: Update packages
+
 ## 0.14.1
 
 ### Patch Changes
