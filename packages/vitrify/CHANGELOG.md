@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.14.3
+
+### Patch Changes
+
+- 3a13558: chore: update peer dependencies
+
 ## 0.14.2
 
 ### Patch Changes
