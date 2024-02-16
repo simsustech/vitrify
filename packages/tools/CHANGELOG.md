@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.1.6
+
+### Patch Changes
+
+- 16256e9: Update packages
+
 ## 0.1.5
 
 ### Patch Changes
