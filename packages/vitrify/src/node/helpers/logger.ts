@@ -34,10 +34,10 @@ function printServerUrls(
   base: string,
   info: Logger['info']
 ): void {
-  if (hostname.host === '127.0.0.1') {
+  if (hostname.host === 'localhost') {
     const url = `${protocol}://${hostname.name}:${chalk.bold(port)}${base}`
     info(`  > Local: ${chalk.cyan(url)}`)
-    if (hostname.name !== '127.0.0.1') {
+    if (hostname.name !== 'localhost') {
       info(`  > Network: ${chalk.dim('use `--host` to expose')}`)
     }
   } else {
@@ -45,10 +45,10 @@ function printServerUrls(
       .flatMap((nInterface) => nInterface ?? [])
       .filter((detail) => detail && detail.address && detail.family === 'IPv4')
       .map((detail) => {
-        const type = detail.address.includes('127.0.0.1')
+        const type = detail.address.includes('localhost')
           ? 'Local:   '
           : 'Network: '
-        const host = detail.address.replace('127.0.0.1', hostname.name)
+        const host = detail.address.replace('localhost', hostname.name)
         const url = `${protocol}://${host}:${chalk.bold(port)}${base}`
         return `  > ${type} ${chalk.cyan(url)}`
       })

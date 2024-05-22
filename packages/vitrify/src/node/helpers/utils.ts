@@ -16,7 +16,7 @@ export function resolveHostname(
     optionsHost === 'localhost'
   ) {
     // Use a secure default
-    host = '127.0.0.1'
+    host = 'localhost'
   } else if (optionsHost === true) {
     // If passed --host in the CLI without arguments
     host = undefined // undefined typically means 0.0.0.0 or :: (listen on all IPs)
@@ -24,9 +24,9 @@ export function resolveHostname(
     host = optionsHost
   }
 
-  // Set host name to localhost when possible, unless the user explicitly asked for '127.0.0.1'
+  // Set host name to localhost when possible, unless the user explicitly asked for 'localhost'
   const name =
-    (optionsHost !== '127.0.0.1' && host === '127.0.0.1') ||
+    (optionsHost !== 'localhost' && host === 'localhost') ||
     host === '0.0.0.0' ||
     host === '::' ||
     host === undefined

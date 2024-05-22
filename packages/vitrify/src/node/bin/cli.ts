@@ -114,7 +114,7 @@ cli
   .option(
     '--host [host]',
     'Specify which IP addresses the server should listen on',
-    { default: '127.0.0.1' }
+    { default: 'localhost' }
   )
   .option('--appDir [appDir]', 'Application directory')
   // .option('--app [app]', 'Fastify app instance path')
