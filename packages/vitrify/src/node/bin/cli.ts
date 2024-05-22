@@ -116,6 +116,9 @@ cli
     'Specify which IP addresses the server should listen on',
     { default: 'localhost' }
   )
+  .option('--port [port]', 'Specify which port the server should listen on', {
+    default: '3000'
+  })
   .option('--appDir [appDir]', 'Application directory')
   // .option('--app [app]', 'Fastify app instance path')
   .option('--publicDir [publicDir]', 'Public directory')
@@ -135,6 +138,7 @@ cli
         ;({ server, config } = await createServer({
           ssr: 'ssr',
           host: options.host,
+          port: options.port,
           appDir: parsePath(options.appDir, cwd),
           publicDir: parsePath(options.publicDir, cwd)
         }))
@@ -143,6 +147,7 @@ cli
         ;({ app, server, config, vite } = await createServer({
           ssr: 'fastify',
           host: options.host,
+          port: options.port,
           appDir: parsePath(options.appDir, cwd),
           publicDir: parsePath(options.publicDir, cwd)
         }))
@@ -150,6 +155,7 @@ cli
       default:
         ;({ server, config } = await createServer({
           host: options.host,
+          port: options.port,
           appDir: parsePath(options.appDir, cwd),
           publicDir: parsePath(options.publicDir, cwd)
         }))
