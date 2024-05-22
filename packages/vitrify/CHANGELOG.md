@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.15.0
+
+### Minor Changes
+
+- b464647: feat: add --port option to CLI
+
+### Patch Changes
+
+- 77d6c3d: fix: replace 127.0.0.1 with localhost (ip6 support)
+
 ## 0.14.4
 
 ### Patch Changes
