@@ -208,6 +208,7 @@ export async function createServer({
           ;({ app, server, vite } = await createServer({
             ssr: 'fastify',
             host: host,
+            port,
             appDir,
             publicDir,
             vite
