@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.15.1
+
+### Patch Changes
+
+- d8ccbb7: fix: add port to createServer on fastifyRestart
+
 ## 0.15.0
 
 ### Minor Changes
