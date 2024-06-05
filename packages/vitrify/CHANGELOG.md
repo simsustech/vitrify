@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.15.2
+
+### Patch Changes
+
+- 3d6e374: chore: update packages
+
 ## 0.15.1
 
 ### Patch Changes
