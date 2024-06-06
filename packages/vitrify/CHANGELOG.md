@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.15.3
+
+### Patch Changes
+
+- 30d4a86: fix: replace builtin-modules with node:module
+
 ## 0.15.2
 
 ### Patch Changes
