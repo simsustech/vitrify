@@ -125,9 +125,6 @@ importers:
       ajv:
         specifier: ^8.16.0
         version: 8.16.0
-      builtin-modules:
-        specifier: ^4.0.0
-        version: 4.0.0
       cac:
         specifier: ^6.7.14
         version: 6.7.14
@@ -3461,11 +3458,6 @@ packages:
   /builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
-    dev: false
-
-  /builtin-modules@4.0.0:
-    resolution: {integrity: sha512-p1n8zyCkt1BVrKNFymOHjcDSAl7oq/gUvfgULv2EblgpPVQlQr9yHnWjg9IJ2MhfwPqiYqMMrr01OY7yQoK2yA==}
-    engines: {node: '>=18.20'}
     dev: false
 
   /cac@6.7.14:
