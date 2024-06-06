@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "build": "run-s build:tools build:vitrify build:create-vitrify",
@@ -55,7 +55,6 @@
       "eslint --ext .ts"
     ]
   },
-  "packageManager": "pnpm@6.32.3",
   "pnpm": {
     "overrides": {
       "vitrify": "workspace:*"
