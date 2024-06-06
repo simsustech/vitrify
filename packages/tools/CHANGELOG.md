@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.1.7
+
+### Patch Changes
+
+- 3d6e374: chore: update packages
+
 ## 0.1.6
 
 ### Patch Changes
