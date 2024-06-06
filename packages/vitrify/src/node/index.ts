@@ -7,7 +7,7 @@ import fs from 'fs'
 import path from 'path'
 import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
-import builtinModules from 'builtin-modules'
+import { builtinModules } from 'node:module'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { fileURLToPath } from 'url'
 import type {
