@@ -57,7 +57,8 @@
   },
   "pnpm": {
     "overrides": {
-      "vitrify": "workspace:*"
+      "vitrify": "workspace:*",
+      "@vitrify/tools": "workspace:*"
     }
   }
 }

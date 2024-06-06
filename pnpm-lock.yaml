@@ -6,6 +6,7 @@ settings:
 
 overrides:
   vitrify: workspace:*
+  '@vitrify/tools': workspace:*
 
 importers:
 
@@ -60,7 +61,7 @@ importers:
   packages/create-vitrify:
     dependencies:
       '@vitrify/tools':
-        specifier: ^0.1.6
+        specifier: workspace:*
         version: link:../tools
       handlebars:
         specifier: ^4.7.8
