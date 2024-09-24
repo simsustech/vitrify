@@ -6,7 +6,6 @@ import {
 } from '@vitrify/tools/render'
 import parseArgs from 'minimist'
 import { input, rawlist } from '@inquirer/prompts'
-import inquirer from 'inquirer'
 import { promises } from 'fs'
 import { templates } from './templates.js'
 const escape = (val: any) => JSON.stringify(val).slice(1, -1)
