@@ -296,6 +296,7 @@ export const baseConfig = async ({
     if (Object.keys(vitrifyConfig).includes(framework)) {
       const plugin = await configPluginMap[framework]()
       const resolver = await configResolverMap[framework]()
+
       frameworkPlugins.push(
         await plugin({
           ssr,

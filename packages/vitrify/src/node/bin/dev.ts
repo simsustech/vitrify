@@ -177,6 +177,7 @@ export async function createServer({
           ? 'debug'
           : process.env.PINO_LOG_LEVEL || 'info'
       },
+      forceCloseConnections: true,
       https: vite.config.server.https,
       ...vitrifyConfig.vitrify?.ssr?.fastify
     } as FastifyServerOptions)

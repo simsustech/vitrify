@@ -24,7 +24,8 @@ export async function build(opts: {
 
   config.build = {
     ...config.build,
-    minify: !opts.debug,
+    // minify: !opts.debug,
+    minify: false,
     outDir: opts.outDir,
     emptyOutDir: !!opts.outDir
   }
