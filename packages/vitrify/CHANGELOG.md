@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.16.1
+
+### Patch Changes
+
+- 4ffae49: chore: update packages
+
 ## 0.16.0
 
 ### Minor Changes
