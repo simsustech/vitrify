@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.2.2
+
+### Patch Changes
+
+- 10d3e00: chore: update packages
+
 ## 0.2.1
 
 ### Patch Changes
