@@ -1,5 +1,13 @@
 # create-vitrify
 
+## 0.5.2
+
+### Patch Changes
+
+- 10d3e00: chore: update packages
+- Updated dependencies [10d3e00]
+  - @vitrify/tools@0.2.2
+
 ## 0.5.1
 
 ### Patch Changes
