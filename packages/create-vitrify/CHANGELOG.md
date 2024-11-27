@@ -1,5 +1,13 @@
 # create-vitrify
 
+## 0.5.3
+
+### Patch Changes
+
+- 86270ee: chore: update dependencies
+- Updated dependencies [86270ee]
+  - @vitrify/tools@0.2.3
+
 ## 0.5.2
 
 ### Patch Changes
