@@ -67,10 +67,10 @@
     "rollup-plugin-visualizer": "^5.12.0",
     "sass": "1.81.0",
     "ts-node": "^10.9.2",
-    "unplugin-vue-components": "^0.27.4",
-    "vite": "^6.0.0",
+    "unplugin-vue-components": "^0.27.5",
+    "vite": "^6.0.1",
     "vite-plugin-pwa": "^0.21.0",
-    "vitefu": "^1.0.3",
+    "vitefu": "^1.0.4",
     "vitest": "^2.1.6",
     "workbox-window": "^7.3.0"
   },
@@ -89,11 +89,11 @@
     "vue-router": "^4.5.0"
   },
   "peerDependencies": {
-    "@fastify/static": "^7.0.1",
-    "fastify": "^4.26.0",
-    "quasar": "^2.14.3",
-    "vue": "^3.4.15",
-    "vue-router": "^4.2.5"
+    "@fastify/static": "^8.0.3",
+    "fastify": "^5.1.0",
+    "quasar": "^2.17.4",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "publishConfig": {
     "access": "public",
