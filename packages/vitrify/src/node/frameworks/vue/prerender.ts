@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs'
+import { existsSync, promises as fs, mkdirSync } from 'fs'
 import type { OnRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 import { appendToHead, addOrReplaceAppDiv } from '../../helpers/utils.js'
@@ -33,6 +33,14 @@ export const prerender = async ({
   })
 
   for (const url of paths) {
+    const directoryUrl = new URL(
+      url.split('/').slice(0, -1).join('/'),
+      `file://${outDir}`
+    )
+    if (!existsSync(directoryUrl.pathname)) {
+      mkdirSync(directoryUrl.pathname, { recursive: true })
+    }
+
     const filename =
       (url.endsWith('/') ? 'index' : url.replace(/^\//g, '')) + '.html'
     console.log(`Generating ${filename}`)
