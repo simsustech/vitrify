@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.16.4
+
+### Patch Changes
+
+- 604afe2: fix(vitrify): fix subdir creation when prerendering
+- 043ca87: chore: update dependencies
+
 ## 0.16.3
 
 ### Patch Changes
