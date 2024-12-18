@@ -2,7 +2,9 @@ import Fastify from 'fastify'
 import { setup, vitrifyConfig } from './entry'
 
 const fastify = Fastify({
-  logger: true,
+  logger: {
+    level: process.env.DEBUG ? 'debug' : 'info'
+  },
   ...vitrifyConfig.vitrify?.ssr.fastify
 })
 await setup({ fastify })
