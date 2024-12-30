@@ -1,0 +1,18 @@
+.q-loading-bar {
+  position: fixed;
+  z-index: 9998;
+  transition: transform 0.5s cubic-bezier(0, 0, 0.2, 1), opacity 0.5s;
+  background: #f44336;
+}
+.q-loading-bar--top {
+  left: 0 /* rtl:ignore */;
+  right: 0 /* rtl:ignore */;
+  top: 0;
+  width: 100%;
+}
+
+.q-virtual-scroll--horizontal .q-virtual-scroll__content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}

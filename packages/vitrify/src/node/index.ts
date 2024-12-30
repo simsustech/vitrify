@@ -32,6 +32,8 @@ import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
 import type { ComponentResolver } from 'unplugin-vue-components'
 import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import UnoCSS from 'unocss/vite'
+import QuasarPreset from './plugins/quasar/unocss/index.js'
 
 const internalServerModules = [
   'util',
@@ -323,6 +325,7 @@ export const baseConfig = async ({
       ...vitrifyConfig.vitrify.ssr.serverModules
     ]
 
+  console.log(fileURLToPath(new URL('**/quasar/src/**/*.{js}', appDir)))
   const plugins: UserConfig['plugins'] = [
     {
       name: 'vitrify-transforms',
@@ -458,6 +461,34 @@ export const baseConfig = async ({
         /[\\/]\.nuxt[\\/]/
       ],
       resolvers
+    }),
+    UnoCSS({
+      transformers: [
+        {
+          name: 'my-transformer',
+          enforce: 'pre', // enforce before other transformers
+          idFilter(id: string) {
+            // only transform .tsx and .jsx files
+            return id
+          },
+          async transform(code: string, id: string) {
+            // console.log(id)
+          }
+        }
+      ],
+      content: {
+        pipeline: {
+          include: [
+            // the default
+            /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+            // include js/ts files
+            /quasar\/src\/.*\.js/
+          ]
+          // exclude files
+          // exclude: []
+        }
+      },
+      presets: [QuasarPreset()]
     })
   ]
   if (isPwa) {
