@@ -256,7 +256,12 @@ export const baseConfig = async ({
     throw e
   }
 
-  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
+  const localPackages = [
+    'vue',
+    'vue-router',
+    '@vue/server-renderer',
+    '@unocss/reset'
+  ]
   // const localPackages: string[] = []
   const cliPackages = []
   const packageUrls: Record<string, URL> =

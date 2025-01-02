@@ -6,9 +6,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-carousel$/,
     ([, c], { theme }) => `bg-white h-400px
     [&_.q-carousel--padding]:(p-16px)
-    [&_.q-carousel__thumbnail]:(m-2px h-50px w-auto inline-block cursor-pointer border-solid border-transparent border-rd-4px v-middle op-70 transition-opacity-duration-300")
+    [&_.q-carousel__thumbnail]:(m-2px h-50px w-auto inline-block cursor-pointer border-solid border-transparent border-rd-4px v-middle op-70 transition-opacity-300)
     [&_.q-carousel__thumbnail:hover]:(op-1000)
-    [&_.q-carousel__thumbnail--active]:(op-1000 border-currentColor cursor-default)
+    [&_.q-carousel__thumbnail--active]:(op-1000 border-current cursor-default)
     [&.fullscreen]:(h-full)
     `
   ],
@@ -22,7 +22,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-carousel__arrow$/,
     ([, c], { theme }) => `pointer-events-none
     [&_.q-icon]:(text-28px)
-    [&_.q-btn]:(point-events-all)
+    [&_.q-btn]:(pointer-events-auto)
     `
   ],
   [

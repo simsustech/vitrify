@@ -5,8 +5,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-btn-dropdown--split$/,
     ([, c], { theme }) => `[&_.q-btn-dropdown\_\_arrow-container]:(px-4px py-0)
-    [&_.q-btn-dropdown\_\_arrow-container.q-btn--outline]:(border-l-1px solid currentColor)
-    [&_.q-btn-dropdown\_\_arrow-container:not(.q-btn--outline)]:(border-l-1px solid rgba(255, 255, 255, 0.3))
+    [&_.q-btn-dropdown\_\_arrow-container.q-btn--outline]:(border-l-1px border-l-solid border-l-current)
+    [&_.q-btn-dropdown\_\_arrow-container:not(.q-btn--outline)]:(border-l-1px border-l-solid border-l-white)
     `
   ],
   [

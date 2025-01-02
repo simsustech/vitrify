@@ -2,7 +2,7 @@ import type { Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  [/^q-banner$/, ([, c], { theme }) => `min-h-54px px-16px py-8px bg="#fff"`],
+  [/^q-banner$/, ([, c], { theme }) => `min-h-54px px-16px py-8px bg-white`],
   [/^q-banner--top-padding$/, ([, c], { theme }) => ``],
   [/^q-banner--top-padding$/, ([, c], { theme }) => `pt-14px`],
   [
@@ -15,7 +15,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-banner__actions$/,
     ([, c], { theme }) =>
-      `[&.col-auto]:(pl-16-px)
+      `[&.col-auto]:(pl-16px)
         [&.col-all_.q.btn-item]:(mt-4px mb-0 ml-4px mr-0)`
   ],
 

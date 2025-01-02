@@ -20,29 +20,67 @@ import {
   preflights as QBreadcrumbsPreflights,
   shortcuts as QBreadcrumbsShortcuts
 } from './components/QBreadcrumbs.unocss.js'
+import { shortcuts as QBtnDropdownShortcuts } from './components/QBtnDropdown.unocss.js'
+import { shortcuts as QBtnGroupShortcuts } from './components/QBtnGroup.unocss.js'
+import { shortcuts as QBtnToggleShortcuts } from './components/QBtnToggle.unocss.js'
+import { shortcuts as QCardShortcuts } from './components/QCard.unocss.js'
+import { shortcuts as QCarouselShortcuts } from './components/QCarousel.unocss.js'
+import { shortcuts as QChatMessageShortcuts } from './components/QChatMessage.unocss.js'
+import {
+  preflights as QCheckboxPreflights,
+  shortcuts as QCheckboxShortcuts
+} from './components/QCheckbox.unocss.js'
+import {
+  preflights as QChipPreflights,
+  shortcuts as QChipShortcuts
+} from './components/QChip.unocss.js'
+import {
+  preflights as QCircularProgressPreflights,
+  shortcuts as QCircularProgressShortcuts
+} from './components/QCircularProgress.unocss.js'
+import { shortcuts as QColorPickerShortcuts } from './components/QColorPicker.unocss.js'
 interface QuasarPresetOptions {}
 // .(.*) \{\n *@apply (.*);\n *\}
 export default definePreset((options?: QuasarPresetOptions) => {
   return {
     name: 'quasar',
     presets: [presetUno()],
-    safelist: ['q-btn--rectangle', 'q-btn__content', 'no-outline'],
+    safelist: ['q-btn--rectangle', 'q-btn__content', 'no-outline', 'q-icon'],
     preflights: (
       [
-        {
-          getCSS: ({ theme }) => `
-          @import '@unocss/reset/normalize.css'
-        `
-        }
+        //       {
+        //         getCSS: ({ theme }) => `
+        // @import '@unocss/reset/normalize.css';
+        //       `
+        //       }
       ] as Preflight<QuasarTheme>[]
-    ).concat(QBreadcrumbsPreflights),
-    shortcuts: ([] as UserShortcuts<QuasarTheme>[]).concat(
+    ).concat(
+      QBreadcrumbsPreflights,
+      QCheckboxPreflights,
+      QChipPreflights,
+      QCircularProgressPreflights
+    ),
+    shortcuts: ([] as any[]).concat(
       QIconShortcuts,
       QBtnShortcuts,
       PanelShortcuts,
       QLoadingBarShortcuts,
       QAvatarShortcuts,
-      QBadgeShortcuts
+      QBadgeShortcuts,
+      QBreadcrumbsShortcuts,
+      QBannerShortcuts,
+      QBarShortcuts,
+      QBtnShortcuts,
+      QBtnDropdownShortcuts,
+      QBtnGroupShortcuts,
+      QBtnToggleShortcuts,
+      QCardShortcuts,
+      QCarouselShortcuts,
+      QChatMessageShortcuts,
+      QCheckboxShortcuts,
+      QChipShortcuts,
+      QCircularProgressShortcuts,
+      QColorPickerShortcuts
     ),
     rules: [],
     theme,

@@ -46,7 +46,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-btn-group--spread$/,
     ([, c], { theme }) => `flex!
-    [&>.q-btn-item]:(flex1)
+    [&>.q-btn-item]:(flex-1)
     [&>.q-btn-group>.q-btn-item:not(.q-btn-dropdown\_\_arrow-container)]:(w-auto min-w-0 max-w-full flex-grow-10000 flex-shrink-1 flex-basis-0)`
   ]
 ]

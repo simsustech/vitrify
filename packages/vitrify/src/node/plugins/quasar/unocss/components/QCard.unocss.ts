@@ -7,10 +7,10 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) => `shadow-black border-rd-4px v-top bg-white relative
       [&>div:not(.q--avoid-card-border)]:(border-t-0 border-t-0 border-b-0 border-b-0)
       [&>img:not(.q--avoid-card-border)]:(border-t-0 border-t-0 border-b-0 border-b-0)
-      [&>div:nth-child(1_of_:not(.q--avoid-card-border))](border-t-0 border-t-inherit border-t-inherit)
-      [&>img:nth-child(1_of_:not(.q--avoid-card-border))](border-t-0 border-t-inherit border-t-inherit)
-      [&>div:nth-last-child(1_of_:not(.q--avoid-card-border))](border-b-0 border-b-inherit border-b-inherit)
-      [&>img:nth-last-child(1_of_:not(.q--avoid-card-border))](border-b-0 border-b-inherit border-b-inherit)
+      [&>div:nth-child(1_of_:not(.q--avoid-card-border))]:(border-t-0 border-t-inherit border-t-inherit)
+      [&>img:nth-child(1_of_:not(.q--avoid-card-border))]:(border-t-0 border-t-inherit border-t-inherit)
+      [&>div:nth-last-child(1_of_:not(.q--avoid-card-border))]:(border-b-0 border-b-inherit border-b-inherit)
+      [&>img:nth-last-child(1_of_:not(.q--avoid-card-border))]:(border-b-0 border-b-inherit border-b-inherit)
       [&>div:not(.q--avoid-card-border)]:(border-l-0 border-r-0 shadow-none)
       [&>img]:(block w-full max-w-full border-none)
     `
