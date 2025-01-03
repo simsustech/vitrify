@@ -39,6 +39,12 @@ import {
   shortcuts as QCircularProgressShortcuts
 } from './components/QCircularProgress.unocss.js'
 import { shortcuts as QColorPickerShortcuts } from './components/QColorPicker.unocss.js'
+import { shortcuts as QDateShortcuts } from './components/QDate.unocss.js'
+import {
+  preflights as QDialogPreflights,
+  shortcuts as QDialogShortcuts
+} from './components/QDialog.unocss.js'
+import { shortcuts as QEditorShortcuts } from './components/QEditor.unocss.js'
 interface QuasarPresetOptions {}
 // .(.*) \{\n *@apply (.*);\n *\}
 export default definePreset((options?: QuasarPresetOptions) => {
@@ -58,7 +64,8 @@ export default definePreset((options?: QuasarPresetOptions) => {
       QBreadcrumbsPreflights,
       QCheckboxPreflights,
       QChipPreflights,
-      QCircularProgressPreflights
+      QCircularProgressPreflights,
+      QDialogPreflights
     ),
     shortcuts: ([] as any[]).concat(
       QIconShortcuts,
@@ -80,7 +87,10 @@ export default definePreset((options?: QuasarPresetOptions) => {
       QCheckboxShortcuts,
       QChipShortcuts,
       QCircularProgressShortcuts,
-      QColorPickerShortcuts
+      QColorPickerShortcuts,
+      QDateShortcuts,
+      QDialogShortcuts,
+      QEditorShortcuts
     ),
     rules: [],
     theme,
