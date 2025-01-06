@@ -15,7 +15,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     [&>.q-btn-group:not(:last-child)>.q-btn:last-child:before]:(border-r-0)
     [&>.q-btn-item:not(:last-child)]:(border-t-0 border-b-0)
     [&>.q-btn-item:not(:first-child)]:(border-t-0 border-b-0)
-    [&>.q-btn-item.q-btn--standard:before]:(z--1)
+    [&>.q-btn-item.q-btn--standard:before]:(-z-1)
     `
   ],
   [

@@ -1,5 +1,5 @@
 import type { Preflight, Rule } from '@unocss/core'
-import type { QuasarTheme } from './theme'
+import type { QuasarTheme } from '../theme.js'
 
 const gutter = {
   none: 0,

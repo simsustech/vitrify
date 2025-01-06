@@ -37,7 +37,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-checkbox__bg$/,
     ([, c], { theme }) =>
-      `select-none top-1/4 w-1/2 h-1/2 border-solid border-current border-rd-2px transition-background-220 transition-all transition-duration-220`
+      `select-none top-1/4 w-1/2 h-1/2 border-solid border-current border-rd-2px transition-all-220 transition-all transition-duration-220`
   ],
   [/^q-checkbox__icon_container$/, ([, c], { theme }) => `select-none`],
   [/^q-checkbox__icon$/, ([, c], { theme }) => `text-current text-0.5em`],
@@ -45,12 +45,11 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-checkbox__truthy$/,
     ([, c], { theme }) =>
-      `stroke-currentColor stroke-3.12px stroke-29.78334 stroke-29.78334`
+      `stroke-current stroke-3.12px stroke-29.78334 stroke-29.78334`
   ],
   [
     /^q-checkbox__indet$/,
-    ([, c], { theme }) =>
-      `fill-currentColor origin-[50%_50%] rotate--280 scale-0`
+    ([, c], { theme }) => `fill-current origin-[50%_50%] rotate--280 scale-0`
   ],
   [
     /^q-checkbox__inner$/,

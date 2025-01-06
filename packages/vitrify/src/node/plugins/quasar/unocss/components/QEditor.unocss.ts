@@ -46,7 +46,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-editor__toolbar-group$/,
     ([, c], { theme }) => `relative mx-4px my-0
-    [&+.q-editor\_\_toolbar-group:before]:(content="[""]" absolute left--4px top-4px bottom-4px w-1px bg-black bg-op-12)
+    [&+.q-editor\_\_toolbar-group:before]:(content-[''] absolute left--4px top-4px bottom-4px w-1px bg-black bg-op-12)
     `
   ],
   [

@@ -48,7 +48,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-chip__icon$/,
     ([, c], { theme }) => `
-      text-black text-op-540 text-1.5em margin--0.2em
+      text-black text-op-540 text-1.5em m--0.2em
     `
   ],
   [
@@ -67,7 +67,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-chip__icon--remove$/,
     ([, c], { theme }) => `
      ml-0.1em mr--0.5em op-60 outline-0
-     [&:hover, .q-chip__icon--remove:focus]:(op-100)
+     [&:hover]:(op-100)
+     [&:focus]:(op-100)
     `
   ],
   [

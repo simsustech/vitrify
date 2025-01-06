@@ -45,7 +45,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-color-picker__error-icon$/,
     ([, c], { theme }) => `
-      bottom-2px right-2px text-24px op-0 transition-[opacity]-300"
+      bottom-2px right-2px text-24px op-0 transition-opacity-300
     `
   ],
   [

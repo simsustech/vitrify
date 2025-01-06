@@ -25,11 +25,11 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     'q-btn--fab':
       'min-h-[56px] min-w-[56px] p-4 [&_.q-icon]:text-2xl [&_.q-icon]:m-auto',
     'q-btn--fab-mini': 'min-h-[40px] min-w-[40px] p-2 [&_.q-icon]:text-2xl',
-    'q-btn__content': 'transition-opacity duration-[0.3s] z-0',
+    'q-btn__content': 'transition-opacity-300 z-0',
     'q-btn__content--hidden': 'opacity-0 pointer-events-none',
     'q-btn__progress': 'z-0 rounded-[inherit]',
     'q-btn__progress-indicator':
-      'z-[-1] -translate-x-full bg-white bg-opacity-25',
+      '-z-1 -translate-x-full bg-white bg-opacity-25',
     'q-btn__progress--dark': `[&_.q-btn\_\_progress-indicator]:bg-black [&_.q-btn__progress-indicator]:bg-opacity-20`,
     'q-btn--flat': `[&_..q-btn\_\_progress-indicator]:bg-current [&_..q-btn__progress-indicator]:opacity-20`
   }

@@ -1,5 +1,17 @@
 import type { Rule } from '@unocss/core'
-import type { QuasarTheme } from './theme'
+import type { QuasarTheme } from '../theme.js'
+
+type Enumerate<
+  N extends number,
+  Acc extends number[] = []
+> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>
+
+type IntRange<F extends number, T extends number> = Exclude<
+  Enumerate<T>,
+  Enumerate<F>
+>
 
 const shadows = (mode: 'light' | 'dark') => [
   ...Array.from({ length: 24 }, (_, i) => i + 1).reduce((acc, z) => {
@@ -7,7 +19,7 @@ const shadows = (mode: 'light' | 'dark') => [
       new RegExp(`shadow-${z}`),
       ([, c], { symbols, theme }) => ({
         [symbols.parent]: mode === 'dark' ? 'body.body--dark' : undefined,
-        'box-shadow': theme['$shadows'][z]
+        'box-shadow': theme['shadows'][z as IntRange<0, 24>]
       })
     ])
     acc.push([
@@ -15,7 +27,7 @@ const shadows = (mode: 'light' | 'dark') => [
       ([, c], { symbols, theme }) => ({
         [symbols.parent]: mode === 'dark' ? 'body.body--dark' : undefined,
 
-        'box-shadow': theme['$shadows'][z]
+        'box-shadow': theme['shadows']['up'][z as IntRange<0, 24>]
       })
     ])
     return acc
@@ -25,7 +37,7 @@ const shadows = (mode: 'light' | 'dark') => [
     function* ([, color], { symbols, theme }) {
       yield {
         [symbols.parent]: mode === 'dark' ? 'body.body--dark' : undefined,
-        'box-shadow': theme['$inset-shadow']
+        'box-shadow': theme['insetShadow']
       }
     }
   ] as Rule<QuasarTheme>,
@@ -34,7 +46,7 @@ const shadows = (mode: 'light' | 'dark') => [
     function* ([, color], { symbols, theme }) {
       yield {
         [symbols.parent]: mode === 'dark' ? 'body.body--dark' : undefined,
-        'box-shadow': theme['$inset-shadow-down']
+        'box-shadow': theme['insetShadowDown']
       }
     }
   ] as Rule<QuasarTheme>
@@ -45,7 +57,7 @@ const rules: Rule<QuasarTheme>[] = [
     /^.shadow-transition$/,
     function* ([, color], { theme }) {
       yield {
-        transition: `${theme['$shadow-transition']} !important`
+        transition: `${theme['shadowTransition']} !important`
       }
     }
   ],
@@ -67,12 +79,16 @@ const rules: Rule<QuasarTheme>[] = [
       [
         new RegExp(`${c}`),
         function* ([, color], { theme }) {
+          const selector = c.replace('z-', '') as
+            | 'marginals'
+            | 'notify'
+            | 'fullscreen'
           yield {
-            'z-index': c === 'z-inherit' ? 'inherit' : theme[`\$${c}`]
+            'z-index': c === 'z-inherit' ? 'inherit' : theme['z'][selector]
           }
         }
       ] as Rule<QuasarTheme>
   )
 ]
 
-export default rules
+export { rules }

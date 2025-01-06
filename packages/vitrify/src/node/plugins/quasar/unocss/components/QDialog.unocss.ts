@@ -45,7 +45,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-dialog__inner$/,
     ([, c], { theme }) => `outline-0
-      [&>div]:(pointer-events-all overflow-auto border-rd-4px)
+      [&>div]:(pointer-events-auto overflow-auto border-rd-4px)
       [&>.q-card>.q-card\_\_actions_.q-btn--rectangle]:(min-w-64px)
     `
   ],
@@ -105,7 +105,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ],
   [
     /^q-dialog__backdrop$/,
-    ([, c], { theme }) => `z--1 pointer-events-all outline-0 bg-black bg-op-40
+    ([, c], { theme }) => `-z-1 pointer-events-auto outline-0 bg-black bg-op-40
     `
   ],
   [

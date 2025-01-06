@@ -91,7 +91,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-date__calendar-item$/,
     ([, c], { theme }) => `
       inline-flex items-center justify-center v-middle w-14.285%! h-12.5%! relative p-1px
-      [&:after]:(content="[""]" absolute pointer-events-none top-1px right-0 bottom-1px left-0 border-dashed border-transparent border-1px)
+      [&:after]:(content-[''] absolute pointer-events-none top-1px right-0 bottom-1px left-0 border-dashed border-transparent border-1px)
       [&>div]:(w-30px h-30px border-rd-50% lh-30px text-center)
       [&_button]:(w-30px h-30px border-rd-50% lh-22px)
 
@@ -112,7 +112,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-date__range$/,
     ([, c], { theme }) => `
-      [&:before]:(content="[""]" bg-current absolute top-1px bottom-1px left-0 right-0 op-30)
+      [&:before]:(content-[''] bg-current absolute top-1px bottom-1px left-0 right-0 op-30)
       [&:nth-child(7n-6):before]:(border-t-0 border-b-0)
       [&:nth-child(7n):before]:(border-t-0 border-b-0)
     `
@@ -120,7 +120,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-date__range-from$/,
     ([, c], { theme }) => `
-      [&:before]:(content="[""]" bg-current absolute top-1px bottom-1px left-0 right-0 op-30 left-50%)
+      [&:before]:(content-[''] bg-current absolute top-1px bottom-1px left-0 right-0 op-30 left-50%)
       [&:nth-child(7n-6):before]:(border-t-0 border-b-0)
       [&:nth-child(7n):before]:(border-t-0 border-b-0)
     `
@@ -128,7 +128,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-date__range-to$/,
     ([, c], { theme }) => `
-      [&:before]:(content="[""]" bg-current absolute top-1px bottom-1px left-0 right-0 op-30 right-50%)
+      [&:before]:(content-[''] bg-current absolute top-1px bottom-1px left-0 right-0 op-30 right-50%)
       [&:nth-child(7n-6):before]:(border-t-0 border-b-0)
       [&:nth-child(7n):before]:(border-t-0 border-b-0)
     `
@@ -174,7 +174,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-date__event$/,
     ([, c], { theme }) => `
-      absolute bottom-2px l-50% h-5px w-8px border-rd-5px bg-primary translate-x-50%
+      absolute bottom-2px left-50% h-5px w-8px border-rd-5px bg-primary translate-x-50%
     `
   ],
   [
