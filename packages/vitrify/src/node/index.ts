@@ -1,5 +1,5 @@
 import vuePlugin from '@vitejs/plugin-vue'
-import type { Alias, InlineConfig, UserConfig } from 'vite'
+import type { Alias, InlineConfig, UserConfig as ViteUserConfig } from 'vite'
 import { findDepPkgJsonPath } from 'vitefu'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'
@@ -33,6 +33,7 @@ import type { ComponentResolver } from 'unplugin-vue-components'
 import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
+
 import QuasarPreset from './plugins/quasar/unocss/index.js'
 
 const internalServerModules = [
@@ -330,8 +331,20 @@ export const baseConfig = async ({
       ...vitrifyConfig.vitrify.ssr.serverModules
     ]
 
-  console.log(fileURLToPath(new URL('**/quasar/src/**/*.{js}', appDir)))
-  const plugins: UserConfig['plugins'] = [
+  const unoCssContentPipelineInclude = [
+    /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/
+  ]
+  if (
+    vitrifyConfig.vitrify?.unocss?.presets?.some(async (preset) => {
+      if (!Array.isArray(preset)) {
+        return (await preset).name === 'quasar'
+      }
+    })
+  ) {
+    unoCssContentPipelineInclude.push(/quasar\/src\/.*\.js/)
+  }
+
+  const plugins: ViteUserConfig['plugins'] = [
     {
       name: 'vitrify-transforms',
       enforce: 'pre',
@@ -468,32 +481,8 @@ export const baseConfig = async ({
       resolvers
     }),
     UnoCSS({
-      transformers: [
-        {
-          name: 'my-transformer',
-          enforce: 'pre', // enforce before other transformers
-          idFilter(id: string) {
-            // only transform .tsx and .jsx files
-            return id
-          },
-          async transform(code: string, id: string) {
-            // console.log(id)
-          }
-        }
-      ],
-      content: {
-        pipeline: {
-          include: [
-            // the default
-            /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
-            // include js/ts files
-            /quasar\/src\/.*\.js/
-          ]
-          // exclude files
-          // exclude: []
-        }
-      },
-      presets: [QuasarPreset()]
+      ...vitrifyConfig.vitrify?.unocss,
+      content: unoCssContentPipelineInclude
     })
   ]
   if (isPwa) {
@@ -612,6 +601,10 @@ export const baseConfig = async ({
         new URL('./dist/vue-router.esm-bundler.js', packageUrls['vue-router'])
       )
     },
+    {
+      find: new RegExp('@unocss/reset'),
+      replacement: fileURLToPath(new URL('./', packageUrls['@unocss/reset']))
+    },
     ...vuePkgAliases
   ]
   if (mode === 'development' && vitrifyConfig.vitrify?.dev?.alias)
@@ -727,6 +720,7 @@ export const baseConfig = async ({
 
 export const vitrifyDir = new URL('..', import.meta.url)
 export { prerender } from './frameworks/vue/prerender.js'
+export { QuasarPreset }
 export type {
   VitrifyConfig,
   VitrifyConfigAsync,

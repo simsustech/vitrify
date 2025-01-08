@@ -4,14 +4,17 @@ import type { QuasarTheme } from '../theme.js'
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-btn-dropdown--split$/,
-    ([, c], { theme }) => `[&_.q-btn-dropdown\_\_arrow-container]:(px-4px py-0)
-    [&_.q-btn-dropdown\_\_arrow-container.q-btn--outline]:(border-l-1px border-l-solid border-l-current)
-    [&_.q-btn-dropdown\_\_arrow-container:not(.q-btn--outline)]:(border-l-1px border-l-solid border-l-white)
+    (
+      [, c],
+      { theme }
+    ) => `[&_.q-btn-dropdown\\_\\_arrow-container]:(px-4px py-0)
+    [&_.q-btn-dropdown\\_\\_arrow-container.q-btn--outline]:(border-l-1px border-l-solid border-l-current)
+    [&_.q-btn-dropdown\\_\\_arrow-container:not(.q-btn--outline)]:(border-l-1px border-l-solid border-l-white)
     `
   ],
   [
     /^q-btn-dropdown--simple$/,
-    ([, c], { theme }) => `[&+.q-btn-dropdown\_\_arrow]:(ml-8px)`
+    ([, c], { theme }) => `[&+.q-btn-dropdown\\_\\_arrow]:(ml-8px)`
   ],
   [
     /^q-btn-dropdown__arrow$/,

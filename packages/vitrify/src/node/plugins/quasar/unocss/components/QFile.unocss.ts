@@ -5,7 +5,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-file$/,
     ([, c], { theme }) =>
-      `[&_.q-field\_\_native]:(break-all overflow-hidden) [&_.q-field\_\_input]:(!opacity-0) [&_.q-field\_\_input::-webkit-file-upload-button]:(cursor-pointer)`
+      `[&_.q-field\\_\\_native]:(break-all overflow-hidden) [&_.q-field\\_\\_input]:(!opacity-0) [&_.q-field\\_\\_input::-webkit-file-upload-button]:(cursor-pointer)`
   ],
 
   [

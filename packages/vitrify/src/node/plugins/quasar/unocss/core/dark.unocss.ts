@@ -4,9 +4,10 @@ import type { QuasarTheme } from '../theme.js'
 const preflights: Preflight<QuasarTheme>[] = [
   {
     getCSS: ({ theme }) => `
-body.body--dark
-  color: #fff
-  background: ${theme.colors['dark-page']}
+body.body--dark {
+  color: #fff;
+  background: ${theme.colors['dark-page']};
+}
     `
   }
 ]

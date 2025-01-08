@@ -1,9 +1,10 @@
-import type { Alias, UserConfig, ViteDevServer } from 'vite'
+import type { Alias, UserConfig as ViteUserConfig, ViteDevServer } from 'vite'
 import type { QuasarConf } from './plugins/quasar.js'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import type { VitePWAOptions } from 'vite-plugin-pwa'
 import { ComponentResolver } from 'unplugin-vue-components'
+import type { UserConfig as UnoCSSUserConfig } from '@unocss/core'
 
 export type BootFunction = ({
   app,
@@ -42,7 +43,7 @@ export type OnSetupHook = (
   }
 ) => any
 export type OnSetupFile = URL
-export interface VitrifyConfig extends UserConfig {
+export interface VitrifyConfig extends ViteUserConfig {
   vitrify?: {
     lang?: string
     /**
@@ -113,6 +114,10 @@ export interface VitrifyConfig extends UserConfig {
      * Enables vite-plugin-pwa
      */
     pwa?: Partial<VitePWAOptions>
+    /**
+     * UnoCSS Configuration
+     */
+    unocss?: UnoCSSUserConfig
   }
   quasar?: QuasarConf
 }

@@ -15,13 +15,13 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
       `opacity-20 [transition:opacity_0.3s] bg-[#000] rounded-[3px]`
   ],
 
-  [/^q-scrollarea__bar--v$/, ([, c], { theme }) => `right-[0] w-[10px]`],
+  [/^q-scrollarea__bar--v$/, ([, c], { theme }) => `right-0 w-[10px]`],
 
-  [/^q-scrollarea__thumb--v$/, ([, c], { theme }) => `right-[0] w-[10px]`],
+  [/^q-scrollarea__thumb--v$/, ([, c], { theme }) => `right-0 w-[10px]`],
 
-  [/^q-scrollarea__bar--h$/, ([, c], { theme }) => `bottom-[0] h-[10px]`],
+  [/^q-scrollarea__bar--h$/, ([, c], { theme }) => `bottom-0 h-[10px]`],
 
-  [/^q-scrollarea__thumb--h$/, ([, c], { theme }) => `bottom-[0] h-[10px]`],
+  [/^q-scrollarea__thumb--h$/, ([, c], { theme }) => `bottom-0 h-[10px]`],
 
   [
     /^q-scrollarea__bar--invisible$/,
@@ -41,7 +41,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-scrollarea--dark$/,
-    ([, c], { theme }) => `[&_.q-scrollarea\_\_thumb]:(bg-[#fff])`
+    ([, c], { theme }) => `[&_.q-scrollarea\\_\\_thumb]:(bg-[#fff])`
   ]
 ]
 

@@ -4,13 +4,12 @@ import type { QuasarTheme } from '../theme.js'
 const preflights: Preflight<QuasarTheme>[] = [
   {
     getCSS: ({ theme }) => `
-
-    body.desktop .q-chip--clickable:focus {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
-    }
-    body.desktop.body--dark .q-chip--clickable:focus {
-      box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2), 0 1px 1px rgba(255, 255, 255, 0.14), 0 2px 1px -1px rgba(255, 255, 255, 0.12);
-    }
+body.desktop .q-chip--clickable:focus {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+body.desktop.body--dark .q-chip--clickable:focus {
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2), 0 1px 1px rgba(255, 255, 255, 0.14), 0 2px 1px -1px rgba(255, 255, 255, 0.12);
+}
 `
   }
 ]
@@ -29,14 +28,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-chip--colored$/,
     ([, c], { theme }) => `
       [&_.q-chip__icon]:(text-inherit)
-      [&_.q-chip--dark_.q-chip\_\_icon]:(text-inherit)
+      [&_.q-chip--dark_.q-chip\\_\\_icon]:(text-inherit)
     `
   ],
   [
     /^q-chip--outline$/,
     ([, c], { theme }) => `
       bg-transparent! border-solid border-width-1px border-current
-      [&_.q-chip--dark_.q-chip\_\_icon]:(text-inherit)
+      [&_.q-chip--dark_.q-chip\\_\\_icon]:(text-inherit)
     `
   ],
   [
@@ -82,9 +81,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) => `
       border-rd-12px px-0.4em py-0 h-1.5em 
       [&_.q-avatar]:(text-1.5em ml--0.27em mr-0.1em border-rd-12px)
-      [&._q-chip\_\_icon]:(text-1.25em)
-      [&._q-chip\_\_icon--left]:(mr-0.195em)
-      [&._q-chip\_\_icon--remove]:(mr--0.25em)
+      [&._q-chip\\_\\_icon]:(text-1.25em)
+      [&._q-chip\\_\\_icon--left]:(mr-0.195em)
+      [&._q-chip\\_\\_icon--remove]:(mr--0.25em)
     `
   ],
   [

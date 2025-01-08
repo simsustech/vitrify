@@ -19,12 +19,23 @@ img.responsive {
   }
 ]
 
+const rules: Rule[] = [
+  [
+    /^content-empty$/,
+    function* ([, color]) {
+      yield {
+        content: '""'
+      }
+    }
+  ]
+]
+
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^rounded-borders$/, ([, c], { theme }) => `rounded-[4px]`],
 
   [/^border-radius-inherit$/, ([, c], { theme }) => `[border-radius:inherit]`],
 
-  [/^no-transition$/, ([, c], { theme }) => `!transition-none`],
+  [/^no-transition$/, ([, c], { theme }) => `transition-none`],
 
   [/^transition-0$/, ([, c], { theme }) => `[transition:0s!important]`],
 
@@ -59,9 +70,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) => `m-0`
   ],
 
-  [/^q-link$/, ([, c], { theme }) => `outline-[0] no-underline`],
+  [/^q-link$/, ([, c], { theme }) => `outline-0 no-underline`],
 
   [/^q-link--focusable:focus-visible$/, ([, c], { theme }) => ``]
 ]
 
-export { preflights, shortcuts }
+export { rules, preflights, shortcuts }

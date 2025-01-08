@@ -2,14 +2,14 @@ import type { Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  [/^q-drawer$/, ([, c], { theme }) => `absolute top-[0] bottom-[0] bg-[#fff]`],
+  [/^q-drawer$/, ([, c], { theme }) => `absolute top-0 bottom-0 bg-[#fff]`],
 
   [/^q-drawer--on-top$/, ([, c], { theme }) => `z-3000`],
 
   [
     /^q-drawer--left$/,
     ([, c], { theme }) =>
-      `left-[0] -translate-x-full [&_.q-layout\_\_shadow]:(left-[10px] -right-[10px]) [&_.q-layout\_\_shadow:after]:(right-[10px])`
+      `left-0 -translate-x-full [&_.q-layout\\_\\_shadow]:(left-[10px] -right-[10px]) [&_.q-layout\\_\\_shadow:after]:(right-[10px])`
   ],
 
   [
@@ -20,7 +20,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-drawer--right$/,
     ([, c], { theme }) =>
-      `right-[0] translate-x-full [&_.q-layout\_\_shadow]:(-left-[10px]) [&_.q-layout\_\_shadow:after]:(left-[10px])`
+      `right-0 translate-x-full [&_.q-layout\\_\\_shadow]:(-left-[10px]) [&_.q-layout\\_\\_shadow:after]:(left-[10px])`
   ],
 
   [
@@ -31,27 +31,27 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-drawer-container:not(.q-drawer--mini-animate)$/,
     ([, c], { theme }) =>
-      `[&_.q-drawer--mini]:(!p-0) [&_.q-drawer--mini_.q-item]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&_.q-drawer--mini_.q-item\_\_label]:(hidden)`
+      `[&_.q-drawer--mini]:(!p-0) [&_.q-drawer--mini_.q-item]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&_.q-drawer--mini_.q-item\\_\\_label]:(hidden)`
   ],
 
   [
     /^q-drawer-container:not(.q-drawer--mini-animate)$/,
     ([, c], { theme }) => `[&__.q-drawer--mini
-  __.q-item\_\_section]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&__.q-drawer--mini
-  __.q-item\_\_section--main]:(hidden) [&__.q-drawer--mini
-  __.q-item\_\_section--side__~_.q-item\_\_section--side]:(hidden)`
+  __.q-item\\_\\_section]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&__.q-drawer--mini
+  __.q-item\\_\\_section--main]:(hidden) [&__.q-drawer--mini
+  __.q-item\\_\\_section--side__~_.q-item\\_\\_section--side]:(hidden)`
   ],
 
   [
     /^q-drawer--mini$/,
     ([, c], { theme }) =>
-      `[&_.q-mini-drawer-hide]:(hidden) [&_.q-expansion-item\_\_content]:(hidden)`
+      `[&_.q-mini-drawer-hide]:(hidden) [&_.q-expansion-item\\_\\_content]:(hidden)`
   ],
 
   [
     /^q-drawer--mini-animate$/,
     ([, c], { theme }) =>
-      `[&_.q-drawer\_\_content]:(!overflow-x-hidden whitespace-nowrap)`
+      `[&_.q-drawer\\_\\_content]:(!overflow-x-hidden whitespace-nowrap)`
   ],
 
   [

@@ -12,7 +12,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     [&_.q-tabs]:(overflow-hidden)
     [&_.q-tab--active]:(shadow-sm)
     [&_.q-tab--active_.q-focus-helper]:(hidden)
-    [&_q-tab\_\_indicator]:(hidden)
+    [&_q-tab\\_\\_indicator]:(hidden)
     [&_q-tab-panels]:(bg-inherit)
     `
   ],
@@ -64,7 +64,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-color-picker__header-content--dark$/,
     ([, c], { theme }) => `
       text-white
-      [&_.q-tab--inactive:before]:(content-none absolute top-0 right-0 bottom-0 left-0 bg-white bg-op-200)
+      [&_.q-tab--inactive:before]:(content-empty absolute top-0 right-0 bottom-0 left-0 bg-white bg-op-200)
     `
   ],
   [
@@ -127,16 +127,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-color-picker__alpha$/,
     ([, c], { theme }) => `
-    [&_.q-slider\_\_track-container]:(pt-0)
-    [&_.q-slider\_\_track:before]:(content-none absolute top-0 right-0 bottom-0 left-0 border-rd-inherit bg-gradient-to-r from-black to-[#757575])
+    [&_.q-slider\\_\\_track-container]:(pt-0)
+    [&_.q-slider\\_\\_track:before]:(content-empty absolute top-0 right-0 bottom-0 left-0 border-rd-inherit bg-gradient-to-r from-black to-[#757575])
     `
   ],
   [
     /^q-color-picker__sliders$/,
     ([, c], { theme }) => `
     pt-0 pb-0 pl-16px pr-16px
-    [&_.q-slider\_\_thumb]:(text-[#424242])
-    [&_.q-slider\_\_thumb_path]:(stroke-2px fill-transparent)
+    [&_.q-slider\\_\\_thumb]:(text-[#424242])
+    [&_.q-slider\\_\\_thumb_path]:(stroke-2px fill-transparent)
     [&_.q-slider--active_path]:(stroke-3px)
   `
   ],
@@ -169,7 +169,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-color-picker--dark$/,
     ([, c], { theme }) => `
       shadow-sm
-      [&_.q-color-picker\_\_tune-tab_input]:(border-solid border-1px border-black border-op-30)
+      [&_.q-color-picker\\_\\_tune-tab_input]:(border-solid border-1px border-black border-op-30)
       [&_.q-slider__thumb]:(text-[#fafafa])
   `
   ]

@@ -5,13 +5,13 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-ripple$/,
     ([, c], { theme }) =>
-      `absolute top-[0] left-[0] w-full h-full [color:inherit] [border-radius:inherit] z-0 pointer-events-none overflow-hidden`
+      `absolute top-0 left-0 w-full h-full [color:inherit] [border-radius:inherit] z-0 pointer-events-none overflow-hidden`
   ],
 
   [
     /^q-ripple__inner$/,
     ([, c], { theme }) =>
-      `absolute top-[0] left-[0] opacity-0 [color:inherit] rounded-[50%] bg-current pointer-events-none`
+      `absolute top-0 left-0 opacity-0 [color:inherit] rounded-[50%] bg-current pointer-events-none`
   ],
 
   [

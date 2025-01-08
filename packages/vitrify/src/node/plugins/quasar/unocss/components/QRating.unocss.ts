@@ -7,7 +7,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-rating__icon-container$/,
     ([, c], { theme }) =>
-      `h-[1em] outline-[0] [&_+_.q-rating\_\_icon-container]:(ml-[2px])`
+      `h-[1em] outline-0 [&_+_.q-rating\\_\\_icon-container]:(ml-[2px])`
   ],
 
   [
@@ -24,12 +24,12 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-rating--no-dimming$/,
-    ([, c], { theme }) => `[&_.q-rating\_\_icon]:(opacity-100)`
+    ([, c], { theme }) => `[&_.q-rating\\_\\_icon]:(opacity-100)`
   ],
 
   [
     /^q-rating--editable$/,
-    ([, c], { theme }) => `[&_.q-rating\_\_icon-container]:(cursor-pointer)`
+    ([, c], { theme }) => `[&_.q-rating\\_\\_icon-container]:(cursor-pointer)`
   ]
 ]
 

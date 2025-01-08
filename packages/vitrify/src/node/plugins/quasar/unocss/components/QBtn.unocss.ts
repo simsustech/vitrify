@@ -2,37 +2,92 @@ import type { UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme'
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  {
-    'q-btn': `inline-flex flex-col items-stretch relative outline-0 border-0 v-middle text-14px lh-1.715em decoration-none text-inherit bg-transparent font-500 uppercase text-center w-auto h-auto cursor-default px-16px py-4px min-h-2.572em 
-      [&_.q-icon]:text-[1.715em]`,
-    'q-btn.disabled': 'opacity-70',
-    'q-btn--actionable': 'cursor-pointer',
-    'q-btn--actionable.q-btn--standard:before': `transition-shadow-duration-300 transition-shadow-opacity-1`,
-    'q-btn--actionable.q-btn--standard:active:before':
-      'shadow-sm shadow-black shadow-op-20',
-    'q-btn--actionable.q-btn--standard.q-btn--active:before':
-      'shadow-sm shadow-black shadow-op-20',
-    'q-btn--no-uppercase': 'normal-case',
-    'q-btn--rectangle': 'rounded-[3px]',
-    'q-btn--round': 'min-w-[3em] min-h-[3em] p-0 rounded-[50%]',
-    'q-btn--square': 'rounded-none',
-    'q-btn--flat:before': 'rounded-none',
-    'q-btn--outline:before': 'rounded-none',
-    'q-btn--unelevated:before': 'shadow-none',
-    'q-btn--dense':
-      'min-h-[2em] p-[0.285em] [&_.on-left]:mr-1.5 [&_.on-right]:ml-1.5',
-    'q-btn--dense.q-btn--round': 'min-h-[2.4em] min-w-[2.4em] p-0',
-    'q-btn--fab':
-      'min-h-[56px] min-w-[56px] p-4 [&_.q-icon]:text-2xl [&_.q-icon]:m-auto',
-    'q-btn--fab-mini': 'min-h-[40px] min-w-[40px] p-2 [&_.q-icon]:text-2xl',
-    'q-btn__content': 'transition-opacity-300 z-0',
-    'q-btn__content--hidden': 'opacity-0 pointer-events-none',
-    'q-btn__progress': 'z-0 rounded-[inherit]',
-    'q-btn__progress-indicator':
-      '-z-1 -translate-x-full bg-white bg-opacity-25',
-    'q-btn__progress--dark': `[&_.q-btn\_\_progress-indicator]:bg-black [&_.q-btn__progress-indicator]:bg-opacity-20`,
-    'q-btn--flat': `[&_..q-btn\_\_progress-indicator]:bg-current [&_..q-btn__progress-indicator]:opacity-20`
-  }
+  [
+    /^q-btn$/,
+    ([, c], { theme }) =>
+      `items-stretch relative outline-0 border-0 align-middle text-[14px] leading-[1.715em] no-underline [color:inherit] bg-transparent font-medium uppercase text-center w-auto h-auto cursor-default px-[16px] py-[4px] min-h-[2.572em] [&_.q-icon]:(text-[1.715em]) [&_.q-spinner]:(text-[1.715em]) [&.disabled]:(!opacity-70) [&:before]:(content-empty block absolute left-[0] right-[0] top-[0] bottom-[0] [border-radius:inherit] [box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)])`
+    // inline-flex flex-col
+  ],
+
+  [
+    /^q-btn--actionable$/,
+    ([, c], { theme }) =>
+      `cursor-pointer [&.q-btn--standard:before]:([transition:box-shadow_0.3s_cubic-bezier(0.25,_0.8,_0.5,_1)]) [&.q-btn--standard:active:before]:([box-shadow:0_3px_5px_-1px_rgba(0,_0,_0,_0.2),_0_5px_8px_rgba(0,_0,_0,_0.14),_0_1px_14px_rgba(0,_0,_0,_0.12)]) [&.q-btn--standard.q-btn--active:before]:([box-shadow:0_3px_5px_-1px_rgba(0,_0,_0,_0.2),_0_5px_8px_rgba(0,_0,_0,_0.14),_0_1px_14px_rgba(0,_0,_0,_0.12)])`
+  ],
+
+  [/^q-btn--no-uppercase$/, ([, c], { theme }) => `normal-case`],
+
+  [/^q-btn--rectangle$/, ([, c], { theme }) => `rounded-[3px]`],
+
+  [
+    /^q-btn--outline$/,
+    ([, c], { theme }) =>
+      `!bg-transparent [&:before]:(border-[1px] border-solid border-[currentColor]) [&:before]:([box-shadow:none]) [&_.q-btn\\_\\_progress-indicator]:(opacity-20 bg-current)`
+  ],
+
+  [
+    /^q-btn--push$/,
+    ([, c], { theme }) =>
+      `rounded-[7px] [&:before]:([border-bottom:3px_solid_rgba(0,_0,_0,_0.15)]) [&.q-btn--actionable]:([transition:transform_0.3s_cubic-bezier(0.25,_0.8,_0.5,_1)]) [&.q-btn--actionable:before]:([transition:border-width_0.3s_cubic-bezier(0.25,_0.8,_0.5,_1)]) [&.q-btn--actionable:active]:(translate-y-[2px]) [&.q-btn--actionable.q-btn--active]:(translate-y-[2px]) [&.q-btn--actionable:active:before]:(border-b-[0]) [&.q-btn--actionable.q-btn--active:before]:(border-b-[0])`
+  ],
+
+  [/^q-btn--rounded$/, ([, c], { theme }) => `rounded-[28px]`],
+
+  [
+    /^q-btn--round$/,
+    ([, c], { theme }) => `rounded-[50%] p-0 min-w-[3em] min-h-[3em]`
+  ],
+
+  [/^q-btn--square$/, ([, c], { theme }) => `rounded-none`],
+
+  [
+    /^q-btn--flat$/,
+    ([, c], { theme }) =>
+      `[&:before]:([box-shadow:none]) [&_.q-btn\\_\\_progress-indicator]:(opacity-20 bg-current)`
+  ],
+
+  [
+    /^q-btn--unelevated$/,
+    ([, c], { theme }) => `[&:before]:([box-shadow:none])`
+  ],
+
+  [
+    /^q-btn--dense$/,
+    ([, c], { theme }) =>
+      `p-[0.285em] min-h-[2em] [&.q-btn--round]:(p-0 min-h-[2.4em] min-w-[2.4em]) [&_.on-left]:(mr-[6px]) [&_.on-right]:(ml-[6px])`
+  ],
+
+  [
+    /^q-btn--fab$/,
+    ([, c], { theme }) =>
+      `[&_.q-icon]:(text-[24px]) p-[16px] min-h-[56px] min-w-[56px] [&_.q-icon]:(m-auto)`
+  ],
+
+  [
+    /^q-btn--fab-mini$/,
+    ([, c], { theme }) =>
+      `[&_.q-icon]:(text-[24px]) p-[8px] min-h-[40px] min-w-[40px]`
+  ],
+
+  [/^q-btn__content$/, ([, c], { theme }) => `[transition:opacity_0.3s] z-0`],
+
+  [
+    /^q-btn__content--hidden$/,
+    ([, c], { theme }) => `opacity-0 pointer-events-none`
+  ],
+
+  [/^q-btn__progress$/, ([, c], { theme }) => `[border-radius:inherit] z-0`],
+
+  [
+    /^q-btn__progress-indicator$/,
+    ([, c], { theme }) => `-translate-x-full bg-[rgba(255,_255,_255,_0.25)]`
+  ],
+
+  [
+    /^q-btn__progress--dark$/,
+    ([, c], { theme }) =>
+      `[&_.q-btn\\_\\_progress-indicator]:(bg-[rgba(0,_0,_0,_0.2)])`
+  ]
 ]
 
 export { shortcuts }

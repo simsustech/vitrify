@@ -46,7 +46,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-editor__toolbar-group$/,
     ([, c], { theme }) => `relative mx-4px my-0
-    [&+.q-editor\_\_toolbar-group:before]:(content-[''] absolute left--4px top-4px bottom-4px w-1px bg-black bg-op-12)
+    [&+.q-editor\\_\\_toolbar-group:before]:(content-empty absolute left--4px top-4px bottom-4px w-1px bg-black bg-op-12)
     `
   ],
   [
@@ -60,7 +60,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-editor--flat$/,
     ([, c], { theme }) => `border-0
-      [&_.q-editor\_\_toolbar]:(border-0)
+      [&_.q-editor\\_\\_toolbar]:(border-0)
     `
   ],
   [
@@ -68,15 +68,15 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     (
       [, c],
       { theme }
-    ) => `[&_.q-editor\_\_toolbar-group]:(flex items-center flex-nowrap)
+    ) => `[&_.q-editor\\_\\_toolbar-group]:(flex items-center flex-nowrap)
     `
   ],
   [
     /^q-editor--dark$/,
     ([, c], { theme }) => `border-color-white border-op-28
-      [&_.q-editor\_\_content_hr]:(border-color-white border-op-28)
-      [&_.q-editor\_\_toolbar]:(border-color-white border-op-28)
-      [&_.q-editor\_\_toolbar-group+.q-editor\_\_toolbar-group:before]:(border-color-white border-op-28)
+      [&_.q-editor\\_\\_content_hr]:(border-color-white border-op-28)
+      [&_.q-editor\\_\\_toolbar]:(border-color-white border-op-28)
+      [&_.q-editor\\_\\_toolbar-group+.q-editor\\_\\_toolbar-group:before]:(border-color-white border-op-28)
 
     `
   ]

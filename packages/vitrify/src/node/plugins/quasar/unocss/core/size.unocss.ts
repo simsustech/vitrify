@@ -12,10 +12,6 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [/^window-width$/, ([, c], { theme }) => `!ml-0 !mr-0 !w-screen`],
 
-  [/^block$/, ([, c], { theme }) => `!block`],
-
-  [/^inline-block$/, ([, c], { theme }) => `!inline-block`],
-
   [/^q-pa-none$/, ([, c], { theme }) => `p-[0]`],
 
   [/^q-pl-none$/, ([, c], { theme }) => `pl-0`],

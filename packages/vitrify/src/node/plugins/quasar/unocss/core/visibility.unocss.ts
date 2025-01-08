@@ -157,22 +157,40 @@ body.desktop .q-focusable:focus > .q-focus-helper, body.desktop .q-manual-focusa
   }
 ]
 
+const rules: Rule[] = [
+  [
+    /^invisible$/,
+    function* ([, c], { symbols }) {
+      yield {
+        visibility: 'hidden !important',
+        transition: 'none !important',
+        animation: 'none !important'
+      }
+      yield {
+        [symbols.selector]: (selector) => `${selector} > *`,
+        visibility: 'hidden !important',
+        transition: 'none !important',
+        animation: 'none !important'
+      }
+    }
+  ]
+]
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^no-margin$/, ([, c], { theme }) => `!m-0`],
 
   [/^no-padding$/, ([, c], { theme }) => `!p-0`],
 
-  [/^no-border$/, ([, c], { theme }) => `!border-[0]`],
+  [/^no-border$/, ([, c], { theme }) => `!border-0`],
 
   [/^no-border-radius$/, ([, c], { theme }) => `!rounded-none`],
 
   [/^no-box-shadow$/, ([, c], { theme }) => `[box-shadow:none!important]`],
 
-  [/^no-outline$/, ([, c], { theme }) => `!outline-[0]`],
+  [/^no-outline$/, ([, c], { theme }) => `outline-0`],
 
   [
     /^ellipsis$/,
-    ([, c], { theme }) => `overflow-ellipsis whitespace-nowrap overflow-hidden`
+    ([, c], { theme }) => `text-ellipsis whitespace-nowrap overflow-hidden`
   ],
 
   [/^ellipsis-2-lines$/, ([, c], { theme }) => `overflow-hidden `],
@@ -184,22 +202,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^disabled$/,
     ([, c], { theme }) =>
-      `!outline-[0] !cursor-not-allowed [&_*]:(!outline-[0] !cursor-not-allowed) !opacity-60`
+      `!outline-0 !cursor-not-allowed [&_*]:(!outline-0 !cursor-not-allowed) !opacity-60`
   ],
 
-  [/^hidden$/, ([, c], { theme }) => `!hidden`],
-
-  [
-    /^invisible$/,
-    ([, c], { theme }) =>
-      `!invisible !transition-none !animate-none [&_*]:(!invisible !transition-none !animate-none)`
-  ],
+  // [
+  //   /^invisible$/,
+  //   ([, c], { theme }) =>
+  //     `invisible !transition-none !animate-none [&_*]:(invisible !transition-none !animate-none)`
+  // ],
 
   [/^transparent$/, ([, c], { theme }) => `!bg-transparent`],
-
-  [/^overflow-auto$/, ([, c], { theme }) => `!overflow-auto`],
-
-  [/^overflow-hidden$/, ([, c], { theme }) => `!overflow-hidden`],
 
   [/^overflow-hidden-y$/, ([, c], { theme }) => `!overflow-y-hidden`],
 
@@ -213,26 +225,26 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^dimmed:after$/,
     ([, c], { theme }) =>
-      `content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] !bg-[rgba(0,_0,_0,_0.4)]`
+      `content-empty absolute top-0 right-0 bottom-0 left-0 !bg-[rgba(0,_0,_0,_0.4)]`
   ],
 
   [
     /^light-dimmed:after$/,
     ([, c], { theme }) =>
-      `content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] !bg-[rgba(255,_255,_255,_0.6)]`
+      `content-empty absolute top-0 right-0 bottom-0 left-0 !bg-[rgba(255,_255,_255,_0.6)]`
   ],
 
   [/^z-top$/, ([, c], { theme }) => `z-7000`],
 
   [/^z-max$/, ([, c], { theme }) => `z-9998`],
 
-  [/^q-focus-helper$/, ([, c], { theme }) => `outline-[0]`],
+  [/^q-focus-helper$/, ([, c], { theme }) => `outline-0`],
 
-  [/^q-focusable$/, ([, c], { theme }) => `outline-[0]`],
+  [/^q-focusable$/, ([, c], { theme }) => `outline-0`],
 
-  [/^q-manual-focusable$/, ([, c], { theme }) => `outline-[0]`],
+  [/^q-manual-focusable$/, ([, c], { theme }) => `outline-0`],
 
-  [/^q-hoverable$/, ([, c], { theme }) => `outline-[0]`]
+  [/^q-hoverable$/, ([, c], { theme }) => `outline-0`]
 ]
 
-export { preflights, shortcuts }
+export { rules, preflights, shortcuts }

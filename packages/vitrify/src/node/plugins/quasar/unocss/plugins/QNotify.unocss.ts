@@ -43,17 +43,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-notifications__list$/,
     ([, c], { theme }) =>
-      `pointer-events-none left-[0] right-[0] mb-[10px] relative z-9500`
+      `pointer-events-none left-0 right-0 mb-[10px] relative z-9500`
   ],
 
-  [
-    /^q-notifications__list--center$/,
-    ([, c], { theme }) => `top-[0] bottom-[0]`
-  ],
+  [/^q-notifications__list--center$/, ([, c], { theme }) => `top-0 bottom-0`],
 
-  [/^q-notifications__list--top$/, ([, c], { theme }) => `top-[0]`],
+  [/^q-notifications__list--top$/, ([, c], { theme }) => `top-0`],
 
-  [/^q-notifications__list--bottom$/, ([, c], { theme }) => `bottom-[0]`],
+  [/^q-notifications__list--bottom$/, ([, c], { theme }) => `bottom-0`],
 
   [
     /^q-notification$/,
@@ -84,12 +81,12 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) => `text-[0.9em] opacity-70`
   ],
 
-  [/^q-notification__actions$/, ([, c], { theme }) => ``],
+  [/^q-notification__actions$/, ([, c], { theme }) => `text-primary`],
 
   [
     /^q-notification__badge$/,
     ([, c], { theme }) =>
-      `animate-[q-notif-badge_0.42s] px-[8px] py-[4px] absolute [box-shadow:0_1px_3px_rgba(0,_0,_0,_0.2),_0_1px_1px_rgba(0,_0,_0,_0.14),_0_2px_1px_-1px_rgba(0,_0,_0,_0.12)] text-[#fff] rounded-[4px] text-[12px] leading-[12px]`
+      `animate-[q-notif-badge_0.42s] px-[8px] py-[4px] absolute [box-shadow:0_1px_3px_rgba(0,_0,_0,_0.2),_0_1px_1px_rgba(0,_0,_0,_0.14),_0_2px_1px_-1px_rgba(0,_0,_0,_0.12)] text-[#fff] rounded-[4px] text-[12px] leading-[12px] bg-negative`
   ],
 
   [
@@ -115,19 +112,19 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-notification__progress$/,
     ([, c], { theme }) =>
-      `absolute h-[3px] bottom-[0] -left-[10px] -right-[10px] animate-[q-notif-progress_linear] bg-current opacity-30 rounded-tl-[4px] rounded-br-[0] rounded-tr-[4px] rounded-bl-[0] origin-[0_50%] scale-x-0 -z-1`
+      `absolute h-[3px] bottom-0 -left-[10px] -right-[10px] animate-[q-notif-progress_linear] bg-current opacity-30 rounded-tl-[4px] rounded-br-[0] rounded-tr-[4px] rounded-bl-[0] origin-[0_50%] scale-x-0 -z-1`
   ],
 
   [
     /^q-notification--standard$/,
     ([, c], { theme }) =>
-      `px-[16px] py-[0] min-h-[48px] [&_.q-notification\_\_actions]:(pl-[8px] pr-[0] py-[6px] -mr-[8px])`
+      `px-[16px] py-[0] min-h-[48px] [&_.q-notification\\_\\_actions]:(pl-[8px] pr-[0] py-[6px] -mr-[8px])`
   ],
 
   [
     /^q-notification--multi-line$/,
     ([, c], { theme }) =>
-      `min-h-[68px] px-[16px] py-[8px] [&_.q-notification\_\_badge--top-left]:(-top-[15px]) [&_.q-notification\_\_badge--top-right]:(-top-[15px]) [&_.q-notification\_\_badge--bottom-left]:(-bottom-[15px]) [&_.q-notification\_\_badge--bottom-right]:(-bottom-[15px]) [&_.q-notification\_\_progress]:(-bottom-[8px]) [&_.q-notification\_\_actions]:(p-0) [&_.q-notification\_\_actions--with-media]:(pl-[25px])`
+      `min-h-[68px] px-[16px] py-[8px] [&_.q-notification\\_\\_badge--top-left]:(-top-[15px]) [&_.q-notification\\_\\_badge--top-right]:(-top-[15px]) [&_.q-notification\\_\\_badge--bottom-left]:(-bottom-[15px]) [&_.q-notification\\_\\_badge--bottom-right]:(-bottom-[15px]) [&_.q-notification\\_\\_progress]:(-bottom-[8px]) [&_.q-notification\\_\\_actions]:(p-0) [&_.q-notification\\_\\_actions--with-media]:(pl-[25px])`
   ],
 
   [
@@ -227,7 +224,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-notification--top-leave-active$/,
-    ([, c], { theme }) => `absolute ml-0 mr-0 top-[0]`
+    ([, c], { theme }) => `absolute ml-0 mr-0 top-0`
   ],
 
   [
@@ -242,7 +239,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-notification--center-leave-active$/,
-    ([, c], { theme }) => `absolute ml-0 mr-0 top-[0]`
+    ([, c], { theme }) => `absolute ml-0 mr-0 top-0`
   ],
 
   [
@@ -252,17 +249,17 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-notification--bottom-left-leave-active$/,
-    ([, c], { theme }) => `absolute ml-0 mr-0 bottom-[0]`
+    ([, c], { theme }) => `absolute ml-0 mr-0 bottom-0`
   ],
 
   [
     /^q-notification--bottom-leave-active$/,
-    ([, c], { theme }) => `absolute ml-0 mr-0 bottom-[0]`
+    ([, c], { theme }) => `absolute ml-0 mr-0 bottom-0`
   ],
 
   [
     /^q-notification--bottom-right-leave-active$/,
-    ([, c], { theme }) => `absolute ml-0 mr-0 bottom-[0]`
+    ([, c], { theme }) => `absolute ml-0 mr-0 bottom-0`
   ]
 ]
 

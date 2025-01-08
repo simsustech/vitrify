@@ -5,7 +5,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-separator$/,
     ([, c], { theme }) =>
-      `border-[0] bg-[rgba(0,_0,_0,_0.12)] m-0 [transition:background_0.3s,_opacity_0.3s] flex-shrink-0`
+      `border-0 bg-[rgba(0,_0,_0,_0.12)] m-0 [transition:background_0.3s,_opacity_0.3s] flex-shrink-0`
   ],
 
   [

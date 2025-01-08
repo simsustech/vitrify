@@ -4,12 +4,12 @@ import type { QuasarTheme } from '../theme.js'
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^q-knob$/, ([, c], { theme }) => `text-[48px]`],
 
-  [/^q-knob--editable$/, ([, c], { theme }) => `cursor-pointer outline-[0]`],
+  [/^q-knob--editable$/, ([, c], { theme }) => `cursor-pointer outline-0`],
 
   [
     /^q-knob--editable:before$/,
     ([, c], { theme }) =>
-      `content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] rounded-[50%] [box-shadow:none] [transition:box-shadow_0.24s_ease-in-out]`
+      `content-empty absolute top-0 right-0 bottom-0 left-0 rounded-[50%] [box-shadow:none] [transition:box-shadow_0.24s_ease-in-out]`
   ],
 
   [

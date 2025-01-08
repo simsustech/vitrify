@@ -28,15 +28,38 @@ const cssRuleToUnocss = (selector, declarations) => {
             // .replaceAll('+ ', '+')
             // .replaceAll(' >', '>')
             // .replaceAll(' +', '+')
-            .replaceAll('__', '\\_\\_')
+            .replaceAll('__', '\\\\_\\\\_')
             .replaceAll('\n', '')
           )
       }
       return str
     })
     selector = split[0]
+
     subselector = `[&_${split.slice(1).join('_')}]:`
   }
+  if (selector.includes(':')) {
+    const selectorSplit = selector.split(':')
+    selector = selectorSplit[0]
+    subselector = subselector
+      ? subselector.replace('[&', `[&:${selectorSplit.slice(1).join(':')}`)
+      : `[&:${selectorSplit.slice(1).join(':')}]:`
+  }
+  if (selector.slice(1).includes('.')) {
+    const selectorSplit = selector.split('.')
+    selector = selectorSplit.slice(0, 2).join('.')
+    subselector = subselector
+      ? subselector.replace('[&', `[&.${selectorSplit.slice(2).join('.')}`)
+      : `[&.${selectorSplit.slice(2).join('.')}]:`
+  }
+  const typeMatch = selector.match(/(.*)\[type=(.*)\]/)
+  if (typeMatch) {
+    selector = typeMatch[1]
+    subselector = subselector
+      ? subselector.replace('[&', `[&[type=${typeMatch[2]}]`)
+      : `[&[type=${typeMatch[2]}]]:`
+  }
+  if (selector.includes('q-btn--dense')) console.log(selector)
 
   const cssCode = `
 ${selector} {
@@ -93,3 +116,17 @@ const unocssShortcuts = Object.entries(cssToUnoCssMap).map(
 )
 
 writeFileSync('./unocssshortcuts.js', unocssShortcuts.join('\n'))
+writeFileSync(
+  './unocssclasses.js',
+  Object.keys(cssToUnoCssMap)
+    .map((selector) => {
+      if (selector.at(0) === '.') selector = selector.slice(1)
+      else return ''
+      return `'${selector}'`
+    })
+    .filter((selector) => selector)
+    .join(',\n')
+)
+// console.log(
+//   Object.entries(cssToUnoCssMap).filter(([key, val]) => key.includes('field'))
+// )

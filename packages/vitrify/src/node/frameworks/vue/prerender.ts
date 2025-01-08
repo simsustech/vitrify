@@ -24,9 +24,9 @@ export const prerender = async ({
   const paths = routesToPaths(routes).filter(
     (i) => !i.includes(':') && !i.includes('*')
   )
-  const critters = new (await import('critters')).default({
+  const beasties = new (await import('beasties')).default({
     path: outDir,
-    logLevel: 'warn',
+    logLevel: 'info',
     external: true,
     inlineFonts: true,
     preloadFonts: true
@@ -59,7 +59,7 @@ export const prerender = async ({
       }
     }
 
-    html = await critters.process(html)
+    html = await beasties.process(html)
 
     promises.push(fs.writeFile(outDir + filename, html, 'utf-8'))
   }

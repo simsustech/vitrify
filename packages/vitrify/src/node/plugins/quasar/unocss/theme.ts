@@ -1,7 +1,7 @@
 import { type QuasarPresetOptions } from './index.js'
 
-const theme = (options: QuasarPresetOptions) => {
-  const shadowColor = options.theme?.shadowColor ?? '#000'
+const theme = (options?: QuasarPresetOptions) => {
+  const shadowColor = options?.theme?.shadowColor ?? '#000'
   const shadowTransition = 'box-shadow .28s cubic-bezier(.4, 0, .2, 1)'
   const insetShadow = `0 7px 9px -7px rgba(${shadowColor}, .7) inset`
   const insetShadowDown = `0 -7px 9px -7px rgba(${shadowColor}, .7) inset`
@@ -30,7 +30,7 @@ const theme = (options: QuasarPresetOptions) => {
       warning: '#F2C037',
 
       'dark-page': '#121212',
-      dark: '#1d1d1d',
+      'q-dark': '#1d1d1d',
 
       red: '#f44336',
       'red-1 ': '#ffebee',

@@ -150,20 +150,20 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-skeleton--anim-wave$/,
     ([, c], { theme }) => `relative overflow-hidden z-1
-    [&:after]:(content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] z-0 bg-[linear-gradient(_90deg,_rgba(255,_255,_255,_0),_rgba(255,_255,_255,_0.5),_rgba(255,_255,_255,_0)_)] animate-[q-skeleton--wave_var(--q-skeleton-speed)_linear_0.5s_infinite] z-0)
+    [&:after]:(content-empty absolute top-0 right-0 bottom-0 left-0 z-0 bg-[linear-gradient(_90deg,_rgba(255,_255,_255,_0),_rgba(255,_255,_255,_0.5),_rgba(255,_255,_255,_0)_)] animate-[q-skeleton--wave_var(--q-skeleton-speed)_linear_0.5s_infinite] z-0)
 `
   ],
 
   [
     /^q-skeleton--anim-blink$/,
     ([, c], { theme }) => `relative overflow-hidden z-1
-    [&:after]:(content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] z-0 bg-[rgba(255,_255,_255,_0.7)] animate-[q-skeleton--fade_var(--q-skeleton-speed)_linear_0.5s_infinite] z-0)`
+    [&:after]:(content-empty absolute top-0 right-0 bottom-0 left-0 z-0 bg-[rgba(255,_255,_255,_0.7)] animate-[q-skeleton--fade_var(--q-skeleton-speed)_linear_0.5s_infinite] z-0)`
   ],
 
   [
     /^q-skeleton--anim-pop$/,
     ([, c], { theme }) => `relative overflow-hidden z-1
-    [&:after]:(content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] z-0)`
+    [&:after]:(content-empty absolute top-0 right-0 bottom-0 left-0 z-0)`
   ],
 
   [

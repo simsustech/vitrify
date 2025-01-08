@@ -50,13 +50,13 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-radio__inner$/,
     ([, c], { theme }) =>
-      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-[0] rounded-[50%] text-[rgba(0,_0,_0,_0.54)]`
+      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-0 rounded-[50%] text-[rgba(0,_0,_0,_0.54)]`
   ],
 
   [
     /^q-radio__inner--truthy$/,
     ([, c], { theme }) =>
-      ` [&_.q-radio\_\_check]:([transform:scale3d(1,_1,_1)])`
+      ` [&_.q-radio\\_\\_check]:([transform:scale3d(1,_1,_1)]) text-primary`
   ],
 
   [/^q-radio.disabled$/, ([, c], { theme }) => `!opacity-75`],
@@ -64,18 +64,18 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-radio--dark$/,
     ([, c], { theme }) =>
-      `[&_.q-radio\_\_inner]:(text-[rgba(255,_255,_255,_0.7)]) [&_.q-radio\_\_inner:before]:(!opacity-[0.32]) [&_.q-radio\_\_inner--truthy]:()`
+      `[&_.q-radio\\_\\_inner]:(text-[rgba(255,_255,_255,_0.7)]) [&_.q-radio\\_\\_inner:before]:(!opacity-[0.32]) [&_.q-radio\\_\\_inner--truthy]:(text-primary)`
   ],
 
   [
     /^q-radio--dense$/,
     ([, c], { theme }) =>
-      `[&_.q-radio\_\_inner]:(w-[0.5em] min-w-[0.5em] h-[0.5em]) [&_.q-radio\_\_bg]:(left-[0] top-[0] w-full h-full) [&_.q-radio\_\_label]:(pl-[0.5em])`
+      `[&_.q-radio\\_\\_inner]:(w-[0.5em] min-w-[0.5em] h-[0.5em]) [&_.q-radio\\_\\_bg]:(left-0 top-0 w-full h-full) [&_.q-radio\\_\\_label]:(pl-[0.5em])`
   ],
 
   [
     /^q-radio--dense.reverse$/,
-    ([, c], { theme }) => `[&_.q-radio\_\_label]:(pl-0 pr-[0.5em])`
+    ([, c], { theme }) => `[&_.q-radio\\_\\_label]:(pl-0 pr-[0.5em])`
   ]
 ]
 

@@ -3,8 +3,7 @@ import type { QuasarTheme } from '../theme.js'
 
 const preflights: Preflight<QuasarTheme>[] = [
   {
-    getCSS: ({ theme }) => `   
-[dir=rtl] .q-breadcrumbs__separator .q-icon {
+    getCSS: ({ theme }) => `[dir=rtl] .q-breadcrumbs__separator .q-icon {
   transform: scaleX(-1) /* rtl:ignore */;
 };`
   }

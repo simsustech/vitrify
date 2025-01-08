@@ -3,7 +3,6 @@ import { createSSRApp, createApp as createVueApp, ref } from 'vue'
 import { onBoot } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
-// import 'quasar/src/css/index.sass'
 import 'virtual:uno.css'
 
 import RootComponent from './RootComponent.vue'

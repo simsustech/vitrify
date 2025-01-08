@@ -46,7 +46,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-toggle__thumb:after$/,
     ([, c], { theme }) =>
-      `content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] rounded-[50%] bg-[#fff] [box-shadow:0_3px_1px_-2px_rgba(0,_0,_0,_0.2),_0_2px_2px_0_rgba(0,_0,_0,_0.14),_0_1px_5px_0_rgba(0,_0,_0,_0.12)]`
+      `content-empty absolute top-0 right-0 bottom-0 left-0 rounded-[50%] bg-[#fff] [box-shadow:0_3px_1px_-2px_rgba(0,_0,_0,_0.2),_0_2px_2px_0_rgba(0,_0,_0,_0.14),_0_1px_5px_0_rgba(0,_0,_0,_0.12)]`
   ],
 
   [
@@ -57,13 +57,13 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-toggle__inner--indet$/,
-    ([, c], { theme }) => `[&_.q-toggle\_\_thumb]:(left-[0.45em])`
+    ([, c], { theme }) => `[&_.q-toggle\\_\\_thumb]:(left-[0.45em])`
   ],
 
   [
     /^q-toggle__inner--truthy$/,
     ([, c], { theme }) =>
-      ` [&_.q-toggle\_\_track]:(opacity-[0.54]) [&_.q-toggle\_\_thumb]:(left-[0.65em]) [&_.q-toggle\_\_thumb:after]:(bg-current) [&_.q-toggle\_\_thumb_.q-icon]:(text-[#fff] opacity-100)`
+      ` [&_.q-toggle\\_\\_track]:(opacity-[0.54]) [&_.q-toggle\\_\\_thumb]:(left-[0.65em]) [&_.q-toggle\\_\\_thumb:after]:(bg-current) [&_.q-toggle\\_\\_thumb_.q-icon]:(text-[#fff] opacity-100) text-primary`
   ],
 
   [/^q-toggle.disabled$/, ([, c], { theme }) => `!opacity-75`],
@@ -71,18 +71,18 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-toggle--dark$/,
     ([, c], { theme }) =>
-      `[&_.q-toggle\_\_inner]:(text-[#fff]) [&_.q-toggle\_\_inner--truthy]:() [&_.q-toggle\_\_thumb:after]:([box-shadow:none]) [&_.q-toggle\_\_thumb:before]:(!opacity-[0.32])`
+      `[&_.q-toggle\\_\\_inner]:(text-[#fff]) [&_.q-toggle\\_\\_inner--truthy]:(text-primary) [&_.q-toggle\\_\\_thumb:after]:([box-shadow:none]) [&_.q-toggle\\_\\_thumb:before]:(!opacity-[0.32])`
   ],
 
   [
     /^q-toggle--dense$/,
     ([, c], { theme }) =>
-      `[&_.q-toggle\_\_inner]:(w-[0.8em] min-w-[0.8em] h-[0.5em] px-[0] py-[0.07625em]) [&_.q-toggle\_\_thumb]:(top-[0] left-[0]) [&_.q-toggle\_\_inner--indet_.q-toggle\_\_thumb]:(left-[0.15em]) [&_.q-toggle\_\_inner--truthy_.q-toggle\_\_thumb]:(left-[0.3em]) [&_.q-toggle\_\_label]:(pl-[0.5em])`
+      `[&_.q-toggle\\_\\_inner]:(w-[0.8em] min-w-[0.8em] h-[0.5em] px-[0] py-[0.07625em]) [&_.q-toggle\\_\\_thumb]:(top-0 left-0) [&_.q-toggle\\_\\_inner--indet_.q-toggle\\_\\_thumb]:(left-[0.15em]) [&_.q-toggle\\_\\_inner--truthy_.q-toggle\\_\\_thumb]:(left-[0.3em]) [&_.q-toggle\\_\\_label]:(pl-[0.5em])`
   ],
 
   [
     /^q-toggle--dense.reverse$/,
-    ([, c], { theme }) => `[&_.q-toggle\_\_label]:(pl-0 pr-[0.5em])`
+    ([, c], { theme }) => `[&_.q-toggle\\_\\_label]:(pl-0 pr-[0.5em])`
   ]
 ]
 

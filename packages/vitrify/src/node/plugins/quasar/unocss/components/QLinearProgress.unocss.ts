@@ -31,6 +31,12 @@ const preflights: Preflight<QuasarTheme>[] = [
 ]
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
+  [
+    /^q-linear-progress$/,
+    ([, c], { theme }) =>
+      `relative w-full overflow-hidden text-[4px] h-[1em] [transform:scale3d(1,_1,_1)] text-primary`
+  ],
+
   [/^q-linear-progress__model$/, ([, c], { theme }) => `origin-[0_0]`],
 
   [
@@ -53,7 +59,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-linear-progress--reverse$/,
     ([, c], { theme }) =>
-      `[&_.q-linear-progress\_\_model]:(origin-[0_100%]) [&_.q-linear-progress\_\_track]:(origin-[0_100%])`
+      `[&_.q-linear-progress\\_\\_model]:(origin-[0_100%]) [&_.q-linear-progress\\_\\_track]:(origin-[0_100%])`
   ],
 
   [
@@ -63,36 +69,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-linear-progress__model--indeterminate$/,
-    ([, c], { theme }) => `transition-none`
+    ([, c], { theme }) =>
+      `transition-none [&:before]:(bg-current content-empty absolute top-0 right-0 bottom-0 left-0 origin-[0_0]) [&:after]:(bg-current content-empty absolute top-0 right-0 bottom-0 left-0 origin-[0_0]) [&:before]:(animate-[q-linear-progress--indeterminate_2.1s_cubic-bezier(0.65,_0.815,_0.735,_0.395)_infinite]) [&:after]:([transform:translate3d(-101%,_0,_0)_scale3d(1,_1,_1)] animate-[q-linear-progress--indeterminate-short_2.1s_cubic-bezier(0.165,_0.84,_0.44,_1)_infinite] [animation-delay:1.15s])`
   ],
 
   [
     /^q-linear-progress__model--query$/,
-    ([, c], { theme }) => `transition-none`
-  ],
-
-  [
-    /^q-linear-progress__model--indeterminate:before$/,
     ([, c], { theme }) =>
-      `bg-current content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] origin-[0_0] animate-[q-linear-progress--indeterminate_2.1s_cubic-bezier(0.65,_0.815,_0.735,_0.395)_infinite]`
-  ],
-
-  [
-    /^q-linear-progress__model--indeterminate:after$/,
-    ([, c], { theme }) =>
-      `bg-current content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] origin-[0_0] [transform:translate3d(-101%,_0,_0)_scale3d(1,_1,_1)] animate-[q-linear-progress--indeterminate-short_2.1s_cubic-bezier(0.165,_0.84,_0.44,_1)_infinite] [animation-delay:1.15s]`
-  ],
-
-  [
-    /^q-linear-progress__model--query:before$/,
-    ([, c], { theme }) =>
-      `bg-current content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] origin-[0_0] animate-[q-linear-progress--indeterminate_2.1s_cubic-bezier(0.65,_0.815,_0.735,_0.395)_infinite]`
-  ],
-
-  [
-    /^q-linear-progress__model--query:after$/,
-    ([, c], { theme }) =>
-      `bg-current content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] origin-[0_0] [transform:translate3d(-101%,_0,_0)_scale3d(1,_1,_1)] animate-[q-linear-progress--indeterminate-short_2.1s_cubic-bezier(0.165,_0.84,_0.44,_1)_infinite] [animation-delay:1.15s]`
+      `transition-none [&:before]:(bg-current content-empty absolute top-0 right-0 bottom-0 left-0 origin-[0_0]) [&:after]:(bg-current content-empty absolute top-0 right-0 bottom-0 left-0 origin-[0_0]) [&:before]:(animate-[q-linear-progress--indeterminate_2.1s_cubic-bezier(0.65,_0.815,_0.735,_0.395)_infinite]) [&:after]:([transform:translate3d(-101%,_0,_0)_scale3d(1,_1,_1)] animate-[q-linear-progress--indeterminate-short_2.1s_cubic-bezier(0.165,_0.84,_0.44,_1)_infinite] [animation-delay:1.15s])`
   ],
 
   [

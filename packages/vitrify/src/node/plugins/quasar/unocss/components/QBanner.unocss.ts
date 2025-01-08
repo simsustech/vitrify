@@ -10,7 +10,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) =>
       `min-w-1px! [&.q-avatar]:(text-46px) 
     [&.q-icon]:(text-40px) 
-    [&:not(:empty)+.q-banner\_\_content]:(pl-16px)`
+    [&:not(:empty)+.q-banner\\_\\_content]:(pl-16px)`
   ],
   [
     /^q-banner__actions$/,
@@ -23,9 +23,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-banner--dense$/,
     ([, c], { theme }) =>
       `min-h-32px p-8px
-          [&_.q-banner\_\_avatar>.q-avatar,.q-banner--dense_.q-banner\_\_avatar>.q-icon]:(text-28px)
-      [&_.q-banner\_\_avatar:not(:empty)+.q-banner\_\_content]:(pl-8px)
-      [&_.q-banner\_\_actions.col-auto]:(pl-8px)`
+          [&_.q-banner\\_\\_avatar>.q-avatar,.q-banner--dense_.q-banner\\_\\_avatar>.q-icon]:(text-28px)
+      [&_.q-banner\\_\\_avatar:not(:empty)+.q-banner\\_\\_content]:(pl-8px)
+      [&_.q-banner\\_\\_actions.col-auto]:(pl-8px)`
   ]
 ]
 

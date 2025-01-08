@@ -38,10 +38,6 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [/^all-pointer-events$/, ([, c], { theme }) => ``],
 
-  [/^cursor-pointer$/, ([, c], { theme }) => `!cursor-pointer`],
-
-  [/^cursor-not-allowed$/, ([, c], { theme }) => `!cursor-not-allowed`],
-
   [/^cursor-inherit$/, ([, c], { theme }) => `[cursor:inherit!important]`],
 
   [/^cursor-none$/, ([, c], { theme }) => ``]

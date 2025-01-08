@@ -1,13 +1,6 @@
 import type { Preflight, Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
-const preflights: Preflight<QuasarTheme>[] = [
-  {
-    getCSS: ({ theme }) => `
-`
-  }
-]
-
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^q-slide-item$/, ([, c], { theme }) => `relative bg-[white]`],
 
@@ -42,4 +35,4 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ]
 ]
 
-export { preflights, shortcuts }
+export { shortcuts }

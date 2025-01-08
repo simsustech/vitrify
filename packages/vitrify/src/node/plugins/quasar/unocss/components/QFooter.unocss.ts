@@ -12,7 +12,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-footer$/,
     ([, c], { theme }) =>
-      `[&_.q-layout\_\_shadow]:(-top-[10px]) [&_.q-layout\_\_shadow:after]:(top-[10px])  relative z-2000`
+      `[&_.q-layout\\_\\_shadow]:(-top-[10px]) [&_.q-layout\\_\\_shadow:after]:(top-[10px])  relative z-2000`
   ]
 ]
 

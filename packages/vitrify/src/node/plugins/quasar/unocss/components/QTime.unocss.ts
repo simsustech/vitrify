@@ -5,7 +5,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-time$/,
     ([, c], { theme }) =>
-      `[box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)] rounded-[4px] bg-[#fff] outline-[0] w-[290px] min-w-[290px] max-w-full`
+      `[box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)] rounded-[4px] bg-[#fff] outline-0 w-[290px] min-w-[290px] max-w-full`
   ],
 
   [
@@ -16,7 +16,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-time__header$/,
     ([, c], { theme }) =>
-      `[border-top-left-radius:inherit] text-[#fff] p-[16px] font-light`
+      `[border-top-left-radius:inherit] text-[#fff] p-[16px] font-light bg-primary`
   ],
 
   [/^q-time__actions$/, ([, c], { theme }) => `pt-[0] px-[16px] pb-[16px]`],
@@ -30,7 +30,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-time__link$/,
     ([, c], { theme }) =>
-      `opacity-[0.56] outline-[0] [transition:opacity_0.3s_ease-out]`
+      `opacity-[0.56] outline-0 [transition:opacity_0.3s_ease-out]`
   ],
 
   [/^q-time__link--active$/, ([, c], { theme }) => `opacity-100`],
@@ -48,7 +48,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-time__content:before$/,
-    ([, c], { theme }) => `content-[''] block pb-[100%]`
+    ([, c], { theme }) => `content-empty block pb-[100%]`
   ],
 
   [/^q-time__container-parent$/, ([, c], { theme }) => `p-[16px]`],
@@ -75,19 +75,19 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-time__clock-pointer$/,
     ([, c], { theme }) =>
-      `w-[2px] h-1/2 origin-[0_0] min-h-[0] absolute left-2/4 right-[0] bottom-[0] bg-current -translate-x-1/2`
+      `w-[2px] h-1/2 origin-[0_0] min-h-[0] absolute left-2/4 right-0 bottom-0 bg-current -translate-x-1/2 text-primary`
   ],
 
   [
     /^q-time__clock-pointer:before$/,
     ([, c], { theme }) =>
-      `content-[''] absolute left-2/4 rounded-[50%] bg-current -translate-x-1/2 -bottom-[4px] w-[8px] h-[8px]`
+      `content-empty absolute left-2/4 rounded-[50%] bg-current -translate-x-1/2 -bottom-[4px] w-[8px] h-[8px]`
   ],
 
   [
     /^q-time__clock-pointer:after$/,
     ([, c], { theme }) =>
-      `content-[''] absolute left-2/4 rounded-[50%] bg-current -translate-x-1/2 -top-[3px] h-[6px] w-[6px]`
+      `content-empty absolute left-2/4 rounded-[50%] bg-current -translate-x-1/2 -top-[3px] h-[6px] w-[6px]`
   ],
 
   [
@@ -98,7 +98,10 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [/^q-time__clock-position--disable$/, ([, c], { theme }) => `opacity-40`],
 
-  [/^q-time__clock-position--active$/, ([, c], { theme }) => `text-[#fff]`],
+  [
+    /^q-time__clock-position--active$/,
+    ([, c], { theme }) => `text-[#fff] bg-primary`
+  ],
 
   [/^q-time__clock-pos-0$/, ([, c], { theme }) => `top-[0%] left-2/4`],
 
@@ -150,36 +153,36 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-time__now-button$/,
-    ([, c], { theme }) => `text-[#fff] top-[12px] right-[12px]`
+    ([, c], { theme }) => `text-[#fff] top-[12px] right-[12px] bg-primary`
   ],
 
   [
     /^q-time.disabled$/,
     ([, c], { theme }) =>
-      `[&_.q-time\_\_header-ampm]:(pointer-events-none) [&_.q-time\_\_content]:(pointer-events-none)`
+      `[&_.q-time\\_\\_header-ampm]:(pointer-events-none) [&_.q-time\\_\\_content]:(pointer-events-none)`
   ],
 
   [
     /^q-time--readonly$/,
     ([, c], { theme }) =>
-      `[&_.q-time\_\_header-ampm]:(pointer-events-none) [&_.q-time\_\_content]:(pointer-events-none)`
+      `[&_.q-time\\_\\_header-ampm]:(pointer-events-none) [&_.q-time\\_\\_content]:(pointer-events-none)`
   ],
 
   [
     /^q-time--portrait$/,
     ([, c], { theme }) =>
-      `inline-flex flex-col [&_.q-time\_\_header]:([border-top-right-radius:inherit] min-h-[86px]) [&_.q-time\_\_header-ampm]:(ml-[12px])`
+      `inline-flex flex-col [&_.q-time\\_\\_header]:([border-top-right-radius:inherit] min-h-[86px]) [&_.q-time\\_\\_header-ampm]:(ml-[12px])`
   ],
 
   [
     /^q-time--portrait.q-time--bordered$/,
-    ([, c], { theme }) => `[&_.q-time\_\_content]:(mx-[0] my-px)`
+    ([, c], { theme }) => `[&_.q-time\\_\\_content]:(mx-[0] my-px)`
   ],
 
   [
     /^q-time--landscape$/,
     ([, c], { theme }) =>
-      `inline-flex items-stretch min-w-[420px] [&_>_div]:(flex flex-col justify-center) [&_.q-time\_\_header]:([border-bottom-left-radius:inherit] min-w-[156px]) [&_.q-time\_\_header-ampm]:(mt-[12px])`
+      `inline-flex items-stretch min-w-[420px] [&_>_div]:(flex flex-col justify-center) [&_.q-time\\_\\_header]:([border-bottom-left-radius:inherit] min-w-[156px]) [&_.q-time\\_\\_header-ampm]:(mt-[12px])`
   ],
 
   [

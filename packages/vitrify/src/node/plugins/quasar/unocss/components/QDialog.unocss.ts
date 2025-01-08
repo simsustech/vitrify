@@ -46,7 +46,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-dialog__inner$/,
     ([, c], { theme }) => `outline-0
       [&>div]:(pointer-events-auto overflow-auto border-rd-4px)
-      [&>.q-card>.q-card\_\_actions_.q-btn--rectangle]:(min-w-64px)
+      [&>.q-card>.q-card\\_\\_actions_.q-btn--rectangle]:(min-w-64px)
     `
   ],
   [
@@ -71,26 +71,26 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-dialog__inner--top$/,
     ([, c], { theme }) => `pt-0! pb-0!
-    [&:not(.q-dialog\_\_inner--animating)>div]:(rounded-tl-none rounded-tr-none)
+    [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-tl-none rounded-tr-none)
     
 `
   ],
   [
     /^q-dialog__inner--bottom$/,
     ([, c], { theme }) => `pt-0! pb-0!
-    [&:not(.q-dialog\_\_inner--animating)>div]:(rounded-bl-none rounded-br-none)
+    [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-bl-none rounded-br-none)
     `
   ],
   [
     /^q-dialog__inner--left$/,
     ([, c], { theme }) => `pt-0! pb-0!
-    [&:not(.q-dialog\_\_inner--animating)>div]:(rounded-tl-none rounded-bl-none)
+    [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-tl-none rounded-bl-none)
     `
   ],
   [
     /^q-dialog__inner--right$/,
     ([, c], { theme }) => `pt-0! pb-0!
-    [&:not(.q-dialog\_\_inner--animating)>div]:(rounded-tr-none rounded-br-none)
+    [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-tr-none rounded-br-none)
     `
   ],
   [

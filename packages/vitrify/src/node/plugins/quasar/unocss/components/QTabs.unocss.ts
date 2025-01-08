@@ -15,12 +15,12 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tab__content$/,
     ([, c], { theme }) =>
-      `[height:inherit] px-[0] py-[4px] min-w-[40px] [&_.q-chip--floating]:(top-[0] -right-[16px])`
+      `[height:inherit] px-[0] py-[4px] min-w-[40px] [&_.q-chip--floating]:(top-0 -right-[16px])`
   ],
 
   [
     /^q-tab__content--inline$/,
-    ([, c], { theme }) => `[&_.q-tab\_\_icon_+_.q-tab\_\_label]:(pl-[8px])`
+    ([, c], { theme }) => `[&_.q-tab\\_\\_icon_+_.q-tab\\_\\_label]:(pl-[8px])`
   ],
 
   [/^q-tab__icon$/, ([, c], { theme }) => `w-[24px] h-[24px] text-[24px]`],
@@ -45,7 +45,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-tab--active$/,
-    ([, c], { theme }) => `[&_.q-tab\_\_indicator]:(opacity-100 origin-left)`
+    ([, c], { theme }) => `[&_.q-tab\\_\\_indicator]:(opacity-100 origin-left)`
   ],
 
   [/^q-tab--inactive$/, ([, c], { theme }) => `opacity-[0.85]`],
@@ -69,12 +69,12 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tabs--scrollable.q-tabs__arrows--outside$/,
     ([, c], { theme }) =>
-      `[&_.q-tabs\_\_arrow--faded]:(opacity-30 pointer-events-none)`
+      `[&_.q-tabs\\_\\_arrow--faded]:(opacity-30 pointer-events-none)`
   ],
 
   [
     /^q-tabs--scrollable.q-tabs__arrows--inside$/,
-    ([, c], { theme }) => `[&_.q-tabs\_\_arrow--faded]:(hidden)`
+    ([, c], { theme }) => `[&_.q-tabs\\_\\_arrow--faded]:(hidden)`
   ],
 
   [
@@ -85,7 +85,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tabs--not-scrollable$/,
     ([, c], { theme }) =>
-      `[&_.q-tabs\_\_arrow]:(hidden) [&_.q-tabs\_\_content]:([border-radius:inherit])`
+      `[&_.q-tabs\\_\\_arrow]:(hidden) [&_.q-tabs\\_\\_content]:([border-radius:inherit])`
   ],
 
   [
@@ -110,23 +110,23 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tabs--horizontal$/,
     ([, c], { theme }) =>
-      `[&_.q-tabs\_\_arrow]:(h-full) [&_.q-tabs\_\_arrow--left]:(top-[0] left-[0] bottom-[0]) [&_.q-tabs\_\_arrow--right]:(top-[0] right-[0] bottom-[0])`
+      `[&_.q-tabs\\_\\_arrow]:(h-full) [&_.q-tabs\\_\\_arrow--left]:(top-0 left-0 bottom-0) [&_.q-tabs\\_\\_arrow--right]:(top-0 right-0 bottom-0)`
   ],
 
   [
     /^q-tabs--vertical$/,
     ([, c], { theme }) =>
-      `!block h-full [&_.q-tabs\_\_content]:(!block h-full) [&_.q-tabs\_\_arrow]:(w-full h-[36px] text-center) [&_.q-tabs\_\_arrow--left]:(top-[0] left-[0] right-[0]) [&_.q-tabs\_\_arrow--right]:(left-[0] right-[0] bottom-[0]) [&_.q-tab]:(px-[8px] py-[0]) [&_.q-tab\_\_indicator]:(h-[unset] w-[2px])`
+      `!block h-full [&_.q-tabs\\_\\_content]:(!block h-full) [&_.q-tabs\\_\\_arrow]:(w-full h-[36px] text-center) [&_.q-tabs\\_\\_arrow--left]:(top-0 left-0 right-0) [&_.q-tabs\\_\\_arrow--right]:(left-0 right-0 bottom-0) [&_.q-tab]:(px-[8px] py-[0]) [&_.q-tab\\_\\_indicator]:(h-[unset] w-[2px])`
   ],
 
   [
     /^q-tabs--vertical.q-tabs--not-scrollable$/,
-    ([, c], { theme }) => `[&_.q-tabs\_\_content]:(h-full)`
+    ([, c], { theme }) => `[&_.q-tabs\\_\\_content]:(h-full)`
   ],
 
   [
     /^q-tabs--vertical.q-tabs--dense$/,
-    ([, c], { theme }) => `[&_.q-tab\_\_content]:(min-w-[24px])`
+    ([, c], { theme }) => `[&_.q-tab\\_\\_content]:(min-w-[24px])`
   ],
 
   [

@@ -17,7 +17,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tree$/,
     ([, c], { theme }) =>
-      `relative text-[#9e9e9e] [&_>_.q-tree\_\_node]:(p-0) [&_>_.q-tree\_\_node:after]:(hidden) [&_>_.q-tree\_\_node_>_.q-tree\_\_node-header:before]:(hidden) [&_>_.q-tree\_\_node--child_>_.q-tree\_\_node-header]:(pl-[24px])`
+      `relative text-[#9e9e9e] [&_>_.q-tree\\_\\_node]:(p-0) [&_>_.q-tree\\_\\_node:after]:(hidden) [&_>_.q-tree\\_\\_node_>_.q-tree\\_\\_node-header:before]:(hidden) [&_>_.q-tree\\_\\_node--child_>_.q-tree\\_\\_node-header]:(pl-[24px])`
   ],
 
   [/^q-tree__node$/, ([, c], { theme }) => `pt-[0] pr-[0] pb-[3px] pl-[22px]`],
@@ -25,7 +25,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tree__node:after$/,
     ([, c], { theme }) =>
-      `content-[''] absolute -top-[3px] bottom-[0] w-[2px] right-auto -left-[13px] [border-left:1px_solid_currentColor]`
+      `content-empty absolute -top-[3px] bottom-0 w-[2px] right-auto -left-[13px] [border-left:1px_solid_currentColor]`
   ],
 
   [/^q-tree__node:last-child:after$/, ([, c], { theme }) => `hidden`],
@@ -33,13 +33,13 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tree__node--disabled$/,
     ([, c], { theme }) =>
-      `pointer-events-none [&_.disabled]:(!opacity-100) [&_>_div]:(!opacity-60) [&_>_i]:(!opacity-60) [&_>_.disabled]:(!opacity-60) [&_>_div_.q-tree\_\_node--disabled_>_div]:(!opacity-100) [&_>_div_.q-tree\_\_node--disabled_>_i]:(!opacity-100) [&_>_div_.q-tree\_\_node--disabled_>_.disabled]:(!opacity-100) [&_>_i_.q-tree\_\_node--disabled_>_div]:(!opacity-100) [&_>_i_.q-tree\_\_node--disabled_>_i]:(!opacity-100) [&_>_i_.q-tree\_\_node--disabled_>_.disabled]:(!opacity-100) [&_>_.disabled_.q-tree\_\_node--disabled_>_div]:(!opacity-100) [&_>_.disabled_.q-tree\_\_node--disabled_>_i]:(!opacity-100) [&_>_.disabled_.q-tree\_\_node--disabled_>_.disabled]:(!opacity-100)`
+      `pointer-events-none [&_.disabled]:(!opacity-100) [&_>_div]:(!opacity-60) [&_>_i]:(!opacity-60) [&_>_.disabled]:(!opacity-60) [&_>_div_.q-tree\\_\\_node--disabled_>_div]:(!opacity-100) [&_>_div_.q-tree\\_\\_node--disabled_>_i]:(!opacity-100) [&_>_div_.q-tree\\_\\_node--disabled_>_.disabled]:(!opacity-100) [&_>_i_.q-tree\\_\\_node--disabled_>_div]:(!opacity-100) [&_>_i_.q-tree\\_\\_node--disabled_>_i]:(!opacity-100) [&_>_i_.q-tree\\_\\_node--disabled_>_.disabled]:(!opacity-100) [&_>_.disabled_.q-tree\\_\\_node--disabled_>_div]:(!opacity-100) [&_>_.disabled_.q-tree\\_\\_node--disabled_>_i]:(!opacity-100) [&_>_.disabled_.q-tree\\_\\_node--disabled_>_.disabled]:(!opacity-100)`
   ],
 
   [
     /^q-tree__node-header:before$/,
     ([, c], { theme }) =>
-      `content-[''] absolute -top-[3px] bottom-2/4 w-[31px] -left-[35px] [border-left:1px_solid_currentColor] [border-bottom:1px_solid_currentColor]`
+      `content-empty absolute -top-[3px] bottom-2/4 w-[31px] -left-[35px] [border-left:1px_solid_currentColor] [border-bottom:1px_solid_currentColor]`
   ],
 
   [/^q-tree__children$/, ([, c], { theme }) => `pl-[25px]`],
@@ -52,14 +52,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-tree__node--parent$/,
     ([, c], { theme }) =>
-      `pl-[2px] [&_>_.q-tree\_\_node-header:before]:(w-[15px] -left-[15px]) [&_>_.q-tree\_\_node-collapsible_>_.q-tree\_\_node-body]:(pt-[5px] pr-[0] pb-[8px] pl-[27px]) [&_>_.q-tree\_\_node-collapsible_>_.q-tree\_\_node-body:after]:(content-[''] absolute top-[0] w-[2px] h-full right-auto left-[12px] [border-left:1px_solid_currentColor] bottom-[50px])`
+      `pl-[2px] [&_>_.q-tree\\_\\_node-header:before]:(w-[15px] -left-[15px]) [&_>_.q-tree\\_\\_node-collapsible_>_.q-tree\\_\\_node-body]:(pt-[5px] pr-[0] pb-[8px] pl-[27px]) [&_>_.q-tree\\_\\_node-collapsible_>_.q-tree\\_\\_node-body:after]:(content-empty absolute top-0 w-[2px] h-full right-auto left-[12px] [border-left:1px_solid_currentColor] bottom-[50px])`
   ],
 
   [/^q-tree__node--link$/, ([, c], { theme }) => `cursor-pointer`],
 
   [
     /^q-tree__node-header$/,
-    ([, c], { theme }) => `p-[4px] mt-[3px] rounded-[4px] outline-[0]`
+    ([, c], { theme }) => `p-[4px] mt-[3px] rounded-[4px] outline-0`
   ],
 
   [
@@ -70,7 +70,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-tree__node--selected$/,
-    ([, c], { theme }) => `[&_.q-tree\_\_node-header-content]:(text-[#9e9e9e])`
+    ([, c], { theme }) =>
+      `[&_.q-tree\\_\\_node-header-content]:(text-[#9e9e9e])`
   ],
 
   [/^q-tree__icon$/, ([, c], { theme }) => `text-[21px]`],
@@ -98,25 +99,25 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-tree--dark$/,
-    ([, c], { theme }) => `[&_.q-tree\_\_node-header-content]:(text-[#fff])`
+    ([, c], { theme }) => `[&_.q-tree\\_\\_node-header-content]:(text-[#fff])`
   ],
 
   [
     /^q-tree--no-connectors$/,
     ([, c], { theme }) =>
-      `[&_.q-tree\_\_node:after]:(!hidden) [&_.q-tree\_\_node-header:before]:(!hidden) [&_.q-tree\_\_node-body:after]:(!hidden)`
+      `[&_.q-tree\\_\\_node:after]:(!hidden) [&_.q-tree\\_\\_node-header:before]:(!hidden) [&_.q-tree\\_\\_node-body:after]:(!hidden)`
   ],
 
   [
     /^q-tree--dense$/,
     ([, c], { theme }) =>
-      `[&_>_.q-tree\_\_node--child_>_.q-tree\_\_node-header]:(pl-px) [&_.q-tree\_\_arrow]:(mr-px) [&_.q-tree\_\_spinner]:(mr-px) [&_.q-tree\_\_img]:(h-[32px]) [&_.q-tree\_\_tickbox]:(mr-[3px]) [&_.q-tree\_\_node]:(p-0) [&_.q-tree\_\_node:after]:(top-[0] -left-[8px]) [&_.q-tree\_\_node-header]:(mt-0 p-px) [&_.q-tree\_\_node-header:before]:(top-[0] -left-[8px] w-[8px]) [&_.q-tree\_\_node--child]:(pl-[17px]) [&_.q-tree\_\_node--child_>_.q-tree\_\_node-header:before]:(-left-[25px] w-[21px]) [&_.q-tree\_\_node-body]:(pt-[0] px-[0] pb-[2px]) [&_.q-tree\_\_children]:(pl-[16px])`
+      `[&_>_.q-tree\\_\\_node--child_>_.q-tree\\_\\_node-header]:(pl-px) [&_.q-tree\\_\\_arrow]:(mr-px) [&_.q-tree\\_\\_spinner]:(mr-px) [&_.q-tree\\_\\_img]:(h-[32px]) [&_.q-tree\\_\\_tickbox]:(mr-[3px]) [&_.q-tree\\_\\_node]:(p-0) [&_.q-tree\\_\\_node:after]:(top-0 -left-[8px]) [&_.q-tree\\_\\_node-header]:(mt-0 p-px) [&_.q-tree\\_\\_node-header:before]:(top-0 -left-[8px] w-[8px]) [&_.q-tree\\_\\_node--child]:(pl-[17px]) [&_.q-tree\\_\\_node--child_>_.q-tree\\_\\_node-header:before]:(-left-[25px] w-[21px]) [&_.q-tree\\_\\_node-body]:(pt-[0] px-[0] pb-[2px]) [&_.q-tree\\_\\_children]:(pl-[16px])`
   ],
 
   [
     /^q-tree--dense$/,
     ([, c], { theme }) =>
-      `[&__.q-tree\_\_node--parent__>_.q-tree\_\_node-collapsible__>_.q-tree\_\_node-body]:(pt-[0] pr-[0] pb-[2px] pl-[20px]) [&__.q-tree\_\_node--parent__>_.q-tree\_\_node-collapsible__>_.q-tree\_\_node-body:after]:(left-[8px])`
+      `[&__.q-tree\\_\\_node--parent__>_.q-tree\\_\\_node-collapsible__>_.q-tree\\_\\_node-body]:(pt-[0] pr-[0] pb-[2px] pl-[20px]) [&__.q-tree\\_\\_node--parent__>_.q-tree\\_\\_node-collapsible__>_.q-tree\\_\\_node-body:after]:(left-[8px])`
   ]
 ]
 

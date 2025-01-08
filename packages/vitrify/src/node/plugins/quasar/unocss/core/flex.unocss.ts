@@ -2,7 +2,7 @@ import type { Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
 const cols = 12
-const grid = Array.from({ length: cols + 1 }, (_, i) => i + 0)
+const grid = Array.from({ length: cols }, (_, i) => i + 1)
 
 const colGutter = {
   none: 0,
@@ -13,17 +13,41 @@ const colGutter = {
   xl: 12
 } as const
 
+const sizes = ['sm', 'md', 'lg', 'xl']
+
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^row$/,
-    ([, c], { theme }) => `grid grid-flow-row grid-cols-12
-    ${grid.map((nr) => `[&_>_col-${nr}]:(col-span-${nr})`).join(' ')}
+    ([, c], { theme }) => `flex flex-row flex-wrap
+    [&_>_.col]:(grow)
+    ${sizes
+      .map((size) => `[&_>_.col-${size}]:(${size}:basis-auto ${size}:grow)`)
+      .join(' ')}
+    ${grid.map((nr) => `[&_>_.col-${nr}]:(basis-${nr}/12)`).join(' ')}
+    ${sizes
+      .map((size) =>
+        grid
+          .map((nr) => `[&_>_.col-${size}-${nr}]:(${size}:basis-${nr}/12)`)
+          .join(' ')
+      )
+      .join(' ')}
   `
   ],
   [
     /^column$/,
-    ([, c], { theme }) => `grid grid-flow-col grid-rows-12
-      ${grid.map((nr) => `[&_>_col-${nr}]:(row-span-${nr})`).join(' ')}
+    ([, c], { theme }) => `flex flex-col flex-wrap
+      [&_>_.col]:(grow)
+      ${sizes
+        .map((size) => `[&_>_.col-${size}]:(${size}:basis-auto ${size}:grow)`)
+        .join(' ')}
+      ${grid.map((nr) => `[&_>_.col-${nr}]:(basis-${nr}/12)`).join(' ')}
+    ${sizes
+      .map((size) =>
+        grid
+          .map((nr) => `[&_>_.col-${size}-${nr}]:(${size}:basis-${nr}/12)`)
+          .join(' ')
+      )
+      .join(' ')}
   `
   ],
   [
@@ -66,7 +90,10 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
       [&_>_*]:(mt-${
         colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
       })`
-  ]
+  ],
+  [/^wrap$/, ([, size], { theme }) => `flex-wrap`],
+  [/^no-wrap$/, ([, size], { theme }) => `flex-nowrap`],
+  [/^reverse-wrap$/, ([, size], { theme }) => `flex-wrap-reverse`]
 ]
 
 export { shortcuts }

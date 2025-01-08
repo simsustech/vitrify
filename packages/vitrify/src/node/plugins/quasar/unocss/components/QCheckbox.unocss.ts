@@ -28,63 +28,62 @@ body.desktop .q-checkbox--dense:not(.disabled):focus .q-checkbox__inner:before, 
 ]
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  [
-    /^q-checkbox$/,
-    ([, c], { theme }) => `v-middle
-      [&.disabled]:(op-75!)`
-  ],
-  [/^q-checkbox__native$/, ([, c], { theme }) => `w-1px h-1px`],
+  [/^q-checkbox$/, ([, c], { theme }) => `align-middle`],
+
+  [/^q-checkbox__native$/, ([, c], { theme }) => `w-px h-px`],
+
   [
     /^q-checkbox__bg$/,
     ([, c], { theme }) =>
-      `select-none top-1/4 w-1/2 h-1/2 border-solid border-current border-rd-2px transition-all-220 transition-all transition-duration-220`
+      `select-none top-1/4 left-1/4 w-1/2 h-1/2 border-[2px] border-solid border-[currentColor] rounded-[2px] [transition:background_0.22s_cubic-bezier(0,_0,_0.2,_1)_0ms]`
   ],
-  [/^q-checkbox__icon_container$/, ([, c], { theme }) => `select-none`],
-  [/^q-checkbox__icon$/, ([, c], { theme }) => `text-current text-0.5em`],
-  [/^q-checkbox__svg$/, ([, c], { theme }) => `text-white`],
+
+  [/^q-checkbox__icon-container$/, ([, c], { theme }) => `select-none`],
+
+  [/^q-checkbox__icon$/, ([, c], { theme }) => `text-current text-[0.5em]`],
+
+  [/^q-checkbox__svg$/, ([, c], { theme }) => `text-[#fff]`],
+
   [
     /^q-checkbox__truthy$/,
-    ([, c], { theme }) =>
-      `stroke-current stroke-3.12px stroke-29.78334 stroke-29.78334`
+    ([, c], { theme }) => `stroke-current stroke-[3.12px]`
   ],
+
   [
     /^q-checkbox__indet$/,
-    ([, c], { theme }) => `fill-current origin-[50%_50%] rotate--280 scale-0`
+    ([, c], { theme }) =>
+      `fill-current origin-[50%_50%] -rotate-[280deg] scale-0`
   ],
+
   [
     /^q-checkbox__inner$/,
     ([, c], { theme }) =>
-      `text-40px w-1em min-w-1em h-1em outline-0 border-rd-50% text-black text-op-540`
+      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-0 rounded-[50%] text-[rgba(0,_0,_0,_0.54)]`
   ],
+
   [
     /^q-checkbox__inner--truthy$/,
-    ([, c], { theme }) => `[&_.q-checkbox\_\_bg]:(text-primary)
-      [&_.q-checkbox\_\_inner--indet_.q-checkbox\_\_bg]:(text-primary)
-      [&_.q-checkbox\_\_bg]:(bg-gurrent)
-      [&_.q-checkbox\_\_inner--indet_.q-checkbox\_\_bg]:(bg-current)
-      [&_path]:(stroke-0 transition-[stroke-dashoffset]-180)
-
-      `
+    ([, c], { theme }) =>
+      `text-primary [&_.q-checkbox\\_\\_bg]:(bg-current) [&_path]:([transition:stroke-dashoffset_0.18s_cubic-bezier(0.4,_0,_0.6,_1)_0ms])`
   ],
+
   [
     /^q-checkbox__inner--indet$/,
-    ([, c], { theme }) => `
-    [&_q-checkbox\_\_indet]:(scale-100 rot-0 transition-[transform]-220)`
+    ([, c], { theme }) =>
+      `text-primary [&_.q-checkbox\\_\\_bg]:(bg-current) [&_.q-checkbox\\_\\_indet]:(rotate-[0] scale-100 [transition:transform_0.22s_cubic-bezier(0,_0,_0.2,_1)_0ms])`
   ],
+
   [
     /^q-checkbox--dark$/,
-    ([, c], { theme }) => `[&._q-checkbox--iner]:(text-white text-op-70)
-      [&_.q-checkbox\_\_inner--truthy]:(text-primary)
-      [&_.q-checkbox--dark_.q-checkbox\_\_inner--indet]:(text-primary)`
+    ([, c], { theme }) =>
+      `[&_.q-checkbox\\_\\_inner]:(text-[rgba(255,_255,_255,_0.7)]) [&_.q-checkbox\\_\\_inner:before]:(!opacity-[0.32]) [&_.q-checkbox\\_\\_inner--truthy]:(text-primary) [&_.q-checkbox\\_\\_inner--indet]:(text-primary)`
   ],
+
   [
     /^q-checkbox--dense$/,
-    ([, c], { theme }) => `[&_.q-checkbox__inner]:(w-0.5em min-w-0.5em h-0.5em)
-      [&_.q-checkbox__label]:(pl-0.5em)
-      [&.reverse .q-checkbox__label]:(pl-0 pr-0.5em)
-      `
-  ],
-  [/^q-checkbox__inner--truthy$/, ([, c], { theme }) => ``]
+    ([, c], { theme }) =>
+      `[&_.q-checkbox\\_\\_inner]:(w-[0.5em] min-w-[0.5em] h-[0.5em]) [&_.q-checkbox\\_\\_bg]:(left-[5%] top-[5%] w-[90%] h-[90%]) [&_.q-checkbox\\_\\_label]:(pl-[0.5em])`
+  ]
 ]
 
 export { preflights, shortcuts }

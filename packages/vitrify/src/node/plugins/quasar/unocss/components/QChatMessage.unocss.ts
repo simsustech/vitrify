@@ -2,31 +2,57 @@ import type { Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
+  [/^q-message-name$/, ([, c], { theme }) => `text-[small]`],
+
+  [
+    /^q-message-label$/,
+    ([, c], { theme }) => `mx-[0] my-[24px] text-center text-[small]`
+  ],
+
+  [
+    /^q-message-stamp$/,
+    ([, c], { theme }) =>
+      `[color:inherit] mt-[4px] opacity-60 hidden text-[small]`
+  ],
+
+  [
+    /^q-message-avatar$/,
+    ([, c], { theme }) => `rounded-[50%] w-[48px] h-[48px] min-w-[48px]`
+  ],
+
   [
     /^q-message$/,
-    ([, c], { theme }) => `mb-8px
-    [&:first-child_.q-message-label]:(mt-0)`
+    ([, c], { theme }) => `mb-[8px] [&:first-child_.q-message-label]:(mt-0)`
   ],
-  [/^q-message-avatar--received$/, ([, c], { theme }) => `mr-8px`],
+
+  [/^q-message-avatar--received$/, ([, c], { theme }) => `mr-[8px]`],
+
   [
     /^q-message-text--received$/,
-    ([, c], { theme }) => `text-green border-rd-4px
-    [&:last-child:before]:(right-full border-r-0 solid transparent border-l-8px solid transparent border-b-8px solid currentColor)`
+    ([, c], { theme }) =>
+      `text-[#81c784] rounded-tl-[4px] rounded-br-[4px] rounded-tr-[4px] rounded-bl-[0] [&:last-child:before]:(right-full [border-right:0_solid_transparent] [border-left:8px_solid_transparent] [border-bottom:8px_solid_currentColor])`
   ],
-  [/^q-message-text-content--received$/, ([, c], { theme }) => `text-white`],
+
+  [/^q-message-text-content--received$/, ([, c], { theme }) => `text-[#000]`],
+
   [/^q-message-name--sent$/, ([, c], { theme }) => `text-right`],
-  [/^q-message-avatar--sent$/, ([, c], { theme }) => `ml-8px`],
+
+  [/^q-message-avatar--sent$/, ([, c], { theme }) => `ml-[8px]`],
+
   [/^q-message-container--sent$/, ([, c], { theme }) => `flex-row-reverse`],
-  [/^q-message-text--sent$/, ([, c], { theme }) => `text-gray-2 border-rd-4px`],
-  [/^q-message-text-content--sent$/, ([, c], { theme }) => `text-white`],
+
+  [
+    /^q-message-text--sent$/,
+    ([, c], { theme }) =>
+      `text-[#e0e0e0] rounded-tl-[4px] rounded-br-[0] rounded-tr-[4px] rounded-bl-[4px] [&:last-child:before]:(left-full [border-left:0_solid_transparent] [border-right:8px_solid_transparent] [border-bottom:8px_solid_currentColor])`
+  ],
+
+  [/^q-message-text-content--sent$/, ([, c], { theme }) => `text-[#000]`],
+
   [
     /^q-message-text$/,
-    ([, c], { theme }) => `bg-current p-8px lh-1.2 break-words relative
-    [&+.q-message-text]:(mt-3px)
-    [&:last-child]:(min-h-48px)
-    [&:last-child_.q-message-stamp]:(block)
-    [&:last-child:before]:(absolute bottom-0 w-0 h-0)
-    `
+    ([, c], { theme }) =>
+      `bg-current p-[8px] leading-[1.2] relative [&_+_.q-message-text]:(mt-[3px]) [&:last-child]:(min-h-[48px]) [&:last-child_.q-message-stamp]:(block) [&:last-child:before]:(content-empty absolute bottom-0 w-[0] h-[0])`
   ]
 ]
 

@@ -11,7 +11,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-video--responsive$/,
     ([, c], { theme }) =>
-      `h-[0] [&_iframe]:(absolute top-[0] left-[0]) [&_object]:(absolute top-[0] left-[0]) [&_embed]:(absolute top-[0] left-[0])`
+      `h-[0] [&_iframe]:(absolute top-0 left-0) [&_object]:(absolute top-0 left-0) [&_embed]:(absolute top-0 left-0)`
   ]
 ]
 

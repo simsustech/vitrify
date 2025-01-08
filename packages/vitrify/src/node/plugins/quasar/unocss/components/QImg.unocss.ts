@@ -36,7 +36,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-img--no-menu$/,
     ([, c], { theme }) =>
-      `[&_.q-img\_\_image]:(pointer-events-none) [&_.q-img\_\_placeholder]:(pointer-events-none)`
+      `[&_.q-img\\_\\_image]:(pointer-events-none) [&_.q-img\\_\\_placeholder]:(pointer-events-none)`
   ]
 ]
 

@@ -122,6 +122,9 @@ importers:
       '@unocss/preset-uno':
         specifier: ^0.65.3
         version: 0.65.3
+      '@unocss/preset-wind':
+        specifier: ^0.65.3
+        version: 0.65.3
       '@vitejs/plugin-vue':
         specifier: ^5.2.1
         version: 5.2.1(vite@6.0.3(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.28.2)(sass@1.83.0)(terser@5.31.0)(tsx@4.19.2)(yaml@2.4.3))(vue@3.5.13(typescript@5.7.2))
@@ -219,6 +222,9 @@ importers:
       '@vue/runtime-core':
         specifier: ^3.5.13
         version: 3.5.13
+      beasties:
+        specifier: ^0.2.0
+        version: 0.2.0
       css:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2327,6 +2333,10 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
+  beasties@0.2.0:
+    resolution: {integrity: sha512-Ljqskqx/tbZagIglYoJIMzH5zgssyp+in9+9sAyh15N22AornBeIDnb8EZ6Rk+6ShfMxd92uO3gfpT0NtZbpow==}
+    engines: {node: '>=14.0.0'}
+
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
@@ -3324,6 +3334,9 @@ packages:
 
   htmlparser2@8.0.2:
     resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
+
+  htmlparser2@9.1.0:
+    resolution: {integrity: sha512-5zfg6mHUoaer/97TxnGpxmbR7zJtPwIYFMZ/H5ucTlPZhKvtum05yiPK3Mgai3a0DyVxv7qYqoweaEd2nrYQzQ==}
 
   http-errors@2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
@@ -7407,7 +7420,7 @@ snapshots:
 
   '@unocss/rule-utils@0.65.2':
     dependencies:
-      '@unocss/core': 0.65.2
+      '@unocss/core': 0.65.3
       magic-string: 0.30.17
 
   '@unocss/rule-utils@0.65.3':
@@ -7753,6 +7766,17 @@ snapshots:
   balanced-match@1.0.2: {}
 
   base64-js@1.5.1: {}
+
+  beasties@0.2.0:
+    dependencies:
+      css-select: 5.1.0
+      css-what: 6.1.0
+      dom-serializer: 2.0.0
+      domhandler: 5.0.3
+      htmlparser2: 9.1.0
+      picocolors: 1.1.1
+      postcss: 8.4.49
+      postcss-media-query-parser: 0.2.3
 
   better-path-resolve@1.0.0:
     dependencies:
@@ -8936,6 +8960,13 @@ snapshots:
   html-tags@3.3.1: {}
 
   htmlparser2@8.0.2:
+    dependencies:
+      domelementtype: 2.3.0
+      domhandler: 5.0.3
+      domutils: 3.1.0
+      entities: 4.5.0
+
+  htmlparser2@9.1.0:
     dependencies:
       domelementtype: 2.3.0
       domhandler: 5.0.3
