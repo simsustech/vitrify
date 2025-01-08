@@ -7,6 +7,12 @@ export default async function ({ mode, command }): Promise<VitrifyConfig> {
       hooks: {
         onSetup: [new URL('src/setup.ts', import.meta.url)]
       },
+      /*
+       * Experimental
+       */
+      // unocss: {
+      //   presets: [QuasarPreset()]
+      // },
       sass: {
         variables: {
           $primary: '#000000'
@@ -25,6 +31,10 @@ export default async function ({ mode, command }): Promise<VitrifyConfig> {
         iconSet: 'svg-material-icons',
         plugins: ['Dialog', 'Notify']
       }
+      /*
+       * Disable SASS if you use UnoCSS
+       */
+      // disableSass: true
     }
   }
   if (mode === 'development') {
