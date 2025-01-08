@@ -1,5 +1,6 @@
 import type { VitrifyConfig } from 'vitrify'
 import { certificateFor } from 'devcert'
+import { QuasarPreset } from 'vitrify'
 
 export default async function ({ mode, command }): Promise<VitrifyConfig> {
   const config: VitrifyConfig = {
