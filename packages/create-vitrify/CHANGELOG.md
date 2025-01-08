@@ -1,5 +1,12 @@
 # create-vitrify
 
+## 0.6.1
+
+### Patch Changes
+
+- c8514bc: fix(create-vitrify): add @unocss/reset and animated-unocss packages to quasar templae
+- b8f3457: fix(create-vitrify): add QuasarPreset import to quasar template vitrify.config.ts
+
 ## 0.6.0
 
 ### Minor Changes
