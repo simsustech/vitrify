@@ -69,6 +69,8 @@ export const templates: Templates = {
         '@vue/runtime-dom',
         '@vue/server-renderer',
         '@vue/shared',
+        '@unocss/reset',
+        'animated-unocss',
         'beasties',
         'eslint',
         'eslint-config-prettier',
