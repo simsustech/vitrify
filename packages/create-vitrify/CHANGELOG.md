@@ -1,5 +1,17 @@
 # create-vitrify
 
+## 0.6.0
+
+### Minor Changes
+
+- feat: add unocss to vitrify
+- 4385453: feat(create-vitrify): update create-vitrify Quasar project template
+
+### Patch Changes
+
+- Updated dependencies
+  - @vitrify/tools@0.3.0
+
 ## 0.5.3
 
 ### Patch Changes

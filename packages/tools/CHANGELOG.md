@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: add unocss to vitrify
+
 ## 0.2.4
 
 ### Patch Changes

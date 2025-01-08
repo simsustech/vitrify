@@ -1,5 +1,16 @@
 # vitrify
 
+## 0.17.0
+
+### Minor Changes
+
+- feat: add unocss to vitrify
+
+### Patch Changes
+
+- 79eea04: fix(vitrify): replace critters with beasties
+- 479236c: fix(vitrify): add logLevel to fastify server
+
 ## 0.16.4
 
 ### Patch Changes
