@@ -7,6 +7,7 @@ import type {
 } from '../vitrify-config.js'
 import type { VitrifyPlugin } from './index.js'
 import { findDepPkgJsonPath } from 'vitefu'
+
 export interface QuasarConf {
   ctx?: Record<string, any>
   css?: string[]
@@ -20,6 +21,7 @@ export interface QuasarConf {
   }
   // animations: string[]
   extras?: string[]
+  disableSass?: boolean
 }
 
 export const injectSsrContext = (
@@ -108,6 +110,7 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         const globalCss = quasar?.extras?.map(
           (extra) => `@quasar/extras/${extra}/${extra}.css`
         )
+        // globalCss?.push('@unocss/reset/normalize.css')
 
         const localPackages = ['@quasar/extras', 'quasar']
         // const localPackages: string[] = []
@@ -187,10 +190,116 @@ export const QuasarPlugin: VitrifyPlugin = async ({
               onMounted: onMountedHooks,
               onRendered: [injectSsrContext]
             },
-            sass: {
-              global: ['quasar/src/css/index.sass']
-              // additionalData: [`@import 'quasar/src/css/index.sass'`]
-            }
+            sass: quasarConf.disableSass
+              ? undefined
+              : {
+                  global: ['quasar/src/css/index.sass']
+                  // global: [
+                  //   'quasar/src/css/helpers/string.sass',
+                  //   'quasar/src/css/helpers/math.sass',
+
+                  //   'quasar/src/css/variables.sass',
+                  //   'quasar/src/css/normalize.sass',
+
+                  //   // 'quasar/src/components/icon/QIcon.sass',
+
+                  //   // /* Composables */
+                  //   // 'quasar/src/composables/private.use-panel/use-panel.sass',
+
+                  //   // /* Components */
+                  //   // 'quasar/src/components/ajax-bar/QAjaxBar.sass',
+                  //   // 'quasar/src/components/avatar/QAvatar.sass',
+                  //   // 'quasar/src/components/badge/QBadge.sass',
+                  //   // 'quasar/src/components/banner/QBanner.sass',
+                  //   // 'quasar/src/components/bar/QBar.sass',
+                  //   // 'quasar/src/components/breadcrumbs/QBreadcrumbs.sass',
+                  //   // 'quasar/src/components/btn/QBtn.sass',
+                  //   // 'quasar/src/components/btn-dropdown/QBtnDropdown.sass',
+                  //   // 'quasar/src/components/btn-group/QBtnGroup.sass',
+                  //   // 'quasar/src/components/btn-toggle/QBtnToggle.sass',
+                  //   // 'quasar/src/components/card/QCard.sass',
+                  //   // 'quasar/src/components/carousel/QCarousel.sass',
+                  //   // 'quasar/src/components/chat/QChatMessage.sass',
+                  //   // 'quasar/src/components/checkbox/QCheckbox.sass',
+                  //   // 'quasar/src/components/chip/QChip.sass',
+                  //   // 'quasar/src/components/circular-progress/QCircularProgress.sass',
+                  //   // 'quasar/src/components/color/QColor.sass',
+                  //   // 'quasar/src/components/date/QDate.sass',
+                  //   // 'quasar/src/components/dialog/QDialog.sass',
+                  //   // 'quasar/src/components/editor/QEditor.sass',
+                  //   // 'quasar/src/components/expansion-item/QExpansionItem.sass',
+                  //   // 'quasar/src/components/fab/QFab.sass',
+                  //   // 'quasar/src/components/field/QField.sass',
+                  //   'quasar/src/components/file/QFile.sass',
+                  //   'quasar/src/components/form/QForm.sass',
+                  //   'quasar/src/components/img/QImg.sass',
+                  //   'quasar/src/components/inner-loading/QInnerLoading.sass',
+                  //   'quasar/src/components/input/QInput.sass',
+                  //   'quasar/src/components/intersection/QIntersection.sass',
+                  //   'quasar/src/components/item/QItem.sass',
+                  //   'quasar/src/components/knob/QKnob.sass',
+                  //   'quasar/src/components/layout/QLayout.sass',
+                  //   'quasar/src/components/linear-progress/QLinearProgress.sass',
+                  //   'quasar/src/components/menu/QMenu.sass',
+                  //   'quasar/src/components/option-group/QOptionGroup.sass',
+                  //   'quasar/src/components/pagination/QPagination.sass',
+                  //   'quasar/src/components/parallax/QParallax.sass',
+                  //   'quasar/src/components/popup-edit/QPopupEdit.sass',
+                  //   'quasar/src/components/pull-to-refresh/QPullToRefresh.sass',
+                  //   'quasar/src/components/radio/QRadio.sass',
+                  //   'quasar/src/components/rating/QRating.sass',
+                  //   'quasar/src/components/responsive/QResponsive.sass',
+                  //   'quasar/src/components/scroll-area/QScrollArea.sass',
+                  //   'quasar/src/components/select/QSelect.sass',
+                  //   'quasar/src/components/separator/QSeparator.sass',
+                  //   'quasar/src/components/skeleton/QSkeleton.sass',
+                  //   'quasar/src/components/slide-item/QSlideItem.sass',
+                  //   'quasar/src/components/slider/QSlider.sass',
+                  //   'quasar/src/components/space/QSpace.sass',
+                  //   'quasar/src/components/spinner/QSpinner.sass',
+                  //   'quasar/src/components/splitter/QSplitter.sass',
+                  //   'quasar/src/components/stepper/QStepper.sass',
+                  //   'quasar/src/components/tab-panels/QTabPanel.sass',
+                  //   'quasar/src/components/table/QTable.sass',
+                  //   'quasar/src/components/tabs/QTabs.sass',
+                  //   'quasar/src/components/time/QTime.sass',
+                  //   'quasar/src/components/timeline/QTimeline.sass',
+                  //   'quasar/src/components/toggle/QToggle.sass',
+                  //   'quasar/src/components/toolbar/QToolbar.sass',
+                  //   'quasar/src/components/tooltip/QTooltip.sass',
+                  //   'quasar/src/components/tree/QTree.sass',
+                  //   'quasar/src/components/uploader/QUploader.sass',
+                  //   'quasar/src/components/video/QVideo.sass',
+                  //   'quasar/src/components/virtual-scroll/QVirtualScroll.sass',
+
+                  //   /* Directives */
+                  //   'quasar/src/directives/ripple/Ripple.sass',
+                  //   'quasar/src/directives/morph/Morph.sass',
+
+                  //   /* Plugins */
+                  //   'quasar/src/plugins/bottom-sheet/component/BottomSheetComponent.sass',
+                  //   'quasar/src/plugins/dialog/component/DialogPluginComponent.sass',
+                  //   'quasar/src/plugins/loading/Loading.sass',
+                  //   'quasar/src/plugins/notify/Notify.sass',
+
+                  //   /* Core */
+                  //   'quasar/src/css/core/animations.sass',
+                  //   'quasar/src/css/core/colors.sass',
+                  //   'quasar/src/css/core/elevation.sass',
+                  //   'quasar/src/css/core/flex.sass',
+                  //   'quasar/src/css/core/helpers.sass',
+                  //   'quasar/src/css/core/mouse.sass',
+                  //   'quasar/src/css/core/orientation.sass',
+                  //   'quasar/src/css/core/positioning.sass',
+                  //   'quasar/src/css/core/size.sass',
+                  //   'quasar/src/css/core/touch.sass',
+                  //   'quasar/src/css/core/transitions.sass',
+                  //   'quasar/src/css/core/typography.sass',
+                  //   'quasar/src/css/core/visibility.sass',
+                  //   'quasar/src/css/core/dark.sass'
+                  // ]
+                  // additionalData: [`@import 'quasar/src/css/index.sass'`]
+                }
           },
           resolve: {
             alias: [

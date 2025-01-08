@@ -26,7 +26,7 @@ export const prerender = async ({
   )
   const beasties = new (await import('beasties')).default({
     path: outDir,
-    logLevel: 'warn',
+    logLevel: 'info',
     external: true,
     inlineFonts: true,
     preloadFonts: true

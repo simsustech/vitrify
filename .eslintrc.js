@@ -53,5 +53,9 @@ module.exports = defineConfig({
         '@typescript-eslint/triple-slash-reference': 'off'
       }
     }
-  ]
+  ],
+  env: {
+    browser: true,
+    node: true
+  }
 })
