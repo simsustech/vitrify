@@ -55,7 +55,6 @@ module.exports = defineConfig({
     }
   ],
   env: {
-    browser: true,
     node: true
   }
 })
