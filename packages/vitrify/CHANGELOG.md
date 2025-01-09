@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.17.2
+
+### Patch Changes
+
+- 8302bf4: fix(vitrify): remove @unocss/reset from main.ts and use a preflight with beasties include comment
+- f6eab58: fix(vitrify): set compress to false for beasties prerender
+
 ## 0.17.1
 
 ### Patch Changes
