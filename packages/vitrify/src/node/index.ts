@@ -341,7 +341,7 @@ export const baseConfig = async ({
       }
     })
   ) {
-    unoCssContentPipelineInclude.push(/quasar\/src\/.*\.js/)
+    // unoCssContentPipelineInclude.push(/quasar\/src\/.*\.js/)
   }
 
   const plugins: ViteUserConfig['plugins'] = [
@@ -482,7 +482,11 @@ export const baseConfig = async ({
     }),
     UnoCSS({
       ...vitrifyConfig.vitrify?.unocss,
-      content: unoCssContentPipelineInclude
+      content: {
+        pipeline: {
+          include: unoCssContentPipelineInclude
+        }
+      }
     })
   ]
   if (isPwa) {
