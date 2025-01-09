@@ -28,8 +28,8 @@ export const prerender = async ({
     path: outDir,
     logLevel: 'info',
     external: true,
-    inlineFonts: true,
-    preloadFonts: true
+    fonts: true,
+    compress: false
   })
 
   for (const url of paths) {
