@@ -21,11 +21,11 @@ const preflights: Preflight<QuasarTheme>[] = [
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^non-selectable$/, ([, c], { theme }) => `!select-none`],
 
-  [/^scroll$/, ([, c], { theme }) => `overflow-auto `],
+  [/^scroll$/, ([, c], { theme }) => `overflow-auto`],
 
-  [/^scroll-x$/, ([, c], { theme }) => ` overflow-x-auto`],
+  [/^scroll-x$/, ([, c], { theme }) => `overflow-x-auto`],
 
-  [/^scroll-y$/, ([, c], { theme }) => ` overflow-y-auto`],
+  [/^scroll-y$/, ([, c], { theme }) => `overflow-y-auto`],
 
   [/^no-scroll$/, ([, c], { theme }) => `!overflow-hidden`],
 

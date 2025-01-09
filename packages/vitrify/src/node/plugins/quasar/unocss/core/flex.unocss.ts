@@ -18,7 +18,7 @@ const sizes = ['sm', 'md', 'lg', 'xl']
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^row$/,
-    ([, c], { theme }) => `flex flex-row flex-wrap
+    ([, c], { theme }) => `flex flex-row flex-wrap 
     [&_>_.col]:(grow)
     ${sizes
       .map((size) => `[&_>_.col-${size}]:(${size}:basis-auto ${size}:grow)`)
