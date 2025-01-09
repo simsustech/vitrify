@@ -4,6 +4,7 @@ import { onBoot } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
 import 'virtual:uno.css'
+import '@unocss/reset/normalize.css'
 
 import RootComponent from './RootComponent.vue'
 interface ssrContext {
