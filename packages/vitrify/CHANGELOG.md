@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.17.1
+
+### Patch Changes
+
+- f68f809: feat(vitrify): remove quasar components from unocss safelist and add an extractor
+- 3bfa18a: fix(vitrify): import @unocss/reset/normalize.css in main.ts
+
 ## 0.17.0
 
 ### Minor Changes
