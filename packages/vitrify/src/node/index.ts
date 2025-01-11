@@ -257,12 +257,7 @@ export const baseConfig = async ({
     throw e
   }
 
-  const localPackages = [
-    'vue',
-    'vue-router',
-    '@vue/server-renderer',
-    '@unocss/reset'
-  ]
+  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
   // const localPackages: string[] = []
   const cliPackages = []
   const packageUrls: Record<string, URL> =
@@ -604,10 +599,6 @@ export const baseConfig = async ({
       replacement: fileURLToPath(
         new URL('./dist/vue-router.esm-bundler.js', packageUrls['vue-router'])
       )
-    },
-    {
-      find: new RegExp('@unocss/reset'),
-      replacement: fileURLToPath(new URL('./', packageUrls['@unocss/reset']))
     },
     ...vuePkgAliases
   ]

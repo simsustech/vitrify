@@ -110,7 +110,6 @@ export const QuasarPlugin: VitrifyPlugin = async ({
         const globalCss = quasar?.extras?.map(
           (extra) => `@quasar/extras/${extra}/${extra}.css`
         )
-        // globalCss?.push('@unocss/reset/normalize.css')
 
         const localPackages = ['@quasar/extras', 'quasar']
         // const localPackages: string[] = []
