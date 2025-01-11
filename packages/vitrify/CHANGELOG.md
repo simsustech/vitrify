@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.17.3
+
+### Patch Changes
+
+- b223acb: fix(vitrify): remove @unocss/reset
+
 ## 0.17.2
 
 ### Patch Changes
