@@ -13,7 +13,7 @@ type IntRange<F extends number, T extends number> = Exclude<
   Enumerate<F>
 >
 
-const shadows = (mode: 'light' | 'dark') => [
+const shadows = (mode: 'light' | 'dark'): Rule<QuasarTheme>[] => [
   ...Array.from({ length: 24 }, (_, i) => i + 1).reduce((acc, z) => {
     acc.push([
       new RegExp(`shadow-${z}`),
@@ -54,13 +54,13 @@ const shadows = (mode: 'light' | 'dark') => [
 
 const rules: Rule<QuasarTheme>[] = [
   [
-    /^.shadow-transition$/,
+    /^shadow-transition$/,
     function* ([, color], { theme }) {
       yield {
         transition: `${theme['shadowTransition']} !important`
       }
     }
-  ],
+  ] as Rule<QuasarTheme>,
   ...shadows('light'),
   ...shadows('dark'),
   ...['no-shadow', 'shadow-0'].map(

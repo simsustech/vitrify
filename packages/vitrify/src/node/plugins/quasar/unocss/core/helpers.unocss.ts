@@ -19,7 +19,7 @@ img.responsive {
   }
 ]
 
-const rules: Rule[] = [
+const rules: Rule<QuasarTheme>[] = [
   [
     /^content-empty$/,
     function* ([, color]) {

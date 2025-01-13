@@ -1,5 +1,11 @@
 // Import normalize and animate css
-import { definePreset, type Preflight, transformerVariantGroup } from 'unocss'
+import {
+  definePreset,
+  type Preflight,
+  type Rule,
+  transformerVariantGroup,
+  type UserShortcuts
+} from 'unocss'
 import presetWind from '@unocss/preset-wind'
 import theme, { type QuasarTheme } from './theme.js'
 import { animatedUno } from 'animated-unocss'
@@ -1551,32 +1557,35 @@ export default definePreset((options?: QuasarPresetOptions) => {
 /* beasties:include end */`
         }
       ] as Preflight<QuasarTheme>[]
-    )
-      .concat
-      // QBreadcrumbsPreflights,
-      // QCheckboxPreflights,
-      // QChipPreflights,
-      // QCircularProgressPreflights,
-      // QDialogPreflights,
-      // QFieldPreflights,
-      // QLayoutPreflights,
-      // QLinearProgressPreflights,
-      // QRadioPreflights,
-      // QSelectPreflights,
-      // QSpinnerPreflights,
-      // QSkeletonPreflights,
-      // QTablePreflights,
-      // QTogglePreflights,
-      // QTreePreflights,
-      // ColorPreflights,
-      // DarkPreflights,
-      // HelperPreflights,
-      // MousePreflights,
-      // TypographyPreflights,
-      // VisibilityPreflights
-      (),
-    rules: ([] as any[]).concat(HelperRules, ElevationRules, VisibilityRules),
-    shortcuts: ([] as any[]).concat(
+    ).concat(
+      QBreadcrumbsPreflights,
+      QCheckboxPreflights,
+      QChipPreflights,
+      QCircularProgressPreflights,
+      QDialogPreflights,
+      QFieldPreflights,
+      QLayoutPreflights,
+      QLinearProgressPreflights,
+      QRadioPreflights,
+      QSelectPreflights,
+      QSpinnerPreflights,
+      QSkeletonPreflights,
+      QTablePreflights,
+      QTogglePreflights,
+      QTreePreflights,
+      ColorPreflights,
+      DarkPreflights,
+      HelperPreflights,
+      MousePreflights,
+      TypographyPreflights,
+      VisibilityPreflights
+    ),
+    rules: ([] as Rule<QuasarTheme>[]).concat(
+      HelperRules,
+      ElevationRules,
+      VisibilityRules
+    ),
+    shortcuts: ([] as UserShortcuts<QuasarTheme>[]).concat(
       QIconShortcuts,
       QAjaxBarShortcuts,
       QAvatarShortcuts,

@@ -157,7 +157,7 @@ body.desktop .q-focusable:focus > .q-focus-helper, body.desktop .q-manual-focusa
   }
 ]
 
-const rules: Rule[] = [
+const rules: Rule<QuasarTheme>[] = [
   [
     /^invisible$/,
     function* ([, c], { symbols }) {
