@@ -33,7 +33,7 @@ const shadows = (mode: 'light' | 'dark'): Rule<QuasarTheme>[] => [
     return acc
   }, [] as Rule<QuasarTheme>[]),
   [
-    /^.inset-shadow$/,
+    /^inset-shadow$/,
     function* ([, color], { symbols, theme }) {
       yield {
         [symbols.parent]: mode === 'dark' ? 'body.body--dark' : undefined,
@@ -42,7 +42,7 @@ const shadows = (mode: 'light' | 'dark'): Rule<QuasarTheme>[] => [
     }
   ] as Rule<QuasarTheme>,
   [
-    /^.inset-shadow-down$/,
+    /^inset-shadow-down$/,
     function* ([, color], { symbols, theme }) {
       yield {
         [symbols.parent]: mode === 'dark' ? 'body.body--dark' : undefined,
