@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.17.4
+
+### Patch Changes
+
+- 3b7a7ed: fix(vitrify): fix type errors and re-enable QuasarPreset preflights
+
 ## 0.17.3
 
 ### Patch Changes
