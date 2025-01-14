@@ -6,7 +6,7 @@ import {
   transformerVariantGroup,
   type UserShortcuts
 } from 'unocss'
-import presetWind from '@unocss/preset-wind'
+import presetUno from '@unocss/preset-uno'
 import theme, { type QuasarTheme } from './theme.js'
 import { animatedUno } from 'animated-unocss'
 
@@ -166,8 +166,10 @@ import {
 import { shortcuts as QHeaderShortcuts } from './components/QHeader.unocss.js'
 import { shortcuts as QFooterShortcuts } from './components/QFooter.unocss.js'
 import { shortcuts as QDrawerShortcuts } from './components/QDrawer.unocss.js'
+import { type QuasarPlugins } from 'quasar'
 
 export interface QuasarPresetOptions {
+  plugins?: (keyof QuasarPlugins)[]
   theme?: {
     shadowColor?: string
     darkShadowColor?: string
@@ -180,7 +182,137 @@ const toKebabCase = (str: string) =>
     ?.map((x) => x.toLowerCase())
     .join('-') ?? ''
 
-const safelist = [
+const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
+  BottomSheet: [
+    'q-bottom-sheet',
+    'q-bottom-sheet__avatar',
+    'q-bottom-sheet--list',
+    'q-bottom-sheet--grid',
+    'q-bottom-sheet__item'
+  ],
+  Dialog: [
+    'q-dialog__title',
+    'q-dialog__progress',
+    'q-dialog__inner',
+    'q-dialog__inner--square',
+    'q-dialog__inner--minimized',
+    'q-dialog__inner--maximized',
+    'q-dialog__inner--top',
+    'q-dialog__inner--bottom',
+    'q-dialog__inner--right',
+    'q-dialog__inner--left',
+    'q-dialog__inner--fullwidth',
+    'q-dialog__inner--fullheight',
+    'q-dialog__backdrop',
+    'q-btn',
+    'q-btn--actionable',
+    'q-btn--no-uppercase',
+    'q-btn--rectangle',
+    'q-btn--outline',
+    'q-btn--push',
+    'q-btn--rounded',
+    'q-btn--round',
+    'q-btn--square',
+    'q-btn--flat',
+    'q-btn--unelevated',
+    'q-btn--dense',
+    'q-btn--fab',
+    'q-btn--fab-mini',
+    'q-btn__content',
+    'q-btn__content--hidden',
+    'q-btn__progress',
+    'q-btn__progress-indicator',
+    'q-btn__progress--dark',
+    'q-card',
+    'q-card--bordered',
+    'q-card--dark',
+    'q-card__section',
+    'q-card__section--vert',
+    'q-card__section--horiz',
+    'q-card__actions',
+    'q-card__actions--horiz',
+    'q-card__actions--vert',
+    'q-separator--spaced',
+    'q-textarea',
+    'q-textarea--autogrow',
+    'q-field',
+    'q-field--with-bottom',
+    'q-field__marginal',
+    'q-field__before',
+    'q-field__prepend',
+    'q-field__after',
+    'q-field__append',
+    'q-field__inner',
+    'q-field__bottom',
+    'q-field__bottom--animated',
+    'q-field__messages',
+    'q-field__counter',
+    'q-field--item-aligned',
+    'q-field__control-container',
+    'q-field__control',
+    'q-field__shadow',
+    'q-field__native',
+    'q-field__prefix',
+    'q-field__suffix',
+    'q-field__input',
+    'q-field--readonly',
+    'q-field--disabled',
+    'q-field__label',
+    'q-field--float',
+    'q-field--highlighted',
+    'q-field--filled',
+    'q-field--outlined',
+    'q-field--standard',
+    'q-field--dark',
+    'q-field--standout',
+    'q-field--labeled',
+    'q-field--dense',
+    'q-field--borderless',
+    'q-field--error',
+    'q-field__focusable-action',
+    'q-field--auto-height',
+    'q-field--square',
+    'q-option-group--inline',
+    'q-spinner',
+    'q-spinner-mat'
+  ],
+  LoadingBar: [
+    'q-loading-bar',
+    'q-loading-bar--top',
+    'q-loading-bar--bottom',
+    'q-loading-bar--right',
+    'q-loading-bar--left'
+  ],
+  Notify: [
+    'q-avatar',
+    'q-avatar__content',
+    'q-avatar--square',
+    'q-icon',
+    'q-btn',
+    'q-btn--actionable',
+    'q-btn--no-uppercase',
+    'q-btn--rectangle',
+    'q-btn--outline',
+    'q-btn--push',
+    'q-btn--rounded',
+    'q-btn--round',
+    'q-btn--square',
+    'q-btn--flat',
+    'q-btn--unelevated',
+    'q-btn--dense',
+    'q-btn--fab',
+    'q-btn--fab-mini',
+    'q-btn__content',
+    'q-btn__content--hidden',
+    'q-btn__progress',
+    'q-btn__progress-indicator',
+    'q-btn__progress--dark',
+    'q-spinner',
+    'q-spinner-mat'
+  ]
+}
+
+const baseSafelist = [
   'material-icons',
   'material-icons-outlined',
   'material-icons-round',
@@ -1288,11 +1420,22 @@ const qClasses = [
   'q-notification--bottom-right-leave-active'
 ]
 
-export default definePreset((options?: QuasarPresetOptions) => {
+const generateSafelist = (plugins?: (keyof QuasarPlugins)[]) => {
+  let safelist = baseSafelist
+  if (plugins) {
+    for (const plugin of plugins) {
+      const pluginSafelist = pluginSafelistMap[plugin]
+      if (pluginSafelist) safelist = safelist.concat(pluginSafelist)
+    }
+  }
+  return safelist
+}
+
+export default definePreset((options: QuasarPresetOptions = {}) => {
   return {
     name: 'quasar',
-    presets: [presetWind(), animatedUno()],
-    safelist,
+    presets: [presetUno(), animatedUno()],
+    safelist: generateSafelist(options?.plugins),
     preflights: (
       [
         {
