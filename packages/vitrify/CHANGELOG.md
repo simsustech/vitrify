@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.17.5
+
+### Patch Changes
+
+- b07c18f: fix(vitrify): fix QuasarConf types
+- a08ce17: feat(vitrify): add plugin safelist map to QuasarPreset
+
 ## 0.17.4
 
 ### Patch Changes
