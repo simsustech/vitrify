@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.6.2
+
+### Patch Changes
+
+- a9637fd: feat(create-vitrify): add plugins to QuasarPreset in quasar template
+
 ## 0.6.1
 
 ### Patch Changes
