@@ -7,20 +7,23 @@ import type {
 } from '../vitrify-config.js'
 import type { VitrifyPlugin } from './index.js'
 import { findDepPkgJsonPath } from 'vitefu'
+import {
+  type QuasarFonts,
+  type QuasarComponents,
+  type QuasarDirectives,
+  type QuasarIconSets,
+  type QuasarPlugins
+} from 'quasar'
 
 export interface QuasarConf {
-  ctx?: Record<string, any>
-  css?: string[]
-  boot?: string[]
   framework: {
-    components?: string[]
-    directives?: string[]
-    plugins?: string[]
+    components?: (keyof QuasarComponents)[]
+    directives?: (keyof QuasarDirectives)[]
+    plugins?: (keyof QuasarPlugins)[]
     lang?: string
-    iconSet?: string
+    iconSet?: QuasarIconSets
   }
-  // animations: string[]
-  extras?: string[]
+  extras?: (QuasarIconSets | QuasarFonts)[]
   disableSass?: boolean
 }
 
