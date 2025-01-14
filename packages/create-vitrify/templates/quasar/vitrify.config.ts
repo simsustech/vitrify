@@ -1,6 +1,21 @@
 import type { VitrifyConfig } from 'vitrify'
 import { certificateFor } from 'devcert'
-import { QuasarPreset } from 'vitrify'
+import { QuasarPreset, type QuasarConf } from 'vitrify'
+
+const quasarConf: QuasarConf = {
+  // extras: ['material-icons'],
+  framework: {
+    components: [
+      // Deprecated
+    ],
+    iconSet: 'svg-material-icons',
+    plugins: ['Dialog', 'Notify']
+  }
+  /*
+   * Disable SASS if you use UnoCSS
+   */
+  // disableSass: true
+}
 
 export default async function ({ mode, command }): Promise<VitrifyConfig> {
   const config: VitrifyConfig = {
@@ -12,7 +27,11 @@ export default async function ({ mode, command }): Promise<VitrifyConfig> {
        * Experimental
        */
       // unocss: {
-      //   presets: [QuasarPreset()]
+      //   presets: [
+      //     QuasarPreset({
+      //       plugins: quasarConf['framework']['plugins']
+      //     })
+      //   ]
       // },
       sass: {
         variables: {
@@ -23,20 +42,7 @@ export default async function ({ mode, command }): Promise<VitrifyConfig> {
         serverModules: []
       }
     },
-    quasar: {
-      // extras: ['material-icons'],
-      framework: {
-        components: [
-          // Deprecated
-        ],
-        iconSet: 'svg-material-icons',
-        plugins: ['Dialog', 'Notify']
-      }
-      /*
-       * Disable SASS if you use UnoCSS
-       */
-      // disableSass: true
-    }
+    quasar: quasarConf
   }
   if (mode === 'development') {
     config.server = {

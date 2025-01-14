@@ -80,6 +80,7 @@ export const templates: Templates = {
         'fastify',
         'npm-run-all',
         'typescript',
+        'unocss',
         'vite',
         'vitrify',
         'workbox-window'
