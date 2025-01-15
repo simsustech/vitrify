@@ -5,6 +5,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-page-sticky--shrink$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-page-sticky--shrink'] ??
       `pointer-events-none [&_>_div]:(inline-block pointer-events-auto)`
   ]
 ]

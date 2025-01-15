@@ -2,74 +2,77 @@ import type { Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  [/^q-drawer$/, ([, c], { theme }) => `absolute top-0 bottom-0 bg-[#fff]`],
+  [
+    /^q-drawer$/,
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer'] ??
+      `absolute top-[0] bottom-[0] bg-[#fff]`
+  ],
 
-  [/^q-drawer--on-top$/, ([, c], { theme }) => `z-3000`],
+  [
+    /^q-drawer--on-top$/,
+    ([, c], { theme }) => theme.quasar?.components?.['q-drawer--on-top'] ?? ``
+  ],
 
   [
     /^q-drawer--left$/,
     ([, c], { theme }) =>
-      `left-0 -translate-x-full [&_.q-layout\\_\\_shadow]:(left-[10px] -right-[10px]) [&_.q-layout\\_\\_shadow:after]:(right-[10px])`
-  ],
-
-  [
-    /^q-drawer--left.q-drawer--bordered$/,
-    ([, c], { theme }) => `[border-right:1px_solid_rgba(0,_0,_0,_0.12)]`
+      theme.quasar?.components?.['q-drawer--left'] ??
+      `left-[0] -translate-x-full [&.q-drawer--bordered]:([border-right:1px_solid_rgba(0,_0,_0,_0.12)]) [&_.q-layout\\_\\_shadow]:(left-[10px] -right-[10px]) [&_.q-layout\\_\\_shadow:after]:(right-[10px])`
   ],
 
   [
     /^q-drawer--right$/,
     ([, c], { theme }) =>
-      `right-0 translate-x-full [&_.q-layout\\_\\_shadow]:(-left-[10px]) [&_.q-layout\\_\\_shadow:after]:(left-[10px])`
+      theme.quasar?.components?.['q-drawer--right'] ??
+      `right-[0] translate-x-full [&.q-drawer--bordered]:([border-left:1px_solid_rgba(0,_0,_0,_0.12)]) [&_.q-layout\\_\\_shadow]:(-left-[10px]) [&_.q-layout\\_\\_shadow:after]:(left-[10px])`
   ],
 
   [
-    /^q-drawer--right.q-drawer--bordered$/,
-    ([, c], { theme }) => `[border-left:1px_solid_rgba(0,_0,_0,_0.12)]`
-  ],
-
-  [
-    /^q-drawer-container:not(.q-drawer--mini-animate)$/,
+    /^q-drawer-container$/,
     ([, c], { theme }) =>
-      `[&_.q-drawer--mini]:(!p-0) [&_.q-drawer--mini_.q-item]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&_.q-drawer--mini_.q-item\\_\\_label]:(hidden)`
-  ],
-
-  [
-    /^q-drawer-container:not(.q-drawer--mini-animate)$/,
-    ([, c], { theme }) => `[&__.q-drawer--mini
-  __.q-item\\_\\_section]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&__.q-drawer--mini
-  __.q-item\\_\\_section--main]:(hidden) [&__.q-drawer--mini
-  __.q-item\\_\\_section--side__~_.q-item\\_\\_section--side]:(hidden)`
+      theme.quasar?.components?.['q-drawer-container'] ??
+      `[&:not(.q-drawer--mini-animate)_.q-drawer--mini]:(!p-0) [&:not(.q-drawer--mini-animate)_.q-drawer--mini_.q-item]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&:not(.q-drawer--mini-animate)__.q-drawer--mini__.q-item\\_\\_section]:(text-center justify-center pl-0 pr-0 min-w-[0]) [&:not(.q-drawer--mini-animate)_.q-drawer--mini_.q-item\\_\\_label]:(hidden) [&:not(.q-drawer--mini-animate)__.q-drawer--mini__.q-item\\_\\_section--main]:(hidden) [&:not(.q-drawer--mini-animate)__.q-drawer--mini__.q-item\\_\\_section--side__~_.q-item\\_\\_section--side]:(hidden)`
   ],
 
   [
     /^q-drawer--mini$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer--mini'] ??
       `[&_.q-mini-drawer-hide]:(hidden) [&_.q-expansion-item\\_\\_content]:(hidden)`
   ],
 
   [
     /^q-drawer--mini-animate$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer--mini-animate'] ??
       `[&_.q-drawer\\_\\_content]:(!overflow-x-hidden whitespace-nowrap)`
   ],
 
   [
     /^q-drawer--standard$/,
-    ([, c], { theme }) => `[&_.q-mini-drawer-only]:(hidden)`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer--standard'] ??
+      `[&_.q-mini-drawer-only]:(hidden)`
   ],
 
   [
     /^q-drawer--mobile$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer--mobile'] ??
       `[&_.q-mini-drawer-only]:(hidden) [&_.q-mini-drawer-hide]:(hidden)`
   ],
 
-  [/^q-drawer__backdrop$/, ([, c], { theme }) => `z-2999!`],
+  [
+    /^q-drawer__backdrop$/,
+    ([, c], { theme }) => theme.quasar?.components?.['q-drawer__backdrop'] ?? ``
+  ],
 
   [
     /^q-drawer__opener$/,
-    ([, c], { theme }) => `h-full w-[15px] select-none z-2001`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer__opener'] ??
+      `h-full w-[15px] select-none`
   ]
 ]
 

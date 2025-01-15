@@ -5,6 +5,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-inner-loading$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-inner-loading'] ??
       `bg-[rgba(255,_255,_255,_0.6)] [border-radius:inherit]`
   ],
 

@@ -4,174 +4,165 @@ import type { QuasarTheme } from '../theme.js'
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-color-picker$/,
-    ([, c], { theme }) => `
-    overflow-hidden bg-white max-w-350px v-top min-w-180px border-rd-4px 
-    shadow-sm
-    [&.q-tab]:(p-0!)
-    [&_input]:(text-inherit bg-transparent outline-0 text-center)
-    [&_.q-tabs]:(overflow-hidden)
-    [&_.q-tab--active]:(shadow-sm)
-    [&_.q-tab--active_.q-focus-helper]:(hidden)
-    [&_q-tab\\_\\_indicator]:(hidden)
-    [&_q-tab-panels]:(bg-inherit)
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker'] ??
+      `overflow-hidden bg-[#fff] max-w-[350px] align-top min-w-[180px] rounded-[4px] [box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)] [&_.q-tab]:(!p-0) [&_input]:([color:inherit] bg-transparent outline-[0] text-center) [&_.q-tabs]:(overflow-hidden) [&_.q-tab--active]:([box-shadow:0_0_14px_3px_rgba(0,_0,_0,_0.2)]) [&_.q-tab--active_.q-focus-helper]:(hidden) [&_.q-tab\\_\\_indicator]:(hidden) [&_.q-tab-panels]:([background:inherit])`
   ],
+
   [
     /^q-color-picker--bordered$/,
-    ([, c], { theme }) => `
-    border-1px border-black border-op-120
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker--bordered'] ??
+      `border-[1px] border-solid border-[rgba(0,0,0,0.12)]`
   ],
+
   [
     /^q-color-picker__header-tabs$/,
-    ([, c], { theme }) => `
-    h-32px
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header-tabs'] ?? `h-[32px]`
   ],
+
   [
     /^q-color-picker__header-banner$/,
-    ([, c], { theme }) => `
-    h-36px
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header-banner'] ??
+      `h-[36px] h-[36px]`
   ],
+
   [
     /^q-color-picker__header$/,
-    ([, c], { theme }) => `
-    [&_input]:(lh-24px border-none)
-    [&_.q-tab]:(min-h-32px! h-32px!)
-    [&_.q-tab--inactive]:(bg-gradient-linear from-black/30 via-black/15 to-black/10)
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header'] ??
+      `[&_input]:(leading-[24px] border-[0]) [&_.q-tab]:(!min-h-[32px] !h-[32px]) [&_.q-tab--inactive]:(bg-[linear-gradient(_to_top,_rgba(0,_0,_0,_0.3)_0%,_rgba(0,_0,_0,_0.15)_25%,_rgba(0,_0,_0,_0.1)_)])`
   ],
+
   [
     /^q-color-picker__error-icon$/,
-    ([, c], { theme }) => `
-      bottom-2px right-2px text-24px op-0 transition-opacity-300
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__error-icon'] ??
+      `bottom-[2px] right-[2px] text-[24px] opacity-0 [transition:opacity_0.3s_ease-in]`
   ],
+
   [
     /^q-color-picker__header-content$/,
-    ([, c], { theme }) => `
-      relative bg-white
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header-content'] ??
+      `relative bg-[#fff]`
   ],
+
   [
     /^q-color-picker__header-content--light$/,
-    ([, c], { theme }) => `
-      text-black
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header-content--light'] ??
+      `text-[#000]`
   ],
+
   [
     /^q-color-picker__header-content--dark$/,
-    ([, c], { theme }) => `
-      text-white
-      [&_.q-tab--inactive:before]:(content-empty absolute top-0 right-0 bottom-0 left-0 bg-white bg-op-200)
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header-content--dark'] ??
+      `text-[#fff] [&_.q-tab--inactive:before]:(content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] bg-[rgba(255,_255,_255,_0.2)])`
   ],
-  [
-    /^q-color-picker__header-banner$/,
-    ([, c], { theme }) => `
-      h-36px
-    `
-  ],
+
   [
     /^q-color-picker__header-bg$/,
-    ([, c], { theme }) => `
-      bg-white bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGAwZkAFZ5G5jPRRgOYEVDeB3EBjBQBOZwTVugIGyAAAAABJRU5ErkJggg==)')]
-
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__header-bg'] ??
+      `bg-[#fff] bg-[url('data:image/png]`
   ],
+
   [
     /^q-color-picker__footer$/,
-    ([, c], { theme }) => `
-      h-36px
-      [&_.q-tab]:(min-h-36px! h-36px!)
-      [&_.q-tab--inactive]:(bg-gradient-to-b from-black/0.3 via-black/0.15 to-black/0.1)
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__footer'] ??
+      `h-[36px] [&_.q-tab]:(!min-h-[36px] !h-[36px]) [&_.q-tab--inactive]:(bg-[linear-gradient(_to_bottom,_rgba(0,_0,_0,_0.3)_0%,_rgba(0,_0,_0,_0.15)_25%,_rgba(0,_0,_0,_0.1)_)])`
   ],
+
   [
     /^q-color-picker__spectrum$/,
-    ([, c], { theme }) => `
-      h-full w-full
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__spectrum'] ?? `w-full h-full`
   ],
+
   [
     /^q-color-picker__spectrum-tab$/,
-    ([, c], { theme }) => `
-      p-0!
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__spectrum-tab'] ?? `!p-0`
   ],
+
   [
-    /^q-color-picker__spectrum--white$/,
-    ([, c], { theme }) => `
-      bg-gradient-to-r from-white to-black
-    `
+    /^q-color-picker__spectrum-white$/,
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__spectrum-white'] ??
+      `bg-[linear-gradient(to_right,_#fff,_rgba(255,_255,_255,_0))]`
   ],
+
   [
-    /^q-color-picker__spectrum--white$/,
-    ([, c], { theme }) => `
-      bg-gradient-to-t from-black to-black
-    `
+    /^q-color-picker__spectrum-black$/,
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__spectrum-black'] ??
+      `bg-[linear-gradient(to_top,_#000,_rgba(0,_0,_0,_0))]`
   ],
+
   [
-    /^q-color-picker__spectrum--circle$/,
-    ([, c], { theme }) => `
-      w-10px h-10px shadow-sm border-rd-50% translate-x--5px translate-y--5px
-    `
+    /^q-color-picker__spectrum-circle$/,
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__spectrum-circle'] ??
+      `w-[10px] h-[10px] [box-shadow:0_0_0_1.5px_#fff,_inset_0_0_1px_1px_rgba(0,_0,_0,_0.3),_0_0_1px_2px_rgba(0,_0,_0,_0.4)] rounded-[50%] -translate-x-[5px] -translate-y-[5px]`
   ],
+
   [
     /^q-color-picker__hue$/,
-    ([, c], { theme }) => `
-      [&_.q-slider-track]:(bg-gradient-to-r! from-[#f00] via-[#ff0/17] via-[#0f0/33] via-[#off/50] via-[#00f/67] via-[#f0f/83] to-[#f00] op-100)
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__hue'] ??
+      `[&_.q-slider\\_\\_track]:(!bg-[linear-gradient(_to_right,_#f00_0%,_#ff0_17%,_#0f0_33%,_#0ff_50%,_#00f_67%,_#f0f_83%,_#f00_100%_)] opacity-100)`
   ],
+
   [
     /^q-color-picker__alpha$/,
-    ([, c], { theme }) => `
-    [&_.q-slider\\_\\_track-container]:(pt-0)
-    [&_.q-slider\\_\\_track:before]:(content-empty absolute top-0 right-0 bottom-0 left-0 border-rd-inherit bg-gradient-to-r from-black to-[#757575])
-    `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__alpha'] ??
+      `[&_.q-slider\\_\\_track-container]:(pt-0) [&_.q-slider\\_\\_track:before]:(content-[''] absolute top-[0] right-[0] bottom-[0] left-[0] [border-radius:inherit] bg-[linear-gradient(90deg,_rgba(255,_255,_255,_0),_#757575)])`
   ],
+
   [
     /^q-color-picker__sliders$/,
-    ([, c], { theme }) => `
-    pt-0 pb-0 pl-16px pr-16px
-    [&_.q-slider\\_\\_thumb]:(text-[#424242])
-    [&_.q-slider\\_\\_thumb_path]:(stroke-2px fill-transparent)
-    [&_.q-slider--active_path]:(stroke-3px)
-  `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__sliders'] ??
+      `px-[16px] py-[0] [&_.q-slider\\_\\_thumb]:(text-[#424242]) [&_.q-slider\\_\\_thumb_path]:(stroke-[2px] fill-[transparent]) [&_.q-slider--active_path]:(stroke-[3px])`
   ],
+
   [
     /^q-color-picker__tune-tab$/,
-    ([, c], { theme }) => `
-      [&_.q-slider]:(ml-18px mr-18px)
-      [&_input]:(text-11px border-solid border-1 border-color-[#e0e0e0] border-rd-4px w-3.5em)
-  `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__tune-tab'] ??
+      `[&_.q-slider]:(ml-[18px] mr-[18px]) [&_input]:(text-[11px] border-[1px] border-solid border-[#e0e0e0] rounded-[4px] w-[3.5em])`
   ],
+
   [
     /^q-color-picker__palette-tab$/,
-    ([, c], { theme }) => `
-      p-0!
-  `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__palette-tab'] ?? `!p-0`
   ],
+
   [
     /^q-color-picker__palette-rows--editable$/,
-    ([, c], { theme }) => `
-      [&_.q-color-picker__cube]:(cursor-pointer)
-  `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__palette-rows--editable'] ??
+      `[&_.q-color-picker\\_\\_cube]:(cursor-pointer)`
   ],
+
   [
     /^q-color-picker__cube$/,
-    ([, c], { theme }) => `
-      pb-10% w-10%!
-  `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker__cube'] ?? `pb-[10%] !w-[10%]`
   ],
+
   [
     /^q-color-picker--dark$/,
-    ([, c], { theme }) => `
-      shadow-sm
-      [&_.q-color-picker\\_\\_tune-tab_input]:(border-solid border-1px border-black border-op-30)
-      [&_.q-slider__thumb]:(text-[#fafafa])
-  `
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-color-picker--dark'] ??
+      `[box-shadow:0_1px_5px_rgba(255,_255,_255,_0.2),_0_2px_2px_rgba(255,_255,_255,_0.14),_0_3px_1px_-2px_rgba(255,_255,_255,_0.12)] [&_.q-color-picker\\_\\_tune-tab_input]:(border-[1px] border-solid border-[rgba(255,255,255,0.3)]) [&_.q-slider\\_\\_thumb]:(text-[#fafafa])`
   ]
 ]
 

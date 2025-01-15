@@ -24,6 +24,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-circular-progress$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-circular-progress'] ??
       `inline-block relative align-middle w-[1em] h-[1em] leading-none`
   ],
 
@@ -34,6 +35,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-circular-progress--indeterminate$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-circular-progress--indeterminate'] ??
       `[&_.q-circular-progress\\_\\_svg]:(origin-[50%_50%] animate-[q-spin_2s_linear_infinite]) [&_.q-circular-progress\\_\\_circle]:(animate-[q-circular-progress-circle_1.5s_ease-in-out_infinite])`
   ]
 ]

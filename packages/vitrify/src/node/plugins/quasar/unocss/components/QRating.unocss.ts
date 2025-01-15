@@ -7,12 +7,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-rating__icon-container$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-rating__icon-container'] ??
       `h-[1em] outline-0 [&_+_.q-rating\\_\\_icon-container]:(ml-[2px])`
   ],
 
   [
     /^q-rating__icon$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-rating__icon'] ??
       `text-current [text-shadow:0_1px_3px_rgba(0,_0,_0,_0.12),_0_1px_2px_rgba(0,_0,_0,_0.24)] relative opacity-40 [transition:transform_0.2s_ease-in,_opacity_0.2s_ease-in]`
   ],
 
@@ -24,12 +26,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-rating--no-dimming$/,
-    ([, c], { theme }) => `[&_.q-rating\\_\\_icon]:(opacity-100)`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-rating--no-dimming'] ??
+      `[&_.q-rating\\_\\_icon]:(opacity-100)`
   ],
 
   [
     /^q-rating--editable$/,
-    ([, c], { theme }) => `[&_.q-rating\\_\\_icon-container]:(cursor-pointer)`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-rating--editable'] ??
+      `[&_.q-rating\\_\\_icon-container]:(cursor-pointer)`
   ]
 ]
 

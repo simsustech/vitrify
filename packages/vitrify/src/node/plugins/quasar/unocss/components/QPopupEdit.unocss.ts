@@ -6,7 +6,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-popup-edit__buttons$/,
-    ([, c], { theme }) => `mt-[8px] [&_.q-btn_+_.q-btn]:(ml-[8px])`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-popup-edit__buttons'] ??
+      `mt-[8px] [&_.q-btn_+_.q-btn]:(ml-[8px])`
   ]
 ]
 

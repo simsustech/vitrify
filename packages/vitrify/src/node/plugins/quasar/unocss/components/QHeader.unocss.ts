@@ -6,12 +6,15 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-header--bordered$/,
-    ([, c], { theme }) => `[border-bottom:1px_solid_rgba(0,_0,_0,_0.12)]`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-header--bordered'] ??
+      `[border-bottom:1px_solid_rgba(0,_0,_0,_0.12)]`
   ],
 
   [
     /^q-header$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-header'] ??
       `z-2000 [&_.q-layout\\_\\_shadow]:(-bottom-10px) [&_.q-layout\\_\\_shadow:after]:(bottom-10px)`
     // relative
   ]

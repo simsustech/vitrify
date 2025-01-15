@@ -44,6 +44,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-spinner-mat$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-spinner-mat'] ??
       `animate-[q-spin_2s_linear_infinite] origin-[center_center] [&_.path]:(animate-[q-mat-dash_1.5s_ease-in-out_infinite])`
   ]
 ]

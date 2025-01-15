@@ -14,11 +14,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ],
   [
     /^q-btn-dropdown--simple$/,
-    ([, c], { theme }) => `[&+.q-btn-dropdown\\_\\_arrow]:(ml-8px)`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-btn-dropdown--simple'] ??
+      `[&+.q-btn-dropdown\\_\\_arrow]:(ml-8px)`
   ],
   [
     /^q-btn-dropdown__arrow$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-btn-dropdown__arrow'] ??
       `transition-property-transform transition-duration-280`
   ],
   [/^q-btn-dropdown--current$/, ([, c], { theme }) => `grow-1`]

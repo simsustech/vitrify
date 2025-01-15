@@ -39,24 +39,32 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^q-dialog$/, ([, c], { theme }) => ``],
   [
     /^q-dialog__title$/,
-    ([, c], { theme }) => `text-1.25rem font-500 lh-1.6 tracking-0.0125em`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__title'] ??
+      `text-1.25rem font-500 lh-1.6 tracking-0.0125em`
   ],
   [/^q-dialog__progress$/, ([, c], { theme }) => `text-4rem`],
   [
     /^q-dialog__inner$/,
-    ([, c], { theme }) => `outline-0
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner'] ??
+      `outline-0
       [&>div]:(pointer-events-auto overflow-auto border-rd-4px)
       [&>.q-card>.q-card\\_\\_actions_.q-btn--rectangle]:(min-w-64px)
     `
   ],
   [
     /^q-dialog__inner--square$/,
-    ([, c], { theme }) => `[&>div]:(border-rd-0!)
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--square'] ??
+      `[&>div]:(border-rd-0!)
     `
   ],
   [
     /^q-dialog__inner--minimized$/,
-    ([, c], { theme }) => `p-24px
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--minimized'] ??
+      `p-24px
     [&>div]:(max-h-[calc(100vh-48px)])
     `
   ],
@@ -70,47 +78,63 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ],
   [
     /^q-dialog__inner--top$/,
-    ([, c], { theme }) => `pt-0! pb-0!
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--top'] ??
+      `pt-0! pb-0!
     [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-tl-none rounded-tr-none)
     
 `
   ],
   [
     /^q-dialog__inner--bottom$/,
-    ([, c], { theme }) => `pt-0! pb-0!
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--bottom'] ??
+      `pt-0! pb-0!
     [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-bl-none rounded-br-none)
     `
   ],
   [
     /^q-dialog__inner--left$/,
-    ([, c], { theme }) => `pt-0! pb-0!
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--left'] ??
+      `pt-0! pb-0!
     [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-tl-none rounded-bl-none)
     `
   ],
   [
     /^q-dialog__inner--right$/,
-    ([, c], { theme }) => `pt-0! pb-0!
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--right'] ??
+      `pt-0! pb-0!
     [&:not(.q-dialog\\_\\_inner--animating)>div]:(rounded-tr-none rounded-br-none)
     `
   ],
   [
     /^q-dialog__inner--fullwidth$/,
-    ([, c], { theme }) => `[&>div]:(w-full! max-w-full!)
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--fullwidth'] ??
+      `[&>div]:(w-full! max-w-full!)
     `
   ],
   [
     /^q-dialog__inner--fullheight$/,
-    ([, c], { theme }) => `[&>div]:(h-full! max-h-full!)
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__inner--fullheight'] ??
+      `[&>div]:(h-full! max-h-full!)
     `
   ],
   [
     /^q-dialog__backdrop$/,
-    ([, c], { theme }) => `-z-1 pointer-events-auto outline-0 bg-black bg-op-40
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-dialog__backdrop'] ??
+      `-z-1 pointer-events-auto outline-0 bg-black bg-op-40
     `
   ],
   [
     /^q-body--dialog$/,
-    ([, c], { theme }) => `overflow-hidden
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-body--dialog'] ??
+      `overflow-hidden
     `
   ]
 ]

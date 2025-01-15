@@ -7,7 +7,7 @@ import {
   type UserShortcuts
 } from 'unocss'
 import presetUno from '@unocss/preset-uno'
-import theme, { type QuasarTheme } from './theme.js'
+import { defaultTheme, type QuasarTheme } from './theme.js'
 import { animatedUno } from 'animated-unocss'
 
 import { shortcuts as QIconShortcuts } from './components/QIcon.unocss.js'
@@ -1820,7 +1820,7 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
       QFooterShortcuts,
       QDrawerShortcuts
     ),
-    theme: theme(options),
+    theme: defaultTheme,
     variants: [
       // ...
     ],

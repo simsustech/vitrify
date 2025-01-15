@@ -72,19 +72,23 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-layout-container$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-layout-container'] ??
       `relative w-full h-full [&_.q-layout]:(min-h-full) [&_>_div]:([transform:translate3d(0,_0,_0)]) [&_>_div_>_div]:(min-h-[0] max-h-full)`
   ],
 
   [
     /^q-layout__shadow$/,
     ([, c], { theme }) =>
+      theme.quasar?.components?.['q-layout__shadow'] ??
       `w-full 
       [&:after]:(content-empty absolute top-[0] right-[0] bottom-[0] left-[0] [box-shadow:0_0_10px_2px_rgba(0,_0,_0,_0.2),_0_0px_10px_rgba(0,_0,_0,_0.24)])`
   ],
 
   [
     /^q-layout__section--marginal$/,
-    ([, c], { theme }) => `text-[#fff] bg-primary`
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-layout__section--marginal'] ??
+      `text-[#fff] bg-primary`
   ]
 ]
 
