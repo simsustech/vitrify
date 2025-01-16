@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.17.6
+
+### Patch Changes
+
+- 047e27f: feat(vitrify): add Quasar component BEM classes to UnoCSS theme
+
 ## 0.17.5
 
 ### Patch Changes
