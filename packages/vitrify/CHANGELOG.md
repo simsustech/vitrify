@@ -1,5 +1,13 @@
 # vitrify
 
+## 0.17.7
+
+### Patch Changes
+
+- a9ba0d9: feat(vitrify): add @unocss/preset-icons to QuasarPreset
+- db6c28a: fix(vitrify): fix QuasarPreset flex
+- c586c06: feat(vitrify): add iconMapFn support to QuasarPlugin
+
 ## 0.17.6
 
 ### Patch Changes
