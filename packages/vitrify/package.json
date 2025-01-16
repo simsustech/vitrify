@@ -85,6 +85,7 @@
     "@types/merge-deep": "^3.0.3",
     "@types/node": "^22.10.2",
     "@types/ws": "^8.5.13",
+    "@unocss/preset-icons": "^65.4.2",
     "@vue/runtime-core": "^3.5.13",
     "beasties": "^0.2.0",
     "css": "^3.0.0",

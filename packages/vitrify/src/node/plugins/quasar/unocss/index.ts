@@ -2,6 +2,7 @@
 import {
   definePreset,
   type Preflight,
+  presetIcons,
   type Rule,
   transformerVariantGroup,
   type UserShortcuts
@@ -166,15 +167,19 @@ import {
 import { shortcuts as QHeaderShortcuts } from './components/QHeader.unocss.js'
 import { shortcuts as QFooterShortcuts } from './components/QFooter.unocss.js'
 import { shortcuts as QDrawerShortcuts } from './components/QDrawer.unocss.js'
-import { type QuasarPlugins } from 'quasar'
+import { type QuasarIconSet, type QuasarPlugins } from 'quasar'
 
 export interface QuasarPresetOptions {
   plugins?: (keyof QuasarPlugins)[]
-  theme?: {
-    shadowColor?: string
-    darkShadowColor?: string
-  }
+  iconSet?: QuasarIconSet
 }
+
+const extractKeys = (obj: Record<string, any>) =>
+  Object.values(obj).reduce((acc, cur) => {
+    if (typeof cur === 'string') acc.push(cur)
+    else if (typeof cur === 'object') acc = acc.concat(extractKeys(cur))
+    return acc
+  }, [] as string[])
 
 const toKebabCase = (str: string) =>
   str
@@ -1420,7 +1425,13 @@ const qClasses = [
   'q-notification--bottom-right-leave-active'
 ]
 
-const generateSafelist = (plugins?: (keyof QuasarPlugins)[]) => {
+const generateSafelist = ({
+  plugins,
+  iconSet
+}: {
+  plugins?: (keyof QuasarPlugins)[]
+  iconSet?: QuasarIconSet
+}) => {
   let safelist = baseSafelist
   if (plugins) {
     for (const plugin of plugins) {
@@ -1428,14 +1439,18 @@ const generateSafelist = (plugins?: (keyof QuasarPlugins)[]) => {
       if (pluginSafelist) safelist = safelist.concat(pluginSafelist)
     }
   }
+  if (iconSet) {
+    const iconSetSafelist = extractKeys(iconSet)
+    if (iconSetSafelist) safelist = safelist.concat(iconSetSafelist)
+  }
   return safelist
 }
 
 export default definePreset((options: QuasarPresetOptions = {}) => {
   return {
     name: 'quasar',
-    presets: [presetUno(), animatedUno()],
-    safelist: generateSafelist(options?.plugins),
+    presets: [presetUno(), animatedUno(), presetIcons({})],
+    safelist: generateSafelist(options),
     preflights: (
       [
         {
