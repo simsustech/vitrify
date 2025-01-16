@@ -16,39 +16,20 @@ const colGutter = {
 const sizes = ['sm', 'md', 'lg', 'xl']
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
+  [/^row$/, ([, c], { theme }) => `flex flex-row flex-wrap`],
+  [/^column$/, ([, c], { theme }) => `flex flex-col flex-wrap`],
   [
-    /^row$/,
-    ([, c], { theme }) => `flex flex-row flex-wrap 
-    [&_>_.col]:(grow)
-    ${sizes
-      .map((size) => `[&_>_.col-${size}]:(${size}:basis-auto ${size}:grow)`)
-      .join(' ')}
-    ${grid.map((nr) => `[&_>_.col-${nr}]:(basis-${nr}/12)`).join(' ')}
-    ${sizes
-      .map((size) =>
-        grid
-          .map((nr) => `[&_>_.col-${size}-${nr}]:(${size}:basis-${nr}/12)`)
-          .join(' ')
-      )
-      .join(' ')}
-  `
-  ],
-  [
-    /^column$/,
-    ([, c], { theme }) => `flex flex-col flex-wrap
-      [&_>_.col]:(grow)
-      ${sizes
-        .map((size) => `[&_>_.col-${size}]:(${size}:basis-auto ${size}:grow)`)
-        .join(' ')}
-      ${grid.map((nr) => `[&_>_.col-${nr}]:(basis-${nr}/12)`).join(' ')}
-    ${sizes
-      .map((size) =>
-        grid
-          .map((nr) => `[&_>_.col-${size}-${nr}]:(${size}:basis-${nr}/12)`)
-          .join(' ')
-      )
-      .join(' ')}
-  `
+    /^col(?:-)?(none|xs|sm|md|lg|xl)?(?:-)?([2-9]|1[0-2]?)?$/,
+    ([, size, nr], { theme }) => {
+      if (size && nr) {
+        return `${size}:basis-${nr}/12)`
+      } else if (nr) {
+        return `basis-${nr}/12`
+      } else if (size) {
+        return `${size}:basis-auto ${size}:grow`
+      }
+      return `grow`
+    }
   ],
   [
     /^q-col-gutter-(none|xs|sm|md|lg|xl)$/,
