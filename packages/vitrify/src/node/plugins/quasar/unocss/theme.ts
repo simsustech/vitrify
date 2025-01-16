@@ -300,7 +300,7 @@ export interface QuasarTheme {
     'blue-grey-13 ': string
     'blue-grey-14 ': '#455a64'
   }
-  quasar?: {
+  quasar: {
     components?: {
       'q-icon'?: string
       'q-panel'?: string
@@ -1124,6 +1124,10 @@ export interface QuasarTheme {
       notify: number
       max: number
     }
+    transition: {
+      duration: string
+      easing: string
+    }
   }
 }
 
@@ -1439,6 +1443,10 @@ const defaultTheme: QuasarTheme = {
       tooltip: 9000,
       notify: 9500,
       max: 9998
+    },
+    transition: {
+      duration: '.3s',
+      easing: 'cubic-bezier(0.215,0.61,0.355,1)'
     }
   }
 }

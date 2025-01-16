@@ -153,7 +153,10 @@ import { shortcuts as OrientationShortcuts } from './core/orientation.unocss.js'
 import { shortcuts as PositionShortcuts } from './core/position.unocss.js'
 import { shortcuts as SizeShortcuts } from './core/size.unocss.js'
 import { shortcuts as TouchShortcuts } from './core/touch.unocss.js'
-import { shortcuts as TransitionsShortcuts } from './core/transitions.unocss.js'
+import {
+  preflights as TransitionPreflights,
+  shortcuts as TransitionsShortcuts
+} from './core/transitions.unocss.js'
 import {
   preflights as TypographyPreflights,
   shortcuts as TypographyShortcuts
@@ -1736,7 +1739,8 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
       HelperPreflights,
       MousePreflights,
       TypographyPreflights,
-      VisibilityPreflights
+      VisibilityPreflights,
+      TransitionPreflights
     ),
     rules: ([] as Rule<QuasarTheme>[]).concat(
       HelperRules,

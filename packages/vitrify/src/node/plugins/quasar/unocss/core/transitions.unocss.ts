@@ -1,6 +1,16 @@
 import type { Preflight, Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
+const preflights: Preflight<QuasarTheme>[] = [
+  {
+    getCSS: ({ theme }) => `
+:root {
+  --q-transition-duration: ${theme.quasar.transition.duration};
+  --q-transition-easing: ${theme.quasar.transition.easing};
+}`
+  }
+]
+
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-transition--slide-right-enter-active$/,
@@ -389,4 +399,4 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ]
 ]
 
-export { shortcuts }
+export { preflights, shortcuts }
