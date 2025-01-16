@@ -92,4 +92,11 @@ const rules: Rule<QuasarTheme>[] = [
   )
 ]
 
-export { rules }
+const shortcuts: UserShortcuts<QuasarTheme> = [
+  [/^shadow-none$/, ([, c], { theme }) => `shadow-none`],
+  [/^no-shadow$/, ([, c], { theme }) => `shadow-none`],
+  // TODO
+  [/^shadow-(0?[1-9]|1[0-9]|2[0-4])$/, ([, nr], { theme }) => `shadow-md`]
+]
+
+export { rules, shortcuts }

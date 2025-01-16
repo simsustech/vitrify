@@ -138,7 +138,10 @@ import {
   preflights as DarkPreflights,
   shortcuts as DarkShortcuts
 } from './core/dark.unocss.js'
-import { rules as ElevationRules } from './core/elevation.unocss.js'
+import {
+  shortcuts as ElevationShortcuts,
+  rules as ElevationRules
+} from './core/elevation.unocss.js'
 import { shortcuts as FlexShortcuts } from './core/flex.unocss.js'
 import {
   rules as HelperRules,
@@ -321,13 +324,6 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
 }
 
 const baseSafelist = [
-  'material-icons',
-  'material-icons-outlined',
-  'material-icons-round',
-  'material-icons-sharp',
-  'material-symbols-outlined',
-  'material-symbols-rounded',
-  'material-symbols-sharp',
   'q-animate--scale',
   'q-animate--fade',
   'inset-shadow',
@@ -1837,7 +1833,8 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
       VisibilityShortcuts,
       QHeaderShortcuts,
       QFooterShortcuts,
-      QDrawerShortcuts
+      QDrawerShortcuts,
+      ElevationShortcuts
     ),
     theme: defaultTheme,
     variants: [
