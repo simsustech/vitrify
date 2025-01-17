@@ -84,7 +84,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-radio--dark$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-radio--dark'] ??
-      `[&_.q-radio\\_\\_inner]:(text-[rgba(255,_255,_255,_0.7)]) [&_.q-radio\\_\\_inner:before]:(!opacity-[0.32]) [&_.q-radio\\_\\_inner--truthy]:()`
+      `[&_.q-radio\\_\\_inner]:(text-[rgba(255,_255,_255,_0.7)]) [&_.q-radio\\_\\_inner:before]:(!opacity-[0.32]) [&_.q-radio\\_\\_inner--truthy]:(text-primary)`
   ],
 
   [

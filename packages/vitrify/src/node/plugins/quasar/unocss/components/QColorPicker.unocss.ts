@@ -68,7 +68,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-color-picker__header-bg$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-color-picker__header-bg'] ??
-      `bg-[#fff] bg-[url('data:image/png]`
+      `bg-[#fff] bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGAwZkAFZ5G5jPRRgOYEVDeB3EBjBQBOZwTVugIGyAAAAABJRU5ErkJggg==')]`
   ],
 
   [

@@ -20,7 +20,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-uploader__input$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-uploader__input'] ??
-      `opacity-0 w-full h-full !cursor-pointer [&::-webkit-file-upload-button]:(cursor-pointer)`
+      `opacity-0 w-full h-full cursor-pointer [&::-webkit-file-upload-button]:(cursor-pointer)`
   ],
 
   [

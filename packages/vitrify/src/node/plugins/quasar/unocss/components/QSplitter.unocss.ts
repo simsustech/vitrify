@@ -34,14 +34,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-splitter--vertical$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-splitter--vertical'] ??
-      `[&_>_.q-splitter\\_\\_panel]:(h-full) [&.q-splitter--active]:() [&_>_.q-splitter\\_\\_separator]:(w-px) [&_>_.q-splitter\\_\\_separator_>_div]:(-left-[6px] -right-[6px]) [&.q-splitter--workable_>_.q-splitter\\_\\_separator]:()`
+      `[&_>_.q-splitter\\_\\_panel]:(h-full) [&.q-splitter--active]:(cursor-col-resize) [&_>_.q-splitter\\_\\_separator]:(w-px) [&_>_.q-splitter\\_\\_separator_>_div]:(-left-[6px] -right-[6px]) [&.q-splitter--workable_>_.q-splitter\\_\\_separator]:(cursor-col-resize)`
   ],
 
   [
     /^q-splitter--horizontal$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-splitter--horizontal'] ??
-      `[&_>_.q-splitter\\_\\_panel]:(w-full) [&.q-splitter--active]:() [&_>_.q-splitter\\_\\_separator]:(h-px) [&_>_.q-splitter\\_\\_separator_>_div]:(-top-[6px] -bottom-[6px]) [&.q-splitter--workable_>_.q-splitter\\_\\_separator]:()`
+      `[&_>_.q-splitter\\_\\_panel]:(w-full) [&.q-splitter--active]:(cursor-row-resize) [&_>_.q-splitter\\_\\_separator]:(h-px) [&_>_.q-splitter\\_\\_separator_>_div]:(-top-[6px] -bottom-[6px]) [&.q-splitter--workable_>_.q-splitter\\_\\_separator]:(cursor-row-resize)`
   ],
 
   [

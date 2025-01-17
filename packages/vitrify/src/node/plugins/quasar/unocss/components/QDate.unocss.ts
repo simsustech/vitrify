@@ -114,7 +114,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-date__edit-range$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-date__edit-range'] ??
-      `[&:after]:() [&:nth-child(7n-6):after]:(rounded-tl-none rounded-bl-none) [&:nth-child(7n):after]:(rounded-tr-none rounded-br-none)`
+      `[&:after]:(border-[currentColor_transparent]) [&:nth-child(7n-6):after]:(rounded-tl-none rounded-bl-none) [&:nth-child(7n):after]:(rounded-tr-none rounded-br-none)`
   ],
 
   [
@@ -180,7 +180,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-date--portrait-standard$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-date--portrait-standard'] ??
-      `[&_.q-date\\_\\_content]:(h-[calc(100% - 86px)]) [&_.q-date\\_\\_header]:([border-top-right-radius:inherit] h-[86px]) [&_.q-date\\_\\_header-title]:(items-center h-[30px])`
+      `[&_.q-date\\_\\_content]:(h-[calc(100%-86px)]) [&_.q-date\\_\\_header]:([border-top-right-radius:inherit] h-[86px]) [&_.q-date\\_\\_header-title]:(items-center h-[30px])`
   ],
 
   [

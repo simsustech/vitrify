@@ -40,7 +40,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [/^cursor-inherit$/, ([, c], { theme }) => `[cursor:inherit!important]`],
 
-  [/^cursor-none$/, ([, c], { theme }) => ``]
+  ['cursor-pointer', 'cursor-[pointer]!']
 ]
 
 export { preflights, shortcuts }

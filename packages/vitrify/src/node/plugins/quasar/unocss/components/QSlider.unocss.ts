@@ -12,7 +12,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-slider--editable$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-slider--editable'] ??
-      `[&_.q-slider\\_\\_track-container]:()`
+      `[&_.q-slider\\_\\_track-container]:(cursor-grab)`
   ],
 
   [/^q-slider__track-container$/, ([, c], { theme }) => `outline-0`],
@@ -21,14 +21,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-slider__track-container--h$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-slider__track-container--h'] ??
-      `w-full px-[0] py-[12px] [&_.q-slider\\_\\_selection]:()`
+      `w-full px-[0] py-[12px] [&_.q-slider\\_\\_selection]:(will-change-width will-change-left)`
   ],
 
   [
     /^q-slider__track-container--v$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-slider__track-container--v'] ??
-      `h-full px-[12px] py-[0] [&_.q-slider\\_\\_selection]:()`
+      `h-full px-[12px] py-[0] [&_.q-slider\\_\\_selection]:(will-change-height will-change-top)`
   ],
 
   [

@@ -79,7 +79,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-toggle--dark$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-toggle--dark'] ??
-      `[&_.q-toggle\\_\\_inner]:(text-[#fff]) [&_.q-toggle\\_\\_inner--truthy]:() [&_.q-toggle\\_\\_thumb:after]:([box-shadow:none]) [&_.q-toggle\\_\\_thumb:before]:(!opacity-[0.32])`
+      `[&_.q-toggle\\_\\_inner]:(text-[#fff]) [&_.q-toggle\\_\\_inner--truthy]:(text-primary) [&_.q-toggle\\_\\_thumb:after]:([box-shadow:none]) [&_.q-toggle\\_\\_thumb:before]:(!opacity-[0.32])`
   ],
 
   [

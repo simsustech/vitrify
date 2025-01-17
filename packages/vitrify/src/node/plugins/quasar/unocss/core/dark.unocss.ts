@@ -7,8 +7,7 @@ const preflights: Preflight<QuasarTheme>[] = [
 body.body--dark {
   color: #fff;
   background: ${theme.colors['dark-page']};
-}
-    `
+}`
   }
 ]
 
