@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.17.8
+
+### Patch Changes
+
+- fb45e8d: fix(vitrify): add QuasarPreset elevation shortcuts
+- 74e851d: fix(vitrify): add QuasarPreset transition preflights
+- 53afb17: fix(vitrify): re-enable QLayout preflight
+- 4d4999a: fix(vitrify): fix QuasarPreset utility classes bugs
+- f422633: feat(vitrify): shrink safelist and add transitions to QuasarPreset
+
 ## 0.17.7
 
 ### Patch Changes
