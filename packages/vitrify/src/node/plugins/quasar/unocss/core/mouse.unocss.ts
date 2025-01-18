@@ -36,11 +36,24 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) => `!pointer-events-none [&_*]:(!pointer-events-none)`
   ],
 
-  [/^all-pointer-events$/, ([, c], { theme }) => ``],
-
   [/^cursor-inherit$/, ([, c], { theme }) => `[cursor:inherit!important]`],
 
   ['cursor-pointer', 'cursor-[pointer]!']
 ]
 
-export { preflights, shortcuts }
+const rules: Rule<QuasarTheme>[] = [
+  [
+    'all-pointer-events',
+    {
+      'pointer-events': 'all !important'
+    }
+  ],
+  [
+    'pointer-events-all',
+    {
+      'pointer-events': 'all !important'
+    }
+  ]
+]
+
+export { preflights, shortcuts, rules }

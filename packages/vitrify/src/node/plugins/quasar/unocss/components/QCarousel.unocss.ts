@@ -24,7 +24,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-carousel__arrow$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-carousel__arrow'] ??
-      `pointer-events-none [&_.q-icon]:(text-[28px]) [&_.q-btn]:()`
+      `pointer-events-none [&_.q-icon]:(text-[28px]) [&_.q-btn]:(pointer-events-all)`
   ],
 
   [

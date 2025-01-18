@@ -156,7 +156,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-fab__actions--opened$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-fab__actions--opened'] ??
-      `opacity-100 scale-100 translate-x-[0.1px] translate-y-[0]`
+      `opacity-100 scale-100 translate-x-[0.1px] translate-y-[0] pointer-events-all`
   ],
 
   [

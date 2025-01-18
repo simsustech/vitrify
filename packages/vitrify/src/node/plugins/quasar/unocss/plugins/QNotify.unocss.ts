@@ -56,7 +56,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-notification$/,
     ([, c], { theme }) =>
       `[box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)] rounded-[4px] inline-flex mt-[10px] mx-[10px] mb-[0] [transition:transform_1s,_opacity_1s] flex-shrink-0 max-w-[95vw] bg-[#323232] text-[#fff] text-[14px]
-      sm:max-w-65vw z-9500`
+      sm:max-w-65vw z-9500 pointer-events-all`
   ],
 
   [
