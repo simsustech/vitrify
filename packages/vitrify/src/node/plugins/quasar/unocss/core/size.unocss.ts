@@ -1,6 +1,19 @@
 import type { Preflight, Rule, UserShortcuts } from '@unocss/core'
 import type { QuasarTheme } from '../theme.js'
 
+const preflights: Preflight<QuasarTheme>[] = [
+  {
+    getCSS: ({ theme }) => `
+:root {
+  --q-size-xs: ${theme.breakpoints.xs};
+  --q-size-sm: ${theme.breakpoints.sm};
+  --q-size-md: ${theme.breakpoints.md};
+  --q-size-lg: ${theme.breakpoints.lg};
+  --q-size-xl: ${theme.breakpoints.xl};
+}`
+  }
+]
+
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^fit$/, ([, c], { theme }) => `!w-full !h-full`],
 
@@ -193,4 +206,4 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^q-mx-auto$/, ([, c], { theme }) => `ml-auto mr-auto`]
 ]
 
-export { shortcuts }
+export { preflights, shortcuts }

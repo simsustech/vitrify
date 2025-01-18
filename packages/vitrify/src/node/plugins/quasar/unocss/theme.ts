@@ -1,6 +1,11 @@
-import { type QuasarPresetOptions } from './index.js'
-
 export interface QuasarTheme {
+  breakpoints: {
+    xs: string
+    sm: string
+    md: string
+    lg: string
+    xl: string
+  }
   colors: {
     primary: string
     secondary: string
@@ -1132,6 +1137,13 @@ export interface QuasarTheme {
 }
 
 const defaultTheme: QuasarTheme = {
+  breakpoints: {
+    xs: '0',
+    sm: '600px',
+    md: '1024px',
+    lg: '1440px',
+    xl: '1920px'
+  },
   colors: {
     primary: '#1976d2',
     secondary: '#26A69A',
