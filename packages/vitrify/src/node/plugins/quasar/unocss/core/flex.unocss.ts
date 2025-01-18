@@ -51,7 +51,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, size], { theme }) =>
       `mt--${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}
         ml--${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}
-        space-x-${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}`
+    [&_>_*]:(ml-${
+      colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+    } mt-${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']})`
   ],
   [
     /^q-gutter-x-(none|xs|sm|md|lg|xl)$/,
