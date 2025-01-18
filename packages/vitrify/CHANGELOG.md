@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.17.9
+
+### Patch Changes
+
+- 3233aea: fix(vitrify): fix QuasarPreset theme colors
+- 3a622d4: fix(vitrify): add QuasarPreset theme breakpoints
+- 267180c: fix(vitrify): fix QuasarPreset pointer events
+- 368ee3b: fix(vitrify): fix QuasarPreset q-gutter
+- ccbd44e: fix(vitrify): fix QuasarPreset flex gutter
+
 ## 0.17.8
 
 ### Patch Changes
