@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.17.10
+
+### Patch Changes
+
+- 31ab88f: fix(vitrify): fix QuasarPreset flex typo
+- 2ebd88f: feat(vitrify): add color extractor for QuasarPreset
+
 ## 0.17.9
 
 ### Patch Changes
