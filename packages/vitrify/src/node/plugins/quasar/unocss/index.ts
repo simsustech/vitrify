@@ -150,11 +150,15 @@ import {
 } from './core/helpers.unocss.js'
 import {
   preflights as MousePreflights,
-  shortcuts as MouseShortcuts
+  shortcuts as MouseShortcuts,
+  rules as MouseRules
 } from './core/mouse.unocss.js'
 import { shortcuts as OrientationShortcuts } from './core/orientation.unocss.js'
 import { shortcuts as PositionShortcuts } from './core/position.unocss.js'
-import { shortcuts as SizeShortcuts } from './core/size.unocss.js'
+import {
+  preflights as SizePreflights,
+  shortcuts as SizeShortcuts
+} from './core/size.unocss.js'
 import { shortcuts as TouchShortcuts } from './core/touch.unocss.js'
 import {
   preflights as TransitionPreflights,
@@ -319,11 +323,64 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
     'q-btn__progress-indicator',
     'q-btn__progress--dark',
     'q-spinner',
-    'q-spinner-mat'
+    'q-spinner-mat',
+    'q-notifications__list',
+    'q-notifications__list--center',
+    'q-notifications__list--top',
+    'q-notifications__list--bottom',
+    'q-notification',
+    'q-notification__icon',
+    'q-notification__icon--additional',
+    'q-notification__avatar',
+    'q-notification__avatar--additional',
+    'q-notification__spinner',
+    'q-notification__spinner--additional',
+    'q-notification__message',
+    'q-notification__caption',
+    'q-notification__actions',
+    'q-notification__badge',
+    'q-notification__badge--top-left',
+    'q-notification__badge--top-right',
+    'q-notification__badge--bottom-left',
+    'q-notification__badge--bottom-right',
+    'q-notification__progress',
+    'q-notification--standard',
+    'q-notification--multi-line',
+    'q-notification--top-left-enter-from',
+    'q-notification--top-left-leave-to',
+    'q-notification--top-enter-from',
+    'q-notification--top-leave-to',
+    'q-notification--top-right-enter-from',
+    'q-notification--top-right-leave-to',
+    'q-notification--left-enter-from',
+    'q-notification--left-leave-to',
+    'q-notification--center-enter-from',
+    'q-notification--center-leave-to',
+    'q-notification--right-enter-from',
+    'q-notification--right-leave-to',
+    'q-notification--bottom-left-enter-from',
+    'q-notification--bottom-left-leave-to',
+    'q-notification--bottom-enter-from',
+    'q-notification--bottom-leave-to',
+    'q-notification--bottom-right-enter-from',
+    'q-notification--bottom-right-leave-to',
+    'q-notification--top-left-leave-active',
+    'q-notification--top-leave-active',
+    'q-notification--top-right-leave-active',
+    'q-notification--left-leave-active',
+    'q-notification--center-leave-active',
+    'q-notification--right-leave-active',
+    'q-notification--bottom-left-leave-active',
+    'q-notification--bottom-leave-active',
+    'q-notification--bottom-right-leave-active'
   ]
 }
 
 const baseSafelist = [
+  'bg-primary',
+  'col',
+  'row',
+  'text-primary',
   'absolute',
   'absolute-bottom',
   'absolute-full',
@@ -1821,9 +1878,11 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
       MousePreflights,
       TypographyPreflights,
       VisibilityPreflights,
-      TransitionPreflights
+      TransitionPreflights,
+      SizePreflights
     ),
     rules: ([] as Rule<QuasarTheme>[]).concat(
+      MouseRules,
       HelperRules,
       ElevationRules,
       VisibilityRules
@@ -1935,6 +1994,7 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
           const transitionMatch = code.matchAll(
             /(transition|transition-show|transition-hide)="(\S*)"/g
           )
+          const colorMatch = code.matchAll(/color="(\S*)"/g)
 
           const matches: string[] = []
           for (const match of kebabMatch) matches.push(match[0])
@@ -1954,11 +2014,15 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
               ].map((v) => `q-transition--${match[2]}-${v}`)
             )
           }
+          const colorClasses = []
+          for (const match of colorMatch) {
+            colorClasses.push(`text-${match[1]}`, `bg-${match[1]}`)
+          }
 
           const classes = qClasses.filter((c) =>
             matches.some((component) => c.includes(component))
           )
-          classes.push(...transitionClasses)
+          classes.push(...transitionClasses, ...colorClasses)
           return classes
         }
       }
