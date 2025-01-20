@@ -6,7 +6,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-bar$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-bar'] ??
-      `bg-black op-20
+      `bg-black/20
     [&>.q-icon]:(ml-2px)
     [&>div]:(ml-8px)
     [&>div+.q-icon]:(ml-8px)
@@ -30,7 +30,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
       `px-8px py-0 h-24px text-14px
     [&_.q-btn]:(text-8px)`
   ],
-  [/^q-bar--dark$/, ([, c], { theme }) => `bg-white op-15`]
+  [/^q-bar--dark$/, ([, c], { theme }) => `bg-white/20`]
 ]
 
 export { shortcuts }
