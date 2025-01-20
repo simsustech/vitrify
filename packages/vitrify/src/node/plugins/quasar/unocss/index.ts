@@ -1858,6 +1858,19 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
 :where(summary) {
   display: list-item;
 }
+
+/* * Change font properties to \`inherit\` in all browsers (opinionated).
+ * */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
 /* beasties:include end */`
           }
         ] as Preflight<QuasarTheme>[]
