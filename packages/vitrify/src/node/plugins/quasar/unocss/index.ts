@@ -2,6 +2,7 @@
 import {
   definePreset,
   type Preflight,
+  type Preset,
   presetIcons,
   type Rule,
   transformerVariantGroup,
@@ -1588,14 +1589,18 @@ const generateSafelist = ({
 }
 
 export default definePreset((options: QuasarPresetOptions = {}) => {
-  return {
-    name: 'quasar',
-    presets: [presetUno(), animatedUno(), presetIcons({})],
-    safelist: generateSafelist(options),
-    preflights: (
-      [
-        {
-          getCSS: ({ theme }) => `/* beasties:include start */
+  return [
+    presetUno(),
+    animatedUno(),
+    presetIcons({}),
+    {
+      name: 'quasar',
+      presets: [presetUno(), animatedUno(), presetIcons({})],
+      safelist: generateSafelist(options),
+      preflights: (
+        [
+          {
+            getCSS: ({ theme }) => `/* beasties:include start */
 /* Document
  * ========================================================================== */
 
@@ -1854,197 +1859,198 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
   display: list-item;
 }
 /* beasties:include end */`
-        }
-      ] as Preflight<QuasarTheme>[]
-    ).concat(
-      QBreadcrumbsPreflights,
-      QCheckboxPreflights,
-      QChipPreflights,
-      QCircularProgressPreflights,
-      QDialogPreflights,
-      QFieldPreflights,
-      QLayoutPreflights,
-      QLinearProgressPreflights,
-      QRadioPreflights,
-      QSelectPreflights,
-      QSpinnerPreflights,
-      QSkeletonPreflights,
-      QTablePreflights,
-      QTogglePreflights,
-      QTreePreflights,
-      ColorPreflights,
-      DarkPreflights,
-      HelperPreflights,
-      MousePreflights,
-      TypographyPreflights,
-      VisibilityPreflights,
-      TransitionPreflights,
-      SizePreflights
-    ),
-    rules: ([] as Rule<QuasarTheme>[]).concat(
-      MouseRules,
-      HelperRules,
-      ElevationRules,
-      VisibilityRules
-    ),
-    shortcuts: ([] as UserShortcuts<QuasarTheme>[]).concat(
-      QIconShortcuts,
-      QAjaxBarShortcuts,
-      QAvatarShortcuts,
-      QBadgeShortcuts,
-      QBreadcrumbsShortcuts,
-      QBannerShortcuts,
-      QBarShortcuts,
-      QBtnShortcuts,
-      QBtnDropdownShortcuts,
-      QBtnGroupShortcuts,
-      QBtnToggleShortcuts,
-      QCardShortcuts,
-      QCarouselShortcuts,
-      QChatMessageShortcuts,
-      QCheckboxShortcuts,
-      QChipShortcuts,
-      QCircularProgressShortcuts,
-      QColorPickerShortcuts,
-      QDateShortcuts,
-      QDialogShortcuts,
-      QEditorShortcuts,
-      QExpansionItemShortcuts,
-      QFabShortcuts,
-      QFieldShortcuts,
-      QFileShortcuts,
-      QFormShortcuts,
-      QImgShortcuts,
-      QInnerLoadingShortcuts,
-      QInputShortcuts,
-      QIntersectionShortcuts,
-      QItemShortcuts,
-      QKnobShortcuts,
-      QLayoutShortcuts,
-      QLinearProgressShortcuts,
-      QMenuShortcuts,
-      QOptionGroupShortcuts,
-      QPageShortcuts,
-      QPageStickyShortcuts,
-      QPaginationShortcuts,
-      QParallaxShortcuts,
-      QPopupEditShortcuts,
-      QPullToRefreshShortcuts,
-      QRadioShortcuts,
-      QRatingShortcuts,
-      QResponsiveShortcuts,
-      QScrollareaShortcuts,
-      QSelectShortcuts,
-      QSeparatorShortcuts,
-      QSkeletonShortcuts,
-      QSlideItemShortcuts,
-      QSliderShortcuts,
-      QSpaceShortcuts,
-      QSpinnerShortcuts,
-      QSplitterShortcuts,
-      QStepperShortcuts,
-      QTabPanelShortcuts,
-      QTableShortcuts,
-      QTabsShortcuts,
-      QTimeShortcuts,
-      QTimelineShortcuts,
-      QToggleShortcuts,
-      QToolbarShortcuts,
-      QTooltipShortcuts,
-      QTreeShortcuts,
-      QUploaderShortcuts,
-      QVideoShortcuts,
-      QVirtualScrollShortcuts,
-      PanelShortcuts,
-
-      QMorphShortcuts,
-      QRippleShortcuts,
-
-      QBottomSheetShortcuts,
-      QDialogPluginShortcuts,
-      QLoadingShortcuts,
-      QNotifyShortcuts,
-      DarkShortcuts,
-      FlexShortcuts,
-      HelperShortcuts,
-      MouseShortcuts,
-      OrientationShortcuts,
-      PositionShortcuts,
-      SizeShortcuts,
-      TouchShortcuts,
-      TransitionsShortcuts,
-      TypographyShortcuts,
-      VisibilityShortcuts,
-      QHeaderShortcuts,
-      QFooterShortcuts,
-      QDrawerShortcuts,
-      ElevationShortcuts
-    ),
-    theme: defaultTheme,
-    variants: [
-      // ...
-    ],
-    extractors: [
-      {
-        name: 'quasar-extractor',
-        order: 0,
-        extract({ code }) {
-          const kebabMatch = code.matchAll(/q-(\w)([\w-]*)/g)
-          const pascalMatch = code.matchAll(/Q([A-Z][a-z0-9]+)+/g)
-          const transitionMatch = code.matchAll(
-            /(transition|transition-show|transition-hide)="(\S*)"/g
-          )
-          const colorMatch = code.matchAll(/color="(\S*)"/g)
-
-          const matches: string[] = []
-          for (const match of kebabMatch) matches.push(match[0])
-          for (const match of pascalMatch) {
-            matches.push(toKebabCase(match[0]))
           }
-          const transitionClasses = []
-          for (const match of transitionMatch) {
-            transitionClasses.push(
-              ...[
-                'enter-from',
-                'enter-active',
-                'enter-to',
-                'leave-from',
-                'leave-active',
-                'leave-to'
-              ].map((v) => `q-transition--${match[2]}-${v}`)
+        ] as Preflight<QuasarTheme>[]
+      ).concat(
+        QBreadcrumbsPreflights,
+        QCheckboxPreflights,
+        QChipPreflights,
+        QCircularProgressPreflights,
+        QDialogPreflights,
+        QFieldPreflights,
+        QLayoutPreflights,
+        QLinearProgressPreflights,
+        QRadioPreflights,
+        QSelectPreflights,
+        QSpinnerPreflights,
+        QSkeletonPreflights,
+        QTablePreflights,
+        QTogglePreflights,
+        QTreePreflights,
+        ColorPreflights,
+        DarkPreflights,
+        HelperPreflights,
+        MousePreflights,
+        TypographyPreflights,
+        VisibilityPreflights,
+        TransitionPreflights,
+        SizePreflights
+      ),
+      rules: ([] as Rule<QuasarTheme>[]).concat(
+        MouseRules,
+        HelperRules,
+        ElevationRules,
+        VisibilityRules
+      ),
+      shortcuts: ([] as UserShortcuts<QuasarTheme>[]).concat(
+        QIconShortcuts,
+        QAjaxBarShortcuts,
+        QAvatarShortcuts,
+        QBadgeShortcuts,
+        QBreadcrumbsShortcuts,
+        QBannerShortcuts,
+        QBarShortcuts,
+        QBtnShortcuts,
+        QBtnDropdownShortcuts,
+        QBtnGroupShortcuts,
+        QBtnToggleShortcuts,
+        QCardShortcuts,
+        QCarouselShortcuts,
+        QChatMessageShortcuts,
+        QCheckboxShortcuts,
+        QChipShortcuts,
+        QCircularProgressShortcuts,
+        QColorPickerShortcuts,
+        QDateShortcuts,
+        QDialogShortcuts,
+        QEditorShortcuts,
+        QExpansionItemShortcuts,
+        QFabShortcuts,
+        QFieldShortcuts,
+        QFileShortcuts,
+        QFormShortcuts,
+        QImgShortcuts,
+        QInnerLoadingShortcuts,
+        QInputShortcuts,
+        QIntersectionShortcuts,
+        QItemShortcuts,
+        QKnobShortcuts,
+        QLayoutShortcuts,
+        QLinearProgressShortcuts,
+        QMenuShortcuts,
+        QOptionGroupShortcuts,
+        QPageShortcuts,
+        QPageStickyShortcuts,
+        QPaginationShortcuts,
+        QParallaxShortcuts,
+        QPopupEditShortcuts,
+        QPullToRefreshShortcuts,
+        QRadioShortcuts,
+        QRatingShortcuts,
+        QResponsiveShortcuts,
+        QScrollareaShortcuts,
+        QSelectShortcuts,
+        QSeparatorShortcuts,
+        QSkeletonShortcuts,
+        QSlideItemShortcuts,
+        QSliderShortcuts,
+        QSpaceShortcuts,
+        QSpinnerShortcuts,
+        QSplitterShortcuts,
+        QStepperShortcuts,
+        QTabPanelShortcuts,
+        QTableShortcuts,
+        QTabsShortcuts,
+        QTimeShortcuts,
+        QTimelineShortcuts,
+        QToggleShortcuts,
+        QToolbarShortcuts,
+        QTooltipShortcuts,
+        QTreeShortcuts,
+        QUploaderShortcuts,
+        QVideoShortcuts,
+        QVirtualScrollShortcuts,
+        PanelShortcuts,
+
+        QMorphShortcuts,
+        QRippleShortcuts,
+
+        QBottomSheetShortcuts,
+        QDialogPluginShortcuts,
+        QLoadingShortcuts,
+        QNotifyShortcuts,
+        DarkShortcuts,
+        FlexShortcuts,
+        HelperShortcuts,
+        MouseShortcuts,
+        OrientationShortcuts,
+        PositionShortcuts,
+        SizeShortcuts,
+        TouchShortcuts,
+        TransitionsShortcuts,
+        TypographyShortcuts,
+        VisibilityShortcuts,
+        QHeaderShortcuts,
+        QFooterShortcuts,
+        QDrawerShortcuts,
+        ElevationShortcuts
+      ),
+      theme: defaultTheme,
+      variants: [
+        // ...
+      ],
+      extractors: [
+        {
+          name: 'quasar-extractor',
+          order: 9,
+          extract({ code }) {
+            const kebabMatch = code.matchAll(/q-(\w)([\w-]*)/g)
+            const pascalMatch = code.matchAll(/Q([A-Z][a-z0-9]+)+/g)
+            const transitionMatch = code.matchAll(
+              /(transition|transition-show|transition-hide)="(\S*)"/g
             )
-          }
-          const colorClasses = []
-          for (const match of colorMatch) {
-            colorClasses.push(`text-${match[1]}`, `bg-${match[1]}`)
-          }
+            const colorMatch = code.matchAll(/color="(\S*)"/g)
 
-          const classes = qClasses.filter((c) =>
-            matches.some((component) => c.includes(component))
-          )
-          classes.push(...transitionClasses, ...colorClasses)
-          return classes
+            const matches: string[] = []
+            for (const match of kebabMatch) matches.push(match[0])
+            for (const match of pascalMatch) {
+              matches.push(toKebabCase(match[0]))
+            }
+            const transitionClasses = []
+            for (const match of transitionMatch) {
+              transitionClasses.push(
+                ...[
+                  'enter-from',
+                  'enter-active',
+                  'enter-to',
+                  'leave-from',
+                  'leave-active',
+                  'leave-to'
+                ].map((v) => `q-transition--${match[2]}-${v}`)
+              )
+            }
+            const colorClasses = []
+            for (const match of colorMatch) {
+              colorClasses.push(`text-${match[1]}`, `bg-${match[1]}`)
+            }
+
+            const classes = qClasses.filter((c) =>
+              matches.some((component) => c.includes(component))
+            )
+            classes.push(...transitionClasses, ...colorClasses)
+            return classes
+          }
         }
-      }
-    ],
-    transformers: [
-      transformerVariantGroup()
-      // {
-      //   name: 'find-classes-in-quasar-src',
-      //   enforce: 'pre', // enforce before other transformers
-      //   idFilter(id) {
-      //     return id.match(/quasar\/src\/.*\.js/)
-      //   },
-      //   async transform(code, id, { uno }) {
-      //     for (const c of baseSafelist) {
-      //       if (code.toString().includes(c)) console.log(c)
-      //     }
-      //     return code
-      //     // code is a MagicString instance
-      //   }
-      // }
-    ]
-  }
+      ],
+      transformers: [
+        transformerVariantGroup()
+        // {
+        //   name: 'find-classes-in-quasar-src',
+        //   enforce: 'pre', // enforce before other transformers
+        //   idFilter(id) {
+        //     return id.match(/quasar\/src\/.*\.js/)
+        //   },
+        //   async transform(code, id, { uno }) {
+        //     for (const c of baseSafelist) {
+        //       if (code.toString().includes(c)) console.log(c)
+        //     }
+        //     return code
+        //     // code is a MagicString instance
+        //   }
+        // }
+      ]
+    } as Preset
+  ]
 })
 
 export const defaultSplitRE = /[\\:]?[\s'"`;{}]+/g
