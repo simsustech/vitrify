@@ -6,7 +6,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-loading-bar$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-loading-bar'] ??
-      `fixed z-9998 transition-transform bg-red`
+      `fixed z-${theme.quasar.z['max']} transition-transform bg-red`
   ],
   [/^q-loading-bar--top$/, ([, c], { theme }) => `left-0 right-0 top-0 w-full`],
   [

@@ -7,7 +7,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-loading__backdrop$/,
     ([, c], { theme }) =>
-      `fixed top-0 right-0 bottom-0 left-0 opacity-50 bg-[#000] [transition:background-color_0.28s]`
+      `fixed top-0 right-0 bottom-0 left-0 opacity-50 bg-[#000] [transition:background-color_0.28s] z--1`
   ],
 
   [

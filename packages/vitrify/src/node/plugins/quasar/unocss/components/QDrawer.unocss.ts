@@ -6,12 +6,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-drawer$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-drawer'] ??
-      `absolute top-[0] bottom-[0] bg-[#fff]`
+      `absolute top-[0] bottom-[0] bg-[#fff] z-${theme.quasar.z['side']}`
   ],
 
   [
     /^q-drawer--on-top$/,
-    ([, c], { theme }) => theme.quasar?.components?.['q-drawer--on-top'] ?? ``
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer--on-top'] ??
+      `z-${theme.quasar.z['top']}`
   ],
 
   [
@@ -65,14 +67,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [
     /^q-drawer__backdrop$/,
-    ([, c], { theme }) => theme.quasar?.components?.['q-drawer__backdrop'] ?? ``
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-drawer__backdrop'] ??
+      `z-${theme.quasar.z['top'] - 1}`
   ],
 
   [
     /^q-drawer__opener$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-drawer__opener'] ??
-      `h-full w-[15px] select-none`
+      `h-full w-[15px] select-none z-${theme.quasar.z['marginals'] + 1}`
   ]
 ]
 

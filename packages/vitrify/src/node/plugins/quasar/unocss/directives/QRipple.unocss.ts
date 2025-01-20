@@ -5,7 +5,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-ripple$/,
     ([, c], { theme }) =>
-      `absolute top-0 left-0 w-full h-full [color:inherit] [border-radius:inherit] z-0 pointer-events-none overflow-hidden`
+      `absolute top-0 left-0 w-full h-full [color:inherit] [border-radius:inherit] z-0 pointer-events-none overflow-hidden z-0`
   ],
 
   [

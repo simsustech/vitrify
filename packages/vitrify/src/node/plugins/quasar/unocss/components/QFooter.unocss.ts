@@ -15,7 +15,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-footer$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-footer'] ??
-      `[&_.q-layout\\_\\_shadow]:(-top-[10px]) [&_.q-layout\\_\\_shadow:after]:(top-[10px])  relative z-2000`
+      `[&_.q-layout\\_\\_shadow]:(-top-[10px]) [&_.q-layout\\_\\_shadow:after]:(top-[10px])  relative z-${theme.quasar.z['marginals']}`
   ]
 ]
 
