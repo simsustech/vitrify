@@ -14,8 +14,16 @@ const colGutter = {
 } as const
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  [/^row$/, ([, c], { theme }) => `flex flex-row flex-wrap`],
-  [/^column$/, ([, c], { theme }) => `flex flex-col flex-wrap`],
+  [
+    /^row$/,
+    ([, c], { theme }) =>
+      `flex flex-row flex-wrap [&.reverse]:(flex-row-reverse)`
+  ],
+  [
+    /^column$/,
+    ([, c], { theme }) =>
+      `flex flex-col flex-wrap [&.reverse]:(flex-col-reverse)`
+  ],
   [
     /^col(?:-)?(none|xs|sm|md|lg|xl)?(?:-)?([2-9]|1[0-2]?)?$/,
     ([, size, nr], { theme }) => {

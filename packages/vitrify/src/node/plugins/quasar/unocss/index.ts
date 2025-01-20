@@ -378,6 +378,7 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
 }
 
 const baseSafelist = [
+  'relative-position',
   'q-panel-parent',
   'inline',
   'bg-primary',
@@ -2000,6 +2001,10 @@ textarea {
         QDrawerShortcuts,
         ElevationShortcuts
       ),
+      layers: {
+        dismiss: -1,
+        default: 1
+      },
       theme: defaultTheme,
       variants: [
         // ...
@@ -2040,7 +2045,10 @@ textarea {
             }
 
             const classes = qClasses.filter((c) =>
-              matches.some((component) => c.includes(component))
+              matches.some((component) => {
+                component = component.replaceAll('q-chat-message', 'q-message')
+                return c.includes(component)
+              })
             )
             classes.push(...transitionClasses, ...colorClasses)
             return classes

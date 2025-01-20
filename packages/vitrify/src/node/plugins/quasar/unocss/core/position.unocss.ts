@@ -75,7 +75,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 
   [/^on-right$/, ([, c], { theme }) => `ml-[12px]`],
 
-  [/^q-position-engine$/, ([, c], { theme }) => `!mt-0 !ml-0`]
+  [/^q-position-engine$/, ([, c], { theme }) => `!mt-0 !ml-0`],
+
+  [/^relative-position$/, ([, c], { theme }) => `relative`]
 ]
 
 export { shortcuts }

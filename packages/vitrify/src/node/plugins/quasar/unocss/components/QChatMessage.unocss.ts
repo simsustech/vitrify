@@ -38,7 +38,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-message-text--received$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-message-text--received'] ??
-      `text-[#81c784] rounded-tl-[4px] rounded-br-[4px] rounded-tr-[4px] rounded-bl-[0] [&:last-child:before]:(right-full [border-right:0_solid_transparent] [border-left:8px_solid_transparent] [border-bottom:8px_solid_currentColor])`
+      `text-[#81c784] rounded-tl-[4px] rounded-br-[4px] rounded-tr-[4px] rounded-bl-[0]
+      [&:last-child:before]:(right-full [border-right:0_solid_transparent] [border-left:8px_solid_transparent] [border-bottom:8px_solid_currentColor])`
   ],
 
   [/^q-message-text-content--received$/, ([, c], { theme }) => `text-[#000]`],
@@ -62,7 +63,11 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-message-text$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-message-text'] ??
-      `bg-current p-[8px] leading-[1.2] relative [&_+_.q-message-text]:(mt-[3px]) [&:last-child]:(min-h-[48px]) [&:last-child_.q-message-stamp]:(block) [&:last-child:before]:(content-empty absolute bottom-0 w-[0] h-[0])`
+      `bg-current p-[8px] leading-[1.2] relative
+      [&_+_.q-message-text]:(mt-[3px])
+      [&:last-child]:(min-h-[48px])
+      [&:last-child_.q-message-stamp]:(block)
+      [&:last-child:before]:(content-empty absolute bottom-0 w-[0] h-[0])`
   ]
 ]
 

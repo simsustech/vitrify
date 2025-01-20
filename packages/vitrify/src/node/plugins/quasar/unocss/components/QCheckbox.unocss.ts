@@ -28,7 +28,12 @@ body.desktop .q-checkbox--dense:not(.disabled):focus .q-checkbox__inner:before, 
 ]
 
 const shortcuts: UserShortcuts<QuasarTheme> = [
-  [/^q-checkbox$/, ([, c], { theme }) => `align-middle`],
+  [
+    /^q-checkbox$/,
+    ([, c], { theme }) =>
+      theme.quasar?.components?.['q-checkbox'] ??
+      `align-middle [&.disabled]:(!opacity-75)`
+  ],
 
   [/^q-checkbox__native$/, ([, c], { theme }) => `w-px h-px`],
 
@@ -49,7 +54,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-checkbox__truthy$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox__truthy'] ??
-      `stroke-current stroke-[3.12px]`
+      `stroke-current stroke-[3.12px] stroke-offset-[29.78334] stroke-dash-[29.78334]`
   ],
 
   [
@@ -63,14 +68,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-checkbox__inner$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox__inner'] ??
-      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-0 rounded-[50%] text-[rgba(0,_0,_0,_0.54)]`
+      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-[0] rounded-[50%] layer-dismiss:text-[rgba(0,_0,_0,_0.54)]`
   ],
 
   [
     /^q-checkbox__inner--truthy$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox__inner--truthy'] ??
-      `text-primary [&_.q-checkbox\\_\\_bg]:(bg-current) [&_path]:([transition:stroke-dashoffset_0.18s_cubic-bezier(0.4,_0,_0.6,_1)_0ms])`
+      `text-primary
+      [&_.q-checkbox\\_\\_bg]:(bg-current)
+      [&_path]:(stroke-offset-none [transition:stroke-dashoffset_0.18s_cubic-bezier(0.4,_0,_0.6,_1)_0ms])`
   ],
 
   [
@@ -84,14 +91,20 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-checkbox--dark$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox--dark'] ??
-      `[&_.q-checkbox\\_\\_inner]:(text-[rgba(255,_255,_255,_0.7)]) [&_.q-checkbox\\_\\_inner:before]:(!opacity-[0.32]) [&_.q-checkbox\\_\\_inner--truthy]:(text-primary) [&_.q-checkbox\\_\\_inner--indet]:(text-primary)`
+      `[&_.q-checkbox\\_\\_inner]:(layer-dismiss:text-[rgba(255,_255,_255,_0.7)])
+       [&_.q-checkbox\\_\\_inner:before]:(!opacity-[0.32])
+       [&_.q-checkbox\\_\\_inner--truthy]:(layer-dismiss:text-primary)
+       [&_.q-checkbox\\_\\_inner--indet]:(layer-dismiss:text-primary)`
   ],
 
   [
     /^q-checkbox--dense$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox--dense'] ??
-      `[&_.q-checkbox\\_\\_inner]:(w-[0.5em] min-w-[0.5em] h-[0.5em]) [&_.q-checkbox\\_\\_bg]:(left-[5%] top-[5%] w-[90%] h-[90%]) [&_.q-checkbox\\_\\_label]:(pl-[0.5em])`
+      `[&_.q-checkbox\\_\\_inner]:(w-[0.5em] min-w-[0.5em] h-[0.5em])
+       [&_.q-checkbox\\_\\_bg]:(left-[5%] top-[5%] w-[90%] h-[90%])
+       [&_.q-checkbox\\_\\_label]:(pl-[0.5em])
+       [&.reverse_.q-checkbox\\_\\_label]:(pl-0 pr-[0.5em])`
   ]
 ]
 
