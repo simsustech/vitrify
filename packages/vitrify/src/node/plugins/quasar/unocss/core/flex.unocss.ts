@@ -69,7 +69,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ],
   [/^wrap$/, ([, size], { theme }) => `flex-wrap`],
   [/^no-wrap$/, ([, size], { theme }) => `flex-nowrap`],
-  [/^reverse-wrap$/, ([, size], { theme }) => `flex-wrap-reverse`]
+  [/^reverse-wrap$/, ([, size], { theme }) => `flex-wrap-reverse`],
+  [/^flex-center$/, ([, c], { theme }) => 'justify-center items-center']
 ]
 
 export { shortcuts }
