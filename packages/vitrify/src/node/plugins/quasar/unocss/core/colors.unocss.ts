@@ -12,7 +12,7 @@ const preflights: Preflight<QuasarTheme>[] = [
   --q-negative: ${theme.colors.negative};
   --q-info: ${theme.colors.info};
   --q-warning: ${theme.colors.warning};
-  --q-dark: ${theme.colors['q-dark']};
+  --q-dark: ${theme.colors['dark']};
   --q-dark-page: ${theme.colors['dark-page']};
 }`
   }

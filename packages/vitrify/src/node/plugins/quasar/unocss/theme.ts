@@ -17,7 +17,7 @@ export interface QuasarTheme {
     warning: string
 
     'dark-page': string
-    'q-dark': string
+    dark: string
 
     red: string
     'red-1': string
@@ -1155,7 +1155,7 @@ const defaultTheme: QuasarTheme = {
     warning: '#F2C037',
 
     'dark-page': '#121212',
-    'q-dark': '#1d1d1d',
+    dark: '#1d1d1d',
 
     red: '#f44336',
     'red-1': '#ffebee',
