@@ -378,6 +378,7 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
 }
 
 const baseSafelist = [
+  'inline',
   'bg-primary',
   'col',
   'row',

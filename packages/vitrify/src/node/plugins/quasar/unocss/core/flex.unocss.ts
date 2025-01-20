@@ -13,8 +13,6 @@ const colGutter = {
   xl: 12
 } as const
 
-const sizes = ['sm', 'md', 'lg', 'xl']
-
 const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^row$/, ([, c], { theme }) => `flex flex-row flex-wrap`],
   [/^column$/, ([, c], { theme }) => `flex flex-col flex-wrap`],
@@ -70,7 +68,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^wrap$/, ([, size], { theme }) => `flex-wrap`],
   [/^no-wrap$/, ([, size], { theme }) => `flex-nowrap`],
   [/^reverse-wrap$/, ([, size], { theme }) => `flex-wrap-reverse`],
-  [/^flex-center$/, ([, c], { theme }) => 'justify-center items-center']
+  [/^flex-center$/, ([, c], { theme }) => 'justify-center items-center'],
+  [/^inline$/, ([, c], { theme }) => 'flex-inline!']
 ]
 
 export { shortcuts }
