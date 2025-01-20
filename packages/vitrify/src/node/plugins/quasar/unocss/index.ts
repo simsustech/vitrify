@@ -378,6 +378,7 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
 }
 
 const baseSafelist = [
+  'q-panel-parent',
   'inline',
   'bg-primary',
   'col',
@@ -2006,12 +2007,12 @@ textarea {
       extractors: [
         {
           name: 'quasar-extractor',
-          order: 9,
+          order: 0,
           extract({ code }) {
             const kebabMatch = code.matchAll(/q-(\w)([\w-]*)/g)
             const pascalMatch = code.matchAll(/Q([A-Z][a-z0-9]+)+/g)
             const transitionMatch = code.matchAll(
-              /(transition|transition-show|transition-hide)="(\S*)"/g
+              /(transition|transition-show|transition-hide|transition-prev|transition-next)="(\S*)"/g
             )
             const colorMatch = code.matchAll(/color="(\S*)"/g)
 
