@@ -1,5 +1,20 @@
 # vitrify
 
+## 0.17.11
+
+### Patch Changes
+
+- d2455d8: fix(vitrify): fix QuasarPreset QCarousel transitions
+- 719dd9f: fix(vitrify): remove !important from QuasarPreset q-dark
+- fe8c1e2: fix(vitrify): add flex-center class to QuasarPreset
+- 8a5db52: fix(vitrify): add inline shortcut to QuasarPreset flex
+- d401ef0: fix(vitrify): return presets instead of setting them in the preset configuration in QuasarPreset
+- 5a6aa9f: fix(vitrify): fix QuasarPreset QChatMessage and QCheckbox
+- 1c79087: fix(vitrify): fix QuasarPreset dark background
+- 7a4e3eb: fix(vitrify): fix QuasarPreset QBar QBtn QCard QTabPanel
+- e6eedcb: fix(vitrify): fix QuasarPreset z-index
+- 03e4141: fix(vitrify): fix QuasarPreset QBar QBtn QCard QTabPanel
+
 ## 0.17.10
 
 ### Patch Changes
