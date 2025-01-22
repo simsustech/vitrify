@@ -60,8 +60,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-date__view$/,
     ([, c], { theme }) =>
-      theme.quasar?.components?.['q-date__view'] ??
-      `h-full w-full min-h-[290px] p-[16px]`
+      theme.quasar?.components?.['q-date__view'] ?? `min-h-[290px] p-[16px]`
+    // h-full w-full
   ],
 
   [
@@ -194,7 +194,9 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-date--landscape$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-date--landscape'] ??
-      `flex-row items-stretch min-w-[420px] [&_>_div]:(flex flex-col) [&_.q-date\\_\\_content]:(h-full)`
+      `flex-row items-stretch min-w-[420px]
+      [&_>_div]:(flex flex-auto flex-col)
+      [&_.q-date\\_\\_content]:(h-full)`
   ],
 
   [

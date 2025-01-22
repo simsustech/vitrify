@@ -17,12 +17,12 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^row$/,
     ([, c], { theme }) =>
-      `flex flex-row flex-wrap [&.reverse]:(flex-row-reverse)`
+      `flex flex-row flex-wrap flex-auto [&.reverse]:(flex-row-reverse)`
   ],
   [
     /^column$/,
     ([, c], { theme }) =>
-      `flex flex-col flex-wrap [&.reverse]:(flex-col-reverse)`
+      `flex flex-col flex-wrap flex-auto [&.reverse]:(flex-col-reverse)`
   ],
   [
     /^col(?:-)?(none|xs|sm|md|lg|xl)?(?:-)?([2-9]|1[0-2]?)?$/,
@@ -57,21 +57,43 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, size], { theme }) =>
       `mt--${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}
         ml--${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}
-    [&_>_*]:(ml-${
-      colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
-    } mt-${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']})`
+        [&:not(.row):not(.column)_>_*]:(ml-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        } mt-${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']})
+        [&.row]:(gap-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })
+        [&.column]:(gap-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })`
   ],
   [
     /^q-gutter-x-(none|xs|sm|md|lg|xl)$/,
     ([, size], { theme }) =>
       `ml--${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}
-      space-x-${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}`
+        [&:not(.row):not(.column)_>_*]:(ml-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })
+        [&.row]:(gap-x-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })
+        [&.column]:(gap-x-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })`
   ],
   [
     /^q-gutter-y-(none|xs|sm|md|lg|xl)$/,
     ([, size], { theme }) =>
       `mt--${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}
-       space-y-${colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']}`
+        [&:not(.row):not(.column)_>_*]:(mt-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })
+        [&.row]:(gap-y-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })
+        [&.column]:(gap-y-${
+          colGutter[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
+        })`
   ],
   [/^wrap$/, ([, size], { theme }) => `flex-wrap`],
   [/^no-wrap$/, ([, size], { theme }) => `flex-nowrap`],

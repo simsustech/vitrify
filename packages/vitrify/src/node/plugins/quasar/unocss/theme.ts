@@ -1117,6 +1117,14 @@ export interface QuasarTheme {
       'q-notification--bottom-leave-active'?: string
       'q-notification--bottom-right-leave-active'?: string
     }
+    spaces: {
+      none: number
+      xs: number
+      sm: number
+      md: number
+      lg: number
+      xl: number
+    }
     z: {
       fab: number
       side: number
@@ -1444,6 +1452,14 @@ const defaultTheme: QuasarTheme = {
     'blue-grey-14': '#455a64'
   },
   quasar: {
+    spaces: {
+      none: 0,
+      xs: 0.25,
+      sm: 0.5,
+      md: 1,
+      lg: 1.5,
+      xl: 3
+    },
     z: {
       fab: 990,
       side: 1000,
