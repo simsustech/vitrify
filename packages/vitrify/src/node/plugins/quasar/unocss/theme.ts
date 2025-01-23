@@ -1454,11 +1454,11 @@ const defaultTheme: QuasarTheme = {
   quasar: {
     spaces: {
       none: 0,
-      xs: 0.25,
-      sm: 0.5,
-      md: 1,
-      lg: 1.5,
-      xl: 3
+      xs: 1,
+      sm: 2,
+      md: 4,
+      lg: 6,
+      xl: 12
     },
     z: {
       fab: 990,
