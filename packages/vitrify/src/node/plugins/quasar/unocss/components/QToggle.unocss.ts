@@ -44,7 +44,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-toggle__track$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-toggle__track'] ??
-      `h-[0.35em] rounded-[0.175em] opacity-[0.38] bg-current`
+      `h-[0.35em] max-w-32px rounded-[0.175em] opacity-[0.38] bg-current`
   ],
 
   [
@@ -58,7 +58,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-toggle__inner$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-toggle__inner'] ??
-      `text-[40px] w-[1.4em] min-w-[1.4em] h-[1em] px-[0.3em] py-[0.325em]`
+      `text-[40px] w-[1.4em] min-w-[1.4em] max-h-[1em] px-[0.3em] py-[0.325em]`
   ],
 
   [

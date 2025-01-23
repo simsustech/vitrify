@@ -71,14 +71,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-btn--fab$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-btn--fab'] ??
-      `[&_.q-icon]:(text-[24px]) p-[16px] min-h-[56px] min-w-[56px] [&_.q-icon]:(m-auto)`
+      `[&_.q-icon]:(text-[24px]) p-[16px] [&_.q-icon]:(m-auto) pb-0`
+    // min-h-[56px] min-w-[56px]
   ],
 
   [
     /^q-btn--fab-mini$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-btn--fab-mini'] ??
-      `[&_.q-icon]:(text-[24px]) p-[8px] min-h-[40px] min-w-[40px]`
+      `[&_.q-icon]:(text-[24px]) p-[8px] pb-0`
+    // min-h-[40px] min-w-[40px]
   ],
 
   [/^q-btn__content$/, ([, c], { theme }) => `[transition:opacity_0.3s] z-0`],
