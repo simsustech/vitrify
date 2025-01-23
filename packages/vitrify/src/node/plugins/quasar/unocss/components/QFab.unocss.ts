@@ -7,8 +7,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^q-fab$/,
     ([, c], { theme }) =>
-      theme.quasar?.components?.['q-fab'] ??
-      `relative align-middle [&_>_.q-btn]:(w-full)`
+      theme.quasar?.components?.['q-fab'] ?? `relative align-middle`
+    // [&_>_.q-btn]:(w-full)
   ],
 
   [/^q-fab--form-rounded$/, ([, c], { theme }) => `rounded-[28px]`],
@@ -19,14 +19,14 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-fab__icon$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-fab__icon'] ??
-      `[transition:opacity_0.4s,_transform_0.4s] opacity-100 rotate-0`
+      `[transition:opacity_0.4s,_transform_0.4s] opacity-100 rotate-0 relative!`
   ],
 
   [
     /^q-fab__active-icon$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-fab__active-icon'] ??
-      `[transition:opacity_0.4s,_transform_0.4s] opacity-0 -rotate-180`
+      `[transition:opacity_0.4s,_transform_0.4s] opacity-0 -rotate-180 relative! !left--20px !mr--20px`
   ],
 
   [
@@ -107,7 +107,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-fab__icon-holder$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-fab__icon-holder'] ??
-      `min-w-[24px] min-h-[24px] relative`
+      `[&:before]:(content-empty)`
+    // min-w-[24px] min-h-[24px] relative
   ],
 
   [
