@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.17.12
+
+### Patch Changes
+
+- 7886838: fix(vitrify): fix QuasarPreset QFab
+- 617ace8: fix(vitrify): fix QuasarPreset theme spacing
+- a3e920f: fix(vitrify): fix QuasarPreset QDate, flex and size
+- 5028f4c: fix(vitrify): fix QBtn, QField, QToggle
+- 21a1fe6: fix(vitrify): fix QuasarPreset components
+
 ## 0.17.11
 
 ### Patch Changes
