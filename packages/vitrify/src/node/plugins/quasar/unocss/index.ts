@@ -178,7 +178,11 @@ import {
 import { shortcuts as QHeaderShortcuts } from './components/QHeader.unocss.js'
 import { shortcuts as QFooterShortcuts } from './components/QFooter.unocss.js'
 import { shortcuts as QDrawerShortcuts } from './components/QDrawer.unocss.js'
-import { type QuasarIconSet, type QuasarPlugins } from 'quasar'
+import {
+  type QuasarComponents,
+  type QuasarIconSet,
+  type QuasarPlugins
+} from 'quasar'
 
 export interface QuasarPresetOptions {
   plugins?: (keyof QuasarPlugins)[]
@@ -197,6 +201,11 @@ const toKebabCase = (str: string) =>
     .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
     ?.map((x) => x.toLowerCase())
     .join('-') ?? ''
+
+const componentsSafelistMap: Partial<Record<keyof QuasarComponents, string[]>> =
+  {
+    QSelect: ['q-list', 'q-item', 'q-virtual-scroll', 'q-menu']
+  }
 
 const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
   BottomSheet: [
@@ -2021,9 +2030,11 @@ textarea {
             )
             const colorMatch = code.matchAll(/color="(\S*)"/g)
 
+            const pascalComponentsMatch: string[] = []
             const matches: string[] = []
             for (const match of kebabMatch) matches.push(match[0])
             for (const match of pascalMatch) {
+              pascalComponentsMatch.push(match[0])
               matches.push(toKebabCase(match[0]))
             }
             const transitionClasses = []
@@ -2047,10 +2058,31 @@ textarea {
             const classes = qClasses.filter((c) =>
               matches.some((component) => {
                 component = component.replaceAll('q-chat-message', 'q-message')
+                component = component.replaceAll(
+                  'q-scroll-area',
+                  'q-scrollarea'
+                )
                 return c.includes(component)
               })
             )
-            classes.push(...transitionClasses, ...colorClasses)
+            const componentClasses = pascalComponentsMatch.reduce(
+              (acc, component) => {
+                if (component in componentsSafelistMap) {
+                  acc.push(
+                    ...(componentsSafelistMap as Record<string, string>)[
+                      component
+                    ]
+                  )
+                }
+                return acc
+              },
+              [] as string[]
+            )
+            classes.push(
+              ...transitionClasses,
+              ...colorClasses,
+              ...componentClasses
+            )
             return classes
           }
         }

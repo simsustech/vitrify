@@ -27,7 +27,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-stepper__dot$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-stepper__dot'] ??
-      `mr-[8px] text-[14px] w-[24px] min-w-[24px] h-[24px] rounded-[50%] bg-current [&_span]:(text-[#fff])`
+      `!flex-initial mr-[8px] text-[14px] w-[24px] min-w-[24px] h-[24px] rounded-[50%] bg-current [&_span]:(text-[#fff])`
   ],
 
   [

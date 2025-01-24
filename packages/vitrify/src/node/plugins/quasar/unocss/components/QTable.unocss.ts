@@ -20,7 +20,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-table$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-table'] ??
-      `w-full max-w-full border-separate [border-spacing:0] [&_thead_tr]:(h-[48px]) [&_tbody_td]:(h-[48px]) [&_th]:(font-medium text-[12px] select-none) [&_th.sortable]:(cursor-pointer) [&_th.sortable:hover_.q-table\\_\\_sort-icon]:(opacity-[0.64]) [&_th.sorted_.q-table\\_\\_sort-icon]:(!opacity-[0.86]) [&_th.sort-desc_.q-table\\_\\_sort-icon]:(rotate-180) [&_th]:(px-[16px] py-[7px] [background-color:inherit]) [&_td]:(px-[16px] py-[7px] [background-color:inherit]) [&_thead]:(border-solid border-[0]) [&_td]:(border-solid border-[0]) [&_th]:(border-solid border-[0]) [&_tbody_td]:(text-[13px]) [&_thead]:(border-[rgba(0,_0,_0,_0.12)]) [&_tr]:(border-[rgba(0,_0,_0,_0.12)]) [&_th]:(border-[rgba(0,_0,_0,_0.12)]) [&_td]:(border-[rgba(0,_0,_0,_0.12)]) [&_tbody_td]:(relative) [&_tbody_td:before]:(absolute top-[0] left-[0] right-[0] bottom-[0] pointer-events-none) [&_tbody_td:after]:(absolute top-[0] left-[0] right-[0] bottom-[0] pointer-events-none) [&_tbody_td:before]:(bg-[rgba(0,_0,_0,_0.03)]) [&_tbody_td:after]:(bg-[rgba(0,_0,_0,_0.06)]) [&_tbody_tr.selected_td:after]:(content-['']) [&_.q-virtual-scroll\\_\\_padding_tr]:(!h-[0]) [&_.q-virtual-scroll\\_\\_padding_td]:(!p-0)`
+      `w-full max-w-full border-separate [border-spacing:0] [&_thead_tr]:(h-[48px]) [&_tbody_td]:(h-[48px]) [&_th]:(font-medium text-[12px] select-none) [&_th.sortable]:(cursor-pointer) [&_th.sortable:hover_.q-table\\_\\_sort-icon]:(opacity-[0.64]) [&_th.sorted_.q-table\\_\\_sort-icon]:(!opacity-[0.86]) [&_th.sort-desc_.q-table\\_\\_sort-icon]:(rotate-180) [&_th]:(px-[16px] py-[7px] [background-color:inherit]) [&_td]:(px-[16px] py-[7px] [background-color:inherit]) [&_thead]:(border-solid border-0) [&_td]:(border-solid border-0) [&_th]:(border-solid border-0) [&_tbody_td]:(text-[13px]) [&_thead]:(border-[rgba(0,_0,_0,_0.12)]) [&_tr]:(border-[rgba(0,_0,_0,_0.12)]) [&_th]:(border-[rgba(0,_0,_0,_0.12)]) [&_td]:(border-[rgba(0,_0,_0,_0.12)]) [&_tbody_td]:(relative) [&_tbody_td:before]:(absolute top-[0] left-[0] right-[0] bottom-[0] pointer-events-none) [&_tbody_td:after]:(absolute top-[0] left-[0] right-[0] bottom-[0] pointer-events-none) [&_tbody_td:before]:(bg-[rgba(0,_0,_0,_0.03)]) [&_tbody_td:after]:(bg-[rgba(0,_0,_0,_0.06)]) [&_tbody_tr.selected_td:after]:(content-['']) [&_.q-virtual-scroll\\_\\_padding_tr]:(!h-[0]) [&_.q-virtual-scroll\\_\\_padding_td]:(!p-0)`
   ],
 
   [
@@ -61,7 +61,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-table__progress$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-table__progress'] ??
-      `!h-[0] [&_th]:(!p-0 !border-[0]) [&_.q-linear-progress]:(absolute bottom-[0])`
+      `!h-[0] [&_th]:(!p-0 !border-0) [&_.q-linear-progress]:(absolute bottom-[0])`
   ],
 
   [
@@ -177,7 +177,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-table--grid$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-table--grid'] ??
-      `[box-shadow:none] rounded-[4px] [&_.q-table\\_\\_top]:(pb-[4px]) [&_.q-table\\_\\_middle]:(min-h-[2px] mb-[4px]) [&_.q-table\\_\\_middle_thead]:(!border-[0]) [&_.q-table\\_\\_middle_thead_th]:(!border-[0]) [&_.q-table\\_\\_linear-progress]:(bottom-[0]) [&_.q-table\\_\\_bottom]:([border-top:0]) [&_.q-table\\_\\_grid-content]:(flex-auto) [&.fullscreen]:([background:inherit])`
+      `[box-shadow:none] rounded-[4px] [&_.q-table\\_\\_top]:(pb-[4px]) [&_.q-table\\_\\_middle]:(min-h-[2px] mb-[4px]) [&_.q-table\\_\\_middle_thead]:(!border-0) [&_.q-table\\_\\_middle_thead_th]:(!border-0) [&_.q-table\\_\\_linear-progress]:(bottom-[0]) [&_.q-table\\_\\_bottom]:([border-top:0]) [&_.q-table\\_\\_grid-content]:(flex-auto) [&.fullscreen]:([background:inherit])`
   ],
 
   [

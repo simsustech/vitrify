@@ -8,7 +8,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-pull-to-refresh__puller$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-pull-to-refresh__puller'] ??
-      `rounded-[50%] w-[40px] h-[40px] bg-[#fff] [box-shadow:0_0_4px_0_rgba(0,_0,_0,_0.3)] text-primary`
+      `!flex-initial rounded-[50%] w-[40px] h-[40px] bg-[#fff] [box-shadow:0_0_4px_0_rgba(0,_0,_0,_0.3)] text-primary`
   ],
 
   [

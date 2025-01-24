@@ -110,7 +110,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field__control'] ??
       `h-[56px] max-w-full outline-[none] text-primary
-	[&:before]:(content-empty top-[0] right-[0] bottom-[0] left-[0] pointer-events-none absolute [border-rd-inherit]) 
+	[&:before]:(content-empty top-[0] right-[0] bottom-[0] left-[0] pointer-events-none absolute border-rd-inherit) 
 	[&:after]:(content-empty top-[0] right-[0] bottom-[0] left-[0] pointer-events-none absolute)`
   ],
 
@@ -127,7 +127,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-field__native$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field__native'] ??
-      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-none text-black/87 outline-[0] px-[0] py-[6px] w-full min-w-[0] !outline-[0] select-auto 
+      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-transparent text-black/87 outline-[0] px-[0] w-full min-w-[0] !outline-[0] select-auto 
 	[&:-webkit-autofill]:() 
 	[&:-webkit-autofill_+_.q-field\\_\\_label]:(-translate-y-[40%] scale-[0.75]) 
 	[&[type='color']_+_.q-field\\_\\_label]:(-translate-y-[40%] scale-[0.75]) 
@@ -144,21 +144,21 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-field__prefix$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field__prefix'] ??
-      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-none text-black/87 outline-[0] px-[0] py-[6px] [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1)] whitespace-nowrap pr-[4px]`
+      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-transparent text-black/87 outline-[0] px-[0] py-[6px] [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1)] whitespace-nowrap pr-[4px]`
   ],
 
   [
     /^q-field__suffix$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field__suffix'] ??
-      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-none text-black/87 outline-[0] px-[0] py-[6px] [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1)] whitespace-nowrap pl-[4px]`
+      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-transparent text-black/87 outline-[0] px-[0] py-[6px] [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1)] whitespace-nowrap pl-[4px]`
   ],
 
   [
     /^q-field__input$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field__input'] ??
-      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-none text-black/87 outline-[0] px-[0] py-[6px] w-full min-w-[0] !outline-[0] select-auto 
+      `font-normal leading-[28px] tracking-[0.00937em] [text-decoration:inherit] [text-transform:inherit] border-none rounded-none bg-transparent text-black/87 outline-[0] px-[0] py-[6px] w-full min-w-[0] !outline-[0] select-auto 
 	[&:-webkit-autofill]:() 
 	[&:-webkit-autofill_+_.q-field\\_\\_label]:(-translate-y-[40%] scale-[0.75]) 
 	[&[type='color']_+_.q-field\\_\\_label]:(-translate-y-[40%] scale-[0.75]) 

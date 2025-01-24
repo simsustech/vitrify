@@ -13,7 +13,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-pagination__content$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-pagination__content'] ??
-      `mt-[var(--q-pagination-gutter-parent)] ml-[var(--q-pagination-gutter-parent)] [&_>_.q-btn]:(mt-[var(--q-pagination-gutter-child)] ml-[var(--q-pagination-gutter-child)]) [&_>_.q-input]:(mt-[var(--q-pagination-gutter-child)] ml-[var(--q-pagination-gutter-child)])`
+      `!flex-initial mt-[var(--q-pagination-gutter-parent)] ml-[var(--q-pagination-gutter-parent)] [&_>_.q-btn]:(mt-[var(--q-pagination-gutter-child)] ml-[var(--q-pagination-gutter-child)]) [&_>_.q-input]:(mt-[var(--q-pagination-gutter-child)] ml-[var(--q-pagination-gutter-child)])`
   ],
 
   [
