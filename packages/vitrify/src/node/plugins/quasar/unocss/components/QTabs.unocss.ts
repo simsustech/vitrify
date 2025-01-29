@@ -67,7 +67,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-tab__indicator$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-tab__indicator'] ??
-      `opacity-0 h-[2px] bg-current`
+      `!relative opacity-0 h-[2px] bg-current`
   ],
 
   [
