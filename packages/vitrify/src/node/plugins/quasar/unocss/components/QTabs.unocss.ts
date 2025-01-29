@@ -87,7 +87,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-tabs$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-tabs'] ??
-      `relative [transition:color_0.3s,_background-color_0.3s]`
+      `!flex-initial relative [transition:color_0.3s,_background-color_0.3s]`
   ],
 
   [
@@ -101,7 +101,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-tabs--not-scrollable$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-tabs--not-scrollable'] ??
-      `[&.q-tabs__arrows--outside]:(pl-0 pr-0) [&_.q-tabs\\_\\_arrow]:(hidden) [&_.q-tabs\\_\\_content]:([border-radius:inherit])`
+      `[&.q-tabs__arrows--outside]:(pl-0 pr-0) [&_.q-tabs\\_\\_arrow]:(!hidden) [&_.q-tabs\\_\\_content]:([border-radius:inherit])`
   ],
 
   [
