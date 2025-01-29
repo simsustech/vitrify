@@ -20,7 +20,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-time__header$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-time__header'] ??
-      `[border-top-left-radius:inherit] text-[#fff] p-[16px] font-light`
+      `[border-top-left-radius:inherit] text-[#fff] p-[16px] font-light bg-primary`
   ],
 
   [
@@ -34,7 +34,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-time__header-label$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-time__header-label'] ??
-      `text-[28px] leading-none tracking-[-0.00833em] [&_>_div_+_div]:(ml-[4px])`
+      `text-[28px] leading-none tracking-[-0.00833em] [&_>_div_+_div]:(ml-[4px]) !flex-initial`
   ],
 
   [
@@ -54,7 +54,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-time__header-ampm$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-time__header-ampm'] ??
-      `text-[16px] tracking-widest`
+      `text-[16px] tracking-widest !flex-initial`
   ],
 
   [
@@ -81,7 +81,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-time__clock$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-time__clock'] ??
-      `p-[24px] w-full h-full max-w-full max-h-full text-[14px]`
+      `p-[24px] w-[calc(100%-48px)] h-[calc(100%-48px)] max-w-full max-h-full text-[14px]`
   ],
 
   [
