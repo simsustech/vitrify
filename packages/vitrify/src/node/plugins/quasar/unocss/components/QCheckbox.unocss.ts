@@ -68,7 +68,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-checkbox__inner$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox__inner'] ??
-      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-[0] rounded-[50%] layer-dismiss:text-[rgba(0,_0,_0,_0.54)]`
+      `text-[40px] w-[1em] min-w-[1em] h-[1em] outline-[0] rounded-[50%] layer-components:text-[rgba(0,_0,_0,_0.54)]`
   ],
 
   [
@@ -91,10 +91,10 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-checkbox--dark$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-checkbox--dark'] ??
-      `[&_.q-checkbox\\_\\_inner]:(layer-dismiss:text-[rgba(255,_255,_255,_0.7)])
+      `[&_.q-checkbox\\_\\_inner]:(layer-components:text-[rgba(255,_255,_255,_0.7)])
        [&_.q-checkbox\\_\\_inner:before]:(!opacity-[0.32])
-       [&_.q-checkbox\\_\\_inner--truthy]:(layer-dismiss:text-primary)
-       [&_.q-checkbox\\_\\_inner--indet]:(layer-dismiss:text-primary)`
+       [&_.q-checkbox\\_\\_inner--truthy]:(layer-components:text-primary)
+       [&_.q-checkbox\\_\\_inner--indet]:(layer-components:text-primary)`
   ],
 
   [

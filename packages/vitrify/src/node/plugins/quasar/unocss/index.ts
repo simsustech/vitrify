@@ -2010,9 +2010,11 @@ textarea {
         QDrawerShortcuts,
         ElevationShortcuts
       ),
+      outputToCssLayers: true,
       layers: {
-        dismiss: -1,
-        default: 1
+        components: -1,
+        default: 1,
+        utilities: 2
       },
       theme: defaultTheme,
       variants: [

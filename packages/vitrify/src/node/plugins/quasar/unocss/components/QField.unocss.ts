@@ -219,16 +219,16 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-field--filled$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field--filled'] ??
-      `[&_.q-field\\_\\_control]:(px-[12px] py-[0] layer-dismiss:bg-black/5 rounded-tl-[4px] rounded-br-[0] rounded-tr-[4px] rounded-bl-[0]) 
-	[&_.q-field\\_\\_control:before]:(layer-dismiss:bg-black/5 [border-bottom:1px_solid_rgba(0,_0,_0,_0.42)] opacity-0 [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1),_background_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
+      `[&_.q-field\\_\\_control]:(px-[12px] py-[0] layer-components:bg-black/5 rounded-tl-[4px] rounded-br-[0] rounded-tr-[4px] rounded-bl-[0]) 
+	[&_.q-field\\_\\_control:before]:(layer-components:bg-black/5 [border-bottom:1px_solid_rgba(0,_0,_0,_0.42)] opacity-0 [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1),_background_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
 	[&_.q-field\\_\\_control:hover:before]:(opacity-100) 
 	[&_.q-field\\_\\_control:after]:(h-[2px] top-auto origin-[center_bottom] [transform:scale3d(0,_1,_1)] bg-current [transition:transform_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
 	[&.q-field--rounded_.q-field\\_\\_control]:(rounded-tl-[28px] rounded-br-[0] rounded-tr-[28px] rounded-bl-[0]) 
-	[&.q-field--highlighted_.q-field\\_\\_control:before]:(opacity-100 layer-dismiss:bg-black/12) 
+	[&.q-field--highlighted_.q-field\\_\\_control:before]:(opacity-100 layer-components:bg-black/12) 
 	[&.q-field--highlighted_.q-field\\_\\_control:after]:([transform:scale3d(1,_1,_1)]) 
-	[&.q-field--dark_.q-field\\_\\_control]:(layer-dismiss:bg-white/7) 
-	[&.q-field--dark_.q-field\\_\\_control:before]:(layer-dismiss:bg-white/7) 
-	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_control:before]:(layer-dismiss:bg-white/1) 
+	[&.q-field--dark_.q-field\\_\\_control]:(layer-components:bg-white/7) 
+	[&.q-field--dark_.q-field\\_\\_control:before]:(layer-components:bg-white/7) 
+	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_control:before]:(layer-components:bg-white/1) 
 	[&.q-field--readonly_.q-field\\_\\_control:before]:(opacity-100 bg-transparent [border-bottom-style:dashed])`
   ],
 
@@ -238,7 +238,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
       theme.quasar?.components?.['q-field--outlined'] ??
       `[&_.q-field\\_\\_control]:(rounded-[4px] px-[12px] py-[0]) 
 	[&_.q-field\\_\\_control:before]:(border-[1px] border-solid border-black/24 [transition:border-color_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
-	[&_.q-field\\_\\_control:hover:before]:(layer-dismiss:border-black) 
+	[&_.q-field\\_\\_control:hover:before]:(layer-components:border-black) 
 	[&_.q-field\\_\\_control:after]:([height:inherit] [border-radius:inherit] border-[2px] border-solid border-transparent [transition:border-color_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
 	[&_.q-field\\_\\_native:-webkit-autofill]:(mt-px mb-px) 
 	[&_.q-field\\_\\_input:-webkit-autofill]:(mt-px mb-px) 
@@ -253,7 +253,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field--standard'] ??
       `[&_.q-field\\_\\_control:before]:([border-bottom:1px_solid_rgba(0,_0,_0,_0.24)] [transition:border-color_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
-	[&_.q-field\\_\\_control:hover:before]:(layer-dismiss:border-black) 
+	[&_.q-field\\_\\_control:hover:before]:(layer-components:border-black) 
 	[&_.q-field\\_\\_control:after]:(h-[2px] top-auto [border-bottom-left-radius:inherit] [border-bottom-right-radius:inherit] origin-[center_bottom] [transform:scale3d(0,_1,_1)] bg-current [transition:transform_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
 	[&.q-field--highlighted_.q-field\\_\\_control:after]:([transform:scale3d(1,_1,_1)]) 
 	[&.q-field--readonly_.q-field\\_\\_control:before]:([border-bottom-style:dashed]) 
@@ -280,11 +280,11 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-field--standout$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-field--standout'] ??
-      `[&_.q-field\\_\\_control]:(px-[12px] py-[0] layer-dismiss:bg-black/5 rounded-[4px] [transition:box-shadow_0.36s_cubic-bezier(0.4,_0,_0.2,_1),_background-color_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
-	[&_.q-field\\_\\_control:before]:(layer-dismiss:bg-black/7 opacity-0 [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1),_background_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
+      `[&_.q-field\\_\\_control]:(px-[12px] py-[0] layer-components:bg-black/5 rounded-[4px] [transition:box-shadow_0.36s_cubic-bezier(0.4,_0,_0.2,_1),_background-color_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
+	[&_.q-field\\_\\_control:before]:(layer-components:bg-black/7 opacity-0 [transition:opacity_0.36s_cubic-bezier(0.4,_0,_0.2,_1),_background_0.36s_cubic-bezier(0.4,_0,_0.2,_1)]) 
 	[&_.q-field\\_\\_control:hover:before]:(opacity-100) 
 	[&.q-field--rounded_.q-field\\_\\_control]:(rounded-[28px]) 
-	[&.q-field--highlighted_.q-field\\_\\_control]:([box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)] layer-dismiss:bg-white) 
+	[&.q-field--highlighted_.q-field\\_\\_control]:([box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)] layer-components:bg-white) 
 	[&.q-field--highlighted_.q-field\\_\\_native]:(text-white) 
 	[&.q-field--highlighted_.q-field\\_\\_prefix]:(text-white) 
 	[&.q-field--highlighted_.q-field\\_\\_suffix]:(text-white) 
@@ -293,8 +293,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
 	[&.q-field--highlighted_.q-field\\_\\_input]:(text-white) 
 	[&.q-field--readonly_.q-field\\_\\_control:before]:(opacity-100 bg-transparent border-[1px] border-dashed border-black/24) 
 	[&.q-field--dark_.q-field\\_\\_control]:(bg-[rgba(255,_255,_255,_0.07)]) 
-	[&.q-field--dark_.q-field\\_\\_control:before]:(layer-dismiss:bg-white/7) 
-	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_control]:(layer-dismiss:bg-white) 
+	[&.q-field--dark_.q-field\\_\\_control:before]:(layer-components:bg-white/7) 
+	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_control]:(layer-components:bg-white) 
 	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_native]:(text-black) 
 	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_prefix]:(text-black) 
 	[&.q-field--dark.q-field--highlighted_.q-field\\_\\_suffix]:(text-black) 
