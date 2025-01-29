@@ -26,7 +26,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [/^window-width$/, ([, c], { theme }) => `!ml-0 !mr-0 !w-screen`],
 
   [
-    /^q-p(a|t|b|l|r)?(?:-)(none|xs|sm|md|lg|xl)$/,
+    /^q-p(a|t|b|l|r|x|y)?(?:-)(none|xs|sm|md|lg|xl)$/,
     ([, side, size], { theme }) => {
       return `p${side}-${
         theme.quasar?.spaces[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
@@ -35,7 +35,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   ],
 
   [
-    /^q-m(a|t|b|l|r)?(?:-)(none|xs|sm|md|lg|xl)$/,
+    /^q-m(a|t|b|l|r|x|y)?(?:-)(none|xs|sm|md|lg|xl)$/,
     ([, side, size], { theme }) => {
       return `m${side}-${
         theme.quasar?.spaces[size as 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl']
