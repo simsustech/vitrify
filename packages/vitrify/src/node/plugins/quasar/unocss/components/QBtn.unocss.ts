@@ -6,8 +6,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-btn$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-btn'] ??
-      `font-medium items-stretch relative outline-0 border-0 align-middle text-[14px] leading-[1.715em] no-underline [color:inherit] bg-transparent font-medium uppercase text-center w-auto h-auto cursor-default px-[16px] py-[4px] min-h-[2.572em] [&_.q-icon]:(text-[1.715em]) [&_.q-spinner]:(text-[1.715em]) [&.disabled]:(!opacity-70) [&:before]:(content-empty block absolute left-[0] right-[0] top-[0] bottom-[0] [border-radius:inherit] [box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)])`
-    // inline-flex flex-col
+      `inline-flex flex-col font-medium items-stretch relative outline-0 border-0 align-middle text-[14px] leading-[1.715em] no-underline [color:inherit] bg-transparent font-medium uppercase text-center w-auto h-auto cursor-default px-[16px] py-[4px] min-h-[2.572em] [&_.q-icon]:(text-[1.715em]) [&_.q-spinner]:(text-[1.715em]) [&.disabled]:(!opacity-70) [&:before]:(content-empty block absolute left-[0] right-[0] top-[0] bottom-[0] [border-radius:inherit] [box-shadow:0_1px_5px_rgba(0,_0,_0,_0.2),_0_2px_2px_rgba(0,_0,_0,_0.14),_0_3px_1px_-2px_rgba(0,_0,_0,_0.12)])`
   ],
 
   [
