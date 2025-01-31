@@ -19,7 +19,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-chip$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-chip'] ??
-      `align-middle rounded-[16px] outline-[0] relative h-[2em] max-w-full m-[4px] bg-[#e0e0e0] text-[rgba(0,_0,_0,_0.87)] text-[14px] px-[0.9em] py-[0.5em] [&_.q-avatar]:(text-[2em] -ml-[0.45em] mr-[0.2em] rounded-[16px])`
+      `!flex-initial align-middle rounded-[16px] outline-[0] relative h-[2em] max-w-full m-[4px] bg-[#e0e0e0] text-[rgba(0,_0,_0,_0.87)] text-[14px] px-[0.9em] py-[0.5em] [&_.q-avatar]:(text-[2em] -ml-[0.45em] mr-[0.2em] rounded-[16px])`
   ],
 
   [
