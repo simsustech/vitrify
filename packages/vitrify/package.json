@@ -62,7 +62,7 @@
     "esbuild": "^0.24.2",
     "fastify": "^5.2.1",
     "glob": "^11.0.1",
-    "happy-dom": "^16.7.3",
+    "happy-dom": "^16.8.1",
     "is-port-reachable": "^4.0.0",
     "magic-string": "^0.30.17",
     "merge-deep": "^3.0.3",
@@ -79,11 +79,12 @@
     "workbox-window": "^7.3.0"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
     "@quasar/extras": "^1.16.16",
     "@types/connect": "^3.4.38",
     "@types/glob": "^8.1.0",
     "@types/merge-deep": "^3.0.3",
-    "@types/node": "^22.12.0",
+    "@types/node": "^22.13.0",
     "@types/ws": "^8.5.14",
     "@unocss/preset-icons": "^65.4.3",
     "@vue/runtime-core": "^3.5.13",
@@ -91,7 +92,7 @@
     "css": "^3.0.0",
     "css-to-tailwind-translator": "^1.2.8",
     "quasar": "^2.17.7",
-    "rollup": "^4.32.1",
+    "rollup": "^4.34.0",
     "typescript": "^5.7.3",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
