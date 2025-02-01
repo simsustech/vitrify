@@ -1,5 +1,16 @@
 # vitrify
 
+## 0.17.14
+
+### Patch Changes
+
+- f29ccab: chore: update dependencies
+- e39a8d4: fix(vitrify): fix QuasarPreset QBtn
+- 4f46317: fix(vitrify): fix QuasarPreset QChip
+- aa6318b: fix(vitrify): add user defined unocss pipeline include
+- 8240130: fix(vitrify): remove double presets from QuasarPreset
+- 78a54bd: chore: update dependencies
+
 ## 0.17.13
 
 ### Patch Changes
