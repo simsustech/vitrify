@@ -1,4 +1,3 @@
-// Import normalize and animate css
 import {
   definePreset,
   type Preflight,
@@ -1881,6 +1880,10 @@ textarea {
   font-family: inherit;
   margin: 0;
 }
+
+html, body
+  margin: 0
+  box-sizing: border-box
 
 /* beasties:include end */`
           }
