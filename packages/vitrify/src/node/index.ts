@@ -330,6 +330,15 @@ export const baseConfig = async ({
     /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/
   ]
   if (
+    typeof vitrifyConfig.vitrify?.unocss?.content?.pipeline === 'object' &&
+    vitrifyConfig.vitrify?.unocss?.content?.pipeline?.include &&
+    Array.isArray(vitrifyConfig.vitrify?.unocss?.content?.pipeline?.include)
+  ) {
+    unoCssContentPipelineInclude.push(
+      ...vitrifyConfig.vitrify.unocss.content.pipeline.include
+    )
+  }
+  if (
     vitrifyConfig.vitrify?.unocss?.presets?.some(async (preset) => {
       if (!Array.isArray(preset)) {
         return (await preset).name === 'quasar'
