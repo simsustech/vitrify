@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.17.13
+
+### Patch Changes
+
+- b0b88d2: fix(vitrify): fix QuasarPreset padding and margin
+- ab885a3: fix(vitrify): fix QuasarPreset QToggle
+- 43074a6: fix(vitrify): fix QuasarPreset q-tabs--not-scrollable
+- ad72279: fix(vitrify): fix QuasarPreset QTabs
+- 32ee19a: fix(vitrify): fix QuasarPreset QTime
+
 ## 0.17.12
 
 ### Patch Changes
