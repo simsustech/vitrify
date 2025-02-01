@@ -1607,7 +1607,6 @@ export default definePreset((options: QuasarPresetOptions = {}) => {
     presetIcons({}),
     {
       name: 'quasar',
-      presets: [presetUno(), animatedUno(), presetIcons({})],
       safelist: generateSafelist(options),
       preflights: (
         [
