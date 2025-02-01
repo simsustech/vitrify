@@ -1,5 +1,15 @@
 # create-vitrify
 
+## 0.6.3
+
+### Patch Changes
+
+- f29ccab: chore: update dependencies
+- 78a54bd: chore: update dependencies
+- Updated dependencies [f29ccab]
+- Updated dependencies [78a54bd]
+  - @vitrify/tools@0.3.1
+
 ## 0.6.2
 
 ### Patch Changes
