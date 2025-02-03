@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.17.15
+
+### Patch Changes
+
+- 31e320a: fix(vitrify): replace critters with beasties in internalServerModules
+- 274cc0f: fix(vitrify): remove html body margin in QuasarPreset
+
 ## 0.17.14
 
 ### Patch Changes
