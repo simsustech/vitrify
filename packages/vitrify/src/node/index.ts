@@ -46,7 +46,7 @@ const internalServerModules = [
   '@fastify/middie',
   '@fastify',
   'node',
-  'critters',
+  'beasties',
   'node-fetch',
   'ws',
   'abort-controller'
