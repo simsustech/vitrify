@@ -131,26 +131,25 @@ export const QuasarPlugin: VitrifyPlugin = async ({
 
         const onMountedHooks: OnMountedHook[] = [
           async (instance) => {
-            // @ts-ignore
             const {
               proxy: { $q }
             } = instance
-            $q.onSSRHydrated !== void 0 && $q.onSSRHydrated()
+            if ($q.onSSRHydrated !== void 0) $q.onSSRHydrated()
           }
         ]
 
         const onBootHooks: OnBootHook[] = [
           async ({ app, ssrContext, staticImports }) => {
-            // @ts-ignore
+            // @ts-expect-error undefined
             const quasarPlugins = await import('virtual:quasar-plugins')
-            // @ts-ignore
+            // @ts-expect-error undefined
             const directives = await import('virtual:quasar-directives')
-            // @ts-ignore
+            // @ts-expect-error undefined
             const { default: lang } = await import('virtual:quasar-lang')
-            // @ts-ignore
+            // @ts-expect-error undefined
             const { default: iconSet } = await import('virtual:quasar-iconSet')
             const { default: iconMapFn } = await import(
-              // @ts-ignore
+              // @ts-expect-error undefined
               'virtual:quasar-iconMapFn'
             )
 

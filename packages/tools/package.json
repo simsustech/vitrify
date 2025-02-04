@@ -29,7 +29,7 @@
     "build": "tsc"
   },
   "engines": {
-    "node": "^14.18.0 || >=16.0.0"
+    "node": ">=20.0.0"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@types/node": "^22.13.0",
+    "@types/node": "^22.13.1",
     "typescript": "^5.7.3",
     "vite": "^6.0.11"
   },

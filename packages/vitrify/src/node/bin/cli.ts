@@ -84,8 +84,7 @@ cli
           outDir: fileURLToPath(new URL('ssr/server/', baseOutDir))
         })
         ;({ prerender, onRendered } = await import(
-          // @ts-ignore
-          new URL('ssr/server/prerender.mjs', baseOutDir)
+          new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
 
         // ;({ prerender, onRendered } = await import(
