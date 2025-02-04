@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.17.16
+
+### Patch Changes
+
+- 54ffeb9: chore: update dependencies
+
 ## 0.17.15
 
 ### Patch Changes
