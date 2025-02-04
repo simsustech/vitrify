@@ -238,7 +238,7 @@ export const baseConfig = async ({
         fileURLToPath(new URL('vitrify.config.ts', appDir))
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
-      // @ts-ignore
+
       rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
       // vitrifyConfig = (await import(configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
@@ -561,7 +561,6 @@ export const baseConfig = async ({
     //   }
     // })
 
-    // @ts-ignore
     if (debug) plugins.push(visualizer())
   }
 

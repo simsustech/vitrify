@@ -56,7 +56,7 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
 
     if (!('use' in fastify)) {
       const middie = (await import('@fastify/middie')).default
-      // @ts-ignore
+      // @ts-expect-error undefined
       await fastify.register(middie)
     }
     fastify.use(vite.middlewares)
@@ -138,7 +138,7 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
         // res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e: any) {
         console.error(e.stack)
-        vite && vite.ssrFixStacktrace(e)
+        if (vite) vite.ssrFixStacktrace(e)
         res.code(500)
         res.send(e.stack)
       }

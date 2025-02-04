@@ -46,14 +46,14 @@ export async function createApp(
       provide = ssrContext?.provide
     }
   } else {
-    // @ts-ignore
+    // @ts-expect-error undefined
     if (window.__INITIAL_STATE__) {
-      // @ts-ignore
+      // @ts-expect-error undefined
       initialState = JSON.parse(window.__INITIAL_STATE__)
       provide = initialState.provide
     }
   }
-  for (let key in provide) {
+  for (const key in provide) {
     if (provide[key]?.value) {
       const refValue = ref(provide[key].value)
       app.provide(key, refValue)
@@ -66,11 +66,12 @@ export async function createApp(
     }
   }
 
-  for (let fn of onBoot) {
+  for (const fn of onBoot) {
     await fn({ app, ssrContext, staticImports })
   }
 
   // @vitrify-pwa-only
+  // @ts-expect-error undefined
   if (__IS_PWA__) {
     if (typeof window !== 'undefined') {
       const { registerPWA } = await import('./pwa.js')

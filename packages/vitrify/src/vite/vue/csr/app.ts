@@ -7,7 +7,7 @@ import type { ViteDevServer } from 'vite'
 
 // const appDir = getPkgJsonDir(import.meta.url)
 const getString = (str?: string) => str
-let baseUrl = getString(__BASE_URL__)
+const baseUrl = getString(__BASE_URL__)
 const appDir = getAppDir()
 
 export const setupApp = async () => {

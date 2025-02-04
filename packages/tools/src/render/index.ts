@@ -41,7 +41,7 @@ export const renderAll = async ({
     }
   }
 
-  let p: Promise<unknown>[] = []
+  const p: Promise<unknown>[] = []
   for (const directory of directories) {
     p.push(
       renderAll({

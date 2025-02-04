@@ -41,7 +41,7 @@ export async function render(url, manifest, ssrContext, renderToString) {
   const ctx = {
     __qMetaList: []
   }
-  let html = await renderToString(app, ctx)
+  const html = await renderToString(app, ctx)
 
   const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
 

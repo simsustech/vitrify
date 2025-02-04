@@ -68,7 +68,7 @@ const templateVariables = {
   description,
   author
 } as TemplateVariables
-// @ts-ignore
+
 const template = templates[templateName]
 
 const directoryUrl = template.url
