@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.3.2
+
+### Patch Changes
+
+- 54ffeb9: chore: update dependencies
+
 ## 0.3.1
 
 ### Patch Changes
