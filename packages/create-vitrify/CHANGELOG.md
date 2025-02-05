@@ -1,5 +1,12 @@
 # create-vitrify
 
+## 0.6.5
+
+### Patch Changes
+
+- Updated dependencies [e1bc56a]
+  - @vitrify/tools@0.4.0
+
 ## 0.6.4
 
 ### Patch Changes
