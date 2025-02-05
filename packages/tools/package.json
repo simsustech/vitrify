@@ -23,6 +23,10 @@
     "./env": {
       "types": "./dist/types/env/index.d.ts",
       "import": "./dist/env/index.js"
+    },
+    "./scrypt": {
+      "types": "./dist/types/scrypt/index.d.ts",
+      "import": "./dist/scrypt/index.js"
     }
   },
   "scripts": {
