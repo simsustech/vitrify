@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.4.0
+
+### Minor Changes
+
+- e1bc56a: feat(tools): add scrypt password hash methods
+
 ## 0.3.2
 
 ### Patch Changes
