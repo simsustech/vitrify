@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.17.17
+
+### Patch Changes
+
+- 1b9ec5f: fix(vitrify): define fontFamily in QuasarPreset theme
+
 ## 0.17.16
 
 ### Patch Changes
