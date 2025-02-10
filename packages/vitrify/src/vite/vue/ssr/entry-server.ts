@@ -80,6 +80,8 @@ function renderPreloadLink(file) {
     return ` <link rel="preload" href="${file}" as="image" type="image/jpeg">`
   } else if (file.endsWith('.png')) {
     return ` <link rel="preload" href="${file}" as="image" type="image/png">`
+  } else if (file.endsWith('.svg')) {
+    return ` <link rel="preload" href="${file}" as="image" type="image/svg+xml">`
   } else {
     // TODO
     return ''
