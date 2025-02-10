@@ -1,4 +1,7 @@
 export interface QuasarTheme {
+  typography: {
+    fontFamily: string
+  }
   breakpoints: {
     xs: string
     sm: string
@@ -1145,6 +1148,10 @@ export interface QuasarTheme {
 }
 
 const defaultTheme: QuasarTheme = {
+  typography: {
+    fontFamily:
+      '"Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
+  },
   breakpoints: {
     xs: '0',
     sm: '600px',

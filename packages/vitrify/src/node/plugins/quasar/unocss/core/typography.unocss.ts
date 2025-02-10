@@ -7,7 +7,7 @@ const preflights: Preflight<QuasarTheme>[] = [
 body {
   min-width: 100px;
   min-height: 100%;
-  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: ${theme.typography.fontFamily};
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -15,6 +15,8 @@ body {
   font-smoothing: antialiased;
   line-height: 1.5;
   font-size: 14px;
+  margin: 0;
+  box-sizing: border-box
 }
 
 h1 {

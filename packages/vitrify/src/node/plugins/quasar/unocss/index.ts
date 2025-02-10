@@ -1881,10 +1881,6 @@ textarea {
   margin: 0;
 }
 
-html, body
-  margin: 0
-  box-sizing: border-box
-
 /* beasties:include end */`
           }
         ] as Preflight<QuasarTheme>[]
