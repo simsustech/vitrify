@@ -472,6 +472,29 @@ export const baseConfig = async ({
           return `export default ${JSON.stringify(vitrifyConfig)}`
         }
         return null
+      },
+      transformIndexHtml: {
+        order: 'post',
+        handler: (html) => {
+          const headContent = html.match(/<head>(.|\n)*<\/head>/)
+          if (headContent) {
+            const headLinks = headContent[0].match(/<link (.*?)>/g)
+            if (headLinks) {
+              const headWithoutLinks = headContent[0].replaceAll(
+                /<link (.*?)>\n?/g,
+                ''
+              )
+              const headWithSortedLinks = headWithoutLinks.replace(
+                '</head>',
+                [
+                  ...headLinks.sort((link) => (link.includes('.css') ? -1 : 0)),
+                  '</head>'
+                ].join('\n')
+              )
+              return html.replace(/<head>(.|\n)*<\/head>/, headWithSortedLinks)
+            }
+          }
+        }
       }
     },
     Components({
