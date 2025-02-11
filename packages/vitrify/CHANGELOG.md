@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.17.18
+
+### Patch Changes
+
+- 8f10385: fix(vitrify): add svg preload links
+
 ## 0.17.17
 
 ### Patch Changes
