@@ -1,5 +1,15 @@
 # vitrify
 
+## 0.18.0
+
+### Minor Changes
+
+- e75eebb: feat(vitrify): add minify command
+
+### Patch Changes
+
+- 30ee44a: fix(vitrify): sort html head links
+
 ## 0.17.18
 
 ### Patch Changes
