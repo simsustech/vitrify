@@ -3,9 +3,11 @@ import cac from 'cac'
 import { fileURLToPath } from 'url'
 import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls, exitLogs } from '../helpers/logger.js'
+import { build as esbuild } from 'esbuild'
 import type { ResolvedConfig, ViteDevServer } from 'vite'
 import type { Server } from 'net'
 import type { FastifyInstance } from 'fastify'
+import { readdir } from 'fs/promises'
 
 const cli = cac('vitrify')
 cli
@@ -86,10 +88,6 @@ cli
         ;({ prerender, onRendered } = await import(
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
-
-        // ;({ prerender, onRendered } = await import(
-        //   fileURLToPath(new URL('ssr/server/prerender.mjs', baseOutDir))
-        // ))
 
         prerender({
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
@@ -186,6 +184,29 @@ cli.command('run <file>').action(async (file, options) => {
   const { run } = await import('./run.js')
   const filePath = new URL(file, `file://${process.cwd()}/`)
   await run(fileURLToPath(filePath))
+})
+
+cli.command('minify <dir>').action(async (dir, options) => {
+  const files = await readdir(
+    fileURLToPath(new URL(dir, `file://${process.cwd()}/`))
+  )
+  let counter = 0
+  for (const file of files) {
+    if (file.endsWith('.mjs')) {
+      await esbuild({
+        absWorkingDir: fileURLToPath(new URL(dir, `file://${process.cwd()}/`)),
+        entryPoints: [file],
+        minify: true,
+        minifyIdentifiers: true,
+        minifySyntax: true,
+        minifyWhitespace: true,
+        outfile: file,
+        allowOverwrite: true
+      })
+      counter++
+    }
+  }
+  console.log(`Minified ${counter} files`)
 })
 
 // Default
