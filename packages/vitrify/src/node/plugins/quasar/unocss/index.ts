@@ -203,7 +203,36 @@ const toKebabCase = (str: string) =>
 
 const componentsSafelistMap: Partial<Record<keyof QuasarComponents, string[]>> =
   {
-    QSelect: ['q-list', 'q-item', 'q-virtual-scroll', 'q-menu']
+    QSelect: ['q-list', 'q-item', 'q-virtual-scroll', 'q-menu'],
+    QPageSticky: [
+      'relative-position',
+      'fixed',
+      'fixed-full',
+      'fullscreen',
+      'fixed-center',
+      'fixed-bottom',
+      'fixed-left',
+      'fixed-right',
+      'fixed-top',
+      'fixed-top-left',
+      'fixed-top-right',
+      'fixed-bottom-left',
+      'fixed-bottom-right',
+      'absolute',
+      'absolute-full',
+      'absolute-center',
+      'absolute-bottom',
+      'absolute-left',
+      'absolute-right',
+      'absolute-top',
+      'absolute-top-left',
+      'absolute-top-right',
+      'absolute-bottom-left',
+      'absolute-bottom-right',
+      'vertical-top',
+      'vertical-middle',
+      'vertical-bottom'
+    ]
   }
 
 const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
