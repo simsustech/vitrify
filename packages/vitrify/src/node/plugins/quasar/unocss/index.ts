@@ -2057,7 +2057,7 @@ textarea {
             const transitionMatch = code.matchAll(
               /(transition|transition-show|transition-hide|transition-prev|transition-next)="(\S*)"/g
             )
-            const colorMatch = code.matchAll(/color="(\S*)"/g)
+            const colorMatch = code.matchAll(/color[=|:]"(\w*)"/g)
 
             const pascalComponentsMatch: string[] = []
             const matches: string[] = []
