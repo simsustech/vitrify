@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.18.2
+
+### Patch Changes
+
+- 8357155: fix(vitrify): fix QuasarPreset color extractor
+
 ## 0.18.1
 
 ### Patch Changes
