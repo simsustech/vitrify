@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.18.3
+
+### Patch Changes
+
+- caeabac: fix(vitrify): fix QuasarPreset QTabs safelist
+
 ## 0.18.2
 
 ### Patch Changes
