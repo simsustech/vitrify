@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.18.1
+
+### Patch Changes
+
+- 8442589: fix(vitrify): fix QPageSticky safelist
+
 ## 0.18.0
 
 ### Minor Changes
