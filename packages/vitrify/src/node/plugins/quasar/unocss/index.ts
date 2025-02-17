@@ -232,6 +232,19 @@ const componentsSafelistMap: Partial<Record<keyof QuasarComponents, string[]>> =
       'vertical-top',
       'vertical-middle',
       'vertical-bottom'
+    ],
+    QTabs: [
+      'q-tab',
+      'q-tab--full',
+      'q-tab--no-caps',
+      'q-tab__content',
+      'q-tab__content--inline',
+      'q-tab__icon',
+      'q-tab__label',
+      'q-tab__alert',
+      'q-tab__alert-icon',
+      'q-tab__indicator',
+      'q-tab--active'
     ]
   }
 
