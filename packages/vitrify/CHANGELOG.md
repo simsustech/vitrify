@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.18.4
+
+### Patch Changes
+
+- 7315f9a: fix(vitrify): fix QuasarPreset QBtn fab
+
 ## 0.18.3
 
 ### Patch Changes
