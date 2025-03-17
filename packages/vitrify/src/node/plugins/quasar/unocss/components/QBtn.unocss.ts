@@ -70,8 +70,8 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
     /^q-btn--fab$/,
     ([, c], { theme }) =>
       theme.quasar?.components?.['q-btn--fab'] ??
-      `[&_.q-icon]:(text-[24px]) p-[16px] [&_.q-icon]:(m-auto) pb-0`
-    // min-h-[56px] min-w-[56px]
+      `[&_.q-icon]:(text-[24px]) [&_.q-icon]:(m-auto)`
+    // min-h-[56px] min-w-[56px] p-[16px] pb-0
   ],
 
   [
