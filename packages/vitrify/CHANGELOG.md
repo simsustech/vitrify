@@ -1,5 +1,13 @@
 # vitrify
 
+## 0.18.5
+
+### Patch Changes
+
+- 7f6c363: fix(vitrify): fix QuasarPreset QPageSticky safelist
+- d45500e: fix(vitrify): fix QuasarPreset Dialog safelist
+- 90c16b1: fix(vitrify): fix QuasarPreset fullscreen z-index
+
 ## 0.18.4
 
 ### Patch Changes
