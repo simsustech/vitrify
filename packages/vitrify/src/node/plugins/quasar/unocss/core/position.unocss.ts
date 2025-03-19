@@ -7,7 +7,7 @@ const shortcuts: UserShortcuts<QuasarTheme> = [
   [
     /^fullscreen$/,
     ([, c], { theme }) =>
-      `fixed !rounded-none max-w-[100vw] max-h-screen top-0 right-0 bottom-0 left-0`
+      `fixed !rounded-none max-w-[100vw] max-h-screen top-0 right-0 bottom-0 left-0 z-${theme.quasar.z.fullscreen}`
   ],
 
   [
