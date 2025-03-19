@@ -201,38 +201,41 @@ const toKebabCase = (str: string) =>
     ?.map((x) => x.toLowerCase())
     .join('-') ?? ''
 
+const QPageStickySafelist = [
+  'relative-position',
+  'fixed',
+  'fixed-full',
+  'fullscreen',
+  'fixed-center',
+  'fixed-bottom',
+  'fixed-left',
+  'fixed-right',
+  'fixed-top',
+  'fixed-top-left',
+  'fixed-top-right',
+  'fixed-bottom-left',
+  'fixed-bottom-right',
+  'absolute',
+  'absolute-full',
+  'absolute-center',
+  'absolute-bottom',
+  'absolute-left',
+  'absolute-right',
+  'absolute-top',
+  'absolute-top-left',
+  'absolute-top-right',
+  'absolute-bottom-left',
+  'absolute-bottom-right',
+  'vertical-top',
+  'vertical-middle',
+  'vertical-bottom'
+]
+
 const componentsSafelistMap: Partial<Record<keyof QuasarComponents, string[]>> =
   {
     QSelect: ['q-list', 'q-item', 'q-virtual-scroll', 'q-menu'],
-    QPageSticky: [
-      'relative-position',
-      'fixed',
-      'fixed-full',
-      'fullscreen',
-      'fixed-center',
-      'fixed-bottom',
-      'fixed-left',
-      'fixed-right',
-      'fixed-top',
-      'fixed-top-left',
-      'fixed-top-right',
-      'fixed-bottom-left',
-      'fixed-bottom-right',
-      'absolute',
-      'absolute-full',
-      'absolute-center',
-      'absolute-bottom',
-      'absolute-left',
-      'absolute-right',
-      'absolute-top',
-      'absolute-top-left',
-      'absolute-top-right',
-      'absolute-bottom-left',
-      'absolute-bottom-right',
-      'vertical-top',
-      'vertical-middle',
-      'vertical-bottom'
-    ],
+    QPageSticky: QPageStickySafelist,
+    QPageScroller: [...QPageStickySafelist],
     QTabs: [
       'q-tab',
       'q-tab--full',
@@ -2076,7 +2079,9 @@ textarea {
 
             const pascalComponentsMatch: string[] = []
             const matches: string[] = []
-            for (const match of kebabMatch) matches.push(match[0])
+            for (const match of kebabMatch) {
+              matches.push(match[0])
+            }
             for (const match of pascalMatch) {
               pascalComponentsMatch.push(match[0])
               matches.push(toKebabCase(match[0]))
