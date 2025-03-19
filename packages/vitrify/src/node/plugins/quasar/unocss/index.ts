@@ -257,6 +257,7 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
     'q-bottom-sheet__item'
   ],
   Dialog: [
+    'q-dialog',
     'q-dialog__title',
     'q-dialog__progress',
     'q-dialog__inner',
@@ -340,7 +341,8 @@ const pluginSafelistMap: Partial<Record<keyof QuasarPlugins, string[]>> = {
     'q-field--square',
     'q-option-group--inline',
     'q-spinner',
-    'q-spinner-mat'
+    'q-spinner-mat',
+    'fixed-full'
   ],
   LoadingBar: [
     'q-loading-bar',
