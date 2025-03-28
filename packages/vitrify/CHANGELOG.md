@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.19.0
+
+### Minor Changes
+
+- 75aec30: feat: add preliminary material design 3 to QuasarPreset
+
 ## 0.18.5
 
 ### Patch Changes
