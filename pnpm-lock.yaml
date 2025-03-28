@@ -131,6 +131,9 @@ importers:
       '@unocss/preset-uno':
         specifier: ^65.4.3
         version: 65.4.3
+      '@unocss/preset-web-fonts':
+        specifier: 66.1.0-beta.7
+        version: 66.1.0-beta.7
       '@unocss/preset-wind':
         specifier: ^65.4.3
         version: 65.4.3
@@ -1851,6 +1854,9 @@ packages:
   '@unocss/core@65.4.3':
     resolution: {integrity: sha512-luFgdcchSlNrYSaDvU2176T2PPQZdxqfREVbxEXNXlFEgyEFrx5hOSUXoJtJSZjRhAcE6zkWyLDf/JkQJ5Eeyw==}
 
+  '@unocss/core@66.1.0-beta.7':
+    resolution: {integrity: sha512-l1/r+Jd9TbsRqR/geEdIV/Erzvs26GitTtMVsGcJfuaK1/WWOLtbSHRUDQAB/UpcOOWvuNuAv4UWsXX9Z0DFmw==}
+
   '@unocss/extractor-arbitrary-variants@0.51.8':
     resolution: {integrity: sha512-cCsdRLqmt3adcaRtoIP2pC8mYgH3ed8DEES3E7VOWghqLjwLULUMyBS+vy7n9CvnV75kuTKb1bZ+k9eu/rfh2w==}
 
@@ -1889,6 +1895,9 @@ packages:
 
   '@unocss/preset-web-fonts@65.4.3':
     resolution: {integrity: sha512-edkyohQ4+qjuOxIJf+NeQiEayB47A9eA2NhBLbcqZ0OfMpN8tRZPVW5cyB3b5Ef253NGMd4S8H/96vGTBpqOBA==}
+
+  '@unocss/preset-web-fonts@66.1.0-beta.7':
+    resolution: {integrity: sha512-2ZTUhV1qGmBo38ZIIdxShqxrTww4qaFE0cLMT7pem6meBO6Wp5eux5fndWvaaHh1rRcbDUadsiBEzNDknm1AYg==}
 
   '@unocss/preset-wind@65.4.3':
     resolution: {integrity: sha512-KM13xIARNeZ/ZKJr33fZ89l79wgI+1Oo8VPJzmckLjbH9IGOhcH2GON7wVIxQqqqM9IM3vALEqw2KNdM6ontWw==}
@@ -6553,6 +6562,8 @@ snapshots:
 
   '@unocss/core@65.4.3': {}
 
+  '@unocss/core@66.1.0-beta.7': {}
+
   '@unocss/extractor-arbitrary-variants@0.51.8':
     dependencies:
       '@unocss/core': 0.51.8
@@ -6625,6 +6636,11 @@ snapshots:
   '@unocss/preset-web-fonts@65.4.3':
     dependencies:
       '@unocss/core': 65.4.3
+      ofetch: 1.4.1
+
+  '@unocss/preset-web-fonts@66.1.0-beta.7':
+    dependencies:
+      '@unocss/core': 66.1.0-beta.7
       ofetch: 1.4.1
 
   '@unocss/preset-wind@65.4.3':

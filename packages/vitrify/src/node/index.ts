@@ -34,7 +34,7 @@ import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
 
-import QuasarPreset from './plugins/quasar/unocss/index.js'
+import { QuasarPreset } from './plugins/quasar/unocss/index.js'
 
 const internalServerModules = [
   'util',
