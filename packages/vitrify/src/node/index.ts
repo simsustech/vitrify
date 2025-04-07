@@ -34,8 +34,6 @@ import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
 
-import { QuasarPreset } from './plugins/quasar/unocss/index.js'
-
 const internalServerModules = [
   'util',
   'vitrify',
@@ -746,7 +744,7 @@ export const baseConfig = async ({
 
 export const vitrifyDir = new URL('..', import.meta.url)
 export { prerender } from './frameworks/vue/prerender.js'
-export { QuasarPreset }
+
 export type {
   VitrifyConfig,
   VitrifyConfigAsync,
