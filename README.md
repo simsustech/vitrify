@@ -4,10 +4,6 @@
 
 Vitrify is an abstraction over Vite similar to how Vite is an abstraction over Rollup and esbuild. It enables you to use Vite as your full-stack development tool.
 
-## Try it online
-
-https://codesandbox.io/p/sandbox/vitrify-gtg4dp
-
 ## Features
 
 - ESM only
