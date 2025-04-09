@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.20.0
+
+### Minor Changes
+
+- cd0b20a: feat(vitrify): use and export renderHtml function in fastify-ssr-plugin
+
 ## 0.19.1
 
 ### Patch Changes
