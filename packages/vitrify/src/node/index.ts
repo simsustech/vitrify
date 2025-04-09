@@ -652,6 +652,7 @@ export const baseConfig = async ({
       input: [
         fileURLToPath(new URL('ssr/entry-server.ts', frameworkDir)),
         fileURLToPath(new URL('ssr/prerender.ts', frameworkDir)),
+        fileURLToPath(new URL('ssr/fastify-ssr-plugin.ts', frameworkDir)),
         fileURLToPath(new URL('ssr/server.ts', frameworkDir))
       ],
       external,

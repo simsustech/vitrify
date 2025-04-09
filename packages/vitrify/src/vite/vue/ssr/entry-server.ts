@@ -1,11 +1,16 @@
-import { createApp } from '../main'
+import { type FastifyReply, type FastifyRequest } from 'fastify'
+import { createApp } from '../main.js'
+import { renderToString as renderToStringVue } from 'vue/server-renderer'
 
-const initializeApp = async (url, ssrContext) => {
-  const onRenderedList = []
+const initializeApp = async (
+  url: string,
+  ssrContext: Record<string, unknown>
+) => {
+  const onRenderedList: (() => unknown)[] = []
   Object.assign(ssrContext, {
     _modules: new Set(),
     _meta: {},
-    onRendered: (fn) => {
+    onRendered: (fn: () => unknown) => {
       onRenderedList.push(fn)
     }
   })
@@ -27,28 +32,43 @@ const initializeApp = async (url, ssrContext) => {
 export const getRoutes = async () =>
   (
     await initializeApp('/', {
-      ssr: false,
       req: { headers: {}, url: '/' },
       res: {}
     })
   ).routes
 
-export async function render(url, manifest, ssrContext, renderToString) {
+export async function render(
+  url: string,
+  manifest: Record<string, unknown>,
+  ssrContext: {
+    request: FastifyRequest | { headers: Record<string, unknown>; url: string }
+    reply: FastifyReply | Record<string, unknown>
+    provide: Record<string, unknown>
+  },
+  renderToString: typeof renderToStringVue
+) {
   if (!renderToString)
     renderToString = (await import('vue/server-renderer')).renderToString
   const { app, router } = await initializeApp(url, ssrContext)
 
-  const ctx = {
+  const ctx: {
+    modules?: Map<unknown, unknown>
+    transports?: Record<string, unknown>
+    __qMetaList: unknown[]
+  } = {
     __qMetaList: []
   }
   const html = await renderToString(app, ctx)
 
-  const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
+  const preloadLinks = renderPreloadLinks(ctx.modules!, manifest)
 
   return [html, preloadLinks]
 }
 
-function renderPreloadLinks(modules, manifest) {
+function renderPreloadLinks(
+  modules: Map<unknown, unknown>,
+  manifest: Record<string, unknown>
+) {
   let links = ''
   const seen = new Set()
   modules.forEach((id) => {

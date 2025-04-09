@@ -9,12 +9,15 @@ import {
 } from '../../helpers/utils.js'
 import type { ViteDevServer } from 'vite'
 import type { OnRenderedHook } from '../../vitrify-config.js'
+
+type ProvideFn = (
+  req: FastifyRequest,
+  res: FastifyReply
+) => Promise<Record<string, unknown | { value: unknown }>>
+
 export interface FastifySsrOptions {
   baseUrl?: string
-  provide?: (
-    req: FastifyRequest,
-    res: FastifyReply
-  ) => Promise<Record<string, unknown | { value: unknown }>>
+  provide?: ProvideFn
   vitrifyDir?: URL
   vite?: ViteDevServer
   // frameworkDir?: URL
@@ -66,12 +69,6 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
         const url = req.raw.url?.replace(options.baseUrl!, '/')
         const provide = options.provide ? await options.provide(req, res) : {}
 
-        const ssrContext: Record<string, any> = {
-          req,
-          res,
-          provide
-        }
-
         let template = readFileSync(
           new URL('index.html', frameworkDir)
         ).toString()
@@ -90,47 +87,16 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
           manifest = {}
         }
 
-        // const cssModules = [entryUrl]
-        // const matchedModules = componentsModules(cssModules, vite!)
-        // const css = collectCss({
-        //   mods: matchedModules
-        // })
-
-        const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
-
-        if (!ssrContext.initialState) ssrContext.initialState = {}
-        ssrContext.initialState.provide = provide
-
-        const initialStateScript = `
-        <script>
-        __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
-        </script>`
-        const renderHtml = (html: string) => {
-          return appendToHead(
-            preloadLinks,
-            appendToBody(initialStateScript, addOrReplaceAppDiv(appHtml, html))
-          )
-        }
-
-        let html = renderHtml(template)
-        // let html = template
-        //   .replace(`<!--app-html-->`, appHtml)
-        //   .replace('<!--product-name-->', options.productName || 'Product name')
-        //   // .replace('<!--dev-ssr-css-->', css)
-        //   .replace(
-        //     '<!--initial-state-->',
-        //     `<script>
-        //     __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
-        //     </script>`
-        //   )
-
-        // html = appendToHead(preloadLinks, html)
-
-        if (options.onRendered?.length) {
-          for (const ssrFunction of options.onRendered) {
-            html = ssrFunction(html, ssrContext)
-          }
-        }
+        const html = await renderHtml({
+          request: req,
+          reply: res,
+          url: url ?? '/',
+          provide,
+          onRendered: options.onRendered,
+          template,
+          manifest,
+          render
+        })
 
         res.code(200)
         res.type('text/html')
@@ -156,11 +122,6 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
     fastify.get(`${options.baseUrl}*`, async (req, res) => {
       const url = req.raw.url?.replace(options.baseUrl!, '/')
       const provide = options.provide ? await options.provide(req, res) : {}
-      const ssrContext: Record<string, any> = {
-        req,
-        res,
-        provide
-      }
 
       const template = readFileSync(
         fileURLToPath(new URL('./dist/ssr/client/index.html', options.appDir))
@@ -177,39 +138,27 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
           )
         )
       ).render
-
-      const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
-
-      if (!ssrContext.initialState) ssrContext.initialState = {}
-      ssrContext.initialState.provide = provide
-
-      const initialStateScript = `
-      <script>
-      __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
-      </script>`
-      const renderHtml = (html: string) => {
-        return appendToHead(
-          preloadLinks,
-          appendToBody(initialStateScript, addOrReplaceAppDiv(appHtml, html))
+      const onRendered = (
+        await import(
+          fileURLToPath(
+            new URL(
+              './dist/ssr/server/virtual_vitrify-hooks.mjs',
+              options.appDir
+            )
+          )
         )
-      }
+      ).onRendered
 
-      let html = renderHtml(template)
-
-      // let html = template.replace(`<!--app-html-->`, appHtml).replace(
-      //   '<!--initial-state-->',
-      //   `<script>
-      //     __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
-      //     </script>`
-      // )
-
-      // html = appendToHead(preloadLinks, html)
-
-      if (options.onRendered?.length) {
-        for (const ssrFunction of options.onRendered) {
-          html = ssrFunction(html, ssrContext)
-        }
-      }
+      const html = await renderHtml({
+        request: req,
+        reply: res,
+        url: url ?? '/',
+        provide,
+        onRendered,
+        template,
+        manifest,
+        render
+      })
 
       res.code(200)
       res.type('text/html')
@@ -218,5 +167,70 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
   }
 }
 
-export { fastifySsrPlugin }
+const renderTemplate = ({
+  template,
+  initialStateScript,
+  appHtml,
+  preloadLinks
+}: {
+  template: string
+  initialStateScript: string
+  appHtml: string
+  preloadLinks: string
+}) => {
+  return appendToHead(
+    preloadLinks,
+    appendToBody(initialStateScript, addOrReplaceAppDiv(appHtml, template))
+  )
+}
+
+const renderHtml = async (options: {
+  url: string
+  request: FastifyRequest | { headers: Record<string, unknown>; url: string }
+  reply: FastifyReply | Record<string, unknown>
+  provide: Record<string, unknown>
+  onRendered?: OnRenderedHook[]
+  template: string
+  manifest: Record<string, unknown>
+  render: any
+}) => {
+  const ssrContext: Record<string, any> = {
+    req: options.request,
+    res: options.reply,
+    provide: options.provide
+  }
+
+  const onRendered = options.onRendered ?? []
+
+  const [appHtml, preloadLinks] = await options.render(
+    options.url,
+    options.manifest,
+    ssrContext
+  )
+
+  if (!ssrContext.initialState) ssrContext.initialState = {}
+  ssrContext.initialState.provide = options.provide
+
+  const initialStateScript = `
+  <script>
+  __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
+  </script>`
+
+  let html = renderTemplate({
+    template: options.template,
+    appHtml,
+    initialStateScript,
+    preloadLinks
+  })
+
+  if (onRendered?.length) {
+    for (const ssrFunction of onRendered) {
+      html = ssrFunction(html, ssrContext)
+    }
+  }
+
+  return html
+}
+
+export { fastifySsrPlugin, renderHtml }
 export type FastifySsrPlugin = typeof fastifySsrPlugin

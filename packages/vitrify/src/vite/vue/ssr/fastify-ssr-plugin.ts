@@ -1,3 +1,6 @@
-import { fastifySsrPlugin } from '../../../node/frameworks/vue/fastify-ssr-plugin.js'
+import {
+  fastifySsrPlugin,
+  renderHtml
+} from '../../../node/frameworks/vue/fastify-ssr-plugin.js'
 
-export { fastifySsrPlugin }
+export { fastifySsrPlugin, renderHtml }

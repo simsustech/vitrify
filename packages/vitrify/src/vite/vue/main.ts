@@ -7,12 +7,11 @@ import 'virtual:uno.css'
 
 import RootComponent from './RootComponent.vue'
 interface ssrContext {
-  ssr: boolean
   provide?: Record<string, unknown>
   [key: string]: unknown
 }
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 

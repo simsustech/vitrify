@@ -1,7 +1,7 @@
 import { existsSync, promises as fs, mkdirSync } from 'fs'
 import type { OnRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
-import { appendToHead, addOrReplaceAppDiv } from '../../helpers/utils.js'
+import { renderHtml } from './fastify-ssr-plugin.js'
 
 export const prerender = async ({
   outDir,
@@ -44,21 +44,17 @@ export const prerender = async ({
     const filename =
       (url.endsWith('/') ? 'index' : url.replace(/^\//g, '')) + '.html'
     console.log(`Generating ${filename}`)
-    const ssrContext = {
-      req: { headers: {}, url },
-      res: {}
-    }
-    const [appHtml, preloadLinks] = await render(url, manifest, ssrContext)
 
-    let html = addOrReplaceAppDiv(appHtml, template)
-    html = appendToHead(preloadLinks, html)
-
-    if (onRendered?.length) {
-      for (const ssrFunction of onRendered) {
-        html = ssrFunction(html, ssrContext)
-      }
-    }
-
+    let html = await renderHtml({
+      url,
+      manifest,
+      provide: {},
+      render,
+      request: { headers: {}, url },
+      reply: {},
+      template,
+      onRendered
+    })
     html = await beasties.process(html)
 
     promises.push(fs.writeFile(outDir + filename, html, 'utf-8'))
