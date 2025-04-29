@@ -2,25 +2,24 @@ import { existsSync, promises as fs, mkdirSync } from 'fs'
 import type { OnRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 import { renderHtml } from './fastify-ssr-plugin.js'
+import { type RouteRecordRaw } from 'vue-router'
 
 export const prerender = async ({
   outDir,
-  templatePath,
-  manifestPath,
-  entryServerPath,
+  template,
+  manifest,
+  render,
+  routes,
   onRendered
 }: {
   outDir: string
-  templatePath: string
-  manifestPath: string
-  entryServerPath: string
+  template: string
+  manifest: Record<string, unknown>
+  render: unknown
+  routes: RouteRecordRaw[]
   onRendered: OnRenderedHook[]
 }) => {
   const promises = []
-  const template = (await fs.readFile(templatePath)).toString()
-  const manifest = JSON.parse((await fs.readFile(manifestPath)).toString())
-  const { render, getRoutes } = await import(entryServerPath)
-  const routes = await getRoutes()
   const paths = routesToPaths(routes).filter(
     (i) => !i.includes(':') && !i.includes('*')
   )

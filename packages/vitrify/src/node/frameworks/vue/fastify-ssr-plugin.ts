@@ -9,6 +9,7 @@ import {
 } from '../../helpers/utils.js'
 import type { ViteDevServer } from 'vite'
 import type { OnRenderedHook } from '../../vitrify-config.js'
+import { getAppDir } from '../../app-urls.js'
 
 type ProvideFn = (
   req: FastifyRequest,
@@ -123,31 +124,9 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
       const url = req.raw.url?.replace(options.baseUrl!, '/')
       const provide = options.provide ? await options.provide(req, res) : {}
 
-      const template = readFileSync(
-        fileURLToPath(new URL('./dist/ssr/client/index.html', options.appDir))
-      ).toString()
-      const manifest = JSON.parse(
-        readFileSync(
-          new URL('./dist/ssr/client/.vite/ssr-manifest.json', options.appDir)
-        ).toString()
-      )
-      const render = (
-        await import(
-          fileURLToPath(
-            new URL('./dist/ssr/server/entry-server.mjs', options.appDir)
-          )
-        )
-      ).render
-      const onRendered = (
-        await import(
-          fileURLToPath(
-            new URL(
-              './dist/ssr/server/virtual_vitrify-hooks.mjs',
-              options.appDir
-            )
-          )
-        )
-      ).onRendered
+      const { template, manifest, render, onRendered } = await loadSSRAssets({
+        distDir: new URL('./dist/', options.appDir)
+      })
 
       const html = await renderHtml({
         request: req,
@@ -232,5 +211,60 @@ const renderHtml = async (options: {
   return html
 }
 
-export { fastifySsrPlugin, renderHtml }
+const loadSSRAssets = async (
+  {
+    mode,
+    distDir
+  }: {
+    mode?: 'ssr' | 'ssg'
+    distDir?: URL
+  } = {
+    mode: 'ssr'
+  }
+) => {
+  const appDir = getAppDir()
+  const baseOutDir = distDir || new URL('dist/', appDir)
+
+  let templatePath, manifestPath, entryServerPath
+  const onRenderedPath = fileURLToPath(
+    new URL('ssr/server/virtual_vitrify-hooks.mjs', baseOutDir)
+  )
+  if (mode === 'ssg') {
+    templatePath = fileURLToPath(new URL('static/index.html', baseOutDir))
+    manifestPath = fileURLToPath(
+      new URL('static/.vite/ssr-manifest.json', baseOutDir)
+    )
+    entryServerPath = fileURLToPath(
+      new URL('ssr/server/entry-server.mjs', baseOutDir)
+    )
+  } else {
+    templatePath = fileURLToPath(new URL('ssr/client/index.html', baseOutDir))
+    manifestPath = fileURLToPath(
+      new URL('ssr/client/.vite/ssr-manifest.json', baseOutDir)
+    )
+    entryServerPath = fileURLToPath(
+      new URL('ssr/server/entry-server.mjs', baseOutDir)
+    )
+  }
+  try {
+    const template = readFileSync(templatePath).toString()
+    const manifest = JSON.parse(readFileSync(manifestPath).toString())
+    const entryServer = await import(entryServerPath)
+    const { render, getRoutes } = entryServer
+    const onRendered = (await import(onRenderedPath)).onRendered
+
+    return {
+      template,
+      manifest,
+      render,
+      getRoutes,
+      onRendered
+    }
+  } catch (e) {
+    console.error(e)
+    throw new Error('Unable to load SSR asset files')
+  }
+}
+
+export { fastifySsrPlugin, renderHtml, loadSSRAssets }
 export type FastifySsrPlugin = typeof fastifySsrPlugin

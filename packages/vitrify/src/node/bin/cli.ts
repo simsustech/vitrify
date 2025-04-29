@@ -8,6 +8,7 @@ import type { ResolvedConfig, ViteDevServer } from 'vite'
 import type { Server } from 'net'
 import type { FastifyInstance } from 'fastify'
 import { readdir } from 'fs/promises'
+import { loadSSRAssets } from '../frameworks/vue/fastify-ssr-plugin.js'
 
 const cli = cac('vitrify')
 cli
@@ -85,17 +86,23 @@ cli
           ...args,
           outDir: fileURLToPath(new URL('ssr/server/', baseOutDir))
         })
-        ;({ prerender, onRendered } = await import(
+        ;({ prerender } = await import(
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
 
+        const { template, manifest, render, getRoutes, onRendered } =
+          await loadSSRAssets({
+            mode: 'ssg',
+            distDir: baseOutDir
+          })
+        const routes = await getRoutes()
+
         prerender({
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
-          templatePath: fileURLToPath(new URL('static/index.html', baseOutDir)),
-          manifestPath: fileURLToPath(
-            new URL('static/.vite/ssr-manifest.json', baseOutDir)
-          ),
-          entryServerPath: new URL('ssr/server/entry-server.mjs', baseOutDir),
+          template,
+          manifest,
+          render,
+          routes,
           onRendered
         })
         break
