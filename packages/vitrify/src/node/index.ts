@@ -74,13 +74,16 @@ const manualChunkNames = [
 
 const moduleChunks = {
   vue: ['vue', '@vue', 'vue-router'],
-  quasar: ['quasar', '@quasar']
+  quasar: ['quasar'],
+  atQuasar: ['@quasar']
 }
 const manualChunksFn = (manualChunkList?: string[]): ManualChunksOption => {
   return (id: string) => {
     const matchedModule = Object.entries(moduleChunks).find(
       ([chunkName, moduleNames]) =>
-        moduleNames.some((moduleName) => id.includes(moduleName + '/'))
+        moduleNames.some((moduleName) =>
+          new RegExp(`\/${moduleName}\/`).test(id)
+        )
     )
     if (id.includes('vitrify/src/')) {
       const name = id.split('/').at(-1)?.split('.').at(0)
