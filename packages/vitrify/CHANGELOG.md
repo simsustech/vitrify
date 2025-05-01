@@ -1,5 +1,17 @@
 # vitrify
 
+## 0.21.0
+
+### Minor Changes
+
+- 8ec204c: feat(vitrify): add loadSSRAssets to fastify-ssr-plugin
+
+### Patch Changes
+
+- eae0ac7: fix(vitrify): fix appDir in loadSSRAssets
+- 496aab2: chore: update dependencies
+- bdd3d59: fix(vitrify): fix manualChunksFn
+
 ## 0.20.0
 
 ### Minor Changes
