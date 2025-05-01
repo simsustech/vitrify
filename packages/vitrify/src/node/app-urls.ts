@@ -19,8 +19,8 @@ export const getPkgJsonDir = (dir: URL): URL => {
   }
   return getPkgJsonDir(new URL('..', dir))
 }
-export const getAppDir = () =>
-  getPkgJsonDir(new URL(`file://${process.cwd()}/`))
+export const getAppDir = (dir?: URL) =>
+  getPkgJsonDir(dir ?? new URL(`file://${process.cwd()}/`))
 export const getCliDir = () => getPkgJsonDir(new URL('./', import.meta.url))
 export const getCliViteDir = (cliDir: URL) => new URL('src/vite/', cliDir)
 export const getSrcDir = (appDir: URL) => new URL('src/', appDir)

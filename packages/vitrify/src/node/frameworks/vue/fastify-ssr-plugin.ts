@@ -222,7 +222,7 @@ const loadSSRAssets = async (
     mode: 'ssr'
   }
 ) => {
-  const appDir = getAppDir()
+  const appDir = getAppDir(new URL(import.meta.url))
   const baseOutDir = distDir || new URL('dist/', appDir)
 
   let templatePath, manifestPath, entryServerPath
