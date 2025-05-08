@@ -173,6 +173,9 @@ export async function createServer({
     ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
     app = fastify({
       logger: {
+        transport: {
+          target: '@fastify/one-line-logger'
+        },
         level: process.env.DEBUG
           ? 'debug'
           : process.env.PINO_LOG_LEVEL || 'info'

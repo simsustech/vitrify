@@ -3,6 +3,9 @@ import { setup, vitrifyConfig } from './entry'
 
 const fastify = Fastify({
   logger: {
+    transport: {
+      target: '@fastify/one-line-logger'
+    },
     level: process.env.DEBUG ? 'debug' : 'info'
   },
   ...vitrifyConfig.vitrify?.ssr.fastify

@@ -23,6 +23,9 @@ export const createApp = ({
 }) => {
   const app = fastify({
     logger: {
+      transport: {
+        target: '@fastify/one-line-logger'
+      },
       level: process.env.DEBUG ? 'debug' : process.env.PINO_LOG_LEVEL || 'info'
     }
   })
