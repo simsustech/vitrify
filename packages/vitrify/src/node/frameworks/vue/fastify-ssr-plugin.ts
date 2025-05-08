@@ -79,7 +79,10 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
         const entryUrl = fileURLToPath(
           new URL('ssr/entry-server.ts', frameworkDir)
         )
-        const render = (await vite!.ssrLoadModule(entryUrl)).render
+        const environment = vite.environments.ssr
+        // @ts-expect-error missing type
+        const { render } = await environment.runner.import(entryUrl)
+        // const render = (await vite!.ssrLoadModule(entryUrl)).render
         let manifest
         // TODO: https://github.com/vitejs/vite/issues/2282
         try {

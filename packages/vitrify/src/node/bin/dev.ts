@@ -170,7 +170,12 @@ export async function createServer({
         ? fileURLToPath(new URL('src/vite/fastify/entry.ts', cliDir))
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
-    ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
+    const environment = vite.environments.ssr
+    ;({ setup, onRendered, vitrifyConfig } =
+      // @ts-expect-error missing types
+      await environment.runner.import(entryUrl))
+    // console.log(module)
+    // ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
     app = fastify({
       logger: {
         transport: {

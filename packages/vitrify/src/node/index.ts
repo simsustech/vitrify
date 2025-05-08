@@ -688,6 +688,9 @@ export const baseConfig = async ({
       __HOST__: `'localhost'`,
       __BASE_URL__: `'${base}'`,
       __IS_PWA__: `${isPwa}`
+    },
+    environments: {
+      server: ssr ? {} : undefined
     }
   } as VitrifyConfig
 
