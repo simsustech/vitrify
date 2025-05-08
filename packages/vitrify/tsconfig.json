@@ -16,7 +16,7 @@
     "declarationDir": "dist/types",
     "paths": {
       "vitrify": ["./src/node/index.ts"],
-      "vitrify/*": ["./src/node/bin/*"]
+      "vitrify/dev": ["./src/node/bin/dev.js"]
     }
     // "typeRoots": ["./"]
   },

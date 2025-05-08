@@ -1,5 +1,10 @@
 import vuePlugin from '@vitejs/plugin-vue'
-import type { Alias, InlineConfig, UserConfig as ViteUserConfig } from 'vite'
+import type {
+  Alias,
+  InlineConfig,
+  Plugin,
+  UserConfig as ViteUserConfig
+} from 'vite'
 import { findDepPkgJsonPath } from 'vitefu'
 import { mergeConfig } from 'vite'
 import { build } from 'esbuild'
@@ -29,7 +34,6 @@ import type { VitrifyPlugin } from './plugins/index.js'
 import { resolve } from './app-urls.js'
 import type { ManualChunksOption, RollupOptions } from 'rollup'
 import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
-import type { ComponentResolver } from 'unplugin-vue-components'
 import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
@@ -49,21 +53,6 @@ const internalServerModules = [
   'ws',
   'abort-controller'
 ]
-
-const configPluginMap: Record<string, () => Promise<VitrifyPlugin>> = {
-  quasar: () =>
-    import('./plugins/quasar.js').then((module) => module.QuasarPlugin)
-}
-
-const configResolverMap: Record<
-  string,
-  () => Promise<ComponentResolver | ComponentResolver[]>
-> = {
-  quasar: () =>
-    import('unplugin-vue-components/resolvers').then((module) =>
-      module.QuasarResolver()
-    )
-}
 
 const manualChunkNames = [
   'prerender',
@@ -102,31 +91,6 @@ const manualChunksFn = (manualChunkList?: string[]): ManualChunksOption => {
     }
   }
 }
-
-// const manualChunks: ManualChunksOption = (
-//   id: string,
-//   manualChunkList?: string[]
-// ) => {
-//   const matchedModule = Object.entries(moduleChunks).find(
-//     ([chunkName, moduleNames]) =>
-//       moduleNames.some((moduleName) => id.includes(moduleName + '/'))
-//   )
-//   if (id.includes('vitrify/src/')) {
-//     const name = id.split('/').at(-1)?.split('.').at(0)
-//     if (name && manualChunkNames.includes(name)) return name
-//   } else if (
-//     VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
-//   ) {
-//     return VIRTUAL_MODULES.find((name) => id.includes(name))
-//   } else if (manualChunkList?.some((file) => id.includes(file))) {
-//     return manualChunkList.find((file) => id.includes(file))
-//   } else if (id.includes('node_modules')) {
-//     if (matchedModule) {
-//       return matchedModule[0]
-//     }
-//     return 'vendor'
-//   }
-// }
 
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
@@ -241,7 +205,6 @@ export const baseConfig = async ({
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
 
       rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
-      // vitrifyConfig = (await import(configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
       rawVitrifyConfig = (
@@ -258,9 +221,11 @@ export const baseConfig = async ({
     throw e
   }
 
-  const localPackages = ['vue', 'vue-router', '@vue/server-renderer']
-  // const localPackages: string[] = []
-  const cliPackages = []
+  const localPackages = []
+  if (framework === 'vue')
+    localPackages.push('vue', 'vue-router', '@vue/server-renderer')
+
+  const cliPackages: string[] = []
   const packageUrls: Record<string, URL> =
     vitrifyConfig.vitrify?.urls?.packages || {}
   await (async () => {
@@ -269,14 +234,6 @@ export const baseConfig = async ({
       if (pkgDir) packageUrls![val] = new URL(`file://${pkgDir}`)
     }
   })()
-
-  // await (async () => {
-  //   for (const val of cliPackages)
-  //     packageUrls[val] = getPkgJsonDir(
-  //       new URL(await resolve(val, cliDir!.href))
-  //     )
-  // })()
-
   if (!productName) {
     try {
       ;({ productName } = JSON.parse(
@@ -293,6 +250,11 @@ export const baseConfig = async ({
   }
 
   const isPwa = !!vitrifyConfig.vitrify?.pwa || false
+
+  const frameworkPlugins: Plugin[] = []
+  if (framework === 'vue') {
+    frameworkPlugins.push(vuePlugin())
+  }
 
   const vitrifyPlugins: Plugin[] = []
   if (vitrifyConfig.vitrify?.plugins) {
@@ -381,13 +343,12 @@ export const baseConfig = async ({
               /<style lang="sass">(.*?)<\/style>/,
               '<style lang="sass">' + sass + '</style>'
             )
-          // code = code.replace(/<\/style>/, sass + '</style>')
         }
 
         return code
       }
     },
-    vuePlugin(),
+    ...frameworkPlugins,
     ...vitrifyPlugins,
     {
       name: 'vitrify-setup',
@@ -448,10 +409,6 @@ export const baseConfig = async ({
                 return `import ${varName} from '${
                   new URL(url, appDir).pathname
                 }'; onSetup.push(${varName})`
-
-                // return `import ${varName} from '${fileURLToPath(
-                //   url
-                // )}'; onSetup.push(${varName})`
               })
               .join('\n')}`
         } else if (id === 'virtual:static-imports') {
@@ -468,11 +425,7 @@ export const baseConfig = async ({
             ),
             ...globalSass.map((sass) => `@import '${sass}'`)
           ].join('\n')
-        }
-        // else if (id === 'vitrify.css') {
-        //   return `${globalCss.map((css) => `@import '${css}'`).join('\n')}`
-        // }
-        else if (id === 'virtual:vitrify-config') {
+        } else if (id === 'virtual:vitrify-config') {
           return `export default ${JSON.stringify(vitrifyConfig)}`
         }
         return null
@@ -502,14 +455,14 @@ export const baseConfig = async ({
       }
     },
     Components({
+      ...vitrifyConfig.vitrify?.unpluginVueComponents,
       exclude: [
         new RegExp(
           `[\\/]node_modules[\\/].*[\\/]!(${serverModules.join('|')})`
         ),
         /[\\/]\.git[\\/]/,
         /[\\/]\.nuxt[\\/]/
-      ],
-      resolvers
+      ]
     }),
     UnoCSS({
       ...vitrifyConfig.vitrify?.unocss,
@@ -562,31 +515,12 @@ export const baseConfig = async ({
           } else {
             entryScript = `<script type="module" src="${entry}"></script>`
           }
-          // html = html.replace('<!--entry-script-->', entryScript)
           html = appendToBody(entryScript, html)
           if (productName) html = addOrReplaceTitle(productName, html)
-          // html = html.replace('<!--product-name-->', productName)
           return html
         }
       }
     })
-
-    // plugins.unshift({
-    //   name: 'product-name',
-    //   enforce: 'post',
-    //   config: (config: VitrifyConfig, env) => {
-    //     if (config.vitrify?.productName)
-    //       productName = config.vitrify?.productName
-    //     return
-    //   },
-    //   transformIndexHtml: {
-    //     enforce: 'post',
-    //     transform: (html) => {
-    //       html = html.replace('<!--product-name-->', productName)
-    //       return html
-    //     }
-    //   }
-    // })
 
     if (debug) plugins.push(visualizer())
   }
@@ -602,19 +536,40 @@ export const baseConfig = async ({
   ]
 
   const vuePkgAliases: Alias[] = []
-  for (const pkg of vueInternalPkgs) {
-    const specifier = pkg.split('/').at(-1)
-    const pkgJsonPath = await findDepPkgJsonPath(pkg, fileURLToPath(appDir!))
-    if (pkgJsonPath)
-      vuePkgAliases.push({
-        find: pkg,
-        replacement: fileURLToPath(
-          new URL(
-            `./dist/${specifier}.esm-bundler.js`,
-            `file://${pkgJsonPath}` || ''
+  if (packageUrls['vue']) {
+    for (const pkg of vueInternalPkgs) {
+      const specifier = pkg.split('/').at(-1)
+      const pkgJsonPath = await findDepPkgJsonPath(pkg, fileURLToPath(appDir!))
+      if (pkgJsonPath)
+        vuePkgAliases.push({
+          find: pkg,
+          replacement: fileURLToPath(
+            new URL(
+              `./dist/${specifier}.esm-bundler.js`,
+              `file://${pkgJsonPath}` || ''
+            )
           )
-        )
-      })
+        })
+
+      vuePkgAliases.push(
+        {
+          find: new RegExp('^vue$'),
+          replacement: fileURLToPath(
+            new URL('./dist/vue.runtime.esm-bundler.js', packageUrls['vue'])
+          )
+        },
+        {
+          find: new RegExp('^vue-router$'),
+          replacement: fileURLToPath(
+            new URL(
+              './dist/vue-router.esm-bundler.js',
+              packageUrls['vue-router']
+            )
+          )
+        },
+        ...vuePkgAliases
+      )
+    }
   }
 
   const alias: Alias[] = [
@@ -622,21 +577,11 @@ export const baseConfig = async ({
     { find: 'app', replacement: fileURLToPath(appDir) },
     { find: 'cwd', replacement: fileURLToPath(cwd) },
     { find: 'boot', replacement: fileURLToPath(new URL('boot/', srcDir)) },
-    { find: 'assets', replacement: fileURLToPath(new URL('assets/', srcDir)) },
-    {
-      find: new RegExp('^vue$'),
-      replacement: fileURLToPath(
-        new URL('./dist/vue.runtime.esm-bundler.js', packageUrls['vue'])
-      )
-    },
-    {
-      find: new RegExp('^vue-router$'),
-      replacement: fileURLToPath(
-        new URL('./dist/vue-router.esm-bundler.js', packageUrls['vue-router'])
-      )
-    },
-    ...vuePkgAliases
+    { find: 'assets', replacement: fileURLToPath(new URL('assets/', srcDir)) }
   ]
+
+  if (framework === 'vue') alias.push(...vuePkgAliases)
+
   if (mode === 'development' && vitrifyConfig.vitrify?.dev?.alias)
     alias.push(...vitrifyConfig.vitrify.dev.alias)
 
