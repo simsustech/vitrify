@@ -294,20 +294,23 @@ export const baseConfig = async ({
 
   const isPwa = !!vitrifyConfig.vitrify?.pwa || false
 
-  const frameworkPlugins = []
-  const resolvers = []
-  for (const framework of Object.keys(configPluginMap)) {
-    if (Object.keys(vitrifyConfig).includes(framework)) {
-      const plugin = await configPluginMap[framework]()
-      const resolver = await configResolverMap[framework]()
+  const vitrifyPlugins: Plugin[] = []
+  if (vitrifyConfig.vitrify?.plugins) {
+    for (const vitrifyPluginConfig of vitrifyConfig.vitrify.plugins) {
+      const vitrifyPlugin = await vitrifyPluginConfig.plugin({
+        ssr,
+        pwa: isPwa,
+        options: vitrifyPluginConfig.options
+      })
+      if ('plugin' in vitrifyPlugin) {
+        vitrifyPlugins.push(vitrifyPlugin.plugin)
+      } else if ('plugins' in vitrifyPlugin) {
+        vitrifyPlugins.push(...vitrifyPlugin.plugins)
+      }
 
-      frameworkPlugins.push(
-        await plugin({
-          ssr,
-          pwa: isPwa
-        })
-      )
-      resolvers.push(resolver)
+      if (vitrifyPlugin.config) {
+        vitrifyConfig = mergeConfig(vitrifyConfig, vitrifyPlugin.config)
+      }
     }
   }
 
@@ -385,7 +388,7 @@ export const baseConfig = async ({
       }
     },
     vuePlugin(),
-    ...frameworkPlugins,
+    ...vitrifyPlugins,
     {
       name: 'vitrify-setup',
       enforce: 'post',

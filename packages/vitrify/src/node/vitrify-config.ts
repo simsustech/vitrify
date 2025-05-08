@@ -1,10 +1,10 @@
 import type { Alias, UserConfig as ViteUserConfig, ViteDevServer } from 'vite'
-import type { QuasarConf } from './plugins/quasar.js'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import type { VitePWAOptions } from 'vite-plugin-pwa'
-import { ComponentResolver } from 'unplugin-vue-components'
+import type { Options as unpluginVueComponentsOptions } from 'unplugin-vue-components'
 import type { UserConfig as UnoCSSUserConfig } from '@unocss/core'
+import { VitrifyPlugin } from './plugins/index.js'
 
 export type BootFunction = ({
   app,
@@ -43,9 +43,14 @@ export type OnSetupHook = (
   }
 ) => any
 export type OnSetupFile = URL
+
 export interface VitrifyConfig extends ViteUserConfig {
   vitrify?: {
     lang?: string
+    /**
+     * Vitrify plugins
+     */
+    plugins?: VitrifyPluginConfig[]
     /**
      * Global CSS imports
      */
@@ -118,8 +123,12 @@ export interface VitrifyConfig extends ViteUserConfig {
      * UnoCSS Configuration
      */
     unocss?: UnoCSSUserConfig
+    /**
+     * unplugin-vue-components configuration
+     */
+    unpluginVueComponents?: unpluginVueComponentsOptions
   }
-  quasar?: QuasarConf
+  // quasar?: QuasarConf
 }
 
 export type VitrifyCommands = 'build' | 'dev' | 'test'
@@ -134,5 +143,10 @@ export type VitrifyConfigAsync = ({
   mode: VitrifyModes
   command: VitrifyCommands
 }) => Promise<VitrifyConfig>
+
+type VitrifyPluginConfig = {
+  plugin: VitrifyPlugin<any>
+  options: any
+}
 
 export const defineConfig = (config: VitrifyConfig) => config

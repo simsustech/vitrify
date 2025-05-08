@@ -30,9 +30,9 @@
     "./client": {
       "types": "./client.d.ts"
     },
-    "./unocss/quasar/styles": {
-      "types": "./dist/types/plugins/quasar/unocss/styles/index.d.ts",
-      "import": "./dist/plugins/quasar/unocss/styles/index.js"
+    "./plugins": {
+      "types": "./dist/types/plugins/index.d.ts",
+      "import": "./dist/plugins/index.js"
     }
   },
   "engines": {
