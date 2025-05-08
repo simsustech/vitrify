@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.7.0
+
+### Minor Changes
+
+- 6e54fe5: feat(create-vitrify): update templates
+
 ## 0.6.5
 
 ### Patch Changes
