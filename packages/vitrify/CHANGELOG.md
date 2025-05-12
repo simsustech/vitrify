@@ -1,5 +1,18 @@
 # vitrify
 
+## 0.22.0
+
+### Minor Changes
+
+- 35774d4: feat(vitrify): export vitrify plugins with subpath export
+- 80cec96: feat(vitrify): merge dev server config into baseConfig
+- 24e048c: refactor(vitrify): refactor and cleanup
+
+### Patch Changes
+
+- 1c32a9e: feat(vitrify): add @fastify/one-line-logger
+- 433ead7: feat(vitrify): use environment api in ssr
+
 ## 0.21.0
 
 ### Minor Changes
