@@ -37,6 +37,7 @@ import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
 import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
+import { searchForWorkspaceRoot } from 'vite'
 
 const internalServerModules = [
   'util',
@@ -652,6 +653,7 @@ export const baseConfig = async ({
 
   const config = {
     root: fileURLToPath(appDir),
+    appType: ssr ? 'custom' : 'spa',
     publicDir: fileURLToPath(publicDir),
     base,
     envDir: fileURLToPath(appDir),
@@ -689,8 +691,27 @@ export const baseConfig = async ({
       __BASE_URL__: `'${base}'`,
       __IS_PWA__: `${isPwa}`
     },
-    environments: {
-      server: ssr ? {} : undefined
+    // environments: {
+    // },
+    server: {
+      https: vitrifyConfig.server?.https,
+      // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
+      middlewareMode: ssr ? true : false,
+      fs: {
+        strict: false, // https://github.com/vitejs/vite/issues/8175
+        allow: [
+          searchForWorkspaceRoot(process.cwd()),
+          searchForWorkspaceRoot(fileURLToPath(appDir)),
+          searchForWorkspaceRoot(fileURLToPath(cliDir)),
+          fileURLToPath(appDir)
+        ]
+      },
+      watch: {
+        // During tests we edit the files too fast and sometimes chokidar
+        // misses change events, so enforce polling for consistency
+        usePolling: true,
+        interval: 100
+      }
     }
   } as VitrifyConfig
 

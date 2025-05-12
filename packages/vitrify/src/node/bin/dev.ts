@@ -49,8 +49,6 @@ export async function createVitrifyDevServer({
     '../app-urls.js'
   )
 
-  const cliDir = getCliDir()
-
   if (!appDir) appDir = getAppDir()
   let config: InlineConfig = {}
   let ssrMode: 'server' | 'fastify' | undefined
@@ -66,52 +64,32 @@ export async function createVitrifyDevServer({
     base
   })
 
-  config.logLevel = logLevel
-
-  config.define = {
-    ...config.define,
-    __HOST__: `'${host}'`
-  }
-
   const wsPort = await getFirstOpenPort(24678)
   if (config.server?.https) {
     exitLogs.push(
       `[warning] HTTPS mode enabled. Visit https://{hostname}:${wsPort} to enable a security exception for HMR.`
     )
   }
-  config.server = {
-    https: config.server?.https,
-    hmr: {
-      protocol: config.server?.https ? 'wss' : 'ws',
-      port: wsPort
-    },
-    port,
-    // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
-    middlewareMode: ssr ? true : false,
-    fs: {
-      strict: false, // https://github.com/vitejs/vite/issues/8175
-      allow: [
-        searchForWorkspaceRoot(process.cwd()),
-        searchForWorkspaceRoot(fileURLToPath(appDir)),
-        searchForWorkspaceRoot(fileURLToPath(cliDir)),
-        fileURLToPath(appDir)
-      ]
-    },
-    watch: {
-      // During tests we edit the files too fast and sometimes chokidar
-      // misses change events, so enforce polling for consistency
-      usePolling: true,
-      interval: 100
-    },
-    host
-  }
-  if (ssr) config.appType = 'custom'
 
   const vitrifyDevServer = await (
     await import('vite')
   ).createServer({
     configFile: false,
-    ...config
+    ...config,
+    logLevel,
+    define: {
+      ...config.define,
+      __HOST__: `'${host}'`
+    },
+    server: {
+      ...config.server,
+      host,
+      port,
+      hmr: {
+        protocol: config.server?.https ? 'wss' : 'ws',
+        port: wsPort
+      }
+    }
   })
 
   return vitrifyDevServer
