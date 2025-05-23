@@ -184,11 +184,11 @@ const renderHtml = async (options: {
 
   const onRendered = options.onRendered ?? []
 
-  const [appHtml, preloadLinks] = await options.render(
-    options.url,
-    options.manifest,
-    ssrContext
-  )
+  const {
+    html: appHtml,
+    preloadLinks,
+    app
+  } = await options.render(options.url, options.manifest, ssrContext)
 
   if (!ssrContext.initialState) ssrContext.initialState = {}
   ssrContext.initialState.provide = options.provide

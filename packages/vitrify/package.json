@@ -33,6 +33,10 @@
     "./plugins": {
       "types": "./dist/types/plugins/index.d.ts",
       "import": "./dist/plugins/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/types/hooks/index.d.ts",
+      "import": "./dist/hooks/index.d.ts"
     }
   },
   "engines": {
@@ -99,6 +103,7 @@
     "beasties": "^0.3.3",
     "css": "^3.0.0",
     "css-to-tailwind-translator": "^1.2.8",
+    "pinia": "^3.0.2",
     "quasar": "^2.18.1",
     "rollup": "^4.40.1",
     "typescript": "^5.8.3",

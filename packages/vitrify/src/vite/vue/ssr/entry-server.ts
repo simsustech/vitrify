@@ -1,6 +1,5 @@
-import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { createApp } from '../main.js'
-import { renderToString as renderToStringVue } from 'vue/server-renderer'
+import type { Render } from '../../../node/vitrify-config.js'
 
 const initializeApp = async (
   url: string,
@@ -37,16 +36,12 @@ export const getRoutes = async () =>
     })
   ).routes
 
-export async function render(
-  url: string,
-  manifest: Record<string, unknown>,
-  ssrContext: {
-    request: FastifyRequest | { headers: Record<string, unknown>; url: string }
-    reply: FastifyReply | Record<string, unknown>
-    provide: Record<string, unknown>
-  },
-  renderToString: typeof renderToStringVue
-) {
+export const render: Render = async (
+  url,
+  manifest,
+  ssrContext,
+  renderToString
+) => {
   if (!renderToString)
     renderToString = (await import('vue/server-renderer')).renderToString
   const { app, router } = await initializeApp(url, ssrContext)
@@ -62,7 +57,7 @@ export async function render(
 
   const preloadLinks = renderPreloadLinks(ctx.modules!, manifest)
 
-  return [html, preloadLinks]
+  return { html, preloadLinks, app }
 }
 
 function renderPreloadLinks(

@@ -17,7 +17,6 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import { fileURLToPath } from 'url'
 import type {
   StaticImports,
-  BootFunction,
   OnMountedHook,
   VitrifyConfig,
   VitrifyConfigAsync,
@@ -27,7 +26,8 @@ import type {
   VitrifySSRModes,
   OnRenderedHook,
   OnBootHook,
-  OnSetupFile
+  OnSetupFile,
+  OnCreateAppHook
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
@@ -280,6 +280,7 @@ export const baseConfig = async ({
   let onBootHooks: OnBootHook[]
   let onRenderedHooks: OnRenderedHook[]
   let onMountedHooks: OnMountedHook[]
+  let onCreateAppHooks: OnCreateAppHook[]
   let onSetupFiles: OnSetupFile[]
   let globalCss: string[] = []
   let staticImports: StaticImports
@@ -358,6 +359,7 @@ export const baseConfig = async ({
         onBootHooks = config.vitrify?.hooks?.onBoot || []
         onRenderedHooks = config.vitrify?.hooks?.onRendered || []
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
+        onCreateAppHooks = config.vitrify?.hooks?.onCreateApp || []
         onSetupFiles = config?.vitrify?.hooks?.onSetup || []
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
@@ -393,6 +395,9 @@ export const baseConfig = async ({
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             export const onRendered = [${onRenderedHooks
+              .map((fn) => `${String(fn)}`)
+              .join(', ')}]
+            export const onCreateApp = [${onCreateAppHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             export const onSetup = []
@@ -726,5 +731,5 @@ export type {
   VitrifyConfigAsync,
   VitrifyPlugin,
   VitrifyContext,
-  BootFunction
+  OnBootHook
 }

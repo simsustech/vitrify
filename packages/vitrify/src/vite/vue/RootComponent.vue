@@ -8,7 +8,7 @@ import {
   onMounted as onMountedVue,
   getCurrentInstance
 } from 'vue'
-import { onBoot, onMounted } from 'virtual:vitrify-hooks'
+import { onMounted } from 'virtual:vitrify-hooks'
 import * as staticImports from 'virtual:static-imports'
 import App from 'src/App.vue'
 // import 'vitrify.sass'

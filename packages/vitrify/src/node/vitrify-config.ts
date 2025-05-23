@@ -1,48 +1,82 @@
 import type { Alias, UserConfig as ViteUserConfig, ViteDevServer } from 'vite'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
-import type { FastifyInstance, FastifyServerOptions } from 'fastify'
+import type {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+  FastifyServerOptions
+} from 'fastify'
 import type { VitePWAOptions } from 'vite-plugin-pwa'
 import type { Options as unpluginVueComponentsOptions } from 'unplugin-vue-components'
 import type { UserConfig as UnoCSSUserConfig } from '@unocss/core'
-import { VitrifyPlugin } from './plugins/index.js'
+import type { VitrifyPlugin } from './plugins/index.js'
+import type { Router } from 'vue-router'
+import type { App } from '@vue/runtime-core'
 
-export type BootFunction = ({
+export type OnCreateAppHook = ({
   app,
-  ssrContext,
-  staticImports
+  router,
+  initialState,
+  ctx
 }: {
-  app: any
-  ssrContext: Record<string, unknown>
-  staticImports: Record<string, any>
+  app: App
+  router: Router
+  initialState: Record<string, unknown> | null
+  ctx?: Record<string, unknown>
 }) => Promise<void> | void
+
 export type OnBootHook = ({
   app,
   ssrContext,
   staticImports
 }: {
-  app: any
+  app: App
   ssrContext: Record<string, unknown>
   staticImports?: Record<string, any>
 }) => Promise<void> | void
+
 export type OnMountedHook = (
   instance: ComponentInternalInstance
 ) => Promise<void> | void
 export type StaticImports = Record<string, string[]>
-export type SsrFunction = (
-  html: string,
-  ssrContext: Record<string, any>
-) => string
-export type OnRenderedHook = (
-  html: string,
-  ssrContext: Record<string, any>
-) => string
+
+export type OnSetupFile = URL
 export type OnSetupHook = (
   fastify: FastifyInstance,
   options?: {
     vite?: ViteDevServer
   }
 ) => any
-export type OnSetupFile = URL
+
+export type Render = (
+  url: string,
+  manifest: Record<string, unknown>,
+  ssrContext: {
+    request:
+      | FastifyRequest
+      | {
+          headers: Record<string, unknown>
+          url: string
+        }
+    reply: FastifyReply | Record<string, unknown>
+    provide: Record<string, unknown>
+  },
+  renderToString: (app: App, ctx?: Record<string, any>) => Promise<string>
+) => Promise<{
+  html: string
+  preloadLinks: string
+  app: App
+}>
+
+export type OnRenderedHook = ({
+  html,
+  ssrContext,
+  app
+}: {
+  html: string
+  ssrContext?: Record<string, any>
+  app?: App
+}) => string
 
 export interface VitrifyConfig extends ViteUserConfig {
   vitrify?: {
@@ -76,6 +110,10 @@ export interface VitrifyConfig extends ViteUserConfig {
        * Functions which run after rendering the app (SSR)
        */
       onRendered?: OnRenderedHook[]
+      /**
+       * Functions which run directly after initializing the application
+       */
+      onCreateApp?: OnCreateAppHook[]
     }
     /**
      * Global SASS variables
