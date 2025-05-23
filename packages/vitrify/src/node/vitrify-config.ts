@@ -17,12 +17,12 @@ export type OnCreateAppHook = ({
   app,
   router,
   initialState,
-  ctx
+  ssrContext
 }: {
   app: App
   router: Router
   initialState: Record<string, unknown> | null
-  ctx?: Record<string, unknown>
+  ssrContext?: Record<string, any>
 }) => Promise<void> | void
 
 export type OnBootHook = ({
@@ -78,6 +78,14 @@ export type OnRenderedHook = ({
   app?: App
 }) => string
 
+export type OnTemplateRenderedHook = ({
+  html,
+  ssrContext
+}: {
+  html: string
+  ssrContext?: Record<string, any>
+}) => string
+
 export interface VitrifyConfig extends ViteUserConfig {
   vitrify?: {
     lang?: string
@@ -110,6 +118,10 @@ export interface VitrifyConfig extends ViteUserConfig {
        * Functions which run after rendering the app (SSR)
        */
       onRendered?: OnRenderedHook[]
+      /**
+       * Functions which run after rendering the template (SSR)
+       */
+      onTemplateRendered?: OnTemplateRenderedHook[]
       /**
        * Functions which run directly after initializing the application
        */

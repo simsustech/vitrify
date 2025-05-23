@@ -27,7 +27,8 @@ import type {
   OnRenderedHook,
   OnBootHook,
   OnSetupFile,
-  OnCreateAppHook
+  OnCreateAppHook,
+  OnTemplateRenderedHook
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
@@ -279,6 +280,7 @@ export const baseConfig = async ({
 
   let onBootHooks: OnBootHook[]
   let onRenderedHooks: OnRenderedHook[]
+  let onTemplateRenderedHooks: OnTemplateRenderedHook[]
   let onMountedHooks: OnMountedHook[]
   let onCreateAppHooks: OnCreateAppHook[]
   let onSetupFiles: OnSetupFile[]
@@ -358,6 +360,8 @@ export const baseConfig = async ({
       config: (config: VitrifyConfig, env) => {
         onBootHooks = config.vitrify?.hooks?.onBoot || []
         onRenderedHooks = config.vitrify?.hooks?.onRendered || []
+        onTemplateRenderedHooks =
+          config.vitrify?.hooks?.onTemplateRendered || []
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
         onCreateAppHooks = config.vitrify?.hooks?.onCreateApp || []
         onSetupFiles = config?.vitrify?.hooks?.onSetup || []
@@ -395,6 +399,9 @@ export const baseConfig = async ({
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             export const onRendered = [${onRenderedHooks
+              .map((fn) => `${String(fn)}`)
+              .join(', ')}]
+            export const onTemplateRendered = [${onTemplateRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             export const onCreateApp = [${onCreateAppHooks

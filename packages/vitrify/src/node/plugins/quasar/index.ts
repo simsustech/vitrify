@@ -1,8 +1,8 @@
-import type { Plugin } from 'vite'
 import { fileURLToPath } from 'url'
 import type {
   OnBootHook,
   OnMountedHook,
+  OnTemplateRenderedHook,
   VitrifyConfig
 } from '../../vitrify-config.js'
 import type { VitrifyPlugin } from '../index.js'
@@ -31,10 +31,10 @@ export interface QuasarPluginOptions {
   disableSass?: boolean
 }
 
-export const injectSsrContext = (
-  html: string,
-  ssrContext: Record<string, any>
-) =>
+export const injectSsrContext: OnTemplateRenderedHook = ({
+  html,
+  ssrContext
+}) =>
   html
     .replace(/(<html[^>]*)(>)/i, (found, start, end) => {
       let matches
@@ -49,21 +49,21 @@ export const injectSsrContext = (
         start = start.replace(matches[0], '')
       }
 
-      return `${start} ${ssrContext._meta.htmlAttrs || ''} ${end}`
+      return `${start} ${ssrContext?._meta.htmlAttrs || ''} ${end}`
     })
     .replace(
       /(<head[^>]*)(>)/i,
-      (_, start, end) => `${start}${end}${ssrContext._meta.headTags || ''}`
+      (_, start, end) => `${start}${end}${ssrContext?._meta.headTags || ''}`
     )
     .replace(
       /(<\/head>)/i,
       (_, tag) =>
-        `${ssrContext._meta.resourceStyles || ''}${
-          ssrContext._meta.endingHeadTags || ''
+        `${ssrContext?._meta.resourceStyles || ''}${
+          ssrContext?._meta.endingHeadTags || ''
         }${tag}`
     )
     .replace(/(<body[^>]*)(>)/i, (found, start, end) => {
-      let classes = ssrContext._meta.bodyClasses || ''
+      let classes = ssrContext?._meta.bodyClasses || ''
 
       const matches = found.match(/\sclass\s*=\s*['"]([^'"]*)['"]/i)
 
@@ -75,8 +75,8 @@ export const injectSsrContext = (
       }
 
       return `${start} class="${classes.trim()}" ${
-        ssrContext._meta.bodyAttrs || ''
-      }${end}${ssrContext._meta.bodyTags || ''}`
+        ssrContext?._meta.bodyAttrs || ''
+      }${end}${ssrContext?._meta.bodyTags || ''}`
     })
 
 export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
@@ -204,7 +204,7 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
               hooks: {
                 onBoot: onBootHooks,
                 onMounted: onMountedHooks,
-                onRendered: [injectSsrContext]
+                onTemplateRendered: [injectSsrContext]
               },
               sass: quasarConf.disableSass
                 ? undefined
@@ -316,5 +316,3 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
     }
   }
 }
-
-export default QuasarPlugin

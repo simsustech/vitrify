@@ -1,5 +1,5 @@
 import { existsSync, promises as fs, mkdirSync } from 'fs'
-import type { OnRenderedHook } from 'src/node/vitrify-config.js'
+import type { OnTemplateRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 import { renderHtml } from './fastify-ssr-plugin.js'
 import { type RouteRecordRaw } from 'vue-router'
@@ -10,14 +10,14 @@ export const prerender = async ({
   manifest,
   render,
   routes,
-  onRendered
+  onTemplateRendered
 }: {
   outDir: string
   template: string
   manifest: Record<string, unknown>
   render: unknown
   routes: RouteRecordRaw[]
-  onRendered: OnRenderedHook[]
+  onTemplateRendered: OnTemplateRenderedHook[]
 }) => {
   const promises = []
   const paths = routesToPaths(routes).filter(
@@ -52,7 +52,7 @@ export const prerender = async ({
       request: { headers: {}, url },
       reply: {},
       template,
-      onRendered
+      onTemplateRendered
     })
     html = await beasties.process(html)
 

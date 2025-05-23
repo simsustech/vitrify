@@ -24,7 +24,6 @@ cli
     const { build } = await import('./build.js')
     let appDir: URL
     let prerender
-    let onRendered
     if (options.appDir) {
       if (options.appDir.slice(-1) !== '/') options.appDir += '/'
       appDir = new URL(`file://${options.appDir}`)
@@ -90,7 +89,7 @@ cli
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
 
-        const { template, manifest, render, getRoutes, onRendered } =
+        const { template, manifest, render, getRoutes, onTemplateRendered } =
           await loadSSRAssets({
             mode: 'ssg',
             distDir: baseOutDir
@@ -103,7 +102,7 @@ cli
           manifest,
           render,
           routes,
-          onRendered
+          onTemplateRendered
         })
         break
       default:

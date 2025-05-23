@@ -5,7 +5,10 @@ import type { Server } from 'net'
 import fastify from 'fastify'
 import type { FastifyServerOptions } from 'fastify'
 import { fastifySsrPlugin } from '../frameworks/vue/fastify-ssr-plugin.js'
-import type { OnRenderedHook, VitrifyConfig } from '../vitrify-config.js'
+import type {
+  OnTemplateRenderedHook,
+  VitrifyConfig
+} from '../vitrify-config.js'
 import isPortReachable from 'is-port-reachable'
 import { exitLogs } from '../helpers/logger.js'
 import { fileURLToPath } from 'url'
@@ -138,7 +141,7 @@ export async function createServer({
   let setup
   let app: FastifyInstance | undefined
   let server: Server
-  let onRendered: OnRenderedHook[]
+  let onTemplateRendered: OnTemplateRenderedHook[]
   let vitrifyConfig: VitrifyConfig
 
   console.log(`Development mode: ${ssr ? ssr : 'csr'}`)
@@ -149,7 +152,7 @@ export async function createServer({
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     const environment = vite.environments.ssr
-    ;({ setup, onRendered, vitrifyConfig } =
+    ;({ setup, onTemplateRendered, vitrifyConfig } =
       // @ts-expect-error missing types
       await environment.runner.import(entryUrl))
     // console.log(module)
@@ -177,7 +180,7 @@ export async function createServer({
       await app.register(fastifySsrPlugin, {
         appDir,
         mode: 'development',
-        onRendered,
+        onTemplateRendered,
         host
       })
     }

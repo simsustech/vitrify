@@ -57,9 +57,8 @@ export async function createApp(
   const router = createRouter()
   app.use(router)
 
-  const onCreateAppCtx = {}
   for (const fn of onCreateApp) {
-    await fn({ app, router, initialState, ctx: onCreateAppCtx })
+    await fn({ app, router, initialState, ssrContext })
   }
 
   // Workaround to fix hydration errors when serving html files directly

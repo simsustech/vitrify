@@ -5,12 +5,12 @@ const initializeApp = async (
   url: string,
   ssrContext: Record<string, unknown>
 ) => {
-  const onRenderedList: (() => unknown)[] = []
+  const onTemplateRenderedList: (() => unknown)[] = []
   Object.assign(ssrContext, {
     _modules: new Set(),
     _meta: {},
     onRendered: (fn: () => unknown) => {
-      onRenderedList.push(fn)
+      onTemplateRenderedList.push(fn)
     }
   })
 
@@ -19,7 +19,7 @@ const initializeApp = async (
   router.push({ path: url })
   ssrContext.initialState = {}
 
-  onRenderedList.forEach((fn) => {
+  onTemplateRenderedList.forEach((fn) => {
     fn()
   })
 

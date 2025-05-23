@@ -3,6 +3,7 @@ import type {
   OnCreateAppHook,
   OnMountedHook,
   OnRenderedHook,
+  OnTemplateRenderedHook,
   OnSetupFile,
   OnSetupHook
 } from '../vitrify-config.js'
@@ -12,6 +13,7 @@ export {
   OnCreateAppHook,
   OnMountedHook,
   OnRenderedHook,
+  OnTemplateRenderedHook,
   OnSetupFile,
   OnSetupHook
 }
