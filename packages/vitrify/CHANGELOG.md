@@ -1,5 +1,17 @@
 # vitrify
 
+## 0.23.0
+
+### Minor Changes
+
+- d95082c: feat(vitrify): add Pinia VitrifyPlugin
+- 7c49449: feat(vitrify): add onCreateApp hook and type the internal render fn
+- 59d5e62: feat(vitrify): add onRendered hook which runs before the template render
+
+### Patch Changes
+
+- 18cc6e4: refactor(vitrify): rename onRendered to onTemplateRendered
+
 ## 0.22.0
 
 ### Minor Changes
