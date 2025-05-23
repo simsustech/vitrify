@@ -4,8 +4,8 @@ import { onBoot, onCreateApp } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
 import 'virtual:uno.css'
-
 import RootComponent from './RootComponent.vue'
+import { parse } from 'devalue'
 
 declare global {
   interface Window {
@@ -28,7 +28,7 @@ export async function createApp(
 ) {
   const initialState: Record<string, any> | null =
     !import.meta.env.SSR && window.__INITIAL_STATE__
-      ? JSON.parse(window.__INITIAL_STATE__)
+      ? parse(window.__INITIAL_STATE__)
       : null
 
   // Delete for security reasons

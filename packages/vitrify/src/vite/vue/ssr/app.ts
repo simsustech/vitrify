@@ -1,6 +1,6 @@
 import { createApp } from '../../../node/frameworks/vue/server.js'
 import { getAppDir } from '../../../node/app-urls.js'
-import { onSetup, onTemplateRendered } from 'virtual:vitrify-hooks'
+import { onSetup, onRendered, onTemplateRendered } from 'virtual:vitrify-hooks'
 import { fastifySsrPlugin } from './fastify-ssr-plugin.js'
 
 const getString = (str?: string) => str
@@ -13,10 +13,11 @@ export const setupApp = async () => {
     appDir,
     baseUrl,
     fastifyPlugin: fastifySsrPlugin,
+    onRendered,
     onTemplateRendered,
     mode: import.meta.env.MODE
   })
 }
 
 export { default as vitrifyConfig } from 'virtual:vitrify-config'
-export { onTemplateRendered }
+export { onRendered, onTemplateRendered }

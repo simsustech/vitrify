@@ -26,3 +26,4 @@ export type VitrifyPlugin<Options> = ({
 }) => Promise<VitrifyPluginReturnType> | VitrifyPluginReturnType
 
 export * from './quasar/index.js'
+export * from './pinia/index.js'

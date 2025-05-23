@@ -7,6 +7,7 @@ const initializeApp = async (
 ) => {
   const onTemplateRenderedList: (() => unknown)[] = []
   Object.assign(ssrContext, {
+    // Quasar internals
     _modules: new Set(),
     _meta: {},
     onRendered: (fn: () => unknown) => {

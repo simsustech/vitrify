@@ -8,8 +8,12 @@ import {
   appendToHead
 } from '../../helpers/utils.js'
 import type { ViteDevServer } from 'vite'
-import type { OnTemplateRenderedHook } from '../../vitrify-config.js'
+import type {
+  OnRenderedHook,
+  OnTemplateRenderedHook
+} from '../../vitrify-config.js'
 import { getAppDir } from '../../app-urls.js'
+import { stringify } from 'devalue'
 
 type ProvideFn = (
   req: FastifyRequest,
@@ -22,6 +26,7 @@ export interface FastifySsrOptions {
   vitrifyDir?: URL
   vite?: ViteDevServer
   // frameworkDir?: URL
+  onRendered?: OnRenderedHook[]
   onTemplateRendered?: OnTemplateRenderedHook[]
   appDir?: URL
   publicDir?: URL
@@ -96,6 +101,7 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
           reply: res,
           url: url ?? '/',
           provide,
+          onRendered: options.onRendered,
           onTemplateRendered: options.onTemplateRendered,
           template,
           manifest,
@@ -127,7 +133,7 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
       const url = req.raw.url?.replace(options.baseUrl!, '/')
       const provide = options.provide ? await options.provide(req, res) : {}
 
-      const { template, manifest, render, onTemplateRendered } =
+      const { template, manifest, render, onRendered, onTemplateRendered } =
         await loadSSRAssets({
           distDir: new URL('./dist/', options.appDir)
         })
@@ -137,6 +143,7 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
         reply: res,
         url: url ?? '/',
         provide,
+        onRendered,
         onTemplateRendered,
         template,
         manifest,
@@ -172,6 +179,7 @@ const renderHtml = async (options: {
   request: FastifyRequest | { headers: Record<string, unknown>; url: string }
   reply: FastifyReply | Record<string, unknown>
   provide: Record<string, unknown>
+  onRendered?: OnRenderedHook[]
   onTemplateRendered?: OnTemplateRenderedHook[]
   template: string
   manifest: Record<string, unknown>
@@ -183,9 +191,8 @@ const renderHtml = async (options: {
     provide: options.provide
   }
 
+  const onRendered = options.onRendered ?? []
   const onTemplateRendered = options.onTemplateRendered ?? []
-
-  console.log(ssrContext)
 
   const {
     html: appHtml,
@@ -193,13 +200,18 @@ const renderHtml = async (options: {
     app
   } = await options.render(options.url, options.manifest, ssrContext)
 
-  console.log(ssrContext)
+  if (onRendered?.length) {
+    for (const ssrFunction of onRendered) {
+      ssrFunction({ app, ssrContext })
+    }
+  }
+
   // if (!ssrContext.initialState) ssrContext.initialState = {}
   ssrContext.initialState.provide = options.provide
 
   const initialStateScript = `
   <script>
-  __INITIAL_STATE__ = '${JSON.stringify(ssrContext.initialState)}'
+  __INITIAL_STATE__ = '${stringify(ssrContext.initialState)}'
   </script>`
 
   let html = renderTemplate({
@@ -233,7 +245,7 @@ const loadSSRAssets = async (
   const baseOutDir = distDir || new URL('dist/', appDir)
 
   let templatePath, manifestPath, entryServerPath
-  const onTemplateRenderedPath = fileURLToPath(
+  const vitrifyHooksPath = fileURLToPath(
     new URL('ssr/server/virtual_vitrify-hooks.mjs', baseOutDir)
   )
   if (mode === 'ssg') {
@@ -258,14 +270,14 @@ const loadSSRAssets = async (
     const manifest = JSON.parse(readFileSync(manifestPath).toString())
     const entryServer = await import(entryServerPath)
     const { render, getRoutes } = entryServer
-    const onTemplateRendered = (await import(onTemplateRenderedPath))
-      .onTemplateRendered
+    const { onTemplateRendered, onRendered } = await import(vitrifyHooksPath)
 
     return {
       template,
       manifest,
       render,
       getRoutes,
+      onRendered,
       onTemplateRendered
     }
   } catch (e) {

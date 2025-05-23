@@ -69,14 +69,12 @@ export type Render = (
 }>
 
 export type OnRenderedHook = ({
-  html,
-  ssrContext,
-  app
+  app,
+  ssrContext
 }: {
-  html: string
+  app: App
   ssrContext?: Record<string, any>
-  app?: App
-}) => string
+}) => void
 
 export type OnTemplateRenderedHook = ({
   html,
