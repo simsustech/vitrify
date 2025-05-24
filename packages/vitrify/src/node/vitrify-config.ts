@@ -12,6 +12,38 @@ import type { UserConfig as UnoCSSUserConfig } from '@unocss/core'
 import type { VitrifyPlugin } from './plugins/index.js'
 import type { Router } from 'vue-router'
 import type { App } from '@vue/runtime-core'
+import type { Pinia } from 'pinia'
+import type { _UseQueryEntryNodeValueSerialized } from '@pinia/colada/index.js'
+
+export type SSRContext = {
+  // Quasar requires req and res on SSRContext instead of request and reply
+  req:
+    | FastifyRequest
+    | {
+        headers: Record<string, unknown>
+        url: string
+      }
+  res: FastifyReply | Record<string, unknown>
+  provide: Record<string, unknown>
+  initialState: Record<string, unknown>
+  stringifyReducers: Record<string, (value: any) => any>
+  pinia?: Pinia
+  // Quasar internals
+  _modules: Set<unknown>
+  _meta: Record<string, any>
+  __qMetaList: unknown[]
+  /**
+   * Required for Quasar
+   */
+  onRenderedList: (() => unknown)[]
+  onRendered: (fn: () => unknown) => void
+  /**
+   * Vue internals
+   */
+  modules?: Map<unknown, unknown>
+  transports?: Record<string, unknown>
+  [key: string]: unknown
+}
 
 export type OnCreateAppHook = ({
   app,
@@ -21,8 +53,13 @@ export type OnCreateAppHook = ({
 }: {
   app: App
   router: Router
-  initialState: Record<string, unknown> | null
-  ssrContext?: Record<string, any>
+  initialState: {
+    provide?: Record<string, unknown>
+    pinia?: Record<string, unknown>
+    piniaColada?: Record<string, _UseQueryEntryNodeValueSerialized>
+    [key: string]: unknown
+  }
+  ssrContext?: SSRContext
 }) => Promise<void> | void
 
 export type OnBootHook = ({
@@ -31,7 +68,7 @@ export type OnBootHook = ({
   staticImports
 }: {
   app: App
-  ssrContext: Record<string, unknown>
+  ssrContext: SSRContext
   staticImports?: Record<string, any>
 }) => Promise<void> | void
 
@@ -51,16 +88,7 @@ export type OnSetupHook = (
 export type Render = (
   url: string,
   manifest: Record<string, unknown>,
-  ssrContext: {
-    request:
-      | FastifyRequest
-      | {
-          headers: Record<string, unknown>
-          url: string
-        }
-    reply: FastifyReply | Record<string, unknown>
-    provide: Record<string, unknown>
-  },
+  ssrContext: SSRContext,
   renderToString: (app: App, ctx?: Record<string, any>) => Promise<string>
 ) => Promise<{
   html: string
@@ -73,7 +101,7 @@ export type OnRenderedHook = ({
   ssrContext
 }: {
   app: App
-  ssrContext?: Record<string, any>
+  ssrContext?: SSRContext
 }) => void
 
 export type OnTemplateRenderedHook = ({
@@ -81,7 +109,7 @@ export type OnTemplateRenderedHook = ({
   ssrContext
 }: {
   html: string
-  ssrContext?: Record<string, any>
+  ssrContext?: SSRContext
 }) => string
 
 export interface VitrifyConfig extends ViteUserConfig {

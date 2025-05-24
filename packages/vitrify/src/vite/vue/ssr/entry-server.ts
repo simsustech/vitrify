@@ -1,28 +1,10 @@
 import { createApp } from '../main.js'
-import type { Render } from '../../../node/vitrify-config.js'
+import type { Render, SSRContext } from '../../../node/vitrify-config.js'
 
-const initializeApp = async (
-  url: string,
-  ssrContext: Record<string, unknown>
-) => {
-  const onTemplateRenderedList: (() => unknown)[] = []
-  Object.assign(ssrContext, {
-    // Quasar internals
-    _modules: new Set(),
-    _meta: {},
-    onRendered: (fn: () => unknown) => {
-      onTemplateRenderedList.push(fn)
-    }
-  })
-
+const initializeApp = async (url: string, ssrContext: SSRContext) => {
   const { app, router, routes } = await createApp('server', ssrContext)
 
   router.push({ path: url })
-  ssrContext.initialState = {}
-
-  onTemplateRenderedList.forEach((fn) => {
-    fn()
-  })
 
   await router.isReady()
 
@@ -33,7 +15,18 @@ export const getRoutes = async () =>
   (
     await initializeApp('/', {
       req: { headers: {}, url: '/' },
-      res: {}
+      res: {},
+      provide: {},
+      initialState: {},
+      stringifyReducers: {},
+      onTemplateRenderedInternal: [],
+      _modules: new Set(),
+      _meta: {},
+      __qMetaList: [],
+      onRenderedList: [],
+      onRendered: (fn: () => unknown) => {
+        return
+      }
     })
   ).routes
 
@@ -47,16 +40,9 @@ export const render: Render = async (
     renderToString = (await import('vue/server-renderer')).renderToString
   const { app, router } = await initializeApp(url, ssrContext)
 
-  const ctx: {
-    modules?: Map<unknown, unknown>
-    transports?: Record<string, unknown>
-    __qMetaList: unknown[]
-  } = {
-    __qMetaList: []
-  }
-  const html = await renderToString(app, ctx)
+  const html = await renderToString(app, ssrContext)
 
-  const preloadLinks = renderPreloadLinks(ctx.modules!, manifest)
+  const preloadLinks = renderPreloadLinks(ssrContext.modules!, manifest)
 
   return { html, preloadLinks, app }
 }

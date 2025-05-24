@@ -10,7 +10,8 @@ import {
 import type { ViteDevServer } from 'vite'
 import type {
   OnRenderedHook,
-  OnTemplateRenderedHook
+  OnTemplateRenderedHook,
+  SSRContext
 } from '../../vitrify-config.js'
 import { getAppDir } from '../../app-urls.js'
 import { stringify } from 'devalue'
@@ -97,8 +98,8 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
         }
 
         const html = await renderHtml({
-          request: req,
-          reply: res,
+          req,
+          res,
           url: url ?? '/',
           provide,
           onRendered: options.onRendered,
@@ -139,8 +140,8 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
         })
 
       const html = await renderHtml({
-        request: req,
-        reply: res,
+        req,
+        res,
         url: url ?? '/',
         provide,
         onRendered,
@@ -176,19 +177,30 @@ const renderTemplate = ({
 
 const renderHtml = async (options: {
   url: string
-  request: FastifyRequest | { headers: Record<string, unknown>; url: string }
-  reply: FastifyReply | Record<string, unknown>
+  req: FastifyRequest | { headers: Record<string, unknown>; url: string }
+  res: FastifyReply | Record<string, unknown>
   provide: Record<string, unknown>
   onRendered?: OnRenderedHook[]
   onTemplateRendered?: OnTemplateRenderedHook[]
+  stringifyReducers?: Record<string, (value: any) => any>
   template: string
   manifest: Record<string, unknown>
   render: any
 }) => {
-  const ssrContext: Record<string, any> = {
-    req: options.request,
-    res: options.reply,
-    provide: options.provide
+  const ssrContextOnRendered: (() => unknown)[] = []
+  const ssrContext: SSRContext = {
+    req: options.req,
+    res: options.res,
+    provide: options.provide,
+    initialState: {},
+    stringifyReducers: {},
+    _modules: new Set(),
+    _meta: {},
+    __qMetaList: [],
+    onRenderedList: ssrContextOnRendered,
+    onRendered: (fn: () => unknown) => {
+      ssrContextOnRendered.push(fn)
+    }
   }
 
   const onRendered = options.onRendered ?? []
@@ -200,6 +212,13 @@ const renderHtml = async (options: {
     app
   } = await options.render(options.url, options.manifest, ssrContext)
 
+  console.log(ssrContextOnRendered)
+  if (ssrContextOnRendered?.length) {
+    for (const ssrFunction of ssrContextOnRendered) {
+      ssrFunction()
+    }
+  }
+
   if (onRendered?.length) {
     for (const ssrFunction of onRendered) {
       ssrFunction({ app, ssrContext })
@@ -209,9 +228,12 @@ const renderHtml = async (options: {
   // if (!ssrContext.initialState) ssrContext.initialState = {}
   ssrContext.initialState.provide = options.provide
 
+  console.log('afterOnRendered')
+  console.log(ssrContext.initialState)
+
   const initialStateScript = `
   <script>
-  __INITIAL_STATE__ = '${stringify(ssrContext.initialState)}'
+  __INITIAL_STATE__ = '${stringify(ssrContext.initialState, ssrContext.stringifyReducers)}'
   </script>`
 
   let html = renderTemplate({

@@ -6,16 +6,12 @@ import * as staticImports from 'virtual:static-imports'
 import 'virtual:uno.css'
 import RootComponent from './RootComponent.vue'
 import { parse } from 'devalue'
+import type { SSRContext } from '../../node/vitrify-config'
 
 declare global {
   interface Window {
     __INITIAL_STATE__: any
   }
-}
-
-interface ssrContext {
-  provide?: Record<string, unknown>
-  [key: string]: unknown
 }
 
 function capitalizeFirstLetter(string: string) {
@@ -24,7 +20,7 @@ function capitalizeFirstLetter(string: string) {
 
 export async function createApp(
   ssr?: 'client' | 'server',
-  ssrContext: ssrContext = {}
+  ssrContext?: SSRContext
 ) {
   const initialState: Record<string, any> | null =
     !import.meta.env.SSR && window.__INITIAL_STATE__
@@ -37,7 +33,7 @@ export async function createApp(
 
   let provide: Record<string, any> = {}
   if (import.meta.env.SSR) {
-    if (ssrContext.provide) {
+    if (ssrContext?.provide) {
       provide = ssrContext?.provide
     }
   } else {

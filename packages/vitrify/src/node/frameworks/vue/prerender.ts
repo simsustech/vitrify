@@ -49,8 +49,8 @@ export const prerender = async ({
       manifest,
       provide: {},
       render,
-      request: { headers: {}, url },
-      reply: {},
+      req: { headers: {}, url },
+      res: {},
       template,
       onTemplateRendered
     })

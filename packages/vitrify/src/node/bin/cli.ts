@@ -89,11 +89,17 @@ cli
           new URL('ssr/server/prerender.mjs', baseOutDir).pathname
         ))
 
-        const { template, manifest, render, getRoutes, onTemplateRendered } =
-          await loadSSRAssets({
-            mode: 'ssg',
-            distDir: baseOutDir
-          })
+        const {
+          template,
+          manifest,
+          render,
+          getRoutes,
+          onRendered,
+          onTemplateRendered
+        } = await loadSSRAssets({
+          mode: 'ssg',
+          distDir: baseOutDir
+        })
         const routes = await getRoutes()
 
         prerender({
@@ -102,6 +108,7 @@ cli
           manifest,
           render,
           routes,
+          onRendered,
           onTemplateRendered
         })
         break
