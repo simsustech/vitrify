@@ -15,6 +15,7 @@ import type {
 } from '../../vitrify-config.js'
 import { getAppDir } from '../../app-urls.js'
 import { stringify } from 'devalue'
+import stringifyObject from 'stringify-object'
 
 type ProvideFn = (
   req: FastifyRequest,
@@ -182,7 +183,6 @@ const renderHtml = async (options: {
   provide: Record<string, unknown>
   onRendered?: OnRenderedHook[]
   onTemplateRendered?: OnTemplateRenderedHook[]
-  stringifyReducers?: Record<string, (value: any) => any>
   template: string
   manifest: Record<string, unknown>
   render: any
@@ -193,7 +193,6 @@ const renderHtml = async (options: {
     res: options.res,
     provide: options.provide,
     initialState: {},
-    stringifyReducers: {},
     _modules: new Set(),
     _meta: {},
     __qMetaList: [],
@@ -233,7 +232,7 @@ const renderHtml = async (options: {
 
   const initialStateScript = `
   <script>
-  __INITIAL_STATE__ = '${stringify(ssrContext.initialState, ssrContext.stringifyReducers)}'
+  __INITIAL_STATE__ = ${stringifyObject(ssrContextInitialStateStringified)}
   </script>`
 
   let html = renderTemplate({

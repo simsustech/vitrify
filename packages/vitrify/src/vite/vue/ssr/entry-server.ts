@@ -18,7 +18,6 @@ export const getRoutes = async () =>
       res: {},
       provide: {},
       initialState: {},
-      stringifyReducers: {},
       onTemplateRenderedInternal: [],
       _modules: new Set(),
       _meta: {},

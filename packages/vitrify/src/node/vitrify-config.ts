@@ -26,7 +26,6 @@ export type SSRContext = {
   res: FastifyReply | Record<string, unknown>
   provide: Record<string, unknown>
   initialState: Record<string, unknown>
-  stringifyReducers: Record<string, (value: any) => any>
   pinia?: Pinia
   // Quasar internals
   _modules: Set<unknown>
@@ -45,14 +44,19 @@ export type SSRContext = {
   [key: string]: unknown
 }
 
-export type OnCreateAppHook = ({
+export type onAppCreatedHook = ({
   app,
   router,
+  ctx,
   initialState,
   ssrContext
 }: {
   app: App
   router: Router
+  ctx: {
+    pinia?: Pinia
+    [key: string]: unknown
+  }
   initialState: {
     provide?: Record<string, unknown>
     pinia?: Record<string, unknown>
@@ -102,7 +106,7 @@ export type OnRenderedHook = ({
 }: {
   app: App
   ssrContext?: SSRContext
-}) => void
+}) => Promise<void> | void
 
 export type OnTemplateRenderedHook = ({
   html,
@@ -110,7 +114,7 @@ export type OnTemplateRenderedHook = ({
 }: {
   html: string
   ssrContext?: SSRContext
-}) => string
+}) => Promise<string> | string
 
 export interface VitrifyConfig extends ViteUserConfig {
   vitrify?: {
@@ -151,7 +155,7 @@ export interface VitrifyConfig extends ViteUserConfig {
       /**
        * Functions which run directly after initializing the application
        */
-      onCreateApp?: OnCreateAppHook[]
+      onAppCreated?: onAppCreatedHook[]
     }
     /**
      * Global SASS variables
