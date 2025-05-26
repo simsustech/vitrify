@@ -1,12 +1,13 @@
 import createRouter from 'src/router'
 import { App, createSSRApp, createApp as createVueApp, ref } from 'vue'
-import { onBoot, onCreateApp } from 'virtual:vitrify-hooks'
+import { onBoot, onAppCreated } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
 import 'virtual:uno.css'
 import RootComponent from './RootComponent.vue'
 import { parse } from 'devalue'
 import type { SSRContext } from '../../node/vitrify-config'
+import type { Pinia } from 'pinia'
 
 declare global {
   interface Window {
@@ -22,10 +23,21 @@ export async function createApp(
   ssr?: 'client' | 'server',
   ssrContext?: SSRContext
 ) {
-  const initialState: Record<string, any> | null =
-    !import.meta.env.SSR && window.__INITIAL_STATE__
-      ? parse(window.__INITIAL_STATE__)
-      : null
+  let initialState: Record<string, any> | null = null
+
+  if (!import.meta.env.SSR && window?.__INITIAL_STATE__) {
+    initialState = window.__INITIAL_STATE__
+
+    for (const key in initialState) {
+      if (key === 'provide' || key === 'piniaColada') {
+        initialState[key] = JSON.parse(initialState[key])
+      } else {
+        initialState[key] = parse(initialState[key], {
+          PiniaColada_TreeMapNode: (data) => data
+        })
+      }
+    }
+  }
 
   // Delete for security reasons
   if (!import.meta.env.SSR && window.__INITIAL_STATE__)
@@ -43,6 +55,10 @@ export async function createApp(
   }
 
   let app: App
+  const ctx: {
+    pinia?: Pinia
+    [key: string]: unknown
+  } = {}
 
   if (ssr) {
     app = createSSRApp(RootComponent)
@@ -53,8 +69,8 @@ export async function createApp(
   const router = createRouter()
   app.use(router)
 
-  for (const fn of onCreateApp) {
-    await fn({ app, router, initialState, ssrContext })
+  for (const fn of onAppCreated) {
+    await fn({ app, router, ctx, initialState, ssrContext })
   }
 
   // Workaround to fix hydration errors when serving html files directly

@@ -25,7 +25,12 @@ export type SSRContext = {
       }
   res: FastifyReply | Record<string, unknown>
   provide: Record<string, unknown>
-  initialState: Record<string, unknown>
+  initialState: {
+    provide?: Record<string, unknown>
+    pinia?: Record<string, unknown>
+    piniaColada?: Record<string, _UseQueryEntryNodeValueSerialized>
+    [key: string]: unknown
+  }
   pinia?: Pinia
   // Quasar internals
   _modules: Set<unknown>

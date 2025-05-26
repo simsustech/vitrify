@@ -1,41 +1,94 @@
-import type { OnCreateAppHook, OnRenderedHook } from '../../vitrify-config.js'
-import { VitrifyPlugin } from '../index.js'
+import type { onAppCreatedHook, OnRenderedHook } from '../../vitrify-config.js'
+import type { VitrifyPlugin } from '../index.js'
 
-export type PiniaPluginOptions = unknown
+export type PiniaPluginOptions = {
+  // Initialize Pinia Colada
+  colada?: boolean
+}
 
-const piniaOnCreateApp: OnCreateAppHook = async ({
+const piniaonAppCreated: onAppCreatedHook = async ({
   app,
+  ctx,
   initialState,
   ssrContext
 }) => {
   const { createPinia } = await import('pinia')
   const pinia = createPinia()
+  ctx.pinia = pinia
   app.use(pinia)
 
-  // SSR
+  // SSR Client
   if (initialState?.pinia) pinia.state.value = initialState.pinia
+  // SSR Server
   if (ssrContext) ssrContext.pinia = pinia
 }
 
 const piniaOnRenderedHook: OnRenderedHook = ({ app, ssrContext }) => {
-  // SSR
-  if (ssrContext?.initialState) {
+  // SSR Server
+  if (ssrContext?.initialState && ssrContext.pinia) {
     ssrContext.initialState.pinia = ssrContext.pinia.state.value
+  }
+}
+
+const piniaColadaonAppCreated: onAppCreatedHook = async ({
+  app,
+  ctx,
+  initialState
+}) => {
+  if (ctx?.pinia) {
+    const { PiniaColada, useQueryCache, hydrateQueryCache } = await import(
+      '@pinia/colada'
+    )
+
+    app.use(PiniaColada)
+
+    // SSR Client
+    if (initialState?.piniaColada) {
+      hydrateQueryCache(useQueryCache(ctx.pinia), initialState.piniaColada)
+    }
+  }
+}
+
+const piniaColadaOnRenderedHook: OnRenderedHook = async ({
+  app,
+  ssrContext
+}) => {
+  // SSR Server
+  if (ssrContext?.initialState && ssrContext.pinia) {
+    const { useQueryCache, serializeQueryCache } = await import('@pinia/colada')
+
+    // Delete to prevent Non-POJO error
+    if (ssrContext.initialState.pinia?._pc_query) {
+      delete ssrContext.initialState.pinia._pc_query
+    }
+    ssrContext.initialState.piniaColada = serializeQueryCache(
+      useQueryCache(ssrContext.pinia)
+    )
   }
 }
 
 export const PiniaPlugin: VitrifyPlugin<PiniaPluginOptions> = async ({
   ssr = false,
   pwa = false,
-  options
+  options = {}
 }) => {
+  const onAppCreated = [piniaonAppCreated]
+  const onRendered = [piniaOnRenderedHook]
+  if (options.colada) {
+    onAppCreated.push(piniaColadaonAppCreated)
+    onRendered.push(piniaColadaOnRenderedHook)
+  }
+
   return {
     plugins: [],
     config: {
       vitrify: {
+        ssr: {
+          serverModules: ['@pinia/colada']
+        },
         hooks: {
-          onCreateApp: [piniaOnCreateApp],
-          onRendered: [piniaOnRenderedHook]
+          onAppCreated,
+          onRendered
         }
       }
     }

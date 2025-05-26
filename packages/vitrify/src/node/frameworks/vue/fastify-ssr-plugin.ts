@@ -211,24 +211,40 @@ const renderHtml = async (options: {
     app
   } = await options.render(options.url, options.manifest, ssrContext)
 
-  console.log(ssrContextOnRendered)
   if (ssrContextOnRendered?.length) {
     for (const ssrFunction of ssrContextOnRendered) {
-      ssrFunction()
+      await ssrFunction()
     }
   }
 
   if (onRendered?.length) {
     for (const ssrFunction of onRendered) {
-      ssrFunction({ app, ssrContext })
+      await ssrFunction({ app, ssrContext })
     }
   }
 
   // if (!ssrContext.initialState) ssrContext.initialState = {}
   ssrContext.initialState.provide = options.provide
 
-  console.log('afterOnRendered')
-  console.log(ssrContext.initialState)
+  const ssrContextInitialStateStringified: Record<
+    keyof SSRContext['initialState'],
+    string
+  > = {}
+  for (const key in ssrContext.initialState) {
+    if (key === 'provide') {
+      ssrContextInitialStateStringified[key] = JSON.stringify(
+        ssrContext.initialState.provide
+      )
+    } else if (key === 'piniaColada') {
+      ssrContextInitialStateStringified[key] = JSON.stringify(
+        ssrContext.initialState.piniaColada
+      )
+    } else {
+      ssrContextInitialStateStringified[key] = stringify(
+        ssrContext.initialState[key]
+      )
+    }
+  }
 
   const initialStateScript = `
   <script>
@@ -244,7 +260,7 @@ const renderHtml = async (options: {
 
   if (onTemplateRendered?.length) {
     for (const ssrFunction of onTemplateRendered) {
-      html = ssrFunction({ html, ssrContext })
+      html = await ssrFunction({ html, ssrContext })
     }
   }
 

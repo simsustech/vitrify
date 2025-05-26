@@ -27,7 +27,7 @@ import type {
   OnRenderedHook,
   OnBootHook,
   OnSetupFile,
-  OnCreateAppHook,
+  onAppCreatedHook,
   OnTemplateRenderedHook
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
@@ -64,7 +64,7 @@ const manualChunkNames = [
 ]
 
 const moduleChunks = {
-  vue: ['vue', '@vue', 'vue-router'],
+  vue: ['vue', '@vue', 'vue-router', 'pinia', '@pinia/colada', '@vue/devtools'],
   quasar: ['quasar'],
   atQuasar: ['@quasar']
 }
@@ -282,7 +282,7 @@ export const baseConfig = async ({
   let onRenderedHooks: OnRenderedHook[]
   let onTemplateRenderedHooks: OnTemplateRenderedHook[]
   let onMountedHooks: OnMountedHook[]
-  let onCreateAppHooks: OnCreateAppHook[]
+  let onAppCreatedHooks: onAppCreatedHook[]
   let onSetupFiles: OnSetupFile[]
   let globalCss: string[] = []
   let staticImports: StaticImports
@@ -363,7 +363,7 @@ export const baseConfig = async ({
         onTemplateRenderedHooks =
           config.vitrify?.hooks?.onTemplateRendered || []
         onMountedHooks = config.vitrify?.hooks?.onMounted || []
-        onCreateAppHooks = config.vitrify?.hooks?.onCreateApp || []
+        onAppCreatedHooks = config.vitrify?.hooks?.onAppCreated || []
         onSetupFiles = config?.vitrify?.hooks?.onSetup || []
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
@@ -404,7 +404,7 @@ export const baseConfig = async ({
             export const onTemplateRendered = [${onTemplateRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
-            export const onCreateApp = [${onCreateAppHooks
+            export const onAppCreated = [${onAppCreatedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             export const onSetup = []
