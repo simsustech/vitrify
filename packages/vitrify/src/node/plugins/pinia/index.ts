@@ -6,7 +6,7 @@ export type PiniaPluginOptions = {
   colada?: boolean
 }
 
-const piniaonAppCreated: onAppCreatedHook = async ({
+const piniaOnAppCreated: onAppCreatedHook = async ({
   app,
   ctx,
   initialState,
@@ -23,7 +23,7 @@ const piniaonAppCreated: onAppCreatedHook = async ({
   if (ssrContext) ssrContext.pinia = pinia
 }
 
-const piniaOnRenderedHook: OnRenderedHook = ({ app, ssrContext }) => {
+const piniaOnRenderedHook: OnRenderedHook = async ({ app, ssrContext }) => {
   // SSR Server
   if (ssrContext?.initialState && ssrContext.pinia) {
     ssrContext.initialState.pinia = ssrContext.pinia.state.value
@@ -35,16 +35,19 @@ const piniaColadaonAppCreated: onAppCreatedHook = async ({
   ctx,
   initialState
 }) => {
-  if (ctx?.pinia) {
-    const { PiniaColada, useQueryCache, hydrateQueryCache } = await import(
+  if (ctx.pinia) {
+    const { PiniaColada, hydrateQueryCache, useQueryCache } = await import(
       '@pinia/colada'
     )
-
     app.use(PiniaColada)
 
-    // SSR Client
     if (initialState?.piniaColada) {
-      hydrateQueryCache(useQueryCache(ctx.pinia), initialState.piniaColada)
+      app.runWithContext(() =>
+        hydrateQueryCache(
+          useQueryCache(ctx.pinia),
+          initialState.piniaColada || {}
+        )
+      )
     }
   }
 }
@@ -61,8 +64,8 @@ const piniaColadaOnRenderedHook: OnRenderedHook = async ({
     if (ssrContext.initialState.pinia?._pc_query) {
       delete ssrContext.initialState.pinia._pc_query
     }
-    ssrContext.initialState.piniaColada = serializeQueryCache(
-      useQueryCache(ssrContext.pinia)
+    ssrContext.initialState.piniaColada = app.runWithContext(() =>
+      serializeQueryCache(useQueryCache())
     )
   }
 }
@@ -72,7 +75,7 @@ export const PiniaPlugin: VitrifyPlugin<PiniaPluginOptions> = async ({
   pwa = false,
   options = {}
 }) => {
-  const onAppCreated = [piniaonAppCreated]
+  const onAppCreated = [piniaOnAppCreated]
   const onRendered = [piniaOnRenderedHook]
   if (options.colada) {
     onAppCreated.push(piniaColadaonAppCreated)
