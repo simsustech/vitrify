@@ -1,5 +1,16 @@
 # vitrify
 
+## 0.24.0
+
+### Minor Changes
+
+- f913f8c: feat(vitrify): rename onMounted hook to onAppMounted
+
+### Patch Changes
+
+- 5e016dd: fix(vitrify): fix pinia colada plugin
+- 95dbb05: chore: update dependencies
+
 ## 0.23.0
 
 ### Minor Changes

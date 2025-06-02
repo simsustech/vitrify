@@ -1,5 +1,13 @@
 # create-vitrify
 
+## 0.7.1
+
+### Patch Changes
+
+- 95dbb05: chore: update dependencies
+- Updated dependencies [95dbb05]
+  - @vitrify/tools@0.4.2
+
 ## 0.7.0
 
 ### Minor Changes
