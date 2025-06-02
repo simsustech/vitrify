@@ -65,7 +65,7 @@ const piniaColadaOnRenderedHook: OnRenderedHook = async ({
       delete ssrContext.initialState.pinia._pc_query
     }
     ssrContext.initialState.piniaColada = app.runWithContext(() =>
-      serializeQueryCache(useQueryCache())
+      serializeQueryCache(useQueryCache(ssrContext.pinia))
     )
   }
 }
@@ -87,7 +87,7 @@ export const PiniaPlugin: VitrifyPlugin<PiniaPluginOptions> = async ({
     config: {
       vitrify: {
         ssr: {
-          serverModules: ['@pinia/colada']
+          serverModules: ['@vue/devtools-api']
         },
         hooks: {
           onAppCreated,
