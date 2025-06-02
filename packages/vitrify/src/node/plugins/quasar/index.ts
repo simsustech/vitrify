@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url'
 import type {
   OnBootHook,
-  OnMountedHook,
+  OnAppMountedHook,
   OnTemplateRenderedHook,
   VitrifyConfig
 } from '../../vitrify-config.js'
@@ -136,8 +136,8 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
             }
           })()
 
-          const onMountedHooks: OnMountedHook[] = [
-            async (instance) => {
+          const onAppMountedHooks: OnAppMountedHook[] = [
+            async ({ instance }) => {
               const {
                 proxy: { $q }
               } = instance
@@ -203,7 +203,7 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
               },
               hooks: {
                 onBoot: onBootHooks,
-                onMounted: onMountedHooks,
+                onAppMounted: onAppMountedHooks,
                 onTemplateRendered: [injectSsrContext]
               },
               sass: quasarConf.disableSass

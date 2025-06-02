@@ -1,7 +1,7 @@
 import type {
   OnBootHook,
   onAppCreatedHook,
-  OnMountedHook,
+  OnAppMountedHook,
   OnRenderedHook,
   OnTemplateRenderedHook,
   OnSetupFile,
@@ -11,7 +11,7 @@ import type {
 export {
   OnBootHook,
   onAppCreatedHook,
-  OnMountedHook,
+  OnAppMountedHook,
   OnRenderedHook,
   OnTemplateRenderedHook,
   OnSetupFile,

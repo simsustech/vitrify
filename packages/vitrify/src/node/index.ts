@@ -17,7 +17,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import { fileURLToPath } from 'url'
 import type {
   StaticImports,
-  OnMountedHook,
+  OnAppMountedHook,
   VitrifyConfig,
   VitrifyConfigAsync,
   VitrifyCommands,
@@ -281,7 +281,7 @@ export const baseConfig = async ({
   let onBootHooks: OnBootHook[]
   let onRenderedHooks: OnRenderedHook[]
   let onTemplateRenderedHooks: OnTemplateRenderedHook[]
-  let onMountedHooks: OnMountedHook[]
+  let onAppMountedHooks: OnAppMountedHook[]
   let onAppCreatedHooks: onAppCreatedHook[]
   let onSetupFiles: OnSetupFile[]
   let globalCss: string[] = []
@@ -362,7 +362,7 @@ export const baseConfig = async ({
         onRenderedHooks = config.vitrify?.hooks?.onRendered || []
         onTemplateRenderedHooks =
           config.vitrify?.hooks?.onTemplateRendered || []
-        onMountedHooks = config.vitrify?.hooks?.onMounted || []
+        onAppMountedHooks = config.vitrify?.hooks?.onAppMounted || []
         onAppCreatedHooks = config.vitrify?.hooks?.onAppCreated || []
         onSetupFiles = config?.vitrify?.hooks?.onSetup || []
         globalCss = config.vitrify?.globalCss || []
@@ -395,7 +395,7 @@ export const baseConfig = async ({
           return `export const onBoot = [${onBootHooks
             .map((fn) => `${String(fn)}`)
             .join(', ')}]
-            export const onMounted = [${onMountedHooks
+            export const onAppMounted = [${onAppMountedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             export const onRendered = [${onRenderedHooks
@@ -688,7 +688,7 @@ export const baseConfig = async ({
       alias
     },
     build: {
-      target: ssr === 'server' || ssr === 'fastify' ? 'esnext' : 'modules',
+      target: 'esnext',
       ssr: ssr === 'server' || ssr === 'fastify' ? true : false,
       ssrManifest: ssr === 'client' || ssr === 'ssg',
       rollupOptions

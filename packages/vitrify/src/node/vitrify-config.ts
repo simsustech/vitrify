@@ -81,9 +81,11 @@ export type OnBootHook = ({
   staticImports?: Record<string, any>
 }) => Promise<void> | void
 
-export type OnMountedHook = (
+export type OnAppMountedHook = ({
+  instance
+}: {
   instance: ComponentInternalInstance
-) => Promise<void> | void
+}) => Promise<void> | void
 export type StaticImports = Record<string, string[]>
 
 export type OnSetupFile = URL
@@ -144,7 +146,7 @@ export interface VitrifyConfig extends ViteUserConfig {
       /**
        * Functions which run in the onMounted hook of the app
        */
-      onMounted?: OnMountedHook[]
+      onAppMounted?: OnAppMountedHook[]
       /**
        * Functions which run after initializing the app
        */

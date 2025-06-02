@@ -8,16 +8,15 @@ import {
   onMounted as onMountedVue,
   getCurrentInstance
 } from 'vue'
-import { onMounted } from 'virtual:vitrify-hooks'
-import * as staticImports from 'virtual:static-imports'
+import { onAppMounted } from 'virtual:vitrify-hooks'
 import App from 'src/App.vue'
 // import 'vitrify.sass'
 const instance = getCurrentInstance()
 const props = defineProps()
 
 onMountedVue(async () => {
-  for (let fn of onMounted) {
-    await fn(instance, staticImports)
+  for (let fn of onAppMounted) {
+    await fn({ instance })
   }
 })
 
