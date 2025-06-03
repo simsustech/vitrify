@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.24.2
+
+### Patch Changes
+
+- c844d44: fix(vitrify): remove @vue/devtools-api from serverModules in pinia plugin
+
 ## 0.24.1
 
 ### Patch Changes
