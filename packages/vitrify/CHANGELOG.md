@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.24.1
+
+### Patch Changes
+
+- e9c523b: fix(vitrify): fix pinia colada plugin build errors
+
 ## 0.24.0
 
 ### Minor Changes
