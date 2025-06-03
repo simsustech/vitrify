@@ -86,9 +86,6 @@ export const PiniaPlugin: VitrifyPlugin<PiniaPluginOptions> = async ({
     plugins: [],
     config: {
       vitrify: {
-        ssr: {
-          serverModules: ['@vue/devtools-api']
-        },
         hooks: {
           onAppCreated,
           onRendered
