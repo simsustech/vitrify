@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.7.2
+
+### Patch Changes
+
+- d406768: fix(create-vitrify): update quasar md3 template
+
 ## 0.7.1
 
 ### Patch Changes
