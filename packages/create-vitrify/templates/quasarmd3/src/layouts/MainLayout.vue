@@ -10,6 +10,7 @@
               v-model="language"
               :language-imports="languageImports"
               :locales="languageLocales"
+              is-item
             />
             <q-item>
               <q-item-section label>

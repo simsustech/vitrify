@@ -45,7 +45,8 @@ export const templates: Templates = {
         'build:ssr': 'vitrify build -m ssr',
         'build:ssg': 'vitrify build -m ssg',
         'minify:csr': 'vitrify minify ./dist/csr',
-        'minify:ssr': 'vitrify minify ./dist/ssr',
+        'minify:ssr:server': 'vitrify minify ./dist/ssr/server',
+        'minify:ssr:client': 'vitrify minify ./dist/ssr/client',
         'minify:ssg': 'vitrify minify ./dist/static',
         test: 'vitrify test',
         lint: 'eslint --ext .vue --ext .ts src',
@@ -55,6 +56,7 @@ export const templates: Templates = {
       },
       dependencies: await getLatestVersions([
         '@fastify/middie',
+        '@fastify/one-line-logger',
         '@fastify/static'
       ]),
       devDependencies: await getLatestVersions([
@@ -126,7 +128,8 @@ export const templates: Templates = {
         'build:ssr': 'vitrify build -m ssr',
         'build:ssg': 'vitrify build -m ssg',
         'minify:csr': 'vitrify minify ./dist/csr',
-        'minify:ssr': 'vitrify minify ./dist/ssr',
+        'minify:ssr:server': 'vitrify minify ./dist/ssr/server',
+        'minify:ssr:client': 'vitrify minify ./dist/ssr/client',
         'minify:ssg': 'vitrify minify ./dist/static',
         test: 'vitrify test',
         lint: 'eslint --ext .vue --ext .ts src',
@@ -136,6 +139,7 @@ export const templates: Templates = {
       },
       dependencies: await getLatestVersions([
         '@fastify/middie',
+        '@fastify/one-line-logger',
         '@fastify/static'
       ]),
       devDependencies: await getLatestVersions([
@@ -210,7 +214,8 @@ export const templates: Templates = {
         'build:ssr': 'vitrify build -m ssr',
         'build:ssg': 'vitrify build -m ssg',
         'minify:csr': 'vitrify minify ./dist/csr',
-        'minify:ssr': 'vitrify minify ./dist/ssr',
+        'minify:ssr:server': 'vitrify minify ./dist/ssr/server',
+        'minify:ssr:client': 'vitrify minify ./dist/ssr/client',
         'minify:ssg': 'vitrify minify ./dist/static',
         test: 'vitrify test',
         lint: 'eslint --ext .vue --ext .ts src',
@@ -220,10 +225,12 @@ export const templates: Templates = {
       },
       dependencies: await getLatestVersions([
         '@fastify/middie',
+        '@fastify/one-line-logger',
         '@fastify/static'
       ]),
       devDependencies: await getLatestVersions([
         '@iconify-json/mdi',
+        '@iconify-json/flagpack',
         '@quasar/extras',
         '@simsustech/quasar-components',
         '@typescript-eslint/eslint-plugin',
@@ -301,6 +308,7 @@ export const templates: Templates = {
       },
       dependencies: await getLatestVersions([
         '@fastify/middie',
+        '@fastify/one-line-logger',
         '@fastify/static'
       ]),
       devDependencies: await getLatestVersions([
