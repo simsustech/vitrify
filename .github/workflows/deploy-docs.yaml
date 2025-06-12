@@ -1,0 +1,56 @@
+name: Build and deploy through rsync
+
+on:
+  push:
+    branches: ["production"]
+
+env:
+  working-directory: ./packages/docs/
+  url: www.vitrify.dev
+
+jobs:
+  build:
+    name: Build and deploy production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Creating .npmrc
+        run: |
+          cat > ~/.npmrc << EOF
+            //npm.simsus.tech/:_authToken=$SIMSUSTECH_NPM_TOKEN
+          EOF
+        env:
+          SIMSUSTECH_NPM_TOKEN: ${{ secrets.SIMSUSTECH_NPM_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build
+        working-directory: ${{ env.working-directory }}
+        run: |
+          pnpm run build
+
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@7.0.2
+        with:
+          switches: -avzr --delete
+          path: ${{env.working-directory}}.vitepress/dist/
+          remote_path: /srv/${{env.url}}
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Remove .npmrc
+        run: rm ~/.npmrc

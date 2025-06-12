@@ -1,5 +1,3 @@
-# Development
-
 ## HTTPS
 
 Configure `config.server.https` to enable HTTPS in development mode.

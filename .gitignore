@@ -3,3 +3,5 @@
 /packages/**/dist
 /packages/vitrify/**/components.d.ts
 ISSUES.md
+/packages/docs/.vitepress/dist
+/packages/docs/.vitepress/cache

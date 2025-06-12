@@ -1,0 +1,23 @@
+# Features
+
+- 🦾 Build and development modes:
+  - CSR: Client side rendered applications
+  - SSR: Server side rendered applications
+  - SSG: Static site generator
+  - Fastify: Uses the onSetup hooks to setup the Fastify server with HMR
+- 🎈 Minification of ESM files.
+- 📥 Bundle your server (backend) code.
+- ✨ Hooks:
+  - onSetup: Sets up your Fastify server directly after initializing.
+  - onAppCreated: Functions which run after the application has been created.
+  - onAppMounted: Functions which run in the onMounted hook of the application.
+  - onRendered: Functions which run after rendering the application (SSR).
+  - onTemplateRendered: Functions which run after rendering the template (SSR)
+- ⭐ [Vitrify plugins](https://github.com/simsustech/vitrify/tree/master/packages/vitrify/src/node/plugins): allows for Vite plugin configuration based on the build mode and dynamic Vite configuration changes.
+  - [Quasar UI](https://github.com/simsustech/vitrify/blob/master/packages/vitrify/src/node/plugins/quasar/index.ts)
+  - [Pinia (Colada)](https://github.com/simsustech/vitrify/blob/master/packages/vitrify/src/node/plugins/pinia/index.ts)
+- 🔥 [Fastify SSR plugin](https://github.com/simsustech/vitrify/blob/master/packages/vitrify/src/node/frameworks/vue/fastify-ssr-plugin.ts): allows you to integrate a server-side rendered web application into your Fastify server. Handles development and build modes automatically.
+- ⚡ Preconfigured Vite plugins:
+  - PWA support with [vite-plugin-pwa](https://github.com/vite-pwa/vite-plugin-pwa).
+  - On demand CSS with [unocss](https://unocss.dev).
+  - Automatic component resolving with [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components/tree/main).

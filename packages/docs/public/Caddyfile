@@ -1,0 +1,11 @@
+www.vitrify.dev {
+  handle {
+    root * /srv/www.vitrify.dev
+    try_files {path}.html {path} /index.html
+    file_server
+  }
+}
+
+vitrify.dev {
+	redir https://www.vitrify.dev
+}

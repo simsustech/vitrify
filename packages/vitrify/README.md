@@ -1,19 +1,5 @@
 # Vitrify
 
-> Vite as your Full Stack development tool
-
-- Use a simple configuration file to configure and integrate required Vite plugins into your project.
-- Client-Side Rendering (CSR), Server-Side Rendering (SSR), Static Site Generation (SSG) and Fastify server build and development modes.
-- Run both your frontend- and backend code through Vite at development and build time.
-
-## Features
-
-- Uses [Fastify](https://github.com/fastify/fastify-vite) for the development server and SSR production server.
-- Generates a Fastify plugin to serve your server-side rendered application.
-- A [`run`](./src/node/bin/run.ts) command which injects context such as application paths into the script which you want to run.
-- A [`test`](./src/node/bin/test.ts) command which runs a pre-configured [Vitest](https://github.com/vitest-dev/vitest) instance.
-- An [extra plugin layer](./src/node/plugins/index.ts) which provides some extra context such as the SSR mode (client or server) and PWA mode. Used for UI frameworks which render differently based on these settings.
-
 ## Commands
 
 ### build
@@ -83,15 +69,14 @@ Options:
     end
     merge-- mode: fastify -->frameworkFastify{Load framework entrypoints from fastify/...};
     merge-- mode: csr/ssr/ssg -->framework{Load framework entrypoints from vite/...};
-    frameworkFastify-->fastifyBuild{Build the application};
-    frameworkFastify-->fastifyDev{Start Fastify dev server};
-    fastifySetup{onSetup / onRendered}-->fastifyDev
-    fastifySetup{onSetup / onRendered}-->fastifyBuild
-    framework-->build{Build the application};
+    frameworkFastify-->fastifySetup{onSetup / onRendered};
+    fastifySetup-->frameworkSetup;
     build-- mode: ssg -->prerender{Run prerender.js}
-    framework-->dev{Start Vite dev server};
-    frameworkSetup{onBoot / onMounted}-->dev
-    frameworkSetup{onBoot / onMounted}-->build
+    framework-->frameworkSetup{onAppCreated / onMounted}
+    frameworkSetup-->frameworkOnRendered{onRendered};
+    frameworkOnRendered-->frameworkOnTemplateRendered{onTemplateRendered};
+    frameworkOnTemplateRendered-->build{Build the application};
+    frameworkOnTemplateRendered-->dev{Start dev server};
     node/bin/test.ts-->test{Run a pre-configured Vitest instance};
     node/bin/run.ts-->run{Inject context into script and run script};
 ```
