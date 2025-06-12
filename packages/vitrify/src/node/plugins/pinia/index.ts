@@ -1,4 +1,4 @@
-import type { onAppCreatedHook, OnRenderedHook } from '../../vitrify-config.js'
+import type { OnAppCreatedHook, OnRenderedHook } from '../../vitrify-config.js'
 import type { VitrifyPlugin } from '../index.js'
 
 export type PiniaPluginOptions = {
@@ -6,7 +6,7 @@ export type PiniaPluginOptions = {
   colada?: boolean
 }
 
-const piniaOnAppCreated: onAppCreatedHook = async ({
+const piniaOnAppCreated: OnAppCreatedHook = async ({
   app,
   ctx,
   initialState,
@@ -30,7 +30,7 @@ const piniaOnRenderedHook: OnRenderedHook = async ({ app, ssrContext }) => {
   }
 }
 
-const piniaColadaonAppCreated: onAppCreatedHook = async ({
+const piniaColadaonAppCreated: OnAppCreatedHook = async ({
   app,
   ctx,
   initialState
