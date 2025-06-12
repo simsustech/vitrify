@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.7.3
+
+### Patch Changes
+
+- 56f2318: chore(create-vitrify): update vue template
+
 ## 0.7.2
 
 ### Patch Changes

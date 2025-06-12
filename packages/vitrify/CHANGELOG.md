@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.25.0
+
+### Minor Changes
+
+- ba5329a: feat(vitrify): add files support for hooks and replace onBoot with onAppCreated
+
 ## 0.24.2
 
 ### Patch Changes
