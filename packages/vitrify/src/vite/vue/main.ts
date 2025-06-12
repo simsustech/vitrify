@@ -70,7 +70,7 @@ export async function createApp(
   app.use(router)
 
   for (const fn of onAppCreated) {
-    await fn({ app, router, ctx, initialState, ssrContext })
+    await fn({ app, router, ctx, initialState, ssrContext, staticImports })
   }
 
   // Workaround to fix hydration errors when serving html files directly
@@ -95,9 +95,9 @@ export async function createApp(
     }
   }
 
-  for (const fn of onBoot) {
-    await fn({ app, ssrContext, staticImports })
-  }
+  // for (const fn of onBoot) {
+  //   await fn({ app, ssrContext, staticImports })
+  // }
 
   // @vitrify-pwa-only
   // @ts-expect-error undefined

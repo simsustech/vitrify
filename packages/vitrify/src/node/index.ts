@@ -25,10 +25,13 @@ import type {
   VitrifyUIFrameworks,
   VitrifySSRModes,
   OnRenderedHook,
-  OnBootHook,
-  OnSetupFile,
-  onAppCreatedHook,
-  OnTemplateRenderedHook
+  OnSetupHookFile,
+  OnAppCreatedHook,
+  OnTemplateRenderedHook,
+  OnAppCreatedHookFile,
+  OnRenderedHookFile,
+  OnTemplateRenderedHookFile,
+  OnAppMountedHookFile
 } from './vitrify-config.js'
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
@@ -278,12 +281,15 @@ export const baseConfig = async ({
     }
   }
 
-  let onBootHooks: OnBootHook[]
   let onRenderedHooks: OnRenderedHook[]
+  let onRenderedFiles: OnRenderedHookFile[]
   let onTemplateRenderedHooks: OnTemplateRenderedHook[]
+  let onTemplateRenderedFiles: OnTemplateRenderedHookFile[]
   let onAppMountedHooks: OnAppMountedHook[]
-  let onAppCreatedHooks: onAppCreatedHook[]
-  let onSetupFiles: OnSetupFile[]
+  let onAppMountedFiles: OnAppMountedHookFile[]
+  let OnAppCreatedHooks: OnAppCreatedHook[]
+  let onAppCreatedFiles: OnAppCreatedHookFile[]
+  let onSetupFiles: OnSetupHookFile[]
   let globalCss: string[] = []
   let staticImports: StaticImports
   let sassVariables: Record<string, string | undefined>
@@ -358,12 +364,16 @@ export const baseConfig = async ({
       name: 'vitrify-setup',
       enforce: 'post',
       config: (config: VitrifyConfig, env) => {
-        onBootHooks = config.vitrify?.hooks?.onBoot || []
         onRenderedHooks = config.vitrify?.hooks?.onRendered || []
+        onRenderedFiles = config.vitrify?.hooks?.onRenderedFiles || []
         onTemplateRenderedHooks =
           config.vitrify?.hooks?.onTemplateRendered || []
+        onTemplateRenderedFiles =
+          config.vitrify?.hooks?.onTemplateRenderedFiles || []
         onAppMountedHooks = config.vitrify?.hooks?.onAppMounted || []
-        onAppCreatedHooks = config.vitrify?.hooks?.onAppCreated || []
+        onAppMountedFiles = config.vitrify?.hooks?.onAppMountedFiles || []
+        OnAppCreatedHooks = config.vitrify?.hooks?.onAppCreated || []
+        onAppCreatedFiles = config.vitrify?.hooks?.onAppCreatedFiles || []
         onSetupFiles = config?.vitrify?.hooks?.onSetup || []
         globalCss = config.vitrify?.globalCss || []
         staticImports = config.vitrify?.staticImports || {}
@@ -392,21 +402,82 @@ export const baseConfig = async ({
       },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
-          return `export const onBoot = [${onBootHooks
+          return `export const onAppMounted = [${onAppMountedHooks
             .map((fn) => `${String(fn)}`)
             .join(', ')}]
-            export const onAppMounted = [${onAppMountedHooks
-              .map((fn) => `${String(fn)}`)
-              .join(', ')}]
+            ${onAppMountedFiles
+              .map((url, index) => {
+                const varName = fileURLToPath(url)
+                  .replaceAll('/', '')
+                  .replaceAll(':', '')
+                  .replaceAll('\\', '')
+                  .replaceAll('.', '')
+                  .replaceAll('-', '')
+                  .replaceAll('_', '')
+                  .replaceAll('+', '')
+
+                return `import ${varName} from '${
+                  new URL(url, appDir).pathname
+                }'; onAppMounted.push(${varName});`
+              })
+              .join('\n')}
             export const onRendered = [${onRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
+            ${onRenderedFiles
+              .map((url, index) => {
+                const varName = fileURLToPath(url)
+                  .replaceAll('/', '')
+                  .replaceAll(':', '')
+                  .replaceAll('\\', '')
+                  .replaceAll('.', '')
+                  .replaceAll('-', '')
+                  .replaceAll('_', '')
+                  .replaceAll('+', '')
+
+                return `import ${varName} from '${
+                  new URL(url, appDir).pathname
+                }'; onRendered.push(${varName});`
+              })
+              .join('\n')}
             export const onTemplateRendered = [${onTemplateRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
-            export const onAppCreated = [${onAppCreatedHooks
-              .map((fn) => `${String(fn)}`)
-              .join(', ')}]
+            ${onTemplateRenderedFiles
+              .map((url, index) => {
+                const varName = fileURLToPath(url)
+                  .replaceAll('/', '')
+                  .replaceAll(':', '')
+                  .replaceAll('\\', '')
+                  .replaceAll('.', '')
+                  .replaceAll('-', '')
+                  .replaceAll('_', '')
+                  .replaceAll('+', '')
+
+                return `import ${varName} from '${
+                  new URL(url, appDir).pathname
+                }'; onTemplateRendered.push(${varName});`
+              })
+              .join('\n')}
+            export const onAppCreated = [${OnAppCreatedHooks.map(
+              (fn) => `${String(fn)}`
+            ).join(', ')}]
+            ${onAppCreatedFiles
+              .map((url, index) => {
+                const varName = fileURLToPath(url)
+                  .replaceAll('/', '')
+                  .replaceAll(':', '')
+                  .replaceAll('\\', '')
+                  .replaceAll('.', '')
+                  .replaceAll('-', '')
+                  .replaceAll('_', '')
+                  .replaceAll('+', '')
+
+                return `import ${varName} from '${
+                  new URL(url, appDir).pathname
+                }'; onAppCreated.push(${varName});`
+              })
+              .join('\n')}
             export const onSetup = []
             ${onSetupFiles
               .map((url, index) => {
@@ -421,7 +492,7 @@ export const baseConfig = async ({
 
                 return `import ${varName} from '${
                   new URL(url, appDir).pathname
-                }'; onSetup.push(${varName})`
+                }'; onSetup.push(${varName});`
               })
               .join('\n')}`
         } else if (id === 'virtual:static-imports') {
@@ -733,10 +804,4 @@ export const baseConfig = async ({
 export const vitrifyDir = new URL('..', import.meta.url)
 export { prerender } from './frameworks/vue/prerender.js'
 
-export type {
-  VitrifyConfig,
-  VitrifyConfigAsync,
-  VitrifyPlugin,
-  VitrifyContext,
-  OnBootHook
-}
+export type { VitrifyConfig, VitrifyConfigAsync, VitrifyPlugin, VitrifyContext }

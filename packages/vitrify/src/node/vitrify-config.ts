@@ -49,12 +49,14 @@ export type SSRContext = {
   [key: string]: unknown
 }
 
-export type onAppCreatedHook = ({
+export type OnAppCreatedHookFile = URL
+export type OnAppCreatedHook = ({
   app,
   router,
   ctx,
   initialState,
-  ssrContext
+  ssrContext,
+  staticImports
 }: {
   app: App
   router: Router
@@ -69,18 +71,10 @@ export type onAppCreatedHook = ({
     [key: string]: unknown
   }
   ssrContext?: SSRContext
-}) => Promise<void> | void
-
-export type OnBootHook = ({
-  app,
-  ssrContext,
-  staticImports
-}: {
-  app: App
-  ssrContext: SSRContext
   staticImports?: Record<string, any>
 }) => Promise<void> | void
 
+export type OnAppMountedHookFile = URL
 export type OnAppMountedHook = ({
   instance
 }: {
@@ -88,7 +82,7 @@ export type OnAppMountedHook = ({
 }) => Promise<void> | void
 export type StaticImports = Record<string, string[]>
 
-export type OnSetupFile = URL
+export type OnSetupHookFile = URL
 export type OnSetupHook = (
   fastify: FastifyInstance,
   options?: {
@@ -107,6 +101,7 @@ export type Render = (
   app: App
 }>
 
+export type OnRenderedHookFile = URL
 export type OnRenderedHook = ({
   app,
   ssrContext
@@ -115,6 +110,7 @@ export type OnRenderedHook = ({
   ssrContext?: SSRContext
 }) => Promise<void> | void
 
+export type OnTemplateRenderedHookFile = URL
 export type OnTemplateRenderedHook = ({
   html,
   ssrContext
@@ -142,27 +138,39 @@ export interface VitrifyConfig extends ViteUserConfig {
       /**
        * setup() is called directly after instantiating fastify. Use it to register your own plugins, routes etc.
        */
-      onSetup?: OnSetupFile[]
+      onSetup?: OnSetupHookFile[]
       /**
        * Functions which run in the onMounted hook of the app
        */
       onAppMounted?: OnAppMountedHook[]
       /**
-       * Functions which run after initializing the app
+       * Files with functions which run in the onMounted hook of the app
        */
-      onBoot?: OnBootHook[]
+      onAppMountedFiles?: OnAppMountedHookFile[]
       /**
        * Functions which run after rendering the app (SSR)
        */
       onRendered?: OnRenderedHook[]
       /**
+       * Files with functions which run after rendering the app (SSR)
+       */
+      onRenderedFiles?: OnRenderedHookFile[]
+      /**
        * Functions which run after rendering the template (SSR)
        */
       onTemplateRendered?: OnTemplateRenderedHook[]
       /**
+       * Files with functions which run after rendering the template (SSR)
+       */
+      onTemplateRenderedFiles?: OnTemplateRenderedHookFile[]
+      /**
        * Functions which run directly after initializing the application
        */
-      onAppCreated?: onAppCreatedHook[]
+      onAppCreated?: OnAppCreatedHook[]
+      /**
+       * Functions which run directly after initializing the application
+       */
+      onAppCreatedFiles?: OnAppCreatedHookFile[]
     }
     /**
      * Global SASS variables

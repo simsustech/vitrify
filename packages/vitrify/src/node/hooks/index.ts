@@ -1,19 +1,25 @@
 import type {
-  OnBootHook,
-  onAppCreatedHook,
+  OnAppCreatedHook,
+  OnAppCreatedHookFile,
   OnAppMountedHook,
+  OnAppMountedHookFile,
   OnRenderedHook,
+  OnRenderedHookFile,
   OnTemplateRenderedHook,
-  OnSetupFile,
+  OnTemplateRenderedHookFile,
+  OnSetupHookFile,
   OnSetupHook
 } from '../vitrify-config.js'
 
 export {
-  OnBootHook,
-  onAppCreatedHook,
+  OnAppCreatedHook,
+  OnAppCreatedHookFile,
   OnAppMountedHook,
+  OnAppMountedHookFile,
   OnRenderedHook,
+  OnRenderedHookFile,
   OnTemplateRenderedHook,
-  OnSetupFile,
+  OnTemplateRenderedHookFile,
+  OnSetupHookFile,
   OnSetupHook
 }

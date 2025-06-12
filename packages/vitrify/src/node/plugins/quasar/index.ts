@@ -1,9 +1,9 @@
 import { fileURLToPath } from 'url'
 import type {
-  OnBootHook,
   OnAppMountedHook,
   OnTemplateRenderedHook,
-  VitrifyConfig
+  VitrifyConfig,
+  OnAppCreatedHook
 } from '../../vitrify-config.js'
 import type { VitrifyPlugin } from '../index.js'
 import { findDepPkgJsonPath } from 'vitefu'
@@ -145,7 +145,7 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
             }
           ]
 
-          const onBootHooks: OnBootHook[] = [
+          const onAppCreatedHooks: OnAppCreatedHook[] = [
             async ({ app, ssrContext, staticImports }) => {
               // @ts-expect-error undefined
               const quasarPlugins = await import('virtual:quasar-plugins')
@@ -202,7 +202,7 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
                 quasar: ['Quasar']
               },
               hooks: {
-                onBoot: onBootHooks,
+                onAppCreated: onAppCreatedHooks,
                 onAppMounted: onAppMountedHooks,
                 onTemplateRendered: [injectSsrContext]
               },
