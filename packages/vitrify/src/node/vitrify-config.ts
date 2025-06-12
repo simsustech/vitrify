@@ -140,6 +140,14 @@ export interface VitrifyConfig extends ViteUserConfig {
        */
       onSetup?: OnSetupHookFile[]
       /**
+       * Functions which run directly after initializing the application
+       */
+      onAppCreated?: OnAppCreatedHook[]
+      /**
+       * Functions which run directly after initializing the application
+       */
+      onAppCreatedFiles?: OnAppCreatedHookFile[]
+      /**
        * Functions which run in the onMounted hook of the app
        */
       onAppMounted?: OnAppMountedHook[]
@@ -163,14 +171,6 @@ export interface VitrifyConfig extends ViteUserConfig {
        * Files with functions which run after rendering the template (SSR)
        */
       onTemplateRenderedFiles?: OnTemplateRenderedHookFile[]
-      /**
-       * Functions which run directly after initializing the application
-       */
-      onAppCreated?: OnAppCreatedHook[]
-      /**
-       * Functions which run directly after initializing the application
-       */
-      onAppCreatedFiles?: OnAppCreatedHookFile[]
     }
     /**
      * Global SASS variables
@@ -223,7 +223,6 @@ export interface VitrifyConfig extends ViteUserConfig {
      */
     unpluginVueComponents?: unpluginVueComponentsOptions
   }
-  // quasar?: QuasarConf
 }
 
 export type VitrifyCommands = 'build' | 'dev' | 'test'
