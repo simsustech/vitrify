@@ -79,6 +79,9 @@ export interface VitrifyConfig extends ViteUserConfig {
      * SSR specific configuration
      */
     ssr?: {
+      /**
+       * Packages which should not be bundled but installed on the server instead.
+       */
       serverModules?: string[]
       fastify?: FastifyServerOptions
     }
