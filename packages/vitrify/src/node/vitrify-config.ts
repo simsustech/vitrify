@@ -101,8 +101,8 @@ export type Render = (
   app: App
 }>
 
-export type OnRenderedHookFile = URL
-export type OnRenderedHook = ({
+export type OnAppRenderedHookFile = URL
+export type OnAppRenderedHook = ({
   app,
   ssrContext
 }: {
@@ -158,11 +158,11 @@ export interface VitrifyConfig extends ViteUserConfig {
       /**
        * Functions which run after rendering the app (SSR)
        */
-      onRendered?: OnRenderedHook[]
+      onAppRendered?: OnAppRenderedHook[]
       /**
        * Files with functions which run after rendering the app (SSR)
        */
-      onRenderedFiles?: OnRenderedHookFile[]
+      onAppRenderedFiles?: OnAppRenderedHookFile[]
       /**
        * Functions which run after rendering the template (SSR)
        */

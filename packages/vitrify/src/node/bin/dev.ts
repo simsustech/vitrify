@@ -1,5 +1,4 @@
 import type { LogLevel, InlineConfig, ViteDevServer } from 'vite'
-import { searchForWorkspaceRoot } from 'vite'
 import { baseConfig } from '../index.js'
 import type { Server } from 'net'
 import fastify from 'fastify'
@@ -7,6 +6,7 @@ import type { FastifyServerOptions } from 'fastify'
 import { fastifySsrPlugin } from '../frameworks/vue/fastify-ssr-plugin.js'
 import type {
   OnTemplateRenderedHook,
+  OnAppRenderedHook,
   VitrifyConfig
 } from '../vitrify-config.js'
 import isPortReachable from 'is-port-reachable'
@@ -142,6 +142,7 @@ export async function createServer({
   let app: FastifyInstance | undefined
   let server: Server
   let onTemplateRendered: OnTemplateRenderedHook[]
+  let onAppRendered: OnAppRenderedHook[]
   let vitrifyConfig: VitrifyConfig
 
   console.log(`Development mode: ${ssr ? ssr : 'csr'}`)
@@ -152,11 +153,10 @@ export async function createServer({
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     const environment = vite.environments.ssr
-    ;({ setup, onTemplateRendered, vitrifyConfig } =
+    ;({ setup, onTemplateRendered, onAppRendered, vitrifyConfig } =
       // @ts-expect-error missing types
       await environment.runner.import(entryUrl))
-    // console.log(module)
-    // ;({ setup, onRendered, vitrifyConfig } = await vite.ssrLoadModule(entryUrl))
+
     app = fastify({
       logger: {
         transport: {
@@ -181,6 +181,7 @@ export async function createServer({
         appDir,
         mode: 'development',
         onTemplateRendered,
+        onAppRendered,
         host
       })
     }

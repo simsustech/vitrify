@@ -2,7 +2,7 @@ import fastify from 'fastify'
 import type {
   OnTemplateRenderedHook,
   OnSetupHook,
-  OnRenderedHook
+  OnAppRenderedHook
 } from '../../vitrify-config.js'
 import type { FastifyCsrPlugin } from './fastify-csr-plugin.js'
 import type { FastifySsrPlugin } from './fastify-ssr-plugin.js'
@@ -12,7 +12,7 @@ export const createApp = ({
   appDir,
   baseUrl,
   fastifyPlugin,
-  onRendered,
+  onAppRendered,
   onTemplateRendered,
   vitrifyDir,
   mode
@@ -21,7 +21,7 @@ export const createApp = ({
   appDir: URL
   baseUrl?: string
   fastifyPlugin: FastifySsrPlugin | FastifyCsrPlugin
-  onRendered?: OnRenderedHook[]
+  onAppRendered?: OnAppRenderedHook[]
   onTemplateRendered?: OnTemplateRenderedHook[]
   vitrifyDir?: URL
   mode: string
@@ -39,7 +39,7 @@ export const createApp = ({
     baseUrl,
     appDir,
     vitrifyDir,
-    onRendered,
+    onAppRendered,
     onTemplateRendered,
     mode
   })

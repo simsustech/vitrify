@@ -1,4 +1,7 @@
-import type { OnAppCreatedHook, OnRenderedHook } from '../../vitrify-config.js'
+import type {
+  OnAppCreatedHook,
+  OnAppRenderedHook
+} from '../../vitrify-config.js'
 import type { VitrifyPlugin } from '../index.js'
 
 export type PiniaPluginOptions = {
@@ -23,7 +26,10 @@ const piniaOnAppCreated: OnAppCreatedHook = async ({
   if (ssrContext) ssrContext.pinia = pinia
 }
 
-const piniaOnRenderedHook: OnRenderedHook = async ({ app, ssrContext }) => {
+const piniaonAppRenderedHook: OnAppRenderedHook = async ({
+  app,
+  ssrContext
+}) => {
   // SSR Server
   if (ssrContext?.initialState && ssrContext.pinia) {
     ssrContext.initialState.pinia = ssrContext.pinia.state.value
@@ -52,7 +58,7 @@ const piniaColadaonAppCreated: OnAppCreatedHook = async ({
   }
 }
 
-const piniaColadaOnRenderedHook: OnRenderedHook = async ({
+const piniaColadaonAppRenderedHook: OnAppRenderedHook = async ({
   app,
   ssrContext
 }) => {
@@ -76,10 +82,10 @@ export const PiniaPlugin: VitrifyPlugin<PiniaPluginOptions> = async ({
   options = {}
 }) => {
   const onAppCreated = [piniaOnAppCreated]
-  const onRendered = [piniaOnRenderedHook]
+  const onAppRendered = [piniaonAppRenderedHook]
   if (options.colada) {
     onAppCreated.push(piniaColadaonAppCreated)
-    onRendered.push(piniaColadaOnRenderedHook)
+    onAppRendered.push(piniaColadaonAppRenderedHook)
   }
 
   return {
@@ -88,7 +94,7 @@ export const PiniaPlugin: VitrifyPlugin<PiniaPluginOptions> = async ({
       vitrify: {
         hooks: {
           onAppCreated,
-          onRendered
+          onAppRendered
         }
       }
     }

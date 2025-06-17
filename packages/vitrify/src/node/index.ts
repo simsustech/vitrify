@@ -24,12 +24,12 @@ import type {
   VitrifyModes,
   VitrifyUIFrameworks,
   VitrifySSRModes,
-  OnRenderedHook,
+  OnAppRenderedHook,
   OnSetupHookFile,
   OnAppCreatedHook,
   OnTemplateRenderedHook,
   OnAppCreatedHookFile,
-  OnRenderedHookFile,
+  OnAppRenderedHookFile,
   OnTemplateRenderedHookFile,
   OnAppMountedHookFile
 } from './vitrify-config.js'
@@ -281,8 +281,8 @@ export const baseConfig = async ({
     }
   }
 
-  let onRenderedHooks: OnRenderedHook[]
-  let onRenderedFiles: OnRenderedHookFile[]
+  let onAppRenderedHooks: OnAppRenderedHook[]
+  let onAppRenderedFiles: OnAppRenderedHookFile[]
   let onTemplateRenderedHooks: OnTemplateRenderedHook[]
   let onTemplateRenderedFiles: OnTemplateRenderedHookFile[]
   let onAppMountedHooks: OnAppMountedHook[]
@@ -364,8 +364,8 @@ export const baseConfig = async ({
       name: 'vitrify-setup',
       enforce: 'post',
       config: (config: VitrifyConfig, env) => {
-        onRenderedHooks = config.vitrify?.hooks?.onRendered || []
-        onRenderedFiles = config.vitrify?.hooks?.onRenderedFiles || []
+        onAppRenderedHooks = config.vitrify?.hooks?.onAppRendered || []
+        onAppRenderedFiles = config.vitrify?.hooks?.onAppRenderedFiles || []
         onTemplateRenderedHooks =
           config.vitrify?.hooks?.onTemplateRendered || []
         onTemplateRenderedFiles =
@@ -421,10 +421,10 @@ export const baseConfig = async ({
                 }'; onAppMounted.push(${varName});`
               })
               .join('\n')}
-            export const onRendered = [${onRenderedHooks
+            export const onAppRendered = [${onAppRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
-            ${onRenderedFiles
+            ${onAppRenderedFiles
               .map((url, index) => {
                 const varName = fileURLToPath(url)
                   .replaceAll('/', '')
@@ -437,7 +437,7 @@ export const baseConfig = async ({
 
                 return `import ${varName} from '${
                   new URL(url, appDir).pathname
-                }'; onRendered.push(${varName});`
+                }'; onAppRendered.push(${varName});`
               })
               .join('\n')}
             export const onTemplateRendered = [${onTemplateRenderedHooks

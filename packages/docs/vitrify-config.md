@@ -40,11 +40,11 @@ export interface VitrifyConfig extends ViteUserConfig {
       /**
        * Functions which run after rendering the app (SSR)
        */
-      onRendered?: OnRenderedHook[]
+      onAppRendered?: onAppRenderedHook[]
       /**
        * Files with functions which run after rendering the app (SSR)
        */
-      onRenderedFiles?: OnRenderedHookFile[]
+      onAppRenderedFiles?: onAppRenderedHookFile[]
       /**
        * Functions which run after rendering the template (SSR)
        */

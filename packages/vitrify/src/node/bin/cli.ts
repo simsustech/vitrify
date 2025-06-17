@@ -94,7 +94,7 @@ cli
           manifest,
           render,
           getRoutes,
-          onRendered,
+          onAppRendered,
           onTemplateRendered
         } = await loadSSRAssets({
           mode: 'ssg',
@@ -108,7 +108,7 @@ cli
           manifest,
           render,
           routes,
-          onRendered,
+          onAppRendered,
           onTemplateRendered
         })
         break
