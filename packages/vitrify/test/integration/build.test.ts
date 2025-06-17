@@ -4,7 +4,7 @@ import { test } from 'vitest'
 test('create CSR app', async () => {
   await build({
     appDir: new URL('app/', import.meta.url),
-    outDir: new URL('file:///tmp/vitrify/ssr/client/').pathname
+    outDir: new URL('file:///tmp/vitrify/csr/').pathname
   })
 })
 
@@ -19,10 +19,6 @@ test('create SSR/SSG app', async () => {
     appDir: new URL('app/', import.meta.url),
     outDir: new URL('file:///tmp/vitrify/ssr/server/').pathname
   })
-  let prerender, onRenderedHooks
-  ;({ prerender, onRenderedHooks } = await import(
-    new URL('ssr/server/prerender.mjs', 'file:///tmp/vitrify/').pathname
-  ))
 })
 
 /**

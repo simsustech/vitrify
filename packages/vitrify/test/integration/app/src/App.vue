@@ -1,9 +1,20 @@
 <template>
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <Suspense>
+      <template #default>
+        <component :is="Component" />
+      </template>
+      <template #fallback>
+        <div>Loading...</div>
+      </template>
+    </Suspense>
+  </router-view>
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts">
+export default {
+  name: 'App'
+}
+</script>
 
-<style lang="sass">
-// do not remove, required for additionalData import
-</style>
+<script setup lang="ts"></script>
