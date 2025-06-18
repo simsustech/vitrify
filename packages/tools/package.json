@@ -49,7 +49,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@types/node": "^22.15.29",
+    "@types/node": "^24.0.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },
