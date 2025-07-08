@@ -13,7 +13,7 @@ import type { VitrifyPlugin } from './plugins/index.js'
 import type { Router } from 'vue-router'
 import type { App } from '@vue/runtime-core'
 import type { Pinia } from 'pinia'
-import type { _UseQueryEntryNodeValueSerialized } from '@pinia/colada/index.js'
+import type { _UseQueryEntryNodeValueSerialized } from '@pinia/colada'
 
 export type SSRContext = {
   // Quasar requires req and res on SSRContext instead of request and reply

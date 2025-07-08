@@ -13,7 +13,7 @@
   },
   "main": "dist/cli.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "repository": {
     "type": "git",
@@ -27,16 +27,16 @@
   "dependencies": {
     "@vitrify/tools": "workspace:*",
     "handlebars": "^4.7.8",
-    "@inquirer/prompts": "^7.5.3",
+    "@inquirer/prompts": "^7.6.0",
     "latest-version": "^9.0.0",
     "minimist": "^1.2.8"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.0.10",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
-    "vue": "^3.5.16"
+    "vite": "^7.0.2",
+    "vue": "^3.5.17"
   },
   "files": [
     "dist",

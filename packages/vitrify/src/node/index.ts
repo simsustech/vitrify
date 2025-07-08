@@ -752,7 +752,13 @@ export const baseConfig = async ({
     },
     plugins,
     optimizeDeps: {
-      exclude: ['vue', 'vue-router', ...serverModules, ...builtinModules]
+      exclude: [
+        'vue',
+        'vue-router',
+        'virtual:pwa-register/vue',
+        ...serverModules,
+        ...builtinModules
+      ]
     },
     resolve: {
       dedupe: ['vue', 'vue-router'],
