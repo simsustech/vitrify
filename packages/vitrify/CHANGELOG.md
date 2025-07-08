@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.25.1
+
+### Patch Changes
+
+- 563f1b8: refactor(vitrify): rename onRendered to onAppRendered
+
 ## 0.25.0
 
 ### Minor Changes
