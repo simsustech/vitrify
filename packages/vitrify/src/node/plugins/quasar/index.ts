@@ -162,8 +162,13 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
                 'virtual:quasar-iconMapFn'
               )
 
+              const { installQuasar } = await import(
+                // @ts-expect-error undefined
+                'virtual:quasar'
+              )
+
               app.use(
-                staticImports?.Quasar,
+                installQuasar,
                 {
                   plugins: quasarPlugins,
                   directives,
@@ -199,7 +204,7 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
               urls,
               globalCss,
               staticImports: {
-                quasar: ['Quasar']
+                // quasar: ['Quasar']
               },
               hooks: {
                 onAppCreated: onAppCreatedHooks,
@@ -301,7 +306,7 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
           export * from 'quasar/src/directives.js';
           export * from 'quasar/src/utils.js';
           export * from 'quasar/src/composables.js';
-          export { default as Quasar } from 'quasar/src/install-quasar.js'`
+          export { default as installQuasar } from 'quasar/src/install-quasar.js'`
           }
           return null
         }
