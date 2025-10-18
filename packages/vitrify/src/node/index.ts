@@ -642,15 +642,15 @@ export const baseConfig = async ({
             new URL('./dist/vue.runtime.esm-bundler.js', packageUrls['vue'])
           )
         },
-        {
-          find: new RegExp('^vue-router$'),
-          replacement: fileURLToPath(
-            new URL(
-              './dist/vue-router.esm-bundler.js',
-              packageUrls['vue-router']
-            )
-          )
-        },
+        // {
+        //   find: new RegExp('^vue-router$'),
+        //   replacement: fileURLToPath(
+        //     new URL(
+        //       './dist/vue-router.esm-bundler.js',
+        //       packageUrls['vue-router']
+        //     )
+        //   )
+        // },
         ...vuePkgAliases
       )
     }
