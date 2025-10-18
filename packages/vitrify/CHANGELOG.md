@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.25.3
+
+### Patch Changes
+
+- 21f72d5: fix(vitrify): fix Quasar initialization
+- e96ff7b: fix(vitrify): remove vue-router alias
+
 ## 0.25.2
 
 ### Patch Changes
