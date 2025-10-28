@@ -1,5 +1,5 @@
 import type { VitrifyConfig } from 'vitrify'
-import { certificateFor } from 'devcert'
+import { getCertificate } from '@vitejs/plugin-basic-ssl'
 import { QuasarPlugin, type QuasarPluginOptions } from 'vitrify/plugins'
 
 const quasarConf: QuasarPluginOptions = {
@@ -40,8 +40,16 @@ export default async function ({ mode, command }): Promise<VitrifyConfig> {
     }
   }
   if (mode === 'development') {
+    const certificate = await getCertificate(
+      'node_modules/.vite/basic-ssl',
+      '',
+      ['vitrify.test']
+    )
     config.server = {
-      https: await certificateFor('vitrify.test')
+      https: {
+        cert: certificate,
+        key: certificate
+      }
     }
   }
   return config

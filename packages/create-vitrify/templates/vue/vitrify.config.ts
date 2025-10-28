@@ -1,13 +1,21 @@
 import type { VitrifyConfig } from 'vitrify'
-import { certificateFor } from 'devcert'
+import { getCertificate } from '@vitejs/plugin-basic-ssl'
 
 export default async function ({ mode, command }): Promise<VitrifyConfig> {
   const config: VitrifyConfig = {
     vitrify: {}
   }
   if (mode === 'development') {
+    const certificate = await getCertificate(
+      'node_modules/.vite/basic-ssl',
+      '',
+      ['vitrify.test']
+    )
     config.server = {
-      https: await certificateFor('vitrify.test')
+      https: {
+        cert: certificate,
+        key: certificate
+      }
     }
   }
   return config

@@ -1,6 +1,6 @@
 import type { VitrifyConfig } from 'vitrify'
 import { QuasarPlugin, type QuasarPluginOptions } from 'vitrify/plugins'
-import { certificateFor } from 'devcert'
+import { getCertificate } from '@vitejs/plugin-basic-ssl'
 import QuasarComponentsPlugin from '@simsustech/quasar-components/vite-plugin'
 import { QuasarPreset } from 'unocss-preset-quasar'
 import { MaterialDesign3 } from 'unocss-preset-quasar/styles'
@@ -196,8 +196,16 @@ export default async function ({ mode, command }): Promise<VitrifyConfig> {
     }
   }
   if (mode === 'development') {
+    const certificate = await getCertificate(
+      'node_modules/.vite/basic-ssl',
+      '',
+      ['vitrify.test']
+    )
     config.server = {
-      https: await certificateFor('vitrify.local')
+      https: {
+        cert: certificate,
+        key: certificate
+      }
     }
   }
   return config
