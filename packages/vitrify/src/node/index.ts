@@ -783,7 +783,7 @@ export const baseConfig = async ({
     // environments: {
     // },
     server: {
-      https: vitrifyConfig.server?.https,
+      // https: vitrifyConfig.server?.https,
       // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
       middlewareMode: ssr ? true : false,
       fs: {
