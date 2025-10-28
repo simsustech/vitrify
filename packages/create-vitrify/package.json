@@ -27,16 +27,16 @@
   "dependencies": {
     "@vitrify/tools": "workspace:*",
     "handlebars": "^4.7.8",
-    "@inquirer/prompts": "^7.6.0",
+    "@inquirer/prompts": "^7.9.0",
     "latest-version": "^9.0.0",
     "minimist": "^1.2.8"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",
-    "@types/node": "^24.0.10",
-    "typescript": "^5.8.3",
-    "vite": "^7.0.2",
-    "vue": "^3.5.17"
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vue": "^3.5.22"
   },
   "files": [
     "dist",
