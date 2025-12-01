@@ -49,9 +49,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@types/node": "^24.9.1",
+    "@types/node": "^24.10.1",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.2.4"
   },
   "dependencies": {
     "handlebars": "^4.7.8"

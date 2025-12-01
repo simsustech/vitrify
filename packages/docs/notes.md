@@ -15,3 +15,11 @@
 ### Deploy
 
 - Cannot set properties of null (setting 'peer'): circular dependency in a monorepo
+
+## npm-check-updates
+
+Update all packages in a monorepo:
+
+```sh
+ncu -u --dep prod,optional,dev,peer --packageFile './packages/**/package.json'
+```
