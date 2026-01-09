@@ -28,8 +28,10 @@ ncu -u --dep prod,optional,dev,peer --packageFile './packages/**/package.json'
 
 ### Wayland
 
+Check https://mcr.microsoft.com/en-us/artifact/mar/playwright/tags for the latest version.
+
 ```sh
-docker run -e XDG_RUNTIME_DIR=/tmp -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY --name playwright --net host --rm --init mcr.microsoft.com/playwright /bin/sh -c "cd /home/pwuser && npx -y playwright run-server --port 3333 --host 0.0.0.0"
+docker run -e XDG_RUNTIME_DIR=/tmp -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY --name playwright --net host --rm --init mcr.microsoft.com/playwright:v1.57.0 /bin/sh -c "cd /home/pwuser && npx -y playwright run-server --port 3333 --host 0.0.0.0"
 
 cd packages/api
 PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3333/ pnpm run test:e2e
