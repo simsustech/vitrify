@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.25.5
+
+### Patch Changes
+
+- 2adad6c: fix(vitrify): fix vue-devtools manual chunks
+
 ## 0.25.4
 
 ### Patch Changes
