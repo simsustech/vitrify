@@ -67,7 +67,14 @@ const manualChunkNames = [
 ]
 
 const moduleChunks = {
-  vue: ['vue', '@vue', 'vue-router', 'pinia', '@pinia/colada', '@vue/devtools'],
+  vue: [
+    'vue',
+    '@vue',
+    'vue-router',
+    'pinia',
+    '@pinia/colada',
+    '@vue/devtools-api'
+  ],
   quasar: ['quasar'],
   atQuasar: ['@quasar']
 }
