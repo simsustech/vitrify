@@ -40,7 +40,9 @@ export default async function ({
                 }$`
               ),
               // name: name + key.slice(1),
-              replacement: fileURLToPath(new URL('.' + val.src, import.meta.url))
+              replacement: fileURLToPath(
+                new URL('.' + val.src, import.meta.url)
+              )
             }
           })
 
