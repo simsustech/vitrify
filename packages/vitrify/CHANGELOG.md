@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.25.6
+
+### Patch Changes
+
+- 3efa28e: fix: use fileURLToPath for correct path resolution on Windows
+
 ## 0.25.5
 
 ### Patch Changes
