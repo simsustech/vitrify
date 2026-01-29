@@ -1,4 +1,10 @@
-import { type LogLevel, type InlineConfig, type ViteDevServer, resolveConfig, ResolvedConfig } from 'vite'
+import {
+  type LogLevel,
+  type InlineConfig,
+  type ViteDevServer,
+  resolveConfig,
+  ResolvedConfig
+} from 'vite'
 import { baseConfig } from '../index.js'
 import type { Server } from 'net'
 import fastify from 'fastify'
@@ -65,40 +71,40 @@ export async function createVitrifyDevServer({
     )
   }
 
-
-  config = await resolveConfig({
-    ...await baseConfig({
-      framework,
-      ssr: ssrMode,
-      command: 'dev',
-      mode: 'development',
-      appDir,
-      publicDir,
-      base
-    }),
-    server: {
-      host,
-      port,
-      // hmr: {
-      //   protocol: config.server?.https ? 'wss' : 'ws',
-      //   port: wsPort
-      // }
-    }
-  },
-    "serve")
-
+  config = await resolveConfig(
+    {
+      ...(await baseConfig({
+        framework,
+        ssr: ssrMode,
+        command: 'dev',
+        mode: 'development',
+        appDir,
+        publicDir,
+        base
+      })),
+      server: {
+        host,
+        port
+        // hmr: {
+        //   protocol: config.server?.https ? 'wss' : 'ws',
+        //   port: wsPort
+        // }
+      }
+    },
+    'serve'
+  )
 
   const vitrifyDevServer = await (
     await import('vite')
   ).createServer({
-    // @ts-ignore ignore
+    // @ts-expect-error configFile is defined more than once
     configFile: false,
     ...config,
     logLevel,
     define: {
       ...config.define,
       __HOST__: `'${host}'`
-    },
+    }
     // server: {
     //   ...config.server,
     //   host,
@@ -168,9 +174,9 @@ export async function createServer({
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     const environment = vite.environments.ssr
-      ; ({ setup, onTemplateRendered, onAppRendered, vitrifyConfig } =
-        // @ts-expect-error missing types
-        await environment.runner.import(entryUrl))
+    ;({ setup, onTemplateRendered, onAppRendered, vitrifyConfig } =
+      // @ts-expect-error missing types
+      await environment.runner.import(entryUrl))
 
     app = fastify({
       logger: {
@@ -211,14 +217,14 @@ export async function createServer({
         if (vite && app) {
           await app.ready()
           await app.close()
-            ; ({ app, server, vite } = await createServer({
-              ssr: 'fastify',
-              host: host,
-              port,
-              appDir,
-              publicDir,
-              vite
-            }))
+          ;({ app, server, vite } = await createServer({
+            ssr: 'fastify',
+            host: host,
+            port,
+            appDir,
+            publicDir,
+            vite
+          }))
         }
       }
     }

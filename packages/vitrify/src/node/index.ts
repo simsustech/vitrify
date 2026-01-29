@@ -603,8 +603,7 @@ export const baseConfig = async ({
             default:
               entry = fileURLToPath(new URL('csr/entry.ts', frameworkDir))
           }
-          let entryScript
-          entryScript = `<script type="module" src="${entry}"></script>`
+          const entryScript = `<script type="module" src="${entry}"></script>`
           html = appendToBody(entryScript, html)
           if (productName) html = addOrReplaceTitle(productName, html)
           return html

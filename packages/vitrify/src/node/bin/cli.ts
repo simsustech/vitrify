@@ -35,7 +35,7 @@ cli
     const baseOutDir =
       parsePath(options.outDir, appDir) || new URL('dist/', appDir)
 
-      console.log( new URL("./", appDir).href)
+    console.log(new URL('./', appDir).href)
 
     const args: {
       base: string

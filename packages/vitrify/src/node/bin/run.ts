@@ -21,7 +21,9 @@ export async function run(filePath: string) {
   const cliDir = getCliDir()
   const projectURLs = getProjectURLs(appDir, cliDir)
   const pkg = JSON.parse(
-    (await fs.readFile(fileURLToPath(projectURLs.cli('package.json')), 'utf-8')).toString()
+    (
+      await fs.readFile(fileURLToPath(projectURLs.cli('package.json')), 'utf-8')
+    ).toString()
   )
 
   if (!run)
