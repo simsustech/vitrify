@@ -201,6 +201,7 @@ export const baseConfig = async ({
   let rawVitrifyConfig: VitrifyConfig | VitrifyConfigAsync
   let vitrifyConfig: VitrifyConfig
 
+  console.log(appDir)
   try {
     if (fs.existsSync(fileURLToPath(new URL('vitrify.config.ts', appDir)))) {
       const configPath = fileURLToPath(new URL('vitrify.config.ts', appDir))
@@ -209,11 +210,13 @@ export const baseConfig = async ({
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
 
+      console.log('kljsdflkjdsf')
+      console.log(configPath)
       rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
       rawVitrifyConfig = (
-        await import(fileURLToPath(new URL('vitrify.config.js', appDir)))
+        await import(new URL('vitrify.config.js', appDir).href)
       ).default
     }
     if (typeof rawVitrifyConfig === 'function') {
@@ -417,7 +420,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onAppMounted.push(${varName});`
               })
               .join('\n')}
@@ -436,7 +439,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onAppRendered.push(${varName});`
               })
               .join('\n')}
@@ -455,7 +458,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onTemplateRendered.push(${varName});`
               })
               .join('\n')}
@@ -474,7 +477,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onAppCreated.push(${varName});`
               })
               .join('\n')}
@@ -491,7 +494,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onSetup.push(${varName});`
               })
               .join('\n')}`

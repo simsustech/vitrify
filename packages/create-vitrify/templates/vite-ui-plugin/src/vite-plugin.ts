@@ -1,5 +1,6 @@
 import type { Plugin } from 'vite'
 import { promises } from 'fs'
+import { fileURLToPath } from 'url'
 const { readFile } = promises
 
 export default async function ({
@@ -9,7 +10,7 @@ export default async function ({
 } = {}): Promise<Plugin> {
   const pkgJson = JSON.parse(
     await readFile(
-      new URL('../package.json', import.meta.url).pathname,
+      fileURLToPath(new URL('../package.json', import.meta.url)),
       'utf-8'
     )
   )
@@ -39,7 +40,7 @@ export default async function ({
                 }$`
               ),
               // name: name + key.slice(1),
-              replacement: new URL('.' + val.src, import.meta.url).pathname
+              replacement: fileURLToPath(new URL('.' + val.src, import.meta.url))
             }
           })
 

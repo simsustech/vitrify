@@ -1,6 +1,6 @@
 // import { resolve } from 'import-meta-resolve'
 import { existsSync } from 'fs'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 
 export const resolve = (packageName: string, base: URL, counter = 0): URL => {
   const packageUrl = new URL(`./node_modules/${packageName}/`, base)
@@ -20,7 +20,7 @@ export const getPkgJsonDir = (dir: URL): URL => {
   return getPkgJsonDir(new URL('..', dir))
 }
 export const getAppDir = (dir?: URL) =>
-  getPkgJsonDir(dir ?? new URL(`file://${process.cwd()}/`))
+  getPkgJsonDir(dir ?? pathToFileURL(`${process.cwd()}/`))
 export const getCliDir = () => getPkgJsonDir(new URL('./', import.meta.url))
 export const getCliViteDir = (cliDir: URL) => new URL('src/vite/', cliDir)
 export const getSrcDir = (appDir: URL) => new URL('src/', appDir)

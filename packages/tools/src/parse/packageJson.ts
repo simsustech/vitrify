@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url"
+
 interface PackageJson {
   name: string
   exports: Record<
@@ -21,7 +23,7 @@ export const parseExportAliases = (pkgJson: PackageJson) => {
       .map(([key, val]) => {
         return {
           find: name + key.slice(1),
-          replacement: new URL('.' + val.src, import.meta.url).pathname
+          replacement: fileURLToPath(new URL('.' + val.src, import.meta.url))
         }
       })
       .sort(
