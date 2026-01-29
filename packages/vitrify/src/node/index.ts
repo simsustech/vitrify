@@ -73,7 +73,10 @@ const moduleChunks = {
     'vue-router',
     'pinia',
     '@pinia/colada',
-    '@vue/devtools-api'
+    '@vue/devtools-api',
+    '@vueuse/core',
+    '@vueuse/metadata',
+    '@vueuse/shared'
   ],
   quasar: ['quasar'],
   atQuasar: ['@quasar']
