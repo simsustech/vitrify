@@ -211,6 +211,7 @@ export const baseConfig = async ({
   let rawVitrifyConfig: VitrifyConfig | VitrifyConfigAsync
   let vitrifyConfig: VitrifyConfig
 
+  console.log(appDir)
   try {
     if (fs.existsSync(fileURLToPath(new URL('vitrify.config.ts', appDir)))) {
       const configPath = fileURLToPath(new URL('vitrify.config.ts', appDir))
@@ -219,11 +220,13 @@ export const baseConfig = async ({
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
 
+      console.log('kljsdflkjdsf')
+      console.log(configPath)
       rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
       rawVitrifyConfig = (
-        await import(fileURLToPath(new URL('vitrify.config.js', appDir)))
+        await import(new URL('vitrify.config.js', appDir).href)
       ).default
     }
     if (typeof rawVitrifyConfig === 'function') {
@@ -427,7 +430,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onAppMounted.push(${varName});`
               })
               .join('\n')}
@@ -446,7 +449,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onAppRendered.push(${varName});`
               })
               .join('\n')}
@@ -465,7 +468,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onTemplateRendered.push(${varName});`
               })
               .join('\n')}
@@ -484,7 +487,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onAppCreated.push(${varName});`
               })
               .join('\n')}
@@ -501,7 +504,7 @@ export const baseConfig = async ({
                   .replaceAll('+', '')
 
                 return `import ${varName} from '${
-                  new URL(url, appDir).pathname
+                  new URL(url, appDir).href
                 }'; onSetup.push(${varName});`
               })
               .join('\n')}`
@@ -601,14 +604,7 @@ export const baseConfig = async ({
               entry = fileURLToPath(new URL('csr/entry.ts', frameworkDir))
           }
           let entryScript
-          if (process.platform === 'win32') {
-            const split = entry.split('node_modules')
-            entryScript = `<script type="module" src="node_modules${split.at(
-              -1
-            )}"></script>`
-          } else {
-            entryScript = `<script type="module" src="${entry}"></script>`
-          }
+          entryScript = `<script type="module" src="${entry}"></script>`
           html = appendToBody(entryScript, html)
           if (productName) html = addOrReplaceTitle(productName, html)
           return html
@@ -793,7 +789,7 @@ export const baseConfig = async ({
     // environments: {
     // },
     server: {
-      https: vitrifyConfig.server?.https,
+      // https: vitrifyConfig.server?.https,
       // middlewareMode: mode === 'ssr' ? 'ssr' : undefined,
       middlewareMode: ssr ? true : false,
       fs: {

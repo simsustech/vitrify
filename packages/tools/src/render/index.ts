@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars'
 import { existsSync, promises } from 'fs'
+import { fileURLToPath } from 'url'
 
 export { renderPackageJson } from './packageJson.js'
 export { renderTsconfigJson } from './tsconfigJson.js'
@@ -82,7 +83,8 @@ export const renderDirectory = async ({
   templateVariables: Record<string, any>
   outputDir: URL
 }) => {
-  if (outputDir.pathname[outputDir.pathname.length - 1] !== '/') {
+  const outputDirPath = fileURLToPath(outputDir)
+  if (outputDirPath[outputDirPath.length - 1] !== '/') {
     throw new Error(
       'outputDir is not a directory. Make sure the URL ends with a /'
     )

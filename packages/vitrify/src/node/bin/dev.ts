@@ -1,4 +1,4 @@
-import type { LogLevel, InlineConfig, ViteDevServer } from 'vite'
+import { type LogLevel, type InlineConfig, type ViteDevServer, resolveConfig, ResolvedConfig } from 'vite'
 import { baseConfig } from '../index.js'
 import type { Server } from 'net'
 import fastify from 'fastify'
@@ -53,19 +53,10 @@ export async function createVitrifyDevServer({
   )
 
   if (!appDir) appDir = getAppDir()
-  let config: InlineConfig = {}
+  let config: InlineConfig | ResolvedConfig = {}
   let ssrMode: 'server' | 'fastify' | undefined
   if (ssr === 'ssr') ssrMode = 'server'
   if (ssr === 'fastify') ssrMode = 'fastify'
-  config = await baseConfig({
-    framework,
-    ssr: ssrMode,
-    command: 'dev',
-    mode: 'development',
-    appDir,
-    publicDir,
-    base
-  })
 
   const wsPort = await getFirstOpenPort(24678)
   if (config.server?.https) {
@@ -74,9 +65,33 @@ export async function createVitrifyDevServer({
     )
   }
 
+
+  config = await resolveConfig({
+    ...await baseConfig({
+      framework,
+      ssr: ssrMode,
+      command: 'dev',
+      mode: 'development',
+      appDir,
+      publicDir,
+      base
+    }),
+    server: {
+      host,
+      port,
+      // hmr: {
+      //   protocol: config.server?.https ? 'wss' : 'ws',
+      //   port: wsPort
+      // }
+    }
+  },
+    "serve")
+
+
   const vitrifyDevServer = await (
     await import('vite')
   ).createServer({
+    // @ts-ignore ignore
     configFile: false,
     ...config,
     logLevel,
@@ -84,15 +99,15 @@ export async function createVitrifyDevServer({
       ...config.define,
       __HOST__: `'${host}'`
     },
-    server: {
-      ...config.server,
-      host,
-      port,
-      hmr: {
-        protocol: config.server?.https ? 'wss' : 'ws',
-        port: wsPort
-      }
-    }
+    // server: {
+    //   ...config.server,
+    //   host,
+    //   port,
+    //   hmr: {
+    //     protocol: config.server?.https ? 'wss' : 'ws',
+    //     port: wsPort
+    //   }
+    // }
   })
 
   return vitrifyDevServer
@@ -153,9 +168,9 @@ export async function createServer({
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     const environment = vite.environments.ssr
-    ;({ setup, onTemplateRendered, onAppRendered, vitrifyConfig } =
-      // @ts-expect-error missing types
-      await environment.runner.import(entryUrl))
+      ; ({ setup, onTemplateRendered, onAppRendered, vitrifyConfig } =
+        // @ts-expect-error missing types
+        await environment.runner.import(entryUrl))
 
     app = fastify({
       logger: {
@@ -196,14 +211,14 @@ export async function createServer({
         if (vite && app) {
           await app.ready()
           await app.close()
-          ;({ app, server, vite } = await createServer({
-            ssr: 'fastify',
-            host: host,
-            port,
-            appDir,
-            publicDir,
-            vite
-          }))
+            ; ({ app, server, vite } = await createServer({
+              ssr: 'fastify',
+              host: host,
+              port,
+              appDir,
+              publicDir,
+              vite
+            }))
         }
       }
     }

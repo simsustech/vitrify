@@ -21,6 +21,7 @@ cli
   .option('--productName [productName]', 'Product name')
   .option('--debug', 'Debug build')
   .action(async (options) => {
+    console.log('test')
     const { build } = await import('./build.js')
     let appDir: URL
     let prerender
@@ -29,10 +30,12 @@ cli
       appDir = new URL(`file://${options.appDir}`)
     } else {
       appDir = getAppDir()
+      console.log(appDir)
     }
-
     const baseOutDir =
       parsePath(options.outDir, appDir) || new URL('dist/', appDir)
+
+      console.log( new URL("./", appDir).href)
 
     const args: {
       base: string
@@ -86,7 +89,7 @@ cli
           outDir: fileURLToPath(new URL('ssr/server/', baseOutDir))
         })
         ;({ prerender } = await import(
-          new URL('ssr/server/prerender.mjs', baseOutDir).pathname
+          new URL('ssr/server/prerender.mjs', baseOutDir).href
         ))
 
         const {

@@ -3,6 +3,7 @@ import type { OnTemplateRenderedHook } from 'src/node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 import { renderHtml } from './fastify-ssr-plugin.js'
 import { type RouteRecordRaw } from 'vue-router'
+import { fileURLToPath } from 'url'
 
 export const prerender = async ({
   outDir,
@@ -36,8 +37,8 @@ export const prerender = async ({
       url.split('/').slice(0, -1).join('/'),
       `file://${outDir}`
     )
-    if (!existsSync(directoryUrl.pathname)) {
-      mkdirSync(directoryUrl.pathname, { recursive: true })
+    if (!existsSync(fileURLToPath(directoryUrl))) {
+      mkdirSync(fileURLToPath(directoryUrl), { recursive: true })
     }
 
     const filename =
