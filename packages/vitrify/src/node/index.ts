@@ -594,14 +594,7 @@ export const baseConfig = async ({
               entry = fileURLToPath(new URL('csr/entry.ts', frameworkDir))
           }
           let entryScript
-          if (process.platform === 'win32') {
-            const split = entry.split('node_modules')
-            entryScript = `<script type="module" src="node_modules${split.at(
-              -1
-            )}"></script>`
-          } else {
-            entryScript = `<script type="module" src="${entry}"></script>`
-          }
+          entryScript = `<script type="module" src="${entry}"></script>`
           html = appendToBody(entryScript, html)
           if (productName) html = addOrReplaceTitle(productName, html)
           return html
