@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.25.7
+
+### Patch Changes
+
+- 4bd0554: chore: cleanup
+- 81f5add: fix(vitrify): fix local https certificates
+
 ## 0.25.6
 
 ### Patch Changes
