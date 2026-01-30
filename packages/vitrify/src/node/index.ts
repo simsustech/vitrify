@@ -211,7 +211,6 @@ export const baseConfig = async ({
   let rawVitrifyConfig: VitrifyConfig | VitrifyConfigAsync
   let vitrifyConfig: VitrifyConfig
 
-  console.log(appDir)
   try {
     if (fs.existsSync(fileURLToPath(new URL('vitrify.config.ts', appDir)))) {
       const configPath = fileURLToPath(new URL('vitrify.config.ts', appDir))
@@ -220,8 +219,6 @@ export const baseConfig = async ({
       )
       fs.writeFileSync(configPath + '.js', bundledConfig.code)
 
-      console.log('kljsdflkjdsf')
-      console.log(configPath)
       rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')
     } else {
