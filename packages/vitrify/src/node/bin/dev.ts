@@ -65,24 +65,21 @@ export async function createVitrifyDevServer({
   if (ssr === 'fastify') ssrMode = 'fastify'
 
   const wsPort = await getFirstOpenPort(24678)
-  if (config.server?.https) {
-    exitLogs.push(
-      `[warning] HTTPS mode enabled. Visit https://{hostname}:${wsPort} to enable a security exception for HMR.`
-    )
-  }
 
+  const configBase = await baseConfig({
+    framework,
+    ssr: ssrMode,
+    command: 'dev',
+    mode: 'development',
+    appDir,
+    publicDir,
+    base
+  })
   config = await resolveConfig(
     {
-      ...(await baseConfig({
-        framework,
-        ssr: ssrMode,
-        command: 'dev',
-        mode: 'development',
-        appDir,
-        publicDir,
-        base
-      })),
+      ...configBase,
       server: {
+        ...configBase.server,
         host,
         port
         // hmr: {
@@ -94,6 +91,12 @@ export async function createVitrifyDevServer({
     'serve'
   )
 
+  if (config.server?.https) {
+    exitLogs.push(
+      `[warning] HTTPS mode enabled. Visit https://{hostname}:${wsPort} to enable a security exception for HMR.`
+    )
+  }
+
   const vitrifyDevServer = await (
     await import('vite')
   ).createServer({
@@ -104,16 +107,16 @@ export async function createVitrifyDevServer({
     define: {
       ...config.define,
       __HOST__: `'${host}'`
+    },
+    server: {
+      ...config.server,
+      host,
+      port,
+      hmr: {
+        protocol: config.server?.https ? 'wss' : 'ws',
+        port: wsPort
+      }
     }
-    // server: {
-    //   ...config.server,
-    //   host,
-    //   port,
-    //   hmr: {
-    //     protocol: config.server?.https ? 'wss' : 'ws',
-    //     port: wsPort
-    //   }
-    // }
   })
 
   return vitrifyDevServer
