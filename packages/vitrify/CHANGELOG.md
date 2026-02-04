@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.25.8
+
+### Patch Changes
+
+- 849ca28: fix(vitrify): fix manual chunking compilation errors
+
 ## 0.25.7
 
 ### Patch Changes
