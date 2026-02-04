@@ -74,9 +74,13 @@ const moduleChunks = {
     'pinia',
     '@pinia/colada',
     '@vue/devtools-api',
+    '@vue/devtools-kit',
+    '@vue/devtools-shared',
     '@vueuse/core',
     '@vueuse/metadata',
-    '@vueuse/shared'
+    '@vueuse/shared',
+    'perfect-debounce',
+    'hookable'
   ],
   quasar: ['quasar'],
   atQuasar: ['@quasar']
