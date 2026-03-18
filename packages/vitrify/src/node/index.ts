@@ -7,10 +7,8 @@ import type {
 } from 'vite'
 import { findDepPkgJsonPath } from 'vitefu'
 import { mergeConfig } from 'vite'
-import { build } from 'esbuild'
+import { transform } from 'rolldown/utils'
 import fs from 'fs'
-import path from 'path'
-import { pathToFileURL } from 'url'
 import { readFileSync } from 'fs'
 import { builtinModules } from 'node:module'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -119,64 +117,6 @@ export const VIRTUAL_MODULES = [
   'vitrify.css'
 ]
 
-async function bundleConfigFile(
-  fileName: string,
-  isESM = false
-): Promise<{ code: string; dependencies: string[] }> {
-  const result = await build({
-    absWorkingDir: process.cwd(),
-    entryPoints: [fileName],
-    outfile: 'out.js',
-    write: false,
-    platform: 'node',
-    bundle: true,
-    format: 'esm',
-    sourcemap: 'inline',
-    metafile: true,
-    plugins: [
-      {
-        name: 'externalize-deps',
-        setup(build) {
-          build.onResolve({ filter: /.*/ }, (args) => {
-            const id = args.path
-            if (id[0] !== '.' && !path.isAbsolute(id)) {
-              return {
-                external: true
-              }
-            }
-          })
-        }
-      },
-      {
-        name: 'replace-import-meta',
-        setup(build) {
-          build.onLoad({ filter: /\.[jt]s$/ }, async (args) => {
-            const contents = await fs.promises.readFile(args.path, 'utf8')
-            return {
-              loader: args.path.endsWith('.ts') ? 'ts' : 'js',
-              contents: contents
-                .replace(
-                  /\bimport\.meta\.url\b/g,
-                  JSON.stringify(pathToFileURL(args.path).href)
-                )
-                .replace(
-                  /\b__dirname\b/g,
-                  JSON.stringify(path.dirname(args.path))
-                )
-                .replace(/\b__filename\b/g, JSON.stringify(args.path))
-            }
-          })
-        }
-      }
-    ]
-  })
-  const { text } = result.outputFiles[0]
-  return {
-    code: text,
-    dependencies: result.metafile ? Object.keys(result.metafile.inputs) : []
-  }
-}
-
 export const baseConfig = async ({
   ssr,
   appDir,
@@ -218,10 +158,12 @@ export const baseConfig = async ({
   try {
     if (fs.existsSync(fileURLToPath(new URL('vitrify.config.ts', appDir)))) {
       const configPath = fileURLToPath(new URL('vitrify.config.ts', appDir))
-      const bundledConfig = await bundleConfigFile(
-        fileURLToPath(new URL('vitrify.config.ts', appDir))
-      )
-      fs.writeFileSync(configPath + '.js', bundledConfig.code)
+
+      const content = readFileSync(configPath, {
+        encoding: 'utf-8'
+      })
+      const output = await transform(configPath, content)
+      fs.writeFileSync(configPath + '.js', output.code)
 
       rawVitrifyConfig = (await import('file://' + configPath + '.js')).default
       fs.unlinkSync(configPath + '.js')

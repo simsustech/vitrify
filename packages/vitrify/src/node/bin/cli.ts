@@ -3,11 +3,11 @@ import cac from 'cac'
 import { fileURLToPath } from 'url'
 import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls, exitLogs } from '../helpers/logger.js'
-import { build as esbuild } from 'esbuild'
+import { minify } from 'rolldown/utils'
 import type { ResolvedConfig, ViteDevServer } from 'vite'
 import type { Server } from 'net'
 import type { FastifyInstance } from 'fastify'
-import { readdir } from 'fs/promises'
+import { readdir, readFile, writeFile } from 'fs/promises'
 import { loadSSRAssets } from '../frameworks/vue/fastify-ssr-plugin.js'
 
 const cli = cac('vitrify')
@@ -199,23 +199,27 @@ cli.command('run <file>').action(async (file, options) => {
 })
 
 cli.command('minify <dir>').action(async (dir, options) => {
-  const files = await readdir(
-    fileURLToPath(new URL(dir, `file://${process.cwd()}/`))
-  )
+  const baseUrl = new URL(dir, `file://${process.cwd()}/`)
+  const files = await readdir(fileURLToPath(baseUrl))
   let counter = 0
   for (const file of files) {
     if (file.endsWith('.mjs')) {
-      await esbuild({
-        absWorkingDir: fileURLToPath(new URL(dir, `file://${process.cwd()}/`)),
-        entryPoints: [file],
-        minify: true,
-        minifyIdentifiers: true,
-        minifySyntax: true,
-        minifyWhitespace: true,
-        outfile: file,
-        allowOverwrite: true
+      const path = fileURLToPath(
+        new URL(`${dir}/${file}`, `file://${process.cwd()}/`)
+      )
+      const content = await readFile(path, {
+        encoding: 'utf-8'
       })
-      counter++
+      const output = await minify(path, content, {
+        compress: true,
+        module: true,
+        mangle: true,
+        codegen: true
+      })
+      if (!output.errors.length) {
+        await writeFile(path, output.code)
+        counter++
+      }
     }
   }
   console.log(`Minified ${counter} files`)
