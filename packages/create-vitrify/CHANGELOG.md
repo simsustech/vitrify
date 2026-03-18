@@ -1,5 +1,16 @@
 # create-vitrify
 
+## 0.8.0
+
+### Minor Changes
+
+- 9ce39d7: feat: update to vite 8
+
+### Patch Changes
+
+- Updated dependencies [9ce39d7]
+  - @vitrify/tools@0.5.0
+
 ## 0.7.6
 
 ### Patch Changes

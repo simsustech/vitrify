@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.0
+
+### Minor Changes
+
+- 9ce39d7: feat: update to vite 8
+
 ## 0.25.9
 
 ### Patch Changes

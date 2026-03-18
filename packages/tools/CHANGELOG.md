@@ -1,5 +1,11 @@
 # @vitrify/tools
 
+## 0.5.0
+
+### Minor Changes
+
+- 9ce39d7: feat: update to vite 8
+
 ## 0.4.5
 
 ### Patch Changes
