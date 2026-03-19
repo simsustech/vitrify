@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.1
+
+### Patch Changes
+
+- e8d4d73: fix: add advancedChunking and export vitrify hooks as an object
+
 ## 0.26.0
 
 ### Minor Changes
