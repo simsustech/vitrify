@@ -34,12 +34,12 @@ import type {
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
 import { resolve } from './app-urls.js'
-import type { ManualChunksOption, RollupOptions } from 'rollup'
 import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
 import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
 import { searchForWorkspaceRoot } from 'vite'
+import { CodeSplittingGroup, RolldownOptions } from 'rolldown'
 
 const internalServerModules = [
   'util',
@@ -60,8 +60,8 @@ const internalServerModules = [
 const manualChunkNames = [
   'prerender',
   'fastify-ssr-plugin',
-  'fastify-csr-plugin',
-  'server'
+  'fastify-csr-plugin'
+  // 'server'
 ]
 
 const moduleChunks = {
@@ -83,31 +83,6 @@ const moduleChunks = {
   quasar: ['quasar'],
   atQuasar: ['@quasar']
 }
-const manualChunksFn = (manualChunkList?: string[]): ManualChunksOption => {
-  return (id: string) => {
-    const matchedModule = Object.entries(moduleChunks).find(
-      ([chunkName, moduleNames]) =>
-        moduleNames.some((moduleName) =>
-          new RegExp(`\/${moduleName}\/`).test(id)
-        )
-    )
-    if (id.includes('vitrify/src/')) {
-      const name = id.split('/').at(-1)?.split('.').at(0)
-      if (name && manualChunkNames.includes(name)) return name
-    } else if (
-      VIRTUAL_MODULES.some((virtualModule) => id.includes(virtualModule))
-    ) {
-      return VIRTUAL_MODULES.find((name) => id.includes(name))
-    } else if (manualChunkList?.some((file) => id.includes(file))) {
-      return manualChunkList.find((file) => id.includes(file))
-    } else if (id.includes('node_modules')) {
-      if (matchedModule) {
-        return matchedModule[0]
-      }
-      return 'vendor'
-    }
-  }
-}
 
 export const VIRTUAL_MODULES = [
   'virtual:vitrify-hooks',
@@ -116,6 +91,44 @@ export const VIRTUAL_MODULES = [
   'vitrify.sass',
   'vitrify.css'
 ]
+
+/**
+ * Advanced chunking may no longer be necessary.
+ * @param ssr
+ * @returns
+ */
+const createCodeSplittingGroups = (
+  ssr?: VitrifySSRModes
+): CodeSplittingGroup[] => {
+  return [
+    ...VIRTUAL_MODULES.map((m) => ({
+      name: m,
+      test: new RegExp(m),
+      priority: 30
+    }))
+    // ...manualChunkNames.map((m) => ({
+    //     name: m,
+    //     test: new RegExp(m),
+    //     priority: 20
+    //   })),
+    //   ...Object.entries(moduleChunks).map(([key, value]) => ({
+    //     name: key,
+    //     test: new RegExp(value.join('|')),
+    //     priority: 20,
+    //     maxSize: ssr === 'client' || ssr === 'ssg' ? 1000000 : Infinity
+    //   })),
+    //   {
+    //     name: 'vendor',
+    //     test: /node_modules/,
+    //     priority: 1
+    //   },
+    //   {
+    //     name: 'typst',
+    //     test: /\.typ/,
+    //     priority: 40
+    //   }
+  ]
+}
 
 export const baseConfig = async ({
   ssr,
@@ -358,7 +371,7 @@ export const baseConfig = async ({
       },
       load(id) {
         if (id === 'virtual:vitrify-hooks') {
-          return `export const onAppMounted = [${onAppMountedHooks
+          return `const onAppMounted = [${onAppMountedHooks
             .map((fn) => `${String(fn)}`)
             .join(', ')}]
             ${onAppMountedFiles
@@ -377,7 +390,7 @@ export const baseConfig = async ({
                 }'; onAppMounted.push(${varName});`
               })
               .join('\n')}
-            export const onAppRendered = [${onAppRenderedHooks
+            const onAppRendered = [${onAppRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             ${onAppRenderedFiles
@@ -396,7 +409,7 @@ export const baseConfig = async ({
                 }'; onAppRendered.push(${varName});`
               })
               .join('\n')}
-            export const onTemplateRendered = [${onTemplateRenderedHooks
+            const onTemplateRendered = [${onTemplateRenderedHooks
               .map((fn) => `${String(fn)}`)
               .join(', ')}]
             ${onTemplateRenderedFiles
@@ -415,7 +428,7 @@ export const baseConfig = async ({
                 }'; onTemplateRendered.push(${varName});`
               })
               .join('\n')}
-            export const onAppCreated = [${OnAppCreatedHooks.map(
+            const onAppCreated = [${OnAppCreatedHooks.map(
               (fn) => `${String(fn)}`
             ).join(', ')}]
             ${onAppCreatedFiles
@@ -434,7 +447,7 @@ export const baseConfig = async ({
                 }'; onAppCreated.push(${varName});`
               })
               .join('\n')}
-            export const onSetup = []
+            const onSetup = []
             ${onSetupFiles
               .map((url, index) => {
                 const varName = fileURLToPath(url)
@@ -450,7 +463,14 @@ export const baseConfig = async ({
                   new URL(url, appDir).href
                 }'; onSetup.push(${varName});`
               })
-              .join('\n')}`
+              .join('\n')}
+              export const hooks = {
+                onAppMounted,
+                onAppRendered,
+                onAppCreated,
+                onTemplateRendered,
+                onSetup
+              }`
         } else if (id === 'virtual:static-imports') {
           return `${Object.entries(staticImports)
             .map(([key, value]) => {
@@ -623,7 +643,7 @@ export const baseConfig = async ({
       replacement: fileURLToPath(new URL(await resolve('vitest', cliDir)))
     })
 
-  let rollupOptions: RollupOptions = {}
+  let rollupOptions: RolldownOptions = {}
   let noExternal: RegExp[] | string[] = [
     new RegExp(`^(?!(${[...builtinModules, ...serverModules].join('|')}))`)
   ]
@@ -644,7 +664,9 @@ export const baseConfig = async ({
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
-        manualChunks: manualChunksFn(vitrifyConfig?.vitrify?.manualChunks)
+        codeSplitting: {
+          groups: createCodeSplittingGroups(ssr)
+        }
       }
     }
     // Create a SSR bundle
@@ -661,7 +683,9 @@ export const baseConfig = async ({
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
-        manualChunks: manualChunksFn(vitrifyConfig?.vitrify?.manualChunks)
+        codeSplitting: {
+          groups: createCodeSplittingGroups(ssr)
+        }
       }
     }
     // Create a SSR bundle
@@ -677,7 +701,9 @@ export const baseConfig = async ({
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         format: 'es',
-        manualChunks: manualChunksFn(vitrifyConfig?.vitrify?.manualChunks)
+        codeSplitting: {
+          groups: createCodeSplittingGroups(ssr)
+        }
       }
     }
   }

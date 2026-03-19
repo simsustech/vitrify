@@ -307,7 +307,9 @@ const loadSSRAssets = async (
     const manifest = JSON.parse(readFileSync(manifestPath).toString())
     const entryServer = await import(entryServerPath)
     const { render, getRoutes } = entryServer
-    const { onTemplateRendered, onAppRendered } = await import(vitrifyHooksPath)
+    const {
+      hooks: { onTemplateRendered, onAppRendered }
+    } = await import(vitrifyHooksPath)
 
     return {
       template,

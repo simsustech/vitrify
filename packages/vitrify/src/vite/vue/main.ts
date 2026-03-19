@@ -1,6 +1,6 @@
 import createRouter from 'src/router'
 import { App, createSSRApp, createApp as createVueApp, ref } from 'vue'
-import { onBoot, onAppCreated } from 'virtual:vitrify-hooks'
+import { hooks } from 'virtual:vitrify-hooks'
 import routes from 'src/router/routes'
 import * as staticImports from 'virtual:static-imports'
 import 'virtual:uno.css'
@@ -69,8 +69,10 @@ export async function createApp(
   const router = createRouter()
   app.use(router)
 
-  for (const fn of onAppCreated) {
-    await fn({ app, router, ctx, initialState, ssrContext, staticImports })
+  if (hooks.onAppCreated) {
+    for (const fn of hooks.onAppCreated) {
+      await fn({ app, router, ctx, initialState, ssrContext, staticImports })
+    }
   }
 
   // Workaround to fix hydration errors when serving html files directly

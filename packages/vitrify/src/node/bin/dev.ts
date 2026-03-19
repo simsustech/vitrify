@@ -177,7 +177,11 @@ export async function createServer({
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
     const environment = vite.environments.ssr
-    ;({ setup, onTemplateRendered, onAppRendered, vitrifyConfig } =
+    ;({
+      setup,
+      hooks: { onTemplateRendered, onAppRendered },
+      vitrifyConfig
+    } =
       // @ts-expect-error missing types
       await environment.runner.import(entryUrl))
 
