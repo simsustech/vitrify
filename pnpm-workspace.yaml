@@ -8,3 +8,4 @@ minimumReleaseAgeExclude:
   - unocss
   - "@unocss*"
   - "@types/node"
+  - "ajv"
