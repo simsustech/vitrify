@@ -10,7 +10,7 @@ const TSCONFIG_JSON_TEMPLATE = Handlebars.compile(`{
     ],
     "module": "esnext",
     "moduleResolution": "nodenext",
-    "baseUrl": "./",
+    "rootDir": "./src",
     "types": [{{#each types}}
       {{#if @last}}
         "{{this}}"

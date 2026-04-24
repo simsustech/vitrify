@@ -8,7 +8,6 @@ import type {
 import type { VitrifyPlugin } from '../index.js'
 import { findDepPkgJsonPath } from 'vitefu'
 import {
-  type QuasarFonts,
   type QuasarComponents,
   type QuasarDirectives,
   type QuasarIconSets,
@@ -16,6 +15,7 @@ import {
   type GlobalQuasarIconMapFn,
   type QuasarIconSet
 } from 'quasar'
+import type { QuasarFonts } from '@quasar/extras'
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
 
 export interface QuasarPluginOptions {

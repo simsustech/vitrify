@@ -1,5 +1,5 @@
 import { existsSync, promises as fs, mkdirSync } from 'fs'
-import type { OnTemplateRenderedHook } from 'src/node/vitrify-config.js'
+import type { OnTemplateRenderedHook } from '../../../node/vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 import { renderHtml } from './fastify-ssr-plugin.js'
 import { type RouteRecordRaw } from 'vue-router'
