@@ -105,7 +105,15 @@ const createCodeSplittingGroups = (
       name: m,
       test: new RegExp(m),
       priority: 30
-    }))
+    })),
+    {
+      test: /(?<!@)quasar/,
+      name: 'quasar'
+    },
+    {
+      test: /@quasar/,
+      name: 'at_quasar'
+    }
     // ...manualChunkNames.map((m) => ({
     //     name: m,
     //     test: new RegExp(m),
