@@ -1,5 +1,13 @@
 # create-vitrify
 
+## 0.8.1
+
+### Patch Changes
+
+- a0288af: chore: update dependencies
+- Updated dependencies [a0288af]
+  - @vitrify/tools@0.5.1
+
 ## 0.8.0
 
 ### Minor Changes
