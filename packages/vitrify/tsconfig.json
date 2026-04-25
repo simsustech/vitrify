@@ -8,7 +8,7 @@
     "types": ["vite/client", "node"],
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "rootDir": "./src",
+    "rootDir": "./src/node",
     "preserveSymlinks": true,
     "resolveJsonModule": true,
     "outDir": "./dist",
