@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.3
+
+### Patch Changes
+
+- b205f43: fix(vitrify): fix tsconfig.json rootDir
+
 ## 0.26.2
 
 ### Patch Changes
