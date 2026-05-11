@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.4
+
+### Patch Changes
+
+- 0ca7e83: fix(vitrify): set correct hmr config
+
 ## 0.26.3
 
 ### Patch Changes
