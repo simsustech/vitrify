@@ -81,11 +81,12 @@ export async function createVitrifyDevServer({
       server: {
         ...configBase.server,
         host,
-        port
-        // hmr: {
-        //   protocol: config.server?.https ? 'wss' : 'ws',
-        //   port: wsPort
-        // }
+        port,
+        hmr: {
+          protocol: configBase.server?.https ? 'wss' : 'ws',
+          port: wsPort,
+          clientPort: wsPort
+        }
       }
     },
     'serve'
