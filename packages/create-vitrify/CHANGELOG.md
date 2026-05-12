@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.8.3
+
+### Patch Changes
+
+- 5eb8b54: chore: replace eslint/prettier with oxlint/oxfmt
+
 ## 0.8.2
 
 ### Patch Changes
