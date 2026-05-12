@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.6
+
+### Patch Changes
+
+- 5eb8b54: chore: replace eslint/prettier with oxlint/oxfmt
+
 ## 0.26.5
 
 ### Patch Changes
