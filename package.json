@@ -4,9 +4,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "engines": {
-    "node": ">=24.0.0"
-  },
   "scripts": {
     "build": "run-s build:tools build:vitrify build:create-vitrify",
     "build:vitrify": "cd packages/vitrify && pnpm run build",
@@ -45,11 +42,14 @@
       "prettier --write --ignore-unknown"
     ],
     "packages/*/{src,types}/**/*.ts": [
-      "eslint --ext .ts"
+      "oxlint --ext .ts"
     ],
     "packages/**/*.d.ts": [
-      "eslint --ext .ts"
+      "oxlint --ext .ts"
     ]
+  },
+  "engines": {
+    "node": ">=24.0.0"
   },
   "pnpm": {
     "overrides": {

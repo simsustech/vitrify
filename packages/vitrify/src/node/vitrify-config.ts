@@ -220,7 +220,7 @@ export interface VitrifyConfig extends ViteUserConfig {
     /**
      * UnoCSS Configuration
      */
-    unocss?: UnoCSSUserConfig
+    unocss?: UnoCSSUserConfig<any>
     /**
      * unplugin-vue-components configuration
      */

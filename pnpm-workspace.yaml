@@ -1,5 +1,9 @@
 packages:
   - 'packages/*'
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  simple-git-hooks: true
 minimumReleaseAge: 1440
 
 minimumReleaseAgeExclude:
@@ -10,3 +14,5 @@ minimumReleaseAgeExclude:
   - "@types/node"
   - "vitest"
   - "@vitest/*"
+  - vue-router
+  - "@quasar/*"
