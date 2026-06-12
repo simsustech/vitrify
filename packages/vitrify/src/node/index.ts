@@ -314,9 +314,7 @@ export const baseConfig = async ({
             )
         }
         if (['RootComponent.vue', 'vitrify'].every((val) => id.includes(val))) {
-          const css = `${globalCss
-            .map((css) => `@import '${css}';`)
-            .join('\n')}\n`
+          const css = `${globalCss.map((css) => `@import '${css}';`).join('\n')}\n`
 
           const sass = [
             ...Object.entries(sassVariables)
@@ -398,9 +396,7 @@ export const baseConfig = async ({
                 }'; onAppMounted.push(${varName});`
               })
               .join('\n')}
-            const onAppRendered = [${onAppRenderedHooks
-              .map((fn) => `${String(fn)}`)
-              .join(', ')}]
+            const onAppRendered = [${onAppRenderedHooks.map((fn) => `${String(fn)}`).join(', ')}]
             ${onAppRenderedFiles
               .map((url, index) => {
                 const varName = fileURLToPath(url)
@@ -436,9 +432,7 @@ export const baseConfig = async ({
                 }'; onTemplateRendered.push(${varName});`
               })
               .join('\n')}
-            const onAppCreated = [${OnAppCreatedHooks.map(
-              (fn) => `${String(fn)}`
-            ).join(', ')}]
+            const onAppCreated = [${OnAppCreatedHooks.map((fn) => `${String(fn)}`).join(', ')}]
             ${onAppCreatedFiles
               .map((url, index) => {
                 const varName = fileURLToPath(url)

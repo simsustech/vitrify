@@ -1,14 +1,33 @@
 {
   "name": "vitrify",
   "version": "0.26.6",
+  "description": "Vite as your Full Stack development tool",
+  "keywords": [
+    "fastify",
+    "full stack",
+    "vite"
+  ],
+  "homepage": "https://github.com/simsustech/vitrify/tree/main/#readme",
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
   "license": "MIT",
   "author": "Stefan van Herwijnen",
-  "description": "Vite as your Full Stack development tool",
-  "type": "module",
-  "types": "./dist/types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/vitrify"
+  },
   "bin": {
     "vitrify": "./dist/bin/cli.js"
   },
+  "files": [
+    "dist",
+    "src",
+    "!dist/**/*.test.js"
+  ],
+  "type": "module",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
@@ -39,18 +58,10 @@
       "import": "./dist/hooks/index.d.ts"
     }
   },
-  "engines": {
-    "node": ">=24.0.0"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/simsustech/vitrify.git",
-    "directory": "packages/vitrify"
-  },
-  "bugs": {
-    "url": "https://github.com/simsustech/vitrify/issues"
-  },
-  "homepage": "https://github.com/simsustech/vitrify/tree/main/#readme",
   "scripts": {
     "build": "tsc",
     "test": "vitest test/"
@@ -123,18 +134,7 @@
     "vue": "^3.5.35",
     "vue-router": "^5.1.0"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "files": [
-    "dist",
-    "src",
-    "!dist/**/*.test.js"
-  ],
-  "keywords": [
-    "vite",
-    "full stack",
-    "fastify"
-  ]
+  "engines": {
+    "node": ">=24.0.0"
+  }
 }

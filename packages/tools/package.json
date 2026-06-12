@@ -1,11 +1,20 @@
 {
   "name": "@vitrify/tools",
   "version": "0.5.2",
+  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/tools#readme",
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
   "author": "Stefan van Herwijnen",
-  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/tools"
+  },
   "files": [
     "dist"
   ],
+  "type": "module",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
@@ -29,31 +38,22 @@
       "import": "./dist/scrypt/index.js"
     }
   },
-  "scripts": {
-    "build": "tsc"
-  },
-  "engines": {
-    "node": ">=24.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/simsustech/vitrify.git",
-    "directory": "packages/tools"
-  },
-  "bugs": {
-    "url": "https://github.com/simsustech/vitrify/issues"
-  },
-  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/tools#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.9"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
     "typescript": "^6.0.3",
     "vite": "^8.0.14"
   },
-  "dependencies": {
-    "handlebars": "^4.7.9"
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

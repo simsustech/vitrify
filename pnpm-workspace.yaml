@@ -7,12 +7,12 @@ allowBuilds:
 minimumReleaseAge: 1440
 
 minimumReleaseAgeExclude:
-  - "vue"
-  - "@vue/*"
+  - 'vue'
+  - '@vue/*'
   - unocss
-  - "@unocss*"
-  - "@types/node"
-  - "vitest"
-  - "@vitest/*"
+  - '@unocss*'
+  - '@types/node'
+  - 'vitest'
+  - '@vitest/*'
   - vue-router
-  - "@quasar/*"
+  - '@quasar/*'

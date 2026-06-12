@@ -54,9 +54,8 @@ export async function createVitrifyDevServer({
   publicDir?: URL
   base?: string
 }) {
-  const { getAppDir, getCliDir, getCliViteDir, getCwd } = await import(
-    '../app-urls.js'
-  )
+  const { getAppDir, getCliDir, getCliViteDir, getCwd } =
+    await import('../app-urls.js')
 
   if (!appDir) appDir = getAppDir()
   let config: InlineConfig | ResolvedConfig = {}
@@ -144,9 +143,8 @@ export async function createServer({
   publicDir?: URL
   vite?: ViteDevServer
 }) {
-  const { getAppDir, getCliDir, getCliViteDir, getCwd } = await import(
-    '../app-urls.js'
-  )
+  const { getAppDir, getCliDir, getCliViteDir, getCwd } =
+    await import('../app-urls.js')
 
   appDir = appDir || getAppDir()
   const cliDir = getCliDir()
@@ -182,9 +180,7 @@ export async function createServer({
       setup,
       hooks: { onTemplateRendered, onAppRendered },
       vitrifyConfig
-    } =
-      // @ts-expect-error missing types
-      await environment.runner.import(entryUrl))
+    } = await environment.runner.import(entryUrl)) // @ts-expect-error missing types
 
     app = fastify({
       logger: {

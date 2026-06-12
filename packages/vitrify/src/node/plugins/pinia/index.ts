@@ -42,9 +42,8 @@ const piniaColadaonAppCreated: OnAppCreatedHook = async ({
   initialState
 }) => {
   if (ctx.pinia) {
-    const { PiniaColada, hydrateQueryCache, useQueryCache } = await import(
-      '@pinia/colada'
-    )
+    const { PiniaColada, hydrateQueryCache, useQueryCache } =
+      await import('@pinia/colada')
     app.use(PiniaColada)
 
     if (initialState?.piniaColada) {

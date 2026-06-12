@@ -1,33 +1,38 @@
 {
   "name": "create-vitrify",
   "version": "0.8.3",
+  "homepage": "https://github.com/simsustech/vitrify/tree/main/packages/create-vitrify#readme",
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
   "license": "MIT",
   "author": "Stefan van Herwijnen",
-  "type": "module",
-  "bin": {
-    "create-vitrify": "dist/cli.js"
-  },
-  "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 0"
-  },
-  "main": "dist/cli.js",
-  "engines": {
-    "node": ">=24.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/simsustech/vitrify.git",
     "directory": "packages/create-vitrify"
   },
-  "bugs": {
-    "url": "https://github.com/simsustech/vitrify/issues"
+  "bin": {
+    "create-vitrify": "dist/cli.js"
   },
-  "homepage": "https://github.com/simsustech/vitrify/tree/main/packages/create-vitrify#readme",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "type": "module",
+  "main": "dist/cli.js",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
   "dependencies": {
+    "@inquirer/prompts": "^8.5.0",
     "@vitrify/tools": "workspace:*",
     "handlebars": "^4.7.9",
-    "@inquirer/prompts": "^8.5.0",
     "latest-version": "^9.0.0",
     "minimist": "^1.2.8"
   },
@@ -38,12 +43,7 @@
     "vite": "^8.0.14",
     "vue": "^3.5.35"
   },
-  "files": [
-    "dist",
-    "templates"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

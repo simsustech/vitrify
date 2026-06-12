@@ -4,8 +4,8 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {},
   "engines": {
     "node": ">=24.0.0"
-  },
-  "scripts": {}
+  }
 }

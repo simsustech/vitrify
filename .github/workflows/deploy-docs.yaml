@@ -2,7 +2,7 @@ name: Build and deploy through rsync
 
 on:
   push:
-    branches: ["production"]
+    branches: ['production']
 
 env:
   working-directory: ./packages/docs/
