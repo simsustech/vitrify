@@ -3,7 +3,8 @@ import {
   type InlineConfig,
   type ViteDevServer,
   resolveConfig,
-  ResolvedConfig
+  ResolvedConfig,
+  RunnableDevEnvironment
 } from 'vite'
 import { baseConfig } from '../index.js'
 import type { Server } from 'net'
@@ -175,12 +176,12 @@ export async function createServer({
         ? fileURLToPath(new URL('src/vite/fastify/entry.ts', cliDir))
         : fileURLToPath(new URL(`src/vite/${framework}/ssr/app.ts`, cliDir))
 
-    const environment = vite.environments.ssr
+    const environment = vite.environments.ssr as RunnableDevEnvironment
     ;({
       setup,
       hooks: { onTemplateRendered, onAppRendered },
       vitrifyConfig
-    } = await environment.runner.import(entryUrl)) // @ts-expect-error missing types
+    } = await environment.runner.import(entryUrl))
 
     app = fastify({
       logger: {

@@ -16,3 +16,4 @@ minimumReleaseAgeExclude:
   - '@vitest/*'
   - vue-router
   - '@quasar/*'
+  - sass@1.101.0
