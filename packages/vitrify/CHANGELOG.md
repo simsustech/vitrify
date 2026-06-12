@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.8
+
+### Patch Changes
+
+- 987d4ab: feat: set **VUE_PROD_HYDRATION_MISMATCH_DETAILS** in debug mode
+
 ## 0.26.7
 
 ### Patch Changes
