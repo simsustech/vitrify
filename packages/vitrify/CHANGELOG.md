@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.9
+
+### Patch Changes
+
+- 08435df: feat: add **DEBUG** define
+
 ## 0.26.8
 
 ### Patch Changes
