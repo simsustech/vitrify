@@ -20,5 +20,5 @@
       }
     }
   ],
-  "ignorePatterns": ["*.hbs"]
+  "ignorePatterns": ["*.hbs", "**/.changeset/**"]
 }
