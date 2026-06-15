@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.26.10
+
+### Patch Changes
+
+- 99e3391: fix: add prodHydrationMismatchDetails to Vue plugin
+
 ## 0.26.9
 
 ### Patch Changes
