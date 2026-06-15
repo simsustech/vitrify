@@ -235,7 +235,13 @@ export const baseConfig = async ({
 
   const frameworkPlugins: Plugin[] = []
   if (framework === 'vue') {
-    frameworkPlugins.push(vuePlugin())
+    frameworkPlugins.push(
+      vuePlugin({
+        features: {
+          prodHydrationMismatchDetails: debug ? true : false
+        }
+      })
+    )
   }
 
   const vitrifyPlugins: Plugin[] = []
