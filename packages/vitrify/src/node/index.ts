@@ -761,8 +761,7 @@ export const baseConfig = async ({
       __HOST__: `'localhost'`,
       __BASE_URL__: `'${base}'`,
       __IS_PWA__: `${isPwa}`,
-      __DEBUG__: `'${debug ? true : false}'`,
-      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: `'${debug ? true : false}'`
+      __DEBUG__: `'${debug ? true : false}'`
     },
     // environments: {
     // },
