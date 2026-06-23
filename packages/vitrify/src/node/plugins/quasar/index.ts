@@ -228,7 +228,15 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
               ]
             },
             optimizeDeps: {
-              exclude: ['quasar']
+              exclude: ['quasar'],
+              include: [
+                'quasar/src/components.js',
+                'quasar/src/plugins.js',
+                'quasar/src/directives.js',
+                'quasar/src/composables.js',
+                'quasar/src/utils.js',
+                'quasar/src/install-quasar.js'
+              ]
             },
             define: {
               __DEV__: process.env.NODE_ENV !== 'production' || true,
