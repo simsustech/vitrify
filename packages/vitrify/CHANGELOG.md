@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.26.11
+
+### Patch Changes
+
+- d2b1ecf: fix(vitrify): add optimizeDeps to Quasar plugin
+- 80fce52: chore: remove **VUE_PROD_HYDRATION_MISMATCH_DETAILS**
+
 ## 0.26.10
 
 ### Patch Changes
