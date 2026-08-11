@@ -1,0 +1,6 @@
+/*!
+ * @quasar/quasar-ui-qmediaplayer v3.0.0
+ * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+ * Released under the MIT License.
+ */
+var material_icons_outlined_default={name:"material-icons-outlined",mediaPlayer:{play:"o_play_arrow",pause:"o_pause",volumeOff:"o_volume_off",volumeDown:"o_volume_down",volumeUp:"o_volume_up",settings:"o_settings",speed:"o_directions_run",language:"o_closed_caption",selected:"o_check",fullscreen:"o_fullscreen",fullscreenExit:"o_fullscreen_exit",bigPlayButton:"o_play_arrow"}};export{material_icons_outlined_default as default};

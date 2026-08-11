@@ -1,0 +1,33 @@
+{
+  "name": "simple-git-hooks",
+  "type": "commonjs",
+  "version": "2.13.1",
+  "description": "A simple, zero dependency tool for setting up git hooks for small projects",
+  "author": "Mikhail Gorbunov <toplenboren@gmail.com>",
+  "main": "simple-git-hooks.js",
+  "bin": "./cli.js",
+  "packageManager": "yarn@1.22.22",
+  "files": [
+    "cli.js",
+    "postinstall.js",
+    "simple-git-hooks.js",
+    "uninstall.js"
+  ],
+  "scripts": {
+    "postinstall": "node ./postinstall.js",
+    "uninstall": "node ./uninstall.js"
+  },
+  "keywords": [
+    "pre-commit",
+    "pre-push",
+    "git",
+    "hook",
+    "lint",
+    "linter"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toplenboren/simple-git-hooks.git"
+  }
+}

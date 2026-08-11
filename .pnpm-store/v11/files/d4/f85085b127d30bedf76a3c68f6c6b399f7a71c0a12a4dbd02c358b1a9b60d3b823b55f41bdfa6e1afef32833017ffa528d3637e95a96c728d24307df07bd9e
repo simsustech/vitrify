@@ -1,0 +1,79 @@
+{
+  "name": "@fastify/one-line-logger",
+  "version": "2.2.0",
+  "description": "A simple formatter for fastify's logs",
+  "main": "index.js",
+  "type": "commonjs",
+  "types": "types/index.d.ts",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {
+    "dateformat": "^5.0.3",
+    "pino-pretty": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "eslint": "^9.17.0",
+    "fastify": "^5.0.0",
+    "neostandard": "^0.13.0",
+    "tinybench": "^6.0.0",
+    "tstyche": "^7.0.0"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:typescript": "tstyche",
+    "test:unit": "node --test --experimental-test-coverage",
+    "test:watch": "node --test --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastify/one-line-logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fastify/one-line-logger/issues"
+  },
+  "homepage": "https://github.com/fastify/one-line-logger#readme",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/fastify"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/fastify"
+    }
+  ],
+  "keywords": [
+    "fastify",
+    "logger",
+    "pino",
+    "pino-pretty",
+    "one-line-logger"
+  ],
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "contributors": [
+    {
+      "name": "James Sumners",
+      "url": "https://james.sumners.info"
+    },
+    {
+      "name": "Manuel Spigolon",
+      "email": "behemoth89@gmail.com"
+    },
+    {
+      "name": "Aras Abbasi",
+      "email": "aras.abbasi@gmail.com"
+    },
+    {
+      "name": "Frazer Smith",
+      "email": "frazer.dev@icloud.com",
+      "url": "https://github.com/fdawgs"
+    }
+  ],
+  "license": "MIT"
+}

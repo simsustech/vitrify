@@ -1,0 +1,48 @@
+const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+
+export function humanStorageSize(bytes, decimals = 1) {
+  let u = 0
+
+  while (Number.parseInt(bytes, 10) >= 1024 && u < units.length - 1) {
+    bytes /= 1024
+    ++u
+  }
+
+  return `${bytes.toFixed(decimals)}${units[u]}`
+}
+
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export function between(v, min, max) {
+  return max <= min ? min : Math.min(max, Math.max(min, v))
+}
+
+export function normalizeToInterval(v, min, max) {
+  if (max <= min) {
+    return min
+  }
+
+  const size = max - min + 1
+
+  let index = min + ((v - min) % size)
+  if (index < min) {
+    index = size + index
+  }
+
+  return index === 0 ? 0 : index // fix for (-a % a) => -0
+}
+
+export function pad(v, length = 2, char = '0') {
+  if (v === void 0 || v === null) return v
+  return String(v).padStart(length, char)
+}
+
+export default {
+  humanStorageSize,
+  capitalize,
+  between,
+  normalizeToInterval,
+  pad
+}

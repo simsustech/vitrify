@@ -1,0 +1,42 @@
+import { SuggestResult, AutoCompleteFunction, UnoGenerator } from '@unocss/core';
+import { LRUCache } from 'lru-cache';
+
+type AutocompleteTemplatePart = AutocompleteTemplateStatic | AutocompleteTemplateGroup | AutocompleteTemplateTheme;
+interface AutocompleteTemplateStatic {
+    type: 'static';
+    value: string;
+}
+interface AutocompleteTemplateGroup {
+    type: 'group';
+    values: string[];
+}
+interface AutocompleteTemplateTheme {
+    type: 'theme';
+    objects: Record<string, unknown>[];
+}
+interface ParsedAutocompleteTemplate {
+    parts: AutocompleteTemplatePart[];
+    suggest(input: string): string[] | undefined;
+}
+interface UnocssAutocomplete {
+    suggest: (input: string) => Promise<string[]>;
+    suggestInFile: (content: string, cursor: number) => Promise<SuggestResult>;
+    templates: (string | AutoCompleteFunction)[];
+    cache: LRUCache<string, string[]>;
+    reset: () => void;
+    enumerate: () => Promise<Set<string>>;
+}
+
+declare function createAutocomplete(uno: UnoGenerator): UnocssAutocomplete;
+
+declare const shorthands: Record<string, string>;
+declare const ignoredThemeKeys: string[];
+declare function parseAutocomplete(template: string, theme?: any): ParsedAutocompleteTemplate;
+
+declare function searchUsageBoundary(line: string, index: number): {
+    content: string;
+    start: number;
+    end: number;
+};
+
+export { AutocompleteTemplateGroup, AutocompleteTemplatePart, AutocompleteTemplateStatic, AutocompleteTemplateTheme, ParsedAutocompleteTemplate, UnocssAutocomplete, createAutocomplete, ignoredThemeKeys, parseAutocomplete, searchUsageBoundary, shorthands };

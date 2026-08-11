@@ -1,0 +1,6 @@
+/*!
+ * @quasar/quasar-ui-qmediaplayer v3.0.0
+ * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+ * Released under the MIT License.
+ */
+(function(e,a){"object"===typeof exports&&"undefined"!==typeof module?module.exports=a():"function"===typeof define&&define.amd?define([],a):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.th=a())})(this,function(){return{lang:"th",mediaPlayer:{oldBrowserVideo:"หากต้องการดูวิดีโอนี้ โปรดเปิดใช้ JavaScript และ/หรือใช้เบราว์เซอร์ที่รองรับวิดีโอ HTML5",oldBrowserAudio:"หากต้องการฟังเสียงนี้ โปรดเปิดใช้ JavaScript และ/หรือใช้เบราว์เซอร์ที่รองรับเสียง HTML5",pause:"หยุดชั่วคราว",play:"เล่น",settings:"การตั้งค่า",toggleFullscreen:"สลับเต็มหน้าจอ",mute:"ปิดเสียง",unmute:"เปิดเสียง",speed:"ความเร็ว",language:"ภาษา",playbackRate:"ความเร็วในการเล่น",waitingVideo:"กำลังรอวิดีโอ",waitingAudio:"กำลังรอเสียง",ratePoint5:".5x",rateNormal:"ปกติ",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"ปิด",noLoadVideo:"ไม่สามารถโหลดวิดีโอได้",noLoadAudio:"ไม่สามารถโหลดเสียงได้",cannotPlayVideo:"ไม่สามารถเล่นวิดีโอได้",cannotPlayAudio:"ไม่สามารถเล่นเสียงได้"}}});

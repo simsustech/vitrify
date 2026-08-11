@@ -1,0 +1,419 @@
+import type { App as Application, ComponentOptions, ComponentPublicInstance } from 'vue'
+import type { NumberArray, StringArray, MediaPlayerType, CrossOrigin, ClassOrStyle, MediaSource, MediaTrack, PlaybackRateOption } from './types'
+
+export interface QMediaPlayer extends ComponentPublicInstance {
+  /**
+   * Tells the component which player is to be used.
+   */
+  type?: MediaPlayerType
+  /**
+   * Use mobile logic for handling visibility of controls. This mode is best for mobiles, but can be used on desktop as well. It prevents the controls from displaying/hiding with mouse hover. Instead, clicks are used to show/hide the controls.
+   */
+  mobileMode?: boolean
+  /**
+   * When true, clicking or tapping the video frame toggles play/pause. Turn this off when the overlay slot contains interactive content, such as forms or buttons.
+   */
+  togglePlayOnClick?: boolean
+  /**
+   * Direct media source URL. When this is set, the media element `src` is set directly and the `sources` prop is ignored.
+   */
+  source?: string
+  /**
+   * One or more sources for video or audio. The browser picks the best source based on supported codecs.
+   */
+  sources?: MediaSource[]
+  /**
+   * Poster image to display before the video is loaded.
+   */
+  poster?: string
+  /**
+   * Fallback poster image to display when `poster` is not provided. The `poster` prop always takes precedence.
+   */
+  fallbackPoster?: string
+  /**
+   * One or more text tracks for subtitles, captions, chapters, or metadata.
+   */
+  tracks?: MediaTrack[]
+  /**
+   * Display controls in a compact single-line layout.
+   */
+  dense?: boolean
+  /**
+   * Automatically start playback when the media is ready to play.
+   */
+  autoplay?: boolean
+  /**
+   * Pause playback when the player scrolls completely out of the viewport. QMediaPlayer will not automatically resume playback when it becomes visible again.
+   */
+  autoPause?: boolean
+  /**
+   * Whether to use CORS for fetching media assets.
+   */
+  crossOrigin?: CrossOrigin
+  /**
+   * Initial volume from 0-100, as a percentage.
+   */
+  volume?: number
+  /**
+   * Hide the volume slider control.
+   */
+  hideVolumeSlider?: boolean
+  /**
+   * Hide the volume button and volume slider.
+   */
+  hideVolumeBtn?: boolean
+  /**
+   * Hide the play/pause button.
+   */
+  hidePlayBtn?: boolean
+  /**
+   * Hide the settings button.
+   */
+  hideSettingsBtn?: boolean
+  /**
+   * Hide the fullscreen button.
+   */
+  hideFullscreenBtn?: boolean
+  /**
+   * Disable the seek-to-position slider.
+   */
+  disabledSeek?: boolean
+  /**
+   * Provides a hint to the browser about what the author thinks will lead to the best user experience.
+   */
+  preload?: 'none' | 'metadata' | 'auto'
+  /**
+   * Force the player to use an `<audio>` element when `type` is `audio`.
+   */
+  noVideo?: boolean
+  /**
+   * Start the player muted.
+   */
+  muted?: boolean
+  /**
+   * Render media inline where the platform supports the video element `playsinline` attribute.
+   */
+  playsinline?: boolean
+  /**
+   * Automatically seek back to the start when playback reaches the end.
+   */
+  loop?: boolean
+  /**
+   * Track `label` value to show by default.
+   */
+  trackLanguage?: string
+  /**
+   * Show tooltips for built-in controls.
+   */
+  showTooltips?: boolean
+  /**
+   * Show the big play button over the video frame.
+   */
+  showBigPlayButton?: boolean
+  /**
+   * Show the spinner while video or audio is loading.
+   */
+  showSpinner?: boolean
+  /**
+   * CSS size for the spinner. Defaults to `3em` for video and `1.5em` for audio.
+   */
+  spinnerSize?: string
+  /**
+   * Never display QMediaPlayer controls.
+   */
+  noControls?: boolean
+  /**
+   * Show the native browser media controls.
+   */
+  nativeControls?: boolean
+  /**
+   * Render controls below the video instead of covering the video.
+   */
+  bottomControls?: boolean
+  /**
+   * Idle time in milliseconds before hiding the controls.
+   */
+  controlsDisplayTime?: number
+  /**
+   * Playback speed options for the settings menu.
+   */
+  playbackRates?: PlaybackRateOption[]
+  /**
+   * Initial playback rate. Corresponds to a `value` in `playback-rates`.
+   */
+  playbackRate?: number
+  /**
+   * Render the player on a dark background.
+   */
+  dark?: boolean
+  /**
+   * Border radius applied to the media player.
+   */
+  radius?: number | string
+  /**
+   * Style definitions applied directly to the media element.
+   */
+  contentStyle?: ClassOrStyle
+  /**
+   * Class definitions applied directly to the media element.
+   */
+  contentClass?: ClassOrStyle
+  /**
+   * Width attribute applied directly to the media element, in pixels.
+   */
+  contentWidth?: number
+  /**
+   * Height attribute applied directly to the media element, in pixels.
+   */
+  contentHeight?: number
+  /**
+   * Load audio or video using a Blob or File object.
+   */
+  loadBlob(blob: Blob | File): boolean
+  /**
+   * Load audio or video using a FileList. Only the first item in the list is used.
+   */
+  loadFileBlob(fileList: FileList): boolean
+  /**
+   * Show the controls. Has no effect if controls are already displayed.
+   */
+  showControls(): void
+  /**
+   * Hide the controls. Has no effect if controls are already hidden.
+   */
+  hideControls(): void
+  /**
+   * Toggle the controls.
+   */
+  toggleControls(): void
+  /**
+   * Start playback if the media is ready. This should be called after the `ready` event and may still require a user gesture depending on browser policy.
+   */
+  play(): void
+  /**
+   * Pause playback if the media is currently playing.
+   */
+  pause(): void
+  /**
+   * Mute the audio.
+   */
+  mute(): void
+  /**
+   * Unmute the audio.
+   */
+  unmute(): void
+  /**
+   * Toggle between play and pause states.
+   */
+  togglePlay(event?: Event): void
+  /**
+   * Toggle between muted and unmuted states.
+   */
+  toggleMuted(event: Event): void
+  /**
+   * Toggle fullscreen mode.
+   */
+  toggleFullscreen(event: Event): void
+  /**
+   * Enter fullscreen mode.
+   */
+  setFullscreen(): void
+  /**
+   * Exit fullscreen mode.
+   */
+  exitFullscreen(): void
+  /**
+   * Return the current play time in seconds.
+   */
+  currentTime(): number
+  /**
+   * Set the current play time.
+   */
+  setCurrentTime(seconds: number): void
+  /**
+   * Set the volume as a percent from 0-100.
+   */
+  setVolume(volume: number): void
+}
+
+export interface QMediaPlayerProps {
+  /**
+   * Tells the component which player is to be used.
+   */
+  type?: MediaPlayerType
+  /**
+   * Use mobile logic for handling visibility of controls. This mode is best for mobiles, but can be used on desktop as well. It prevents the controls from displaying/hiding with mouse hover. Instead, clicks are used to show/hide the controls.
+   */
+  mobileMode?: boolean
+  /**
+   * When true, clicking or tapping the video frame toggles play/pause. Turn this off when the overlay slot contains interactive content, such as forms or buttons.
+   */
+  togglePlayOnClick?: boolean
+  /**
+   * Direct media source URL. When this is set, the media element `src` is set directly and the `sources` prop is ignored.
+   */
+  source?: string
+  /**
+   * One or more sources for video or audio. The browser picks the best source based on supported codecs.
+   */
+  sources?: MediaSource[]
+  /**
+   * Poster image to display before the video is loaded.
+   */
+  poster?: string
+  /**
+   * Fallback poster image to display when `poster` is not provided. The `poster` prop always takes precedence.
+   */
+  fallbackPoster?: string
+  /**
+   * One or more text tracks for subtitles, captions, chapters, or metadata.
+   */
+  tracks?: MediaTrack[]
+  /**
+   * Display controls in a compact single-line layout.
+   */
+  dense?: boolean
+  /**
+   * Automatically start playback when the media is ready to play.
+   */
+  autoplay?: boolean
+  /**
+   * Pause playback when the player scrolls completely out of the viewport. QMediaPlayer will not automatically resume playback when it becomes visible again.
+   */
+  autoPause?: boolean
+  /**
+   * Whether to use CORS for fetching media assets.
+   */
+  crossOrigin?: CrossOrigin
+  /**
+   * Initial volume from 0-100, as a percentage.
+   */
+  volume?: number
+  /**
+   * Hide the volume slider control.
+   */
+  hideVolumeSlider?: boolean
+  /**
+   * Hide the volume button and volume slider.
+   */
+  hideVolumeBtn?: boolean
+  /**
+   * Hide the play/pause button.
+   */
+  hidePlayBtn?: boolean
+  /**
+   * Hide the settings button.
+   */
+  hideSettingsBtn?: boolean
+  /**
+   * Hide the fullscreen button.
+   */
+  hideFullscreenBtn?: boolean
+  /**
+   * Disable the seek-to-position slider.
+   */
+  disabledSeek?: boolean
+  /**
+   * Provides a hint to the browser about what the author thinks will lead to the best user experience.
+   */
+  preload?: 'none' | 'metadata' | 'auto'
+  /**
+   * Force the player to use an `<audio>` element when `type` is `audio`.
+   */
+  noVideo?: boolean
+  /**
+   * Start the player muted.
+   */
+  muted?: boolean
+  /**
+   * Render media inline where the platform supports the video element `playsinline` attribute.
+   */
+  playsinline?: boolean
+  /**
+   * Automatically seek back to the start when playback reaches the end.
+   */
+  loop?: boolean
+  /**
+   * Track `label` value to show by default.
+   */
+  trackLanguage?: string
+  /**
+   * Show tooltips for built-in controls.
+   */
+  showTooltips?: boolean
+  /**
+   * Show the big play button over the video frame.
+   */
+  showBigPlayButton?: boolean
+  /**
+   * Show the spinner while video or audio is loading.
+   */
+  showSpinner?: boolean
+  /**
+   * CSS size for the spinner. Defaults to `3em` for video and `1.5em` for audio.
+   */
+  spinnerSize?: string
+  /**
+   * Never display QMediaPlayer controls.
+   */
+  noControls?: boolean
+  /**
+   * Show the native browser media controls.
+   */
+  nativeControls?: boolean
+  /**
+   * Render controls below the video instead of covering the video.
+   */
+  bottomControls?: boolean
+  /**
+   * Idle time in milliseconds before hiding the controls.
+   */
+  controlsDisplayTime?: number
+  /**
+   * Playback speed options for the settings menu.
+   */
+  playbackRates?: PlaybackRateOption[]
+  /**
+   * Initial playback rate. Corresponds to a `value` in `playback-rates`.
+   */
+  playbackRate?: number
+  /**
+   * Render the player on a dark background.
+   */
+  dark?: boolean
+  /**
+   * Border radius applied to the media player.
+   */
+  radius?: number | string
+  /**
+   * Style definitions applied directly to the media element.
+   */
+  contentStyle?: ClassOrStyle
+  /**
+   * Class definitions applied directly to the media element.
+   */
+  contentClass?: ClassOrStyle
+  /**
+   * Width attribute applied directly to the media element, in pixels.
+   */
+  contentWidth?: number
+  /**
+   * Height attribute applied directly to the media element, in pixels.
+   */
+  contentHeight?: number
+}
+
+export const version: string
+
+export const QMediaPlayer: ComponentOptions
+
+export interface QMediaPlayerPlugin {
+  version: string
+  QMediaPlayer: ComponentOptions
+  install(app: Application): void
+}
+
+declare const plugin: QMediaPlayerPlugin
+export default plugin
+export * from './types'
+export as namespace QMediaPlayer

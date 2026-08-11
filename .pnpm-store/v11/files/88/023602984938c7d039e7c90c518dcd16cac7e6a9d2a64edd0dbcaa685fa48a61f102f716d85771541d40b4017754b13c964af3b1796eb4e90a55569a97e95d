@@ -1,0 +1,6 @@
+/*!
+ * @quasar/quasar-ui-qmediaplayer v3.0.0
+ * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+ * Released under the MIT License.
+ */
+(function(e,a){"object"===typeof exports&&"undefined"!==typeof module?module.exports=a():"function"===typeof define&&define.amd?define([],a):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.faIR=a())})(this,function(){return{lang:"fa-IR",mediaPlayer:{oldBrowserVideo:"برای مشاهده این ویدئو لطفا JavaScript مرورگر خود را فعال کنید و/یا مرورگر خود را به نسخه ای که از HTML5 پشتیبانی میکند ارتقاء دهید",oldBrowserAudio:"برای شنیدن این صوت لطفا JavaScript مرورگر خود را فعال کنید و/یا مرورگر خود را به نسخه ای که از HTML5 پشتیبانی میکند ارتقاء دهید",pause:"توقف",play:"پخش",settings:"تنظیمات",toggleFullscreen:"تغییر وضعیت تمام صفحه",mute:"قطع صدا",unmute:"وصل صدا",speed:"سرعت",language:"زبان",playbackRate:"سرعت پخش",waitingVideo:"در انتظار ویدئو",waitingAudio:"در انتظار فایل صوتی",ratePoint5:".5x",rateNormal:"معمولی",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"خاموش",noLoadVideo:"بارگیری ویدئو امکان پذیر نیست",noLoadAudio:"بارگیری صوت امکان پذیر نیست",cannotPlayVideo:"پخش ویدئو امکان پذیر نیست",cannotPlayAudio:"پخش صوت امکان پذیر نیست"}}});

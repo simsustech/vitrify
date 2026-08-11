@@ -1,0 +1,265 @@
+{
+  "generated_at": "2026-08-06T17:39:25.265Z",
+  "type": "component",
+  "meta": {
+    "docsUrl": "/developing/using-qmarkdown"
+  },
+  "props": {
+    "src": {
+      "desc": "Optional markdown source passed as a prop. Slotted markdown content overrides this value when both are provided.",
+      "type": "String",
+      "default": "",
+      "category": "model",
+      "examples": [
+        "src=\"Classic markup: :wink: :joy: :cry: :angel: :heart: :beers: :laughing: :yum:\""
+      ]
+    },
+    "no-blockquote": {
+      "desc": "Disable blockquote conversion.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-breaks": {
+      "desc": "Disable conversion of `\\n` into `<br>`.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-container": {
+      "desc": "Disable QMarkdown's custom `:::` container block parser.",
+      "type": "Boolean",
+      "category": "content",
+      "examples": [
+        ":no-container=\"true\""
+      ]
+    },
+    "no-highlight": {
+      "desc": "Disable code highlighting.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-html": {
+      "desc": "Disable HTML tags in source markdown.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-image": {
+      "desc": "Disable image conversion.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-line-numbers": {
+      "desc": "Disable line numbers on code blocks.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-link": {
+      "desc": "Disable conversion of links.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-linkify": {
+      "desc": "Disable auto-conversion of URL-like text into links.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "linkify-options": {
+      "desc": "Options passed to markdown-it's linkifier. For example, enable links without a protocol with `{ fuzzyLink: true }`.",
+      "type": "Object",
+      "tsType": "MarkdownItLinkifyOptions",
+      "default": "() => ({})",
+      "category": "content",
+      "examples": [
+        ":linkify-options=\"{ fuzzyLink: true }\""
+      ]
+    },
+    "no-heading-anchor-links": {
+      "desc": "Disable automatic heading anchor links.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "no-typographer": {
+      "desc": "Disable language-neutral replacements and quote beautification.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "line-number-alt": {
+      "desc": "Alternative single character to display instead of generated line numbers.",
+      "type": "String",
+      "category": "content",
+      "examples": [
+        "line-number-alt=\"$\"",
+        "line-number-alt=\">\""
+      ]
+    },
+    "toc": {
+      "desc": "Enable table-of-contents generation and emit the generated TOC data.",
+      "type": "Boolean",
+      "category": "behavior"
+    },
+    "inline": {
+      "desc": "Render markdown as inline content with `markdown-it.renderInline()` and a `span` root. Useful when QMarkdown is used inside existing paragraph or text structure.",
+      "type": "Boolean",
+      "category": "content"
+    },
+    "toc-start": {
+      "desc": "Starting heading level for table-of-contents generation.",
+      "type": "Number",
+      "default": "1",
+      "values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "category": "behavior"
+    },
+    "toc-end": {
+      "desc": "Ending heading level for table-of-contents generation.",
+      "type": "Number",
+      "default": "3",
+      "values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "category": "behavior"
+    },
+    "content-style": {
+      "desc": "Style definitions applied to the rendered markdown container.",
+      "type": "Object | Array | String",
+      "tsType": "VueStyleProp",
+      "category": "style",
+      "examples": [
+        "background-color: #ff0000",
+        ":content-style=\"{ backgroundColor: '#ff0000' }\""
+      ]
+    },
+    "content-class": {
+      "desc": "Class definitions applied to the rendered markdown container.",
+      "type": "Object | Array | String",
+      "tsType": "VueClassProp",
+      "category": "style",
+      "examples": [
+        "my-special-class",
+        ":content-class=\"{ 'my-special-class': condition }\""
+      ]
+    },
+    "no-noopener": {
+      "desc": "Prevent QMarkdown from adding `rel=\"noopener\"` to external links.",
+      "type": "Boolean",
+      "category": "behavior"
+    },
+    "no-noreferrer": {
+      "desc": "Prevent QMarkdown from adding `rel=\"noreferrer\"` to external links.",
+      "type": "Boolean",
+      "category": "behavior"
+    },
+    "show-copy": {
+      "desc": "Show the copy-to-clipboard button for rendered markdown content.",
+      "type": "Boolean",
+      "category": "behavior"
+    },
+    "copy-icon": {
+      "desc": "Icon used for the copy-to-clipboard button.",
+      "type": "String",
+      "category": "behavior",
+      "examples": [
+        "copy-icon=\"copy\"",
+        ":copy-icon=\"matCopy\""
+      ]
+    },
+    "no-copy-tooltip": {
+      "desc": "Hide the copy-to-clipboard tooltip.",
+      "type": "Boolean",
+      "category": "behavior"
+    },
+    "done-icon": {
+      "desc": "Icon used in the notify response after content is copied.",
+      "type": "String",
+      "category": "behavior",
+      "examples": [
+        "done-icon=\"done\"",
+        ":done-icon=\"matDone\""
+      ],
+      "addedIn": "v2.0.0-beta.1"
+    },
+    "copy-tooltip-text": {
+      "desc": "Tooltip text for the copy-to-clipboard button.",
+      "type": "String",
+      "default": "Copy to clipboard",
+      "category": "behavior",
+      "examples": [
+        "copy-tooltip-text=\"Click here for content to be copied to the clipboard\"",
+        ":copy-tooltip-text=\"$t('copy-tooltip-text')\""
+      ]
+    },
+    "copy-response-text": {
+      "desc": "Notify text shown after content is copied. The Quasar Notify plugin must be installed for the response to display.",
+      "type": "String",
+      "default": "Copied to clipboard",
+      "category": "behavior",
+      "examples": [
+        "copy-response-text=\"The content was copied to the clipboard\"",
+        ":copy-response-text=\"$t('copy-response-text')\""
+      ]
+    },
+    "fix-cr": {
+      "desc": "Replace escaped `\\n` sequences in the `src` prop with real newline characters before rendering.",
+      "type": "Boolean",
+      "category": "behavior"
+    },
+    "plugins": {
+      "desc": "Optional array of `markdown-it` plugins or plugin configuration objects.",
+      "type": "Array",
+      "tsType": "MarkdownItPluginsArray",
+      "default": "() => []",
+      "__exemption": [
+        "examples"
+      ],
+      "category": "extend"
+    }
+  },
+  "events": {
+    "data": {
+      "desc": "Emitted when `toc` is true and a table of contents is generated.",
+      "params": {
+        "tocData": {
+          "desc": "Generated table-of-contents entries.",
+          "required": true,
+          "tsType": "TocDefinitionArray",
+          "type": "Array"
+        }
+      }
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default markdown content. QMarkdown removes common template indentation before rendering so slotted markdown can be formatted naturally inside Vue templates."
+    }
+  },
+  "methods": {
+    "makeTree": {
+      "desc": "Transform flat table-of-contents entries into a hierarchical tree.",
+      "params": {
+        "data": {
+          "desc": "The results from the `data` event.",
+          "required": true,
+          "tsType": "TocDefinitionArray",
+          "type": "TocDefinitionArray"
+        }
+      },
+      "tsSignature": "function makeTree(data: TocDefinitionArray): TocDefinitionArray",
+      "type": "Function",
+      "returns": {
+        "desc": "A hierarchical version of the passed TOC data.",
+        "type": "TocDefinitionArray",
+        "tsType": "TocDefinitionArray"
+      }
+    }
+  }
+}

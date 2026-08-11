@@ -1,0 +1,6 @@
+/*!
+ * @quasar/quasar-ui-qmediaplayer v3.0.0
+ * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+ * Released under the MIT License.
+ */
+(function(e,a){"object"===typeof exports&&"undefined"!==typeof module?module.exports=a():"function"===typeof define&&define.amd?define([],a):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.kurCKB=a())})(this,function(){return{lang:"kur-CKB",mediaPlayer:{oldBrowserVideo:"بۆ بینینی ئەم ڤیدیۆیە، تکایە JavaScript چالاک بکە و/یان وێبگەڕێک بەکاربهێنە کە پاڵپشتی ڤیدیۆی HTML5 دەکات.",oldBrowserAudio:"بۆ گوێگرتن لەم دەنگە، تکایە JavaScript چالاک بکە و/یان وێبگەڕێک بەکاربهێنە کە پاڵپشتی دەنگی HTML5 دەکات.",pause:"وەستان",play:"لێدان",settings:"ڕێکخستنەکان",toggleFullscreen:"گۆڕینی پڕشاشە",mute:"بێدەنگکردن",unmute:"دەنگکردنەوە",speed:"خێرایی",language:"زمان",playbackRate:"خێرایی پەخشکردن",waitingVideo:"چاوەڕوانی ڤیدیۆ",waitingAudio:"چاوەڕوانی دەنگ",ratePoint5:".5x",rateNormal:"ئاسایی",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"کوژاوە",noLoadVideo:"ناتوانرێت ڤیدیۆ باربکرێت",noLoadAudio:"ناتوانرێت دەنگ باربکرێت",cannotPlayVideo:"ناتوانرێت ڤیدیۆ پەخش بکرێت",cannotPlayAudio:"ناتوانرێت دەنگ پەخش بکرێت"}}});

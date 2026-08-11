@@ -1,0 +1,35 @@
+{
+  "name": "changesets",
+  "repo": "marcelklehr/changesets",
+  "description": "A Changeset library incorporating an operational transformation (OT) algorithm -- for node and the browser!",
+  "version": "1.0.0",
+  "keywords": [
+    "operational transformation",
+    "ot",
+    "changesets",
+    "diff",
+    "Forward Transformation",
+    "Backward Transformation",
+    "Inclusion Transformation",
+    "Exclusion Transformation",
+    "collaborative",
+    "undo",
+    "text"
+  ],
+  "dependencies": {
+
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": [
+    "lib/index.js",
+    "lib/Operator.js",
+    "lib/Changeset.js",
+    "lib/operations/Skip.js",
+    "lib/operations/Insert.js",
+    "lib/operations/Retain.js",
+    "lib/Builder.js",
+    "lib/TextTransform.js",
+    "lib/ChangesetTransform.js"
+  ]
+}

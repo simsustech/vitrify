@@ -1,0 +1,1 @@
+{"version":3,"file":"ReadableStreamWrapper.d.ts","sourceRoot":"","sources":["../../src/fetch/ReadableStreamWrapper.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AACH,qBAAa,qBAAqB;;IAGjC;;;;OAIG;gBACS,IAAI,EAAE,MAAM,cAAc;IAItC;;;;OAIG;IACH,IAAW,cAAc,IAAI,cAAc,CAK1C;CACD"}

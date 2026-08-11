@@ -1,0 +1,26 @@
+{
+    "name": "@types/stringify-object",
+    "version": "4.0.5",
+    "description": "TypeScript definitions for stringify-object",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/stringify-object",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Piotr Błażejewicz",
+            "githubUsername": "peterblazejewicz",
+            "url": "https://github.com/peterblazejewicz"
+        }
+    ],
+    "type": "module",
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/stringify-object"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "ed5361af3d20e2b75a880a66e91d1246cb29af1549f50fc5de0a5e581333b29c",
+    "typeScriptVersion": "4.5"
+}

@@ -1,0 +1,186 @@
+import EventTarget from '../event/EventTarget.js';
+import DOMExceptionNameEnum from '../exception/DOMExceptionNameEnum.js';
+import CookieSameSiteEnum from '../cookie/enums/CookieSameSiteEnum.js';
+import CookieChangeEvent from '../event/events/CookieChangeEvent.js';
+import URL from '../url/URL.js';
+import WindowBrowserContext from '../window/WindowBrowserContext.js';
+import * as PropertySymbol from '../PropertySymbol.js';
+/**
+ * CookieStore.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore
+ */
+export default class CookieStore extends EventTarget {
+    // Internal properties
+    #window;
+    /**
+     * Constructor.
+     *
+     * @param illegalConstructorSymbol Illegal constructor symbol.
+     * @param window Window.
+     */
+    constructor(illegalConstructorSymbol, window) {
+        super();
+        if (illegalConstructorSymbol !== PropertySymbol.illegalConstructor) {
+            throw new TypeError('Illegal constructor');
+        }
+        this.#window = window;
+    }
+    /**
+     * Returns a cookie.
+     *
+     * @param [nameOrOptions] Name or options.
+     * @returns Cookie.
+     */
+    async get(nameOrOptions) {
+        const cookies = await this.getAll(nameOrOptions);
+        return cookies.length > 0 ? cookies[0] : null;
+    }
+    /**
+     * Returns all cookies.
+     *
+     * @param [nameOrOptions] Name or options.
+     * @returns Cookies.
+     */
+    async getAll(nameOrOptions) {
+        const browserFrame = new WindowBrowserContext(this.#window).getBrowserFrame();
+        if (!browserFrame) {
+            return [];
+        }
+        const options = typeof nameOrOptions === 'string' ? { name: nameOrOptions } : nameOrOptions || {};
+        let targetURL;
+        if (options.url) {
+            targetURL = new URL(options.url, this.#window.location.href);
+            // In a document context, only the current URL is valid
+            if (targetURL.origin !== this.#window.location.origin) {
+                throw new this.#window.DOMException(`Failed to execute 'getAll' on 'CookieStore': URL must match the document origin`, DOMExceptionNameEnum.securityError);
+            }
+        }
+        else {
+            targetURL = this.#window.location;
+        }
+        const internalCookies = browserFrame.page.context.cookieContainer.getCookies(targetURL, true);
+        const result = [];
+        for (const cookie of internalCookies) {
+            if (!options.name || cookie.key === options.name) {
+                result.push(this.#convertToStoreItem(cookie));
+            }
+        }
+        return result;
+    }
+    /**
+     * Sets a cookie.
+     *
+     * @param nameOrOptions Name or options.
+     * @param [value] Value.
+     * @returns Promise.
+     */
+    async set(nameOrOptions, value) {
+        const browserFrame = new WindowBrowserContext(this.#window).getBrowserFrame();
+        if (!browserFrame) {
+            return;
+        }
+        let options;
+        if (typeof nameOrOptions === 'string') {
+            if (value === undefined) {
+                throw new this.#window.TypeError(`Failed to execute 'set' on 'CookieStore': Value is required when name is provided as a string.`);
+            }
+            options = { name: nameOrOptions, value };
+        }
+        else {
+            options = { ...nameOrOptions, value: nameOrOptions.value ?? '' };
+        }
+        if (!options.name) {
+            throw new this.#window.TypeError(`Failed to execute 'set' on 'CookieStore': Required member name is undefined.`);
+        }
+        const originURL = this.#window.location;
+        // Convert expires to Date if it's a number (Unix timestamp in milliseconds)
+        let expires = null;
+        if (options.expires !== undefined && options.expires !== null) {
+            expires = options.expires instanceof Date ? options.expires : new Date(options.expires);
+        }
+        // Convert sameSite string to enum
+        let sameSite = CookieSameSiteEnum.strict;
+        if (options.sameSite) {
+            switch (options.sameSite.toLowerCase()) {
+                case 'strict':
+                    sameSite = CookieSameSiteEnum.strict;
+                    break;
+                case 'lax':
+                    sameSite = CookieSameSiteEnum.lax;
+                    break;
+                case 'none':
+                    sameSite = CookieSameSiteEnum.none;
+                    break;
+            }
+        }
+        const cookie = {
+            key: options.name,
+            value: options.value ?? '',
+            originURL,
+            domain: options.domain || '',
+            path: options.path || '/',
+            expires,
+            httpOnly: false, // CookieStore API cannot set httpOnly cookies
+            secure: true,
+            sameSite
+        };
+        const cookieContainer = browserFrame.page.context.cookieContainer;
+        const changedCookies = cookieContainer.addCookies([cookie]);
+        if (changedCookies.changed.length > 0 || changedCookies.deleted.length > 0) {
+            this.dispatchEvent(new CookieChangeEvent('change', {
+                changed: changedCookies.changed.map((cookie) => this.#convertToStoreItem(cookie)),
+                deleted: changedCookies.deleted.map((cookie) => this.#convertToStoreItem(cookie))
+            }));
+        }
+    }
+    /**
+     * Deletes a cookie.
+     *
+     * @param nameOrOptions Name or options.
+     * @returns Promise.
+     */
+    async delete(nameOrOptions) {
+        const options = typeof nameOrOptions === 'string' ? { name: nameOrOptions } : nameOrOptions;
+        // Set the cookie with an expired date to delete it
+        await this.set({
+            name: options.name,
+            value: '',
+            domain: options.domain ?? undefined,
+            path: options.path,
+            partitioned: options.partitioned,
+            expires: new Date(0)
+        });
+    }
+    /**
+     * Converts an internal cookie to a CookieStore item.
+     *
+     * @param cookie Internal cookie.
+     * @returns CookieStore item.
+     */
+    #convertToStoreItem(cookie) {
+        let sameSite = 'lax';
+        switch (cookie.sameSite) {
+            case CookieSameSiteEnum.strict:
+                sameSite = 'strict';
+                break;
+            case CookieSameSiteEnum.lax:
+                sameSite = 'lax';
+                break;
+            case CookieSameSiteEnum.none:
+                sameSite = 'none';
+                break;
+        }
+        return {
+            name: cookie.key,
+            value: cookie.value ?? '',
+            domain: cookie.domain,
+            path: cookie.path,
+            expires: cookie.expires ? cookie.expires.getTime() : null,
+            secure: cookie.secure,
+            sameSite,
+            partitioned: false // Not supported yet
+        };
+    }
+}
+//# sourceMappingURL=CookieStore.js.map

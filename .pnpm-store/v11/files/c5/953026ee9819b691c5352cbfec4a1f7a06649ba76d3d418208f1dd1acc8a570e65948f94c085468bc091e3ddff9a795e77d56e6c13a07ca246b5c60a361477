@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/tab-panels"
+  },
+
+  "mixins": ["composables/private.use-panel/use-panel.child"],
+
+  "slots": {
+    "default": {
+      "extends": "default"
+    }
+  }
+}

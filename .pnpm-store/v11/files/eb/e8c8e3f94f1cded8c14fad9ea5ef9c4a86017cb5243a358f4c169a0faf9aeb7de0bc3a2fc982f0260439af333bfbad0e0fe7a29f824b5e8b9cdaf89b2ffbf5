@@ -1,0 +1,64 @@
+
+<h1 align="center">Fastify</h1>
+
+**Table of contents**
+- [Warnings](#warnings)
+  - [Warnings In Fastify](#warnings-in-fastify)
+  - [Fastify Warning Codes](#fastify-warning-codes)
+    - [FSTWRN001](#FSTWRN001)
+    - [FSTWRN003](#FSTWRN003)
+    - [FSTWRN004](#FSTWRN004)
+  - [Fastify Deprecation Codes](#fastify-deprecation-codes)
+    - [FSTDEP022](#FSTDEP022)
+    - [FSTDEP023](#FSTDEP023)
+    - [FSTDEP024](#FSTDEP024)
+    - [FSTDEP025](#FSTDEP025)
+
+## Warnings
+
+### Warnings In Fastify
+
+Fastify uses the Node.js [warning event](https://nodejs.org/api/process.html#event-warning)
+API to notify users of deprecated features and coding mistakes. Fastify's
+warnings are recognizable by the `FSTWRN` and `FSTDEP` prefixes. When
+encountering such a warning, it is highly recommended to determine the cause
+using the [`--trace-warnings`](https://nodejs.org/api/cli.html#trace-warnings)
+and [`--trace-deprecation`](https://nodejs.org/api/cli.html#trace-deprecation)
+flags. These produce stack traces pointing to where the issue occurs in the
+application's code. Issues opened about warnings without this information will
+be closed.
+
+Warnings can also be disabled, though it is not recommended. If necessary, use
+one of the following methods:
+
+- Set the `NODE_NO_WARNINGS` environment variable to `1`
+- Pass the `--no-warnings` flag to the node process
+- Set `no-warnings` in the `NODE_OPTIONS` environment variable
+- Pass `--disable-warning=FSTWRN004` to disable a specific warning
+
+For more information on disabling warnings, see [Node's documentation](https://nodejs.org/api/cli.html).
+
+Disabling warnings is not recommended and may cause unexpected behavior.
+
+### Fastify Warning Codes
+
+| Code | Description | How to solve | Discussion |
+| ---- | ----------- | ------------ | ---------- |
+| <a id="FSTWRN001">FSTWRN001</a> | The specified schema for a route is missing. This may indicate the schema is not well specified. | Check the schema for the route. | [#4647](https://github.com/fastify/fastify/pull/4647) |
+| <a id="FSTWRN003">FSTWRN003</a> | The `%s` plugin mixes async and callback styles, which may lead to unhandled rejections. | Do not mix async and callback style. | [#6011](https://github.com/fastify/fastify/pull/6011) |
+| <a id="FSTWRN004">FSTWRN004</a> | An `errorHandler` is being overridden in the same scope, which can lead to subtle bugs. | Avoid calling `setErrorHandler` more than once in the same scope. For more information, see [Server documentation](https://fastify.dev/docs/latest/Reference/Server/#allowerrorhandleroverride). | [#6104](https://github.com/fastify/fastify/pull/6104) |
+### Fastify Deprecation Codes
+
+Deprecation codes are supported by the Node.js CLI options:
+
+- [--no-deprecation](https://nodejs.org/api/cli.html#no-deprecation)
+- [--throw-deprecation](https://nodejs.org/api/cli.html#throw-deprecation)
+- [--trace-deprecation](https://nodejs.org/api/cli.html#trace-deprecation)
+
+
+| Code | Description | How to solve | Discussion |
+| ---- | ----------- | ------------ | ---------- |
+| <a id="FSTDEP022">FSTDEP022</a> | You are trying to access the deprecated router options on top option properties. | Use `options.routerOptions`. | [#5985](https://github.com/fastify/fastify/pull/5985)
+| <a id="FSTDEP023">FSTDEP023</a> | `disableRequestLogging` top-level option is deprecated. | Pass a `LogController` instance via the `logController` option with `disableRequestLogging` in its constructor instead. |
+| <a id="FSTDEP024">FSTDEP024</a> | `requestIdLogLabel` top-level option is deprecated. | Pass a `LogController` instance via the `logController` option with `requestIdLogLabel` in its constructor instead. |
+| <a id="FSTDEP025">FSTDEP025</a> | Calling `addHttpMethod` for an existing HTTP method without `{ overrideExisting: true }` is deprecated. | Pass `{ overrideExisting: true }` to make the override explicit. | [#6879](https://github.com/fastify/fastify/pull/6879) |

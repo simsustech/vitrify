@@ -1,0 +1,1477 @@
+import { computed, customRef, effectScope, getCurrentInstance, getCurrentScope, hasInjectionContext, inject, isRef, markRaw, onMounted, onScopeDispose, onServerPrefetch, onUnmounted, shallowRef, toValue, triggerRef, watch } from "vue";
+import { defineStore, getActivePinia, skipHydrate } from "pinia";
+import { createConsoleReporter, defineDiagnostics } from "nostics";
+import { createDevReporter } from "nostics/reporters/dev";
+//#region src/entry-keys.ts
+/**
+* Serializes the given {@link EntryKey | key} (query or mutation key) to a string.
+*
+* @param key - The key to serialize.
+*
+* @see {@link EntryKey}
+*/
+function toCacheKey(key) {
+	return key && JSON.stringify(key, (_, val) => !val || typeof val !== "object" || Array.isArray(val) ? val : Object.keys(val).sort().reduce((result, key) => {
+		result[key] = val[key];
+		return result;
+	}, {}));
+}
+/**
+* Checks whether `subsetKey` is a subset of `fullsetKey` by matching partially objects and arrays.
+*
+* @param subsetKey - subset key to check
+* @param fullsetKey - fullset key to check against
+*/
+function isSubsetOf(subsetKey, fullsetKey) {
+	return subsetKey === fullsetKey ? true : typeof subsetKey !== typeof fullsetKey ? false : subsetKey && fullsetKey && typeof subsetKey === "object" && typeof fullsetKey === "object" ? Object.keys(subsetKey).every((key) => isSubsetOf(subsetKey[key], fullsetKey[key])) : false;
+}
+/**
+* Finds entries that partially match the given key. If no key is provided, all
+* entries are returned.
+*
+* @param map - The map to search in.
+* @param partialKey - The key to match against. If not provided, all entries are yield.
+*
+* @internal
+*/
+function* find(map, partialKey) {
+	for (const entry of map.values()) if (!partialKey || entry.key && isSubsetOf(partialKey, entry.key)) yield entry;
+}
+/**
+* Empty starting object for extensions that allows to detect when to update.
+*
+* @internal
+*/
+const START_EXT = Object.freeze(process.env.NODE_ENV === "production" ? {} : { message: "This is a placeholder object for Pinia Colada extensions, it should never be used directly, but only checked for identity. This is here to simplify debugging during dev." });
+//#endregion
+//#region src/utils.ts
+function useEventListener(target, event, listener, options) {
+	target.addEventListener(event, listener, options);
+	if (getCurrentScope()) onScopeDispose(() => {
+		target.removeEventListener(event, listener);
+	});
+}
+const IS_CLIENT = typeof window !== "undefined";
+/**
+* Transforms a value or a function that returns a value to a value.
+*
+* @param valFn either a value or a function that returns a value
+* @param args  arguments to pass to the function if `valFn` is a function
+*
+* @internal
+*/
+function toValueWithArgs(valFn, ...args) {
+	return typeof valFn === "function" ? valFn(...args) : valFn;
+}
+/**
+* @internal
+*/
+const noop = () => {};
+/**
+* Dev only warnings that are only shown once.
+*/
+const warnedIds = /* @__PURE__ */ new Set();
+/**
+* Returns `true` the first time it is called with a given id, `false`
+* afterwards. Used to report dev-only diagnostics once. This should only be
+* used in dev.
+*
+* @param id - Unique id for the warning
+*/
+function shouldWarnOnce(id) {
+	if (warnedIds.has(id)) return false;
+	warnedIds.add(id);
+	return true;
+}
+//#endregion
+//#region src/query-options.ts
+/**
+* Default options for `useQuery()`. Modifying this object will affect all the queries that don't override these
+*/
+const USE_QUERY_DEFAULTS = {
+	staleTime: 1e3 * 5,
+	gcTime: 1e3 * 60 * 5,
+	refetchOnWindowFocus: true,
+	refetchOnReconnect: true,
+	refetchOnMount: true,
+	enabled: true
+};
+const USE_QUERY_OPTIONS_KEY = process.env.NODE_ENV !== "production" ? Symbol("useQueryOptions") : Symbol();
+/**
+* Injects the global query options.
+*
+* @internal
+*/
+const useQueryOptions = () => inject(USE_QUERY_OPTIONS_KEY, USE_QUERY_DEFAULTS);
+//#endregion
+//#region src/diagnostics.ts
+/**
+* Catalog of all user-facing diagnostics (errors and warnings) emitted by
+* Pinia Colada. Codes are permanent: never rename or reuse one. Each code has
+* a documentation page at https://pinia-colada.esm.dev/errors/.
+*
+* Categories: `R` runtime, `C` config, `B` build, `D` deprecation.
+*/
+const diagnostics = /*#__PURE__*/ defineDiagnostics({
+	docsBase: (code) => `https://pinia-colada.esm.dev/errors/${code.toLowerCase()}.md`,
+	reporters: [/*#__PURE__*/ createConsoleReporter(), ...process.env.NODE_ENV === "development" ? [/*#__PURE__*/ createDevReporter()] : []],
+	codes: {
+		PINIA_COLADA_C0001: {
+			why: "root pinia plugin not detected.",
+			fix: "Make sure to install pinia with \"app.use(pinia)\" before installing the \"PiniaColada\" plugin, or manually pass the pinia instance in the options."
+		},
+		PINIA_COLADA_R0001: {
+			why: (p) => `${p.composable}() was called outside of an injection context (component setup, store, navigation guard). You will get a warning about "inject" being used incorrectly from Vue.`,
+			fix: "Make sure to use it only in allowed places. See https://vuejs.org/guide/reusability/composables.html#usage-restrictions"
+		},
+		PINIA_COLADA_R0002: {
+			why: (p) => `The ${p.cache} cache cannot be directly set, it must be modified instead. This will fail in production.`,
+			fix: "Use the cache methods (e.g. \"setQueryData()\", \"setEntryState()\") to modify the cache instead of replacing it."
+		},
+		PINIA_COLADA_R0003: {
+			why: "useQuery() was called with an empty array as the key. It must have at least one element.",
+			fix: `Pass a key with at least one element, e.g. ['todos'].`
+		},
+		PINIA_COLADA_R0004: {
+			why: (p) => `"entry.${p.method}()" was called but the entry has no options.`,
+			fix: "This is probably a bug, report it to pinia-colada with a boiled down example to reproduce it. Thank you!"
+		},
+		PINIA_COLADA_R0005: {
+			why: (p) => `A mutation entry ${p.key ? `with key "${p.key}"` : "without a key"} was mutated before being ensured.`,
+			fix: "If you are manually calling \"mutationCache.mutate()\", you should always ensure the entry first: \"mutationCache.mutate(mutationCache.ensure(options, vars))\". If not, this is probably a bug. Please, open an issue on GitHub with a boiled down reproduction."
+		},
+		PINIA_COLADA_R0006: {
+			why: (p) => `A mutation entry ${p.key ? `with key "${p.key}"` : "without a key"} was reused.`,
+			fix: "If you are manually calling \"mutationCache.mutate()\", you should always ensure the entry first: \"mutationCache.mutate(mutationCache.ensure(options, vars))\". If not, this is probably a bug. Please, open an issue on GitHub with a boiled down reproduction."
+		},
+		PINIA_COLADA_R0007: {
+			why: "defineMutation() composable was called outside of a component or effect scope. The mutation effects will never be cleaned up, which may cause memory leaks.",
+			fix: "Make sure to call it inside a component setup, an effect scope, or a store."
+		},
+		PINIA_COLADA_R0008: {
+			why: "Trying to load the previous page but \"getPreviousPageParam\" is not defined in the options. This will fail in production.",
+			fix: "Add a \"getPreviousPageParam()\" function to the \"useInfiniteQuery()\" options."
+		},
+		PINIA_COLADA_R0009: {
+			why: (p) => `Cannot load the ${p.direction} page: the query entry was not found in the cache.`,
+			fix: "Make sure the infinite query is active (e.g. used by a mounted component) before calling \"loadNextPage()\" or \"loadPreviousPage()\"."
+		}
+	}
+});
+//#endregion
+//#region src/query-store.ts
+/**
+* Keep track of the entry being defined so we can add the queries in ensure
+* this allows us to refresh the entry when a defined query is used again
+* and refetchOnMount is true
+*
+* @internal
+*/
+let currentDefineQueryEntry;
+/**
+* Returns whether the entry is using a placeholder data.
+*
+* @template TDataInitial - Initial data type
+* @param entry - entry to check
+*/
+function isEntryUsingPlaceholderData(entry) {
+	return entry?.placeholderData != null && entry.state.value.status === "pending";
+}
+/**
+* UseQueryEntry method to serialize the entry to JSON.
+*
+* @param entry - entry to serialize
+* @returns Serialized version of the entry
+*/
+const queryEntry_toJSON = ({ state: { value }, when, meta }) => [
+	value.data,
+	value.error,
+	when ? Date.now() - when : -1,
+	meta
+];
+/**
+* Composable to get the cache of the queries. As any other composable, it can
+* be used inside the `setup` function of a component, within another
+* composable, or in injectable contexts like stores and navigation guards.
+*/
+const useQueryCache = /* @__PURE__ */ defineStore("_pc_query", ({ action }) => {
+	const cachesRaw = /* @__PURE__ */ new Map();
+	const caches = skipHydrate(shallowRef(cachesRaw));
+	if (process.env.NODE_ENV !== "production") watch(() => caches.value !== cachesRaw, (isDifferent) => {
+		if (isDifferent) diagnostics.PINIA_COLADA_R0002({ cache: "query" }, { method: "error" });
+	});
+	const scope = getCurrentScope();
+	const app = getActivePinia()._a;
+	if (process.env.NODE_ENV !== "production") {
+		if (!hasInjectionContext() && shouldWarnOnce("useQueryCache-injection-context")) diagnostics.PINIA_COLADA_R0001({ composable: "useQueryCache" });
+	}
+	const optionDefaults = useQueryOptions();
+	/**
+	* Creates a new query entry in the cache. Shouldn't be called directly.
+	*
+	* @param key - Serialized key of the query
+	* @param [options] - options attached to the query
+	* @param [initialData] - initial data of the query if any
+	* @param [error] - initial error of the query if any
+	* @param [when] - relative when was the data or error fetched (will be substracted to Date.now())
+	* @param [meta] - resolved meta information for the query
+	*/
+	const create = action((key, options = null, initialData, error = null, when = 0, meta = {}) => scope.run(() => {
+		const state = shallowRef({
+			data: initialData,
+			error,
+			status: error ? "error" : initialData !== void 0 ? "success" : "pending"
+		});
+		const asyncStatus = shallowRef("idle");
+		return markRaw({
+			key,
+			keyHash: toCacheKey(key),
+			state,
+			placeholderData: null,
+			when: initialData === void 0 ? 0 : Date.now() - when,
+			asyncStatus,
+			pending: null,
+			deps: markRaw(/* @__PURE__ */ new Set()),
+			gcTimeout: void 0,
+			ext: START_EXT,
+			options,
+			meta,
+			get stale() {
+				return !this.options || !this.when || Date.now() >= this.when + this.options.staleTime;
+			},
+			get active() {
+				return this.deps.size > 0;
+			}
+		});
+	}));
+	const defineQueryMap = /* @__PURE__ */ new WeakMap();
+	/**
+	* Ensures a query created with {@link defineQuery} is present in the cache. If it's not, it creates a new one.
+	* @param fn - function that defines the query
+	*/
+	const ensureDefinedQuery = action((fn) => {
+		let defineQueryEntry = defineQueryMap.get(fn);
+		if (!defineQueryEntry) {
+			currentDefineQueryEntry = defineQueryEntry = scope.run(() => [
+				[],
+				null,
+				effectScope(),
+				shallowRef(false)
+			]);
+			defineQueryEntry[1] = app.runWithContext(() => defineQueryEntry[2].run(fn));
+			currentDefineQueryEntry = null;
+			defineQueryMap.set(fn, defineQueryEntry);
+		} else {
+			defineQueryEntry[2].resume();
+			defineQueryEntry[3].value = false;
+			defineQueryEntry[0] = defineQueryEntry[0].map((oldEntry) => oldEntry.options ? ensure(oldEntry.options, oldEntry) : oldEntry);
+		}
+		return defineQueryEntry;
+	});
+	/**
+	* Tracks an effect or component that uses a query.
+	*
+	* @param entry - the entry of the query
+	* @param effect - the effect or component to untrack
+	*
+	* @see {@link untrack}
+	*/
+	function track(entry, effect) {
+		if (!effect) return;
+		entry.deps.add(effect);
+		clearTimeout(entry.gcTimeout);
+		entry.gcTimeout = void 0;
+		triggerRef(caches);
+	}
+	/**
+	* Untracks an effect or component that uses a query.
+	*
+	* @param entry - the entry of the query
+	* @param effect - the effect or component to untrack
+	*
+	* @see {@link track}
+	*/
+	function untrack(entry, effect) {
+		if (!effect || !entry.deps.has(effect)) return;
+		entry.deps.delete(effect);
+		triggerRef(caches);
+		scheduleGarbageCollection(entry);
+	}
+	function scheduleGarbageCollection(entry) {
+		if (entry.deps.size > 0 || !entry.options) return;
+		clearTimeout(entry.gcTimeout);
+		if (entry.state.value.status === "pending") entry.pending?.abortController.abort();
+		if (Number.isFinite(entry.options.gcTime)) entry.gcTimeout = setTimeout(() => {
+			remove(entry);
+		}, entry.options.gcTime);
+	}
+	/**
+	* Invalidates and cancel matched queries, and then refetches (in parallel)
+	* all active ones. If you need to further control which queries are
+	* invalidated, canceled, and/or refetched, you can use the filters, you
+	* can direcly call {@link invalidate} on {@link getEntries}:
+	*
+	* ```ts
+	* // instead of doing
+	* await queryCache.invalidateQueries(filters)
+	* await Promise.all(queryCache.getEntries(filters).map(entry => {
+	*   queryCache.invalidate(entry)
+	*   // this is the default behavior of invalidateQueries
+	*   // return entry.active && queryCache.fetch(entry)
+	*   // here to refetch everything, even non active queries
+	*   return queryCache.fetch(entry)
+	* })
+	* ```
+	*
+	* @param filters - filters to apply to the entries
+	* @param refetchActive - whether to refetch active queries or not. Set
+	* to `'all'` to refetch all queries
+	*
+	* @see {@link invalidate}
+	* @see {@link cancel}
+	*/
+	const invalidateQueries = action((filters, refetchActive = true) => {
+		return Promise.all(getEntries(filters).map((entry) => {
+			invalidate(entry);
+			return (refetchActive === "all" || entry.active && refetchActive) && toValue(entry.options?.enabled) && fetch(entry);
+		}));
+	});
+	/**
+	* Returns all the entries in the cache that match the filters.
+	*
+	* @param filters - filters to apply to the entries
+	*/
+	const getEntries = action((filters = {}) => {
+		return (filters.exact ? filters.key ? [caches.value.get(toCacheKey(filters.key))].filter((v) => !!v) : [] : [...find(caches.value, filters.key)]).filter((entry) => (filters.stale == null || entry.stale === filters.stale) && (filters.active == null || entry.active === filters.active) && (!filters.status || entry.state.value.status === filters.status) && (!filters.predicate || filters.predicate(entry)));
+	});
+	/**
+	* Ensures a query entry is present in the cache. If it's not, it creates a
+	* new one. The resulting entry is required to call other methods like
+	* {@link fetch}, {@link refresh}, or {@link invalidate}.
+	*
+	* @param opts - options to create the query
+	* @param previousEntry - the previous entry that was associated with the same options
+	*/
+	const ensure = action((opts, previousEntry) => {
+		const options = {
+			...optionDefaults,
+			...opts
+		};
+		const key = toValue(options.key);
+		const keyHash = toCacheKey(key);
+		if (process.env.NODE_ENV !== "production" && keyHash === "[]") throw diagnostics.PINIA_COLADA_R0003();
+		if (previousEntry && keyHash === previousEntry.keyHash) {
+			previousEntry.options = options;
+			return previousEntry;
+		}
+		let entry = cachesRaw.get(keyHash);
+		if (!entry) {
+			const initialDataUpdatedAt = toValue(options.initialDataUpdatedAt);
+			cachesRaw.set(keyHash, entry = create(key, options, options.initialData?.(), null, initialDataUpdatedAt != null ? Date.now() - initialDataUpdatedAt : 0, toValue(options.meta)));
+			if (options.placeholderData && entry.state.value.status === "pending") entry.placeholderData = toValueWithArgs(options.placeholderData, isEntryUsingPlaceholderData(previousEntry) ? previousEntry.placeholderData : previousEntry?.state.value.data, previousEntry);
+			triggerRef(caches);
+		}
+		if (process.env.NODE_ENV !== "production") {
+			const currentInstance = getCurrentInstance();
+			if (currentInstance) {
+				const type = currentInstance.type;
+				if (type.__hmrId) {
+					const components = (entry.__hmr ??= { components: /* @__PURE__ */ new Map() }).components;
+					const prev = components.get(type.__hmrId);
+					if (prev && (prev.setup !== type.setup || prev.render !== type.render)) invalidate(entry);
+					components.set(type.__hmrId, {
+						setup: type.setup,
+						render: type.render
+					});
+				}
+			}
+		}
+		entry.options = options;
+		if (entry.ext === START_EXT) {
+			entry.ext = {};
+			extend(entry);
+		}
+		currentDefineQueryEntry?.[0].push(entry);
+		return entry;
+	});
+	/**
+	* Action called when an entry is ensured for the first time to allow plugins to extend it.
+	*
+	* @param _entry - the entry of the query to extend
+	*/
+	const extend = action((_entry) => {});
+	/**
+	* Invalidates and cancels a query entry. It effectively sets the `when`
+	* property to `0` and {@link cancel | cancels} the pending request.
+	*
+	* @param entry - the entry of the query to invalidate
+	*
+	* @see {@link cancel}
+	*/
+	const invalidate = action((entry) => {
+		entry.when = 0;
+		cancel(entry);
+	});
+	/**
+	* Ensures the current data is fresh. If the data is stale or if the status
+	* is 'error', calls {@link fetch}, if not return the current data. Can only
+	* be called if the entry has been initialized with `useQuery()` and has
+	* options.
+	*
+	* @param entry - the entry of the query to refresh
+	* @param options - the options to use for the fetch
+	*
+	* @see {@link fetch}
+	*/
+	const refresh = action(async (entry, options = entry.options) => {
+		if (process.env.NODE_ENV !== "production" && !options) throw diagnostics.PINIA_COLADA_R0004({ method: "refresh" });
+		if (entry.state.value.error || entry.stale) return entry.pending?.refreshCall ?? fetch(entry, options);
+		return entry.state.value;
+	});
+	/**
+	* Fetch an entry. Ignores fresh data and triggers a new fetch. Can only be called if the entry has options.
+	*
+	* @param entry - the entry of the query to fetch
+	* @param options - the options to use for the fetch
+	*/
+	const fetch = action(async (entry, options = entry.options) => {
+		if (process.env.NODE_ENV !== "production" && !options) throw diagnostics.PINIA_COLADA_R0004({ method: "fetch" });
+		entry.asyncStatus.value = "loading";
+		const abortController = new AbortController();
+		const { signal } = abortController;
+		entry.pending?.abortController.abort();
+		const pendingCall = entry.pending = {
+			abortController,
+			refreshCall: (async () => options.query({
+				signal,
+				entry
+			}))().then((data) => {
+				if (pendingCall === entry.pending) setEntryState(entry, {
+					data,
+					error: null,
+					status: "success"
+				});
+				return entry.state.value;
+			}).catch((error) => {
+				if (pendingCall === entry.pending && (error !== signal.reason || !signal.aborted)) setEntryState(entry, {
+					status: "error",
+					data: entry.state.value.data,
+					error
+				});
+				throw error;
+			}).finally(() => {
+				if (pendingCall === entry.pending) {
+					entry.asyncStatus.value = "idle";
+					entry.pending = null;
+					if (entry.state.value.status !== "pending") entry.placeholderData = null;
+				}
+			}),
+			when: Date.now()
+		};
+		return pendingCall.refreshCall;
+	});
+	/**
+	* Cancels an entry's query if it's currently pending. This will effectively abort the `AbortSignal` of the query and any
+	* pending request will be ignored.
+	*
+	* @param entry - the entry of the query to cancel
+	* @param reason - the reason passed to the abort controller
+	*/
+	const cancel = action((entry, reason) => {
+		entry.pending?.abortController.abort(reason);
+		entry.asyncStatus.value = "idle";
+		entry.pending = null;
+	});
+	/**
+	* Cancels queries if they are currently pending. This will effectively abort the `AbortSignal` of the query and any
+	* pending request will be ignored.
+	*
+	* @param filters - filters to apply to the entries
+	* @param reason - the reason passed to the abort controller
+	*
+	* @see {@link cancel}
+	*/
+	const cancelQueries = action((filters, reason) => {
+		getEntries(filters).forEach((entry) => cancel(entry, reason));
+	});
+	/**
+	* Sets the state of a query entry in the cache and updates the
+	* {@link UseQueryEntry['pending']['when'] | `when` property}. This action is
+	* called every time the cache state changes and can be used by plugins to
+	* detect changes.
+	*
+	* @param entry - the entry of the query to set the state
+	* @param state - the new state of the entry
+	*/
+	const setEntryState = action((entry, state) => {
+		entry.state.value = state;
+		entry.when = Date.now();
+		scheduleGarbageCollection(entry);
+	});
+	/**
+	* Gets a single query entry from the cache based on the key of the query.
+	*
+	* @param key - the key of the query
+	*/
+	function get(key) {
+		return caches.value.get(toCacheKey(key));
+	}
+	/**
+	* Set the data of a query entry in the cache. It also sets the `status` to `success`.
+	*
+	* @param key - the key of the query
+	* @param data - the new data to set
+	*
+	* @see {@link setEntryState}
+	*/
+	const setQueryData = action((key, data) => {
+		const keyHash = toCacheKey(key);
+		let entry = cachesRaw.get(keyHash);
+		if (!entry) cachesRaw.set(keyHash, entry = create(key));
+		setEntryState(entry, {
+			error: null,
+			status: "success",
+			data: toValueWithArgs(data, entry.state.value.data)
+		});
+		triggerRef(caches);
+	});
+	/**
+	* Sets the data of all queries in the cache that are children of a key. It
+	* also sets the `status` to `success`. Differently from {@link
+	* setQueryData}, this method recursively sets the data for all queries. This
+	* is why it requires a function to set the data.
+	*
+	* @param filters - filters used to get the entries
+	* @param updater - the function to set the data
+	*
+	* @example
+	* ```ts
+	* // let's suppose we want to optimistically update all contacts in the cache
+	* setQueriesData(['contacts', 'list'], (contactList: Contact[]) => {
+	*   const contactToReplaceIndex = contactList.findIndex(c => c.id === updatedContact.id)
+	*   return contactList.toSpliced(contactToReplaceIndex, 1, updatedContact)
+	* })
+	* ```
+	*
+	* @see {@link setQueryData}
+	*/
+	function setQueriesData(filters, updater) {
+		for (const entry of getEntries(filters)) setEntryState(entry, {
+			error: null,
+			status: "success",
+			data: updater(entry.state.value.data)
+		});
+		triggerRef(caches);
+	}
+	/**
+	* Gets the data of a query entry in the cache based on the key of the query.
+	*
+	* @param key - the key of the query
+	*/
+	function getQueryData(key) {
+		return caches.value.get(toCacheKey(key))?.state.value.data;
+	}
+	/**
+	* Removes a query entry from the cache.
+	*
+	* @param entry - the entry of the query to remove
+	*/
+	const remove = action((entry) => {
+		clearTimeout(entry.gcTimeout);
+		cachesRaw.delete(entry.keyHash);
+		triggerRef(caches);
+	});
+	return {
+		caches,
+		ensureDefinedQuery,
+		/**
+		* Scope to track effects and components that use the query cache.
+		* @internal
+		*/
+		_s: markRaw(scope),
+		setQueryData,
+		setQueriesData,
+		getQueryData,
+		invalidateQueries,
+		cancelQueries,
+		invalidate,
+		fetch,
+		refresh,
+		ensure,
+		extend,
+		track,
+		untrack,
+		cancel,
+		create,
+		remove,
+		get,
+		setEntryState,
+		getEntries
+	};
+});
+/**
+* Checks if the given object is a query cache. Used in SSR to apply custom serialization.
+*
+* @param cache - the object to check
+*
+* @see {@link QueryCache}
+* @see {@link serializeQueryCache}
+*/
+function isQueryCache(cache) {
+	return typeof cache === "object" && !!cache && cache.$id === "_pc_query";
+}
+/**
+* Hydrates the query cache with the serialized cache. Used during SSR.
+*
+* @param queryCache - query cache
+* @param serializedCache - serialized cache
+*/
+function hydrateQueryCache(queryCache, serializedCache) {
+	for (const keyHash in serializedCache) queryCache.caches.set(keyHash, queryCache.create(JSON.parse(keyHash), void 0, ...serializedCache[keyHash] ?? []));
+}
+/**
+* Serializes the query cache to a compressed version. Used during SSR.
+*
+* @param queryCache - query cache
+*/
+function serializeQueryCache(queryCache) {
+	return Object.fromEntries([...queryCache.caches.entries()].map(([keyHash, entry]) => [keyHash, queryEntry_toJSON(entry)]));
+}
+//#endregion
+//#region src/define-query.ts
+/**
+* The current effect scope where the function returned by `defineQuery` is
+* being called. This allows `useQuery()` to know if it should be attached to
+* an effect scope or not
+*
+* @internal
+*/
+let currentDefineQueryEffect;
+function defineQuery(optionsOrSetup) {
+	const setupFn = typeof optionsOrSetup === "function" ? optionsOrSetup : () => useQuery(optionsOrSetup);
+	let hasBeenEnsured;
+	let refCount = 0;
+	return () => {
+		const queryCache = useQueryCache();
+		const previousEffect = currentDefineQueryEffect;
+		const currentScope = getCurrentInstance() || (currentDefineQueryEffect = getCurrentScope());
+		const [ensuredEntries, ret, scope, isPaused] = queryCache.ensureDefinedQuery(setupFn);
+		if (hasBeenEnsured) ensuredEntries.forEach((entry) => {
+			if (entry.options?.refetchOnMount && toValue(entry.options.enabled)) if (toValue(entry.options.refetchOnMount) === "always") queryCache.fetch(entry).catch(noop);
+			else queryCache.refresh(entry).catch(noop);
+		});
+		hasBeenEnsured = true;
+		if (currentScope) {
+			refCount++;
+			ensuredEntries.forEach((entry) => {
+				queryCache.track(entry, currentScope);
+			});
+			onScopeDispose(() => {
+				ensuredEntries.forEach((entry) => {
+					queryCache.untrack(entry, currentScope);
+				});
+				if (--refCount < 1) {
+					scope.pause();
+					isPaused.value = true;
+				}
+			});
+		}
+		currentDefineQueryEffect = previousEffect;
+		return ret;
+	};
+}
+//#endregion
+//#region src/use-query.ts
+/**
+* Ensures and return a shared query state based on the `key` option.
+*
+* @param _options - The options of the query
+*/
+function useQuery(_options) {
+	const queryCache = useQueryCache();
+	const optionDefaults = useQueryOptions();
+	const hasCurrentInstance = getCurrentInstance();
+	const defineQueryEffect = currentDefineQueryEntry?.[2];
+	const currentEffect = currentDefineQueryEffect || getCurrentScope();
+	const isPaused = currentDefineQueryEntry?.[3];
+	const options = computed(() => ({
+		...optionDefaults,
+		...toValue(_options)
+	}));
+	const enabled = () => toValue(options.value.enabled);
+	let lastEntry;
+	const entry = computed(() => isPaused?.value ? lastEntry : lastEntry = queryCache.ensure(options.value, lastEntry));
+	lastEntry = entry.value;
+	const errorCatcher = () => entry.value.state.value;
+	const refresh = (throwOnError) => queryCache.refresh(entry.value, options.value).catch(throwOnError || errorCatcher);
+	const refetch = (throwOnError) => queryCache.fetch(entry.value, options.value).catch(throwOnError || errorCatcher);
+	const isPlaceholderData = computed(() => isEntryUsingPlaceholderData(entry.value));
+	const state = computed(() => isPlaceholderData.value ? {
+		status: "success",
+		data: entry.value.placeholderData,
+		error: null
+	} : entry.value.state.value);
+	const extensions = {};
+	for (const key in lastEntry.ext) extensions[key] = computed({
+		get: () => toValue(entry.value.ext[key]),
+		set(value) {
+			const target = entry.value.ext[key];
+			if (isRef(target)) target.value = value;
+			else entry.value.ext[key] = value;
+		}
+	});
+	const queryReturn = {
+		...extensions,
+		state,
+		status: computed(() => state.value.status),
+		data: computed(() => state.value.data),
+		error: computed(() => entry.value.state.value.error),
+		asyncStatus: computed(() => entry.value.asyncStatus.value),
+		isPlaceholderData,
+		isPending: computed(() => state.value.status === "pending"),
+		isLoading: computed(() => entry.value.asyncStatus.value === "loading"),
+		refresh,
+		refetch
+	};
+	if (hasCurrentInstance) onServerPrefetch(async () => {
+		if (enabled()) await refresh(!options.value.ssrCatchError);
+	});
+	let isActive = false;
+	if (hasCurrentInstance) {
+		onMounted(() => {
+			isActive = true;
+			queryCache.track(lastEntry, hasCurrentInstance);
+		});
+		onUnmounted(() => {
+			queryCache.untrack(lastEntry, hasCurrentInstance);
+		});
+	} else {
+		isActive = true;
+		if (currentEffect !== defineQueryEffect) {
+			queryCache.track(lastEntry, currentEffect);
+			onScopeDispose(() => {
+				queryCache.untrack(lastEntry, currentEffect);
+			});
+		}
+	}
+	watch(entry, (entry, previousEntry) => {
+		if (!isActive) return;
+		if (previousEntry) {
+			queryCache.untrack(previousEntry, hasCurrentInstance);
+			queryCache.untrack(previousEntry, currentEffect);
+		}
+		queryCache.track(entry, hasCurrentInstance);
+		if (!hasCurrentInstance && currentEffect !== defineQueryEffect) queryCache.track(entry, currentEffect);
+		if (enabled()) refresh();
+	}, { immediate: true });
+	watch(enabled, (newEnabled) => {
+		if (newEnabled) refresh();
+	});
+	if (hasCurrentInstance) onMounted(() => {
+		if (enabled()) {
+			const refetchControl = toValue(options.value.refetchOnMount);
+			if (refetchControl === "always") refetch();
+			else if (refetchControl || entry.value.state.value.status === "pending") refresh();
+		}
+	});
+	if (IS_CLIENT) {
+		useEventListener(document, "visibilitychange", () => {
+			const refetchControl = toValue(options.value.refetchOnWindowFocus);
+			if (document.visibilityState === "visible" && enabled() && entry.value.active) {
+				if (refetchControl === "always") refetch();
+				else if (refetchControl) refresh();
+			}
+		});
+		useEventListener(window, "online", () => {
+			if (enabled() && entry.value.active) {
+				const refetchControl = toValue(options.value.refetchOnReconnect);
+				if (refetchControl === "always") refetch();
+				else if (refetchControl) refresh();
+			}
+		});
+	}
+	return queryReturn;
+}
+//#endregion
+//#region src/define-query-options.ts
+/**
+* Define type-safe query options. Can be static or dynamic. Define the arguments based
+* on what's needed on the query and the key. Use an object if you need
+* multiple properties.
+*
+* @param setupOrOptions - The query options or a function that returns the query options.
+*
+* @example
+* ```ts
+* import { defineQueryOptions } from '@pinia/colada'
+*
+* const documentDetailsQuery = defineQueryOptions((id: number ) => ({
+*   key: ['documents', id],
+*   query: () => fetchDocument(id),
+* }))
+*
+* queryCache.getQueryData(documentDetailsQuery(4).key) // typed
+* ```
+*
+* @__NO_SIDE_EFFECTS__
+*/
+function defineQueryOptions(setupOrOptions) {
+	return setupOrOptions;
+}
+//#endregion
+//#region src/use-query-state.ts
+function useQueryState(key) {
+	const queryCache = useQueryCache();
+	const entry = computed(() => queryCache.get(toValue(key)));
+	const state = computed(() => entry.value?.state.value);
+	return {
+		state,
+		data: computed(() => state.value?.data),
+		error: computed(() => state.value?.error),
+		status: computed(() => state.value?.status),
+		asyncStatus: computed(() => entry.value?.asyncStatus.value),
+		isPending: computed(() => !state.value || state.value.status === "pending")
+	};
+}
+//#endregion
+//#region src/infinite-query.ts
+/**
+* Type guard to check if a query entry is an infinite query entry.
+*
+* @param entry - The query entry to check.
+*
+* @internal
+*/
+function isInfiniteQueryEntry(entry) {
+	return !!entry.meta.__i;
+}
+const installedMap = /* @__PURE__ */ new WeakMap();
+function PiniaColadaInfiniteQueryPlugin(scope, queryCache) {
+	if (!installedMap.has(queryCache)) {
+		queryCache.$onAction(({ name, args }) => {
+			if (name === "extend") {
+				const [entry] = args;
+				if (isInfiniteQueryEntry(entry)) scope.run(() => {
+					const nextPageParam = shallowRef();
+					const hasNextPage = computed(() => nextPageParam.value != null);
+					const previousPageParam = shallowRef();
+					const hasPreviousPage = computed(() => previousPageParam.value != null);
+					entry.ext.nextPageParam = nextPageParam;
+					entry.ext.hasNextPage = hasNextPage;
+					entry.ext.previousPageParam = previousPageParam;
+					entry.ext.hasPreviousPage = hasPreviousPage;
+					entry.ext.nextPageIndicator = 0;
+				});
+			}
+		}, true);
+		installedMap.set(queryCache, true);
+	}
+}
+/**
+* Sets the data of an infinite query entry in the cache. Unlike {@link QueryCache.setQueryData | `queryCache.setQueryData()`},
+* this function properly marks the entry as an infinite query and initializes the
+* infinite query extensions (`hasNextPage`, `hasPreviousPage`, etc.).
+*
+* Use this when you need to set infinite query data before `useInfiniteQuery()` is mounted
+* (e.g. optimistic updates from a mutation on a different page).
+*
+* @param queryCache - The query cache instance
+* @param key - The key of the infinite query
+* @param data - The data to set, or an updater function
+*/
+function setInfiniteQueryData(queryCache, key, data) {
+	PiniaColadaInfiniteQueryPlugin(queryCache._s, queryCache);
+	queryCache.setQueryData(key, data);
+	queryCache.get(key).meta.__i = 1;
+}
+function useInfiniteQuery(options) {
+	const queryCache = useQueryCache();
+	PiniaColadaInfiniteQueryPlugin(queryCache._s, queryCache);
+	let entry;
+	const query = useQuery(() => {
+		const opts = toValueWithArgs(options);
+		const key = toValue(opts.key);
+		entry = queryCache.get(key);
+		return {
+			...opts,
+			key,
+			query: async (context) => {
+				const currentEntry = entry = context.entry;
+				const exts = currentEntry.ext;
+				const state = currentEntry.state.value;
+				const { data } = state;
+				let pages;
+				let pageParams;
+				let pageParam;
+				if ((state.status === "pending" || !data?.pages.length) && !exts.nextPageIndicator) exts.nextPageIndicator = 1;
+				const position = exts.nextPageIndicator > 0 ? -1 : 0;
+				if (!exts.nextPageIndicator && data) {
+					const pagesToRefetch = data.pages.length;
+					pages = [];
+					pageParams = [];
+					pageParam = data.pageParams[0];
+					for (let i = 0; i < pagesToRefetch; i++) {
+						const page = await opts.query({
+							...context,
+							pageParam
+						});
+						pages.push(page);
+						pageParams.push(pageParam);
+						if (i < pagesToRefetch - 1) {
+							const nextParam = opts.getNextPageParam(page, pages, pageParam, pageParams);
+							if (nextParam == null) break;
+							pageParam = nextParam;
+						}
+					}
+				} else {
+					exts.nextPageIndicator = 0;
+					if (process.env.NODE_ENV !== "production") {
+						if (position === 0 && !opts.getPreviousPageParam) throw diagnostics.PINIA_COLADA_R0008();
+					}
+					computePageParams(currentEntry, data);
+					pageParam = (position ? exts.nextPageParam : exts.previousPageParam).value;
+					if (pageParam == null && data) return data;
+					pageParam ??= toValue(opts.initialPageParam);
+					const page = await opts.query({
+						...context,
+						pageParam
+					});
+					pages = data?.pages.slice() ?? [];
+					pageParams = data?.pageParams.slice() ?? [];
+					const arrayMethod = position ? "push" : "unshift";
+					pages[arrayMethod](page);
+					pageParams[arrayMethod](pageParam);
+				}
+				if (opts.maxPages && pages.length > opts.maxPages) if (position) {
+					pages.splice(0, pages.length - opts.maxPages);
+					pageParams.splice(0, pageParams.length - opts.maxPages);
+				} else {
+					pages.splice(opts.maxPages);
+					pageParams.splice(opts.maxPages);
+				}
+				computePageParams(currentEntry, {
+					pages,
+					pageParams
+				});
+				return {
+					pages,
+					pageParams
+				};
+			},
+			meta: {
+				...toValue(opts.meta),
+				__i: 1
+			}
+		};
+	});
+	function computePageParams(entry, data = entry?.state.value.data) {
+		if (!entry?.options) return;
+		const opts = entry.options;
+		const lastPageParam = data?.pageParams.at(-1);
+		const exts = entry.ext;
+		exts.nextPageParam.value = data && data.pages.length > 0 ? opts.getNextPageParam(data.pages.at(-1), data.pages, lastPageParam, data.pageParams) : null;
+		const firstPageParam = data?.pageParams.at(0);
+		exts.previousPageParam.value = data && data.pages.length > 0 ? opts.getPreviousPageParam?.(data.pages.at(0), data.pages, firstPageParam, data.pageParams) : null;
+	}
+	computePageParams(entry);
+	async function loadPage(page, { throwOnError, cancelRefetch = true } = {}) {
+		const opts = toValueWithArgs(options);
+		const entry = queryCache.get(toValue(opts.key));
+		if (!entry) {
+			if (process.env.NODE_ENV !== "production") diagnostics.PINIA_COLADA_R0009({ direction: page === -1 ? "previous" : "next" });
+			return null;
+		}
+		if (!cancelRefetch && entry.pending) return entry.pending.refreshCall;
+		entry.ext.nextPageIndicator = page;
+		return queryCache.fetch(entry).catch(throwOnError ? void 0 : noop);
+	}
+	return {
+		...query,
+		loadNextPage: (options) => loadPage(1, options),
+		loadPreviousPage: (options) => loadPage(-1, options)
+	};
+}
+//#endregion
+//#region src/define-infinite-query-options.ts
+/**
+* Define type-safe infinite query options. Can be static or dynamic. Define the
+* arguments based on what's needed on the query and the key.
+*
+* @param setupOrOptions - The infinite query options or a function that returns
+*   them.
+*
+* @example
+* ```ts
+* import { defineInfiniteQueryOptions } from '@pinia/colada'
+*
+* const itemsQuery = defineInfiniteQueryOptions({
+*   key: ['items'],
+*   query: ({ pageParam }) => fetchItems(pageParam),
+*   initialPageParam: 0,
+*   getNextPageParam: (lastPage) => lastPage.nextCursor,
+* })
+*
+* queryCache.getQueryData(itemsQuery.key) // typed
+* ```
+*
+* @__NO_SIDE_EFFECTS__
+*/
+function defineInfiniteQueryOptions(setupOrOptions) {
+	return setupOrOptions;
+}
+//#endregion
+//#region src/mutation-options.ts
+/**
+* Default options for `useMutation()`. Modifying this object will affect all mutations.
+*/
+const USE_MUTATION_DEFAULTS = { gcTime: 1e3 * 60 };
+const USE_MUTATION_OPTIONS_KEY = process.env.NODE_ENV !== "production" ? Symbol("useMutationOptions") : Symbol();
+/**
+* Injects the global query options.
+*
+* @internal
+*/
+const useMutationOptions = () => inject(USE_MUTATION_OPTIONS_KEY, USE_MUTATION_DEFAULTS);
+/**
+* Composable to get the cache of the mutations. As any other composable, it
+* can be used inside the `setup` function of a component, within another
+* composable, or in injectable contexts like stores and navigation guards.
+*/
+const useMutationCache = /* @__PURE__ */ defineStore("_pc_mutation", ({ action }) => {
+	const cachesRaw = /* @__PURE__ */ new Map();
+	let triggerCache;
+	const caches = skipHydrate(customRef((track, trigger) => (triggerCache = trigger) && {
+		get: () => (track(), cachesRaw),
+		set: process.env.NODE_ENV !== "production" ? () => {
+			diagnostics.PINIA_COLADA_R0002({ cache: "mutation" }, { method: "error" });
+		} : noop
+	}));
+	const scope = getCurrentScope();
+	if (process.env.NODE_ENV !== "production") {
+		if (!hasInjectionContext() && shouldWarnOnce("useMutationCache-injection-context")) diagnostics.PINIA_COLADA_R0001({ composable: "useMutationCache" });
+	}
+	const app = getActivePinia()._a;
+	const globalOptions = useMutationOptions();
+	const defineMutationMap = /* @__PURE__ */ new WeakMap();
+	let nextMutationId = 1;
+	/**
+	* Action called when an entry is created for the first time to allow plugins to extend it.
+	*
+	* @param _entry - the entry of the mutation to extend
+	*/
+	const extend = action((_entry) => _entry);
+	/**
+	* Creates a mutation entry and its state without adding it to the cache.
+	* This allows for the state to exist in `useMutation()` before the mutation
+	* is actually called. The mutation must be _ensured_ with {@link ensure}
+	* before being called.
+	*
+	* @param options - options to create the mutation
+	*/
+	const create = action((options, key, vars) => extend(scope.run(() => markRaw({
+		id: 0,
+		state: shallowRef({
+			status: "pending",
+			data: void 0,
+			error: null
+		}),
+		gcTimeout: void 0,
+		asyncStatus: shallowRef("idle"),
+		when: 0,
+		vars,
+		key,
+		meta: options.meta ?? {},
+		options,
+		ext: {}
+	}))));
+	/**
+	* Ensures a mutation entry in the cache by assigning it an `id` and a `key` based on `vars`. Usually, a mutation is ensured twice
+	*
+	* @param entry - entry to ensure
+	* @param vars - variables to call the mutation with
+	*/
+	function ensure(entry, vars) {
+		const options = entry.options;
+		const id = nextMutationId++;
+		const key = options.key && toValueWithArgs(options.key, vars);
+		entry = entry.id ? (untrack(entry), create(options, key, vars)) : entry;
+		entry.id = id;
+		entry.key = key;
+		entry.vars = vars;
+		cachesRaw.set(id, entry);
+		triggerCache();
+		return entry;
+	}
+	/**
+	* Ensures a mutation created with {@link defineMutation} is present in the cache. If it's not, it creates a new one.
+	* @param fn - function that defines the mutation
+	*/
+	const ensureDefinedMutation = action((fn) => {
+		let entry = defineMutationMap.get(fn);
+		if (!entry) {
+			entry = scope.run(() => [null, effectScope()]);
+			entry[0] = app.runWithContext(() => entry[1].run(fn));
+			defineMutationMap.set(fn, entry);
+		} else entry[1].resume();
+		return entry;
+	});
+	/**
+	* Gets a single mutation entry from the cache based on the ID of the mutation.
+	*
+	* @param id - the ID of the mutation
+	*/
+	function get(id) {
+		return caches.value.get(id);
+	}
+	/**
+	* Sets the state of a query entry in the cache and updates the
+	* {@link UseQueryEntry['pending']['when'] | `when` property}. This action is
+	* called every time the cache state changes and can be used by plugins to
+	* detect changes.
+	*
+	* @param entry - the entry of the query to set the state
+	* @param state - the new state of the entry
+	*/
+	const setEntryState = action((entry, state) => {
+		entry.state.value = state;
+		entry.when = Date.now();
+	});
+	/**
+	* Removes a mutation entry from the cache if it has an id. If it doesn't then it does nothing.
+	*
+	* @param entry - the entry of the mutation to remove
+	*/
+	const remove = action((entry) => {
+		cachesRaw.delete(entry.id);
+		triggerCache();
+	});
+	/**
+	* Returns all the entries in the cache that match the filters.
+	* Note that you can have multiple entries with the exact same key if they
+	* were called multiple times.
+	*
+	* @param filters - filters to apply to the entries
+	*/
+	const getEntries = action((filters = {}) => {
+		return [...find(caches.value, filters.key)].filter((entry) => (filters.status == null || entry.state.value.status === filters.status) && (!filters.predicate || filters.predicate(entry)));
+	});
+	/**
+	* Untracks a mutation entry, scheduling garbage collection.
+	*
+	* @param entry - the entry of the mutation to untrack
+	*/
+	const untrack = action((entry) => {
+		if (entry.gcTimeout) return;
+		if (Number.isFinite(entry.options.gcTime)) entry.gcTimeout = setTimeout(() => {
+			remove(entry);
+		}, entry.options.gcTime);
+	});
+	/**
+	* Mutate a previously ensured mutation entry.
+	*
+	* @param entry - the entry to mutate
+	*/
+	async function mutate(entry) {
+		const { vars, options } = entry;
+		if (process.env.NODE_ENV !== "production") {
+			const key = entry.key?.join("/");
+			if (entry.id === 0) diagnostics.PINIA_COLADA_R0005({ key }, { method: "error" });
+			if (entry.state.value.status !== "pending" || entry.asyncStatus.value === "loading") diagnostics.PINIA_COLADA_R0006({ key }, { method: "error" });
+		}
+		entry.asyncStatus.value = "loading";
+		let currentData;
+		let currentError;
+		let context = { entry };
+		try {
+			const globalOnMutateContext = globalOptions.onMutate?.(vars, context);
+			context = {
+				entry,
+				...globalOnMutateContext instanceof Promise ? await globalOnMutateContext : globalOnMutateContext
+			};
+			const onMutateContext = await options.onMutate?.(vars, context);
+			context = {
+				...context,
+				...onMutateContext
+			};
+			const newData = currentData = await options.mutation(vars, context);
+			await globalOptions.onSuccess?.(newData, vars, context);
+			await options.onSuccess?.(newData, vars, context);
+			setEntryState(entry, {
+				status: "success",
+				data: newData,
+				error: null
+			});
+		} catch (newError) {
+			currentError = newError;
+			await globalOptions.onError?.(currentError, vars, context);
+			await options.onError?.(currentError, vars, context);
+			setEntryState(entry, {
+				status: "error",
+				data: entry.state.value.data,
+				error: currentError
+			});
+			throw newError;
+		} finally {
+			await globalOptions.onSettled?.(currentData, currentError, vars, context);
+			await options.onSettled?.(currentData, currentError, vars, context);
+			entry.asyncStatus.value = "idle";
+		}
+		return currentData;
+	}
+	return {
+		caches,
+		create,
+		ensure,
+		ensureDefinedMutation,
+		mutate,
+		remove,
+		extend,
+		get,
+		setEntryState,
+		getEntries,
+		untrack,
+		/**
+		* Scope to track effects and components that use the mutation cache.
+		* @internal
+		*/
+		_s: scope
+	};
+});
+/**
+* Checks if the given object is a mutation cache. Used in SSR to apply custom serialization.
+*
+* @param cache - the object to check
+*
+* @see {@link MutationCache}
+*/
+function isMutationCache(cache) {
+	return typeof cache === "object" && !!cache && cache.$id === "_pc_mutation";
+}
+//#endregion
+//#region src/use-mutation.ts
+/**
+* Setups a mutation.
+*
+* @param options - Options to create the mutation
+*
+* @example
+* ```ts
+* const queryCache = useQueryCache()
+* const { mutate, status, error } = useMutation({
+*   mutation: (id: number) => fetch(`/api/todos/${id}`),
+*   onSuccess() {
+*     queryCache.invalidateQueries('todos')
+*   },
+* })
+* ```
+*/
+function useMutation(options) {
+	const mutationCache = useMutationCache();
+	const hasCurrentInstance = getCurrentInstance();
+	const currentEffect = getCurrentScope();
+	const mergedOptions = {
+		...useMutationOptions(),
+		onMutate: void 0,
+		onSuccess: void 0,
+		onError: void 0,
+		onSettled: void 0,
+		...options
+	};
+	const entry = shallowRef(mutationCache.create(mergedOptions));
+	const extensions = {};
+	for (const key in entry.value.ext) extensions[key] = computed({
+		get: () => toValue(entry.value.ext[key]),
+		set(value) {
+			const target = entry.value.ext[key];
+			if (isRef(target)) target.value = value;
+			else entry.value.ext[key] = value;
+		}
+	});
+	if (hasCurrentInstance) onUnmounted(() => {
+		mutationCache.untrack(entry.value);
+	});
+	if (currentEffect) onScopeDispose(() => {
+		mutationCache.untrack(entry.value);
+	});
+	const state = computed(() => entry.value.state.value);
+	const status = computed(() => state.value.status);
+	const data = computed(() => state.value.data);
+	const error = computed(() => state.value.error);
+	const asyncStatus = computed(() => entry.value.asyncStatus.value);
+	const variables = computed(() => entry.value.vars);
+	async function mutateAsync(vars) {
+		return mutationCache.mutate(entry.value = mutationCache.ensure(entry.value, vars));
+	}
+	function mutate(vars) {
+		mutateAsync(vars).catch(noop);
+	}
+	function reset() {
+		entry.value = mutationCache.create(mergedOptions);
+	}
+	return {
+		...extensions,
+		state,
+		data,
+		isLoading: computed(() => asyncStatus.value === "loading"),
+		status,
+		variables,
+		asyncStatus,
+		error,
+		mutate,
+		mutateAsync,
+		reset
+	};
+}
+//#endregion
+//#region src/define-mutation.ts
+function defineMutation(optionsOrSetup) {
+	const setupFn = typeof optionsOrSetup === "function" ? optionsOrSetup : () => useMutation(optionsOrSetup);
+	let refCount = 0;
+	return () => {
+		const mutationCache = useMutationCache();
+		const currentScope = getCurrentInstance() || getCurrentScope();
+		const [ret, scope] = mutationCache.ensureDefinedMutation(setupFn);
+		if (currentScope) {
+			refCount++;
+			onScopeDispose(() => {
+				if (--refCount < 1) scope.pause();
+			});
+		} else if (process.env.NODE_ENV !== "production") diagnostics.PINIA_COLADA_R0007();
+		return ret;
+	};
+}
+//#endregion
+//#region src/define-mutation-options.ts
+/**
+* Define type-safe mutation options. Can be static or dynamic. Define the
+* arguments based on what's needed. Use an object if you need multiple
+* properties.
+*
+* @param setupOrOptions - The mutation options or a function that returns the mutation options.
+*
+* @example
+* ```ts
+* import { defineMutationOptions } from '@pinia/colada'
+*
+* const deleteItemMutation = defineMutationOptions({
+*   mutation: (id: number) => fetch(`/api/items/${id}`, { method: 'DELETE' }),
+* })
+*
+* // use in a component
+* const { mutate } = useMutation(deleteItemMutation)
+* ```
+*
+* @__NO_SIDE_EFFECTS__
+*/
+function defineMutationOptions(setupOrOptions) {
+	return setupOrOptions;
+}
+//#endregion
+//#region src/pinia-colada.ts
+/**
+* Plugin that installs the Query and Mutation plugins alongside some extra plugins.
+*
+* @see {@link QueryPlugin} to only install the Query plugin.
+*
+* @param app - Vue App
+* @param options - Pinia Colada options
+*/
+const PiniaColada = (app, options = {}) => {
+	const { pinia = app.config.globalProperties.$pinia, plugins, queryOptions, mutationOptions } = options;
+	app.provide(USE_QUERY_OPTIONS_KEY, {
+		...USE_QUERY_DEFAULTS,
+		...queryOptions
+	});
+	app.provide(USE_MUTATION_OPTIONS_KEY, {
+		...USE_MUTATION_DEFAULTS,
+		...mutationOptions
+	});
+	if (process.env.NODE_ENV !== "production" && !pinia) throw diagnostics.PINIA_COLADA_C0001();
+	const queryCache = useQueryCache(pinia);
+	plugins?.forEach((plugin) => plugin({
+		scope: queryCache._s,
+		queryCache,
+		pinia
+	}));
+};
+//#endregion
+//#region src/plugins/query-hooks.ts
+/**
+* Allows to add global hooks to all queries:
+* - `onSuccess`: called when a query is successful
+* - `onError`: called when a query throws an error
+* - `onSettled`: called when a query is settled (either successfully or with an error)
+* @param options - Pinia Colada Query Hooks plugin options
+*
+* @example
+* ```ts
+* import { PiniaColada, PiniaColadaQueryHooksPlugin } from '@pinia/colada'
+*
+* const app = createApp(App)
+* // app setup with other plugins
+* app.use(PiniaColada, {
+*   plugins: [
+*     PiniaColadaQueryHooksPlugin({
+*       onError(error, entry) {
+*         // ...
+*       },
+*     }),
+*   ],
+* })
+* ```
+*/
+function PiniaColadaQueryHooksPlugin(options) {
+	return ({ queryCache }) => {
+		queryCache.$onAction(({ name, after, onError, args }) => {
+			if (name === "fetch") {
+				const [entry] = args;
+				after(async ({ data }) => {
+					await options.onSuccess?.(data, entry);
+					options.onSettled?.(data, null, entry);
+				});
+				onError(async (error) => {
+					await options.onError?.(error, entry);
+					options.onSettled?.(void 0, error, entry);
+				});
+			}
+		});
+	};
+}
+//#endregion
+//#region src/plugins/no-gc-ssr.ts
+/**
+* Forces `gcTime: false` on every query and mutation entry, so no garbage
+* collection timers are scheduled. Designed for SSR / SSG / build pipelines
+* where pending `setTimeout` calls keep the Node.js process alive after
+* rendering completes, and where setTimeout closures retain entry memory
+* across requests.
+*
+* Apply conditionally — usually only on the server.
+*
+* @example
+* ```ts
+* import { PiniaColada, PiniaColadaSSRNoGc } from '@pinia/colada'
+*
+* app.use(PiniaColada, {
+*   plugins: import.meta.env.SSR ? [PiniaColadaSSRNoGc()] : [],
+* })
+* ```
+*/
+function PiniaColadaSSRNoGc() {
+	return ({ queryCache, pinia }) => {
+		queryCache.$onAction(({ name, after }) => {
+			if (name === "ensure") after((entry) => {
+				if (entry.options) entry.options.gcTime = false;
+			});
+		});
+		useMutationCache(pinia).$onAction(({ name, after }) => {
+			if (name === "extend") after((entry) => {
+				if (entry.options) entry.options.gcTime = false;
+			});
+		});
+	};
+}
+//#endregion
+export { PiniaColada, PiniaColadaQueryHooksPlugin, PiniaColadaSSRNoGc, queryEntry_toJSON as _queryEntry_toJSON, toValueWithArgs as _toValueWithArgs, defineInfiniteQueryOptions, defineMutation, defineMutationOptions, defineQuery, defineQueryOptions, hydrateQueryCache, isMutationCache, isQueryCache, serializeQueryCache, setInfiniteQueryData, toCacheKey, useInfiniteQuery, useMutation, useMutationCache, useQuery, useQueryCache, useQueryState };
+
+//# sourceMappingURL=index.mjs.map

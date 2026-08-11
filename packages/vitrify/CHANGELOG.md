@@ -1,5 +1,34 @@
 # vitrify
 
+## 0.26.12
+
+### Patch Changes
+
+- b25aa06: chore: update dependencies
+
+  Major bumps: rolldown 1.1→1.2, vite 8.0→8.2, fastify 5.8→5.11,
+  @fastify/static 9→10, magic-string 0.30→1.1, stringify-object 6→7,
+  chalk 5→6, sass 1.101→1.102. Also updates root devDeps (commitlint 21,
+  oxlint 1.78, oxfmt 0.63, @pinia/colada 1.4) and all workspace package
+  devDeps (typescript 7.0, @types/node 26.2).
+
+- b25aa06: fix(vitrify): isolate server entry side effects in SSG builds
+
+  Rolldown's code splitting was merging `ssr/server.ts` (which has a
+  top-level `app.listen()` side effect) into the shared chunk imported by
+  `entry-server.ts`. This caused the SSG prerender to start an in-process
+  fastify server on port 3000, keeping Node alive after all pages were
+  generated.
+
+  Added `includeDependenciesRecursively: false` entry-point groups for
+  `server`, `entry-server`, `prerender`, and `fastify-ssr-plugin` so
+  rolldown keeps each entry in its own chunk. Also added a `vendor` group
+  and restored `moduleChunks` for vue/quasar/fastify/beasties to improve
+  cache invalidation.
+
+  Additionally fixed a missing `await` on the `prerender()` call in
+  `cli.ts` SSG action.
+
 ## 0.26.11
 
 ### Patch Changes

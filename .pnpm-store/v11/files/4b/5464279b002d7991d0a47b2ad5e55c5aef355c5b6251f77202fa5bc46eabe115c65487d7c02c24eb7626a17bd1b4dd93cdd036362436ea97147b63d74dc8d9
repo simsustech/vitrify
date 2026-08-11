@@ -1,0 +1,1 @@
+{"version":3,"file":"ICookieChangeEventInit.d.ts","sourceRoot":"","sources":["../../../src/event/events/ICookieChangeEventInit.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,UAAU,MAAM,kBAAkB,CAAC;AAC/C,OAAO,KAAK,gBAAgB,MAAM,wCAAwC,CAAC;AAE3E;;GAEG;AACH,MAAM,CAAC,OAAO,WAAW,sBAAuB,SAAQ,UAAU;IACjE,OAAO,CAAC,EAAE,gBAAgB,EAAE,CAAC;IAC7B,OAAO,CAAC,EAAE,gBAAgB,EAAE,CAAC;CAC7B"}

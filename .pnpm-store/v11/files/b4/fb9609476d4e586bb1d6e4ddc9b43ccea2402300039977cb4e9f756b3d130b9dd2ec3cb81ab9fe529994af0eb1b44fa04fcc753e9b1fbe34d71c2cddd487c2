@@ -1,0 +1,25 @@
+/*!
+* @quasar/quasar-ui-qmediaplayer v3.0.0
+* (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+* Released under the MIT License.
+*/
+//#region icon-set/bootstrap-icons.mjs
+var bootstrap_icons_default = {
+	name: "bootstrap-icons",
+	mediaPlayer: {
+		play: "bi-play-circle",
+		pause: "bi-pause-circle",
+		volumeOff: "bi-volume-mute",
+		volumeDown: "bi-volume-down",
+		volumeUp: "bi-volume-up",
+		settings: "bi-gear",
+		speed: "bi-speedometer",
+		language: "bi-badge-cc",
+		selected: "bi-check",
+		fullscreen: "bi-fullscreen",
+		fullscreenExit: "bi-fullscreen-exit",
+		bigPlayButton: "bi-caret-right"
+	}
+};
+//#endregion
+export { bootstrap_icons_default as default };

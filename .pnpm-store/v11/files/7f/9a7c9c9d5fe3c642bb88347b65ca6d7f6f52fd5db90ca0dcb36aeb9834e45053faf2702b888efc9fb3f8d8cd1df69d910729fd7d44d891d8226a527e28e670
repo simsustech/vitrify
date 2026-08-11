@@ -1,0 +1,6 @@
+/*!
+ * @quasar/quasar-ui-qmediaplayer v3.0.0
+ * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+ * Released under the MIT License.
+ */
+(function(e,a){"object"===typeof exports&&"undefined"!==typeof module?module.exports=a():"function"===typeof define&&define.amd?define([],a):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.cs=a())})(this,function(){return{lang:"cs",mediaPlayer:{oldBrowserVideo:"Pro zobrazení obrazu prosím zapněte JavaScript a/nebo zvažte aktualizaci na prohlížeč, který podporuje HTML5 video.",oldBrowserAudio:"Pro přehrání zvuku, prosím zapněte JavaScript a/nebo zvažte aktualizaci na prohlížeč, který podporuje HTML5 audio.",pause:"Pozastavit",play:"Přehrát",settings:"Nastavení",toggleFullscreen:"Přepni na celou obrazovku",mute:"Vypnout zvuk",unmute:"Zapnout zvuk",speed:"Rychlost",language:"Jazyk",playbackRate:"Rychlost přehrávání",waitingVideo:"Čekám na video",waitingAudio:"Čekám na audio",ratePoint5:".5x",rateNormal:"Normálně",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"Vypnout",noLoadVideo:"Nemůžu nahrát video",noLoadAudio:"Nemůžu nahrát audio",cannotPlayVideo:"Nemůžu přehrát video",cannotPlayAudio:"Nemůžu přehrát audio"}}});

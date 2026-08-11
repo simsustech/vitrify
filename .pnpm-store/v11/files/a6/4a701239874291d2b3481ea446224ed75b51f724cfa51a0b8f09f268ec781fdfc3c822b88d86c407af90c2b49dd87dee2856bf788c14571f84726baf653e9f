@@ -1,0 +1,2080 @@
+/*!
+* @quasar/quasar-ui-qmediaplayer v3.0.0
+* (c) 2026 Jeff Galbraith <jeff@quasar.dev>
+* Released under the MIT License.
+*/
+import { computed, defineComponent, getCurrentInstance, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch, withDirectives } from "vue";
+import { ClosePopup, QBtn, QExpansionItem, QIcon, QItem, QItemSection, QList, QMenu, QSlider, QSpinner, QTooltip, Ripple, useQuasar } from "quasar";
+//#region icon-set/material-icons.mjs
+var material_icons_default = {
+	name: "material-icons",
+	mediaPlayer: {
+		play: "play_arrow",
+		pause: "pause",
+		volumeOff: "volume_off",
+		volumeDown: "volume_down",
+		volumeUp: "volume_up",
+		settings: "settings",
+		speed: "directions_run",
+		language: "closed_caption",
+		selected: "check",
+		fullscreen: "fullscreen",
+		fullscreenExit: "fullscreen_exit",
+		bigPlayButton: "play_arrow"
+	}
+};
+//#endregion
+//#region lang/en-US.mjs
+var en_US_default = {
+	lang: "en-US",
+	mediaPlayer: {
+		oldBrowserVideo: "To view this video please enable JavaScript and/or consider upgrading to a browser that supports HTML5 video.",
+		oldBrowserAudio: "To listen to this audio please enable JavaScript and/or consider upgrading to a browser that supports HTML5 audio.",
+		pause: "Pause",
+		play: "Play",
+		settings: "Settings",
+		toggleFullscreen: "Toggle Fullscreen",
+		mute: "Mute",
+		unmute: "Unmute",
+		speed: "Speed",
+		language: "Language",
+		playbackRate: "Playback Rate",
+		waitingVideo: "Waiting for video",
+		waitingAudio: "Waiting for audio",
+		ratePoint5: ".5x",
+		rateNormal: "Normal",
+		rate1Point5: "1.5x",
+		rate2: "2x",
+		trackLanguageOff: "Off",
+		noLoadVideo: "Unable to load video",
+		noLoadAudio: "Unable to load audio",
+		cannotPlayVideo: "Cannot play video",
+		cannotPlayAudio: "Cannot play audio"
+	}
+};
+//#endregion
+//#region src/components/QMediaPlayer.ts
+const defaultMediaPlayerLang = en_US_default;
+const defaultMediaPlayerIconSet = material_icons_default;
+const matClose = "M0 0h24v24H0z@@fill:none;&&M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z";
+const iconSetLoaders = {
+	"bootstrap-icons": () => import("./chunks/bootstrap-icons-D72j6HTS.js"),
+	"eva-icons": () => import("./chunks/eva-icons-DUTFTeW_.js"),
+	"fontawesome-v7": () => import("./chunks/fontawesome-v7-CLuwYpyG.js"),
+	"ionicons-v4": () => import("./chunks/ionicons-v4-Ob_KsHZ-.js"),
+	"ionicons-v8": () => import("./chunks/ionicons-v8-VLbbSloK.js"),
+	"line-awesome": () => import("./chunks/line-awesome-Bc6w5wg9.js"),
+	"material-icons": async () => ({ default: material_icons_default }),
+	"material-icons-outlined": () => import("./chunks/material-icons-outlined-BK138V3A.js"),
+	"material-icons-round": () => import("./chunks/material-icons-round-Tly-Llly.js"),
+	"material-icons-sharp": () => import("./chunks/material-icons-sharp-DJEN8s86.js"),
+	"material-symbols-outlined": () => import("./chunks/material-symbols-outlined-Cl-aN8-6.js"),
+	"material-symbols-rounded": () => import("./chunks/material-symbols-rounded-CqjWRmfM.js"),
+	"material-symbols-sharp": () => import("./chunks/material-symbols-sharp-B7NbHd0J.js"),
+	"mdi-v7": () => import("./chunks/mdi-v7-CT3E7KWS.js"),
+	"svg-bootstrap-icons": () => import("./chunks/svg-bootstrap-icons-DVsZ13Wa.js"),
+	"svg-eva-icons": () => import("./chunks/svg-eva-icons--4Ysu5K3.js"),
+	"svg-fontawesome-v7": () => import("./chunks/svg-fontawesome-v7-DOSWHNxg.js"),
+	"svg-ionicons-v4": () => import("./chunks/svg-ionicons-v4-Dz1O04Pt.js"),
+	"svg-ionicons-v8": () => import("./chunks/svg-ionicons-v8-D85gf-h3.js"),
+	"svg-line-awesome": () => import("./chunks/svg-line-awesome-TswH7rPD.js"),
+	"svg-material-icons": () => import("./chunks/svg-material-icons-CCXXMRMh.js"),
+	"svg-material-icons-outlined": () => import("./chunks/svg-material-icons-outlined-zfgDAk7R.js"),
+	"svg-material-icons-round": () => import("./chunks/svg-material-icons-round-DbYJXnX5.js"),
+	"svg-material-icons-sharp": () => import("./chunks/svg-material-icons-sharp-DDXRNzWh.js"),
+	"svg-material-symbols-outlined": () => import("./chunks/svg-material-symbols-outlined-SSiENq4Q.js"),
+	"svg-material-symbols-rounded": () => import("./chunks/svg-material-symbols-rounded-C7K3svXC.js"),
+	"svg-material-symbols-sharp": () => import("./chunks/svg-material-symbols-sharp-D_am_Wei.js"),
+	"svg-mdi-v7": () => import("./chunks/svg-mdi-v7-BkPBnfNS.js"),
+	"svg-themify": () => import("./chunks/svg-themify-BzGEbZPw.js"),
+	themify: () => import("./chunks/themify-q1AIpBs5.js")
+};
+const langLoaders = {
+	ar: () => import("./chunks/ar-APrqOTu8.js"),
+	"az-Latn": () => import("./chunks/az-Latn-Bdk3HDns.js"),
+	bg: () => import("./chunks/bg-Dm2fgaLS.js"),
+	bn: () => import("./chunks/bn-vGlw7sgP.js"),
+	ca: () => import("./chunks/ca-gBimiE12.js"),
+	cs: () => import("./chunks/cs-BpzIDZWE.js"),
+	da: () => import("./chunks/da-BhUqo15-.js"),
+	de: () => import("./chunks/de-dgitjASd.js"),
+	el: () => import("./chunks/el-DdDSWLuB.js"),
+	"en-GB": () => import("./chunks/en-GB-CwBwwVjl.js"),
+	"en-US": async () => ({ default: en_US_default }),
+	eo: () => import("./chunks/eo-Drx_fwu2.js"),
+	es: () => import("./chunks/es-BBrhXo5l.js"),
+	et: () => import("./chunks/et-Ccg2JfhN.js"),
+	fa: () => import("./chunks/fa-HsAIq1ud.js"),
+	"fa-IR": () => import("./chunks/fa-IR-_2Oz_H1M.js"),
+	fi: () => import("./chunks/fi-xiPACAtL.js"),
+	fr: () => import("./chunks/fr-DBoabvor.js"),
+	gn: () => import("./chunks/gn-gM07FXTu.js"),
+	he: () => import("./chunks/he-iGKp2aY2.js"),
+	hr: () => import("./chunks/hr-Dlgv6v1F.js"),
+	hu: () => import("./chunks/hu-Dn5wO5wh.js"),
+	id: () => import("./chunks/id-weBZM-tv.js"),
+	is: () => import("./chunks/is-WUlUZ_UX.js"),
+	it: () => import("./chunks/it-JQUdzyW1.js"),
+	ja: () => import("./chunks/ja-Q0ZrWN6l.js"),
+	km: () => import("./chunks/km-D4_BZFRx.js"),
+	"ko-KR": () => import("./chunks/ko-KR-CF1nnyo9.js"),
+	"kur-CKB": () => import("./chunks/kur-CKB-BdfWL_Q9.js"),
+	lt: () => import("./chunks/lt-BMFVamf4.js"),
+	lu: () => import("./chunks/lu-D5QithbC.js"),
+	lv: () => import("./chunks/lv-BKzRYaQ9.js"),
+	ml: () => import("./chunks/ml-CJd2esWB.js"),
+	ms: () => import("./chunks/ms-DekhSrCf.js"),
+	"nb-NO": () => import("./chunks/nb-NO-DFAFmwh7.js"),
+	nl: () => import("./chunks/nl-CRu300WF.js"),
+	pl: () => import("./chunks/pl-Btq3oMz7.js"),
+	pt: () => import("./chunks/pt-B54M607W.js"),
+	"pt-BR": () => import("./chunks/pt-BR-Hw6dA615.js"),
+	ro: () => import("./chunks/ro-PzEW6LyZ.js"),
+	ru: () => import("./chunks/ru-maz-ceQT.js"),
+	sk: () => import("./chunks/sk-LZ5x_cm0.js"),
+	sl: () => import("./chunks/sl-XcjwbkEY.js"),
+	sr: () => import("./chunks/sr-CNR6SNdJ.js"),
+	"sr-CYR": () => import("./chunks/sr-CYR-BGeYHEXW.js"),
+	sv: () => import("./chunks/sv-CPRKIrqV.js"),
+	ta: () => import("./chunks/ta-DcJlYb2H.js"),
+	th: () => import("./chunks/th-B5T4TuG8.js"),
+	tr: () => import("./chunks/tr-BITCn6xD.js"),
+	ug: () => import("./chunks/ug-BuGNfxmX.js"),
+	uk: () => import("./chunks/uk-CTK3V6QU.js"),
+	vi: () => import("./chunks/vi-_l6dtUqJ.js"),
+	"zh-CN": () => import("./chunks/zh-CN-gnKv4HGu.js"),
+	"zh-TW": () => import("./chunks/zh-TW-BsOFcMWv.js")
+};
+function getLanguageCandidates(lang) {
+	const candidates = [lang];
+	const [baseLang] = lang.split("-");
+	if (baseLang && baseLang !== lang) candidates.push(baseLang);
+	if (!candidates.includes("en-US")) candidates.push("en-US");
+	return candidates;
+}
+function getLanguageGlobalName(lang) {
+	return lang.replace(/-([A-Za-z])/g, (_, char) => char.toUpperCase());
+}
+function resolveLangLoaderName(lang) {
+	const candidates = getLanguageCandidates(lang);
+	for (const candidate of candidates) if (Object.prototype.hasOwnProperty.call(langLoaders, candidate)) return candidate;
+	return "en-US";
+}
+function hSlot(slot, otherwise) {
+	return slot !== void 0 ? slot() : otherwise;
+}
+const padTime = (val) => {
+	val = Math.floor(val);
+	if (val < 10) return "0" + val;
+	return val + "";
+};
+const timeParse = (sec) => {
+	let min = 0;
+	min = Math.floor(sec / 60);
+	sec = sec - min * 60;
+	return padTime(min) + ":" + padTime(sec);
+};
+var QMediaPlayer_default = defineComponent({
+	name: "QMediaPlayer",
+	directives: {
+		ClosePopup,
+		Ripple
+	},
+	slots: Object,
+	props: {
+		/**
+		* Tells the component which player is to be used.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @values video | audio
+		* @example type="video"
+		* @example type="audio"
+		*/
+		type: {
+			type: String,
+			required: false,
+			default: "video",
+			validator: (v) => ["video", "audio"].includes(v)
+		},
+		/**
+		* Use mobile logic for handling visibility of controls. This mode is best for mobiles, but can be used on desktop as well. It prevents the controls from displaying/hiding with mouse hover. Instead, clicks are used to show/hide the controls.
+		*
+		* @category behavior
+		* @applicable Video
+		*/
+		mobileMode: Boolean,
+		/**
+		* When true, clicking or tapping the video frame toggles play/pause. Turn this off when the overlay slot contains interactive content, such as forms or buttons.
+		*
+		* @category behavior
+		* @applicable Video
+		* @example :toggle-play-on-click="false"
+		*/
+		togglePlayOnClick: {
+			type: Boolean,
+			default: true
+		},
+		/**
+		* Direct media source URL. When this is set, the media element `src` is set directly and the `sources` prop is ignored.
+		*
+		* @category model
+		* @applicable Audio | Video
+		* @example source="https://path/to/the/video.mpeg"
+		*/
+		source: String,
+		/**
+		* One or more sources for video or audio. The browser picks the best source based on supported codecs.
+		*
+		* @category model
+		* @applicable Audio | Video
+		* @tsType MediaSource[]
+		* @example :sources="[{ src: 'https://your-server/your-video.mov', type: 'video/mp4' }]"
+		* @example :sources="[{ src: 'https://your-server/your-audio.mp3', type: 'audio/mp3' }]"
+		*/
+		sources: {
+			type: Array,
+			default: () => []
+		},
+		/**
+		* Poster image to display before the video is loaded.
+		*
+		* @category model
+		* @applicable Video
+		* @example poster="https://path/to/the/image.jpg"
+		*/
+		poster: {
+			type: String,
+			default: ""
+		},
+		/**
+		* Fallback poster image to display when `poster` is not provided. The `poster` prop always takes precedence.
+		*
+		* @category model
+		* @applicable Video
+		* @example fallback-poster="https://path/to/the/fallback-image.jpg"
+		*/
+		fallbackPoster: {
+			type: String,
+			default: ""
+		},
+		/**
+		* One or more text tracks for subtitles, captions, chapters, or metadata.
+		*
+		* @category model
+		* @applicable Video
+		* @tsType MediaTrack[]
+		* @example :tracks="[{ src: 'https://your-server/path/to/subtitles-en.vtt', kind: 'subtitles', srclang: 'en', label: 'English' }]"
+		*/
+		tracks: {
+			type: Array,
+			default: () => []
+		},
+		/**
+		* Display controls in a compact single-line layout.
+		*
+		* @category style
+		* @applicable Audio | Video
+		*/
+		dense: Boolean,
+		/**
+		* Automatically start playback when the media is ready to play.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		*/
+		autoplay: Boolean,
+		/**
+		* Pause playback when the player scrolls completely out of the viewport. QMediaPlayer will not automatically resume playback when it becomes visible again.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @example auto-pause
+		*/
+		autoPause: {
+			type: Boolean,
+			default: false
+		},
+		/**
+		* Whether to use CORS for fetching media assets.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @values null | anonymous | use-credentials
+		* @example cross-origin="anonymous"
+		*/
+		crossOrigin: {
+			type: String,
+			default: null,
+			validator: (v) => v === null || ["anonymous", "use-credentials"].includes(v)
+		},
+		/**
+		* Initial volume from 0-100, as a percentage.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @example :volume="50"
+		* @example :volume="75"
+		*/
+		volume: {
+			type: Number,
+			default: 60,
+			validator: (v) => v >= 0 && v <= 100
+		},
+		/**
+		* Hide the volume slider control.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		*/
+		hideVolumeSlider: Boolean,
+		/**
+		* Hide the volume button and volume slider.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @since v1.1.0
+		*/
+		hideVolumeBtn: Boolean,
+		/**
+		* Hide the play/pause button.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @since v1.0.21
+		*/
+		hidePlayBtn: Boolean,
+		/**
+		* Hide the settings button.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @since v1.0.2
+		*/
+		hideSettingsBtn: Boolean,
+		/**
+		* Hide the fullscreen button.
+		*
+		* @category behavior
+		* @applicable Video
+		* @since v1.2.0
+		*/
+		hideFullscreenBtn: Boolean,
+		/**
+		* Disable the seek-to-position slider.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @since v1.1.0
+		*/
+		disabledSeek: Boolean,
+		/**
+		* Provides a hint to the browser about what the author thinks will lead to the best user experience.
+		*
+		* @category state
+		* @applicable Video
+		* @values none | metadata | auto
+		* @tsType 'none' | 'metadata' | 'auto'
+		* @example preload="metadata"
+		*/
+		preload: {
+			type: String,
+			default: "metadata",
+			validator: (v) => [
+				"none",
+				"metadata",
+				"auto"
+			].includes(v)
+		},
+		/**
+		* Force the player to use an `<audio>` element when `type` is `audio`.
+		*
+		* @category behavior
+		* @applicable Audio
+		* @since v1.0.23
+		*/
+		noVideo: Boolean,
+		/**
+		* Start the player muted.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		*/
+		muted: Boolean,
+		/**
+		* Render media inline where the platform supports the video element `playsinline` attribute.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		*/
+		playsinline: Boolean,
+		/**
+		* Automatically seek back to the start when playback reaches the end.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		*/
+		loop: Boolean,
+		/**
+		* Track `label` value to show by default.
+		*
+		* @category behavior
+		* @applicable Video
+		* @example track-language="English"
+		*/
+		trackLanguage: {
+			type: String,
+			default: "off"
+		},
+		/**
+		* Show tooltips for built-in controls.
+		*
+		* @category state
+		*/
+		showTooltips: Boolean,
+		/**
+		* Show the big play button over the video frame.
+		*
+		* @category behavior
+		* @applicable Video
+		*/
+		showBigPlayButton: {
+			type: Boolean,
+			default: true
+		},
+		/**
+		* Show the spinner while video or audio is loading.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		*/
+		showSpinner: {
+			type: Boolean,
+			default: true
+		},
+		/**
+		* CSS size for the spinner. Defaults to `3em` for video and `1.5em` for audio.
+		*
+		* @category state
+		* @applicable Audio | Video
+		* @example spinner-size="3em"
+		* @example spinner-size="1.5em"
+		*/
+		spinnerSize: String,
+		/**
+		* Never display QMediaPlayer controls.
+		*
+		* @category behavior
+		* @applicable Video
+		*/
+		noControls: Boolean,
+		/**
+		* Show the native browser media controls.
+		*
+		* @category behavior
+		* @applicable Audio | Video
+		* @since v1.2.0
+		*/
+		nativeControls: Boolean,
+		/**
+		* Render controls below the video instead of covering the video.
+		*
+		* @category behavior
+		* @applicable Video | Audio
+		*/
+		bottomControls: {
+			type: Boolean,
+			default: false
+		},
+		/**
+		* Idle time in milliseconds before hiding the controls.
+		*
+		* @category behavior
+		* @applicable Video
+		* @example :controls-display-time="3000"
+		*/
+		controlsDisplayTime: {
+			type: Number,
+			default: 4e3
+		},
+		/**
+		* Playback speed options for the settings menu.
+		*
+		* @category behavior
+		* @applicable Video
+		* @tsType PlaybackRateOption[]
+		* @default [ { label: '.5x', value: 0.5 }, { label: 'Normal', value: 1 }, { label: '1.5x', value: 1.5 }, { label: '2x', value: 2 } ]
+		* @example :playback-rates="[{ label: '.5x', value: 0.5 }]"
+		*/
+		playbackRates: Array,
+		/**
+		* Initial playback rate. Corresponds to a `value` in `playback-rates`.
+		*
+		* @category behavior
+		* @applicable Video
+		* @example :playback-rate="2"
+		*/
+		playbackRate: {
+			type: Number,
+			default: 1
+		},
+		/**
+		* Render the player on a dark background.
+		*
+		* @category style
+		* @applicable Audio | Video
+		*/
+		dark: Boolean,
+		/**
+		* Border radius applied to the media player.
+		*
+		* @category style
+		* @applicable Audio | Video
+		* @tsType number | string
+		* @example radius="4px"
+		* @example radius="6%"
+		*/
+		radius: {
+			type: [Number, String],
+			default: 0
+		},
+		/**
+		* Style definitions applied directly to the media element.
+		*
+		* @category style
+		* @applicable Audio | Video
+		* @tsType ClassOrStyle
+		* @example content-style="background-color: #ff0000"
+		* @example :content-style="{ backgroundColor: '#ff0000' }"
+		*/
+		contentStyle: [String, Object],
+		/**
+		* Class definitions applied directly to the media element.
+		*
+		* @category style
+		* @applicable Audio | Video
+		* @tsType ClassOrStyle
+		* @example content-class="my-special-class"
+		* @example :content-class="{ 'my-special-class': condition }"
+		*/
+		contentClass: [String, Object],
+		/**
+		* Width attribute applied directly to the media element, in pixels.
+		*
+		* @category style
+		* @applicable Audio | Video
+		* @example :content-width="300"
+		* @since v1.0.2
+		*/
+		contentWidth: Number,
+		/**
+		* Height attribute applied directly to the media element, in pixels.
+		*
+		* @category style
+		* @applicable Audio | Video
+		* @example :content-height="300"
+		* @since v1.0.2
+		*/
+		contentHeight: Number
+	},
+	emits: [
+		"mediaPlayer",
+		"playbackRate",
+		"trackLanguage",
+		"showControls",
+		"volume",
+		"muted",
+		"fullscreen",
+		"networkState",
+		"abort",
+		"ready",
+		"canplay",
+		"canplaythrough",
+		"duration",
+		"emptied",
+		"ended",
+		"error",
+		"loadeddata",
+		"loadedmetadata",
+		"stalled",
+		"suspend",
+		"loadstart",
+		"paused",
+		"play",
+		"playing",
+		"timeupdate",
+		"waiting"
+	],
+	setup(props, { slots, emit, expose }) {
+		const vm = getCurrentInstance();
+		const vmContext = vm;
+		const instanceQuasar = vm?.proxy?.$q || vmContext?.ctx?.$q;
+		const $q = {
+			dark: { isActive: false },
+			iconSet: { name: "material-icons" },
+			lang: { isoName: "en-US" },
+			...useQuasar() || instanceQuasar || {}
+		};
+		const canRender = ref(false), lang = reactive({ mediaPlayer: { ...defaultMediaPlayerLang.mediaPlayer } }), iconSet = reactive({ mediaPlayer: { ...defaultMediaPlayerIconSet.mediaPlayer } }), $root = ref(null), $media = ref(null), controls = ref(null), menu = ref(null), timer = reactive({ hideControlsTimer: null }), state = reactive({
+			errorText: null,
+			controls: false,
+			showControls: true,
+			inControls: false,
+			volume: 60,
+			muted: false,
+			currentTime: .01,
+			duration: 1,
+			durationTime: "00:00",
+			remainingTime: "00:00",
+			displayTime: "00:00",
+			inFullscreen: false,
+			loading: true,
+			playReady: false,
+			playing: false,
+			playbackRates: [
+				{
+					label: ".5x",
+					value: .5
+				},
+				{
+					label: "Normal",
+					value: 1
+				},
+				{
+					label: "1.5x",
+					value: 1.5
+				},
+				{
+					label: "2x",
+					value: 2
+				}
+			],
+			playbackRate: 1,
+			trackLanguage: "Off",
+			showBigPlayButton: true,
+			metadataLoaded: false,
+			spinnerSize: "5em",
+			bottomControls: false,
+			noControls: false
+		}), settingsMenuVisible = ref(false), autoPauseObserver = ref(null), blobObjectUrl = ref(null), allEvents = [
+			"abort",
+			"canplay",
+			"canplaythrough",
+			"durationchange",
+			"emptied",
+			"ended",
+			"error",
+			"interruptbegin",
+			"interruptend",
+			"loadeddata",
+			"loadedmetadata",
+			"loadstart",
+			"pause",
+			"play",
+			"playing",
+			"progress",
+			"ratechange",
+			"seeked",
+			"timeupdate",
+			"volumechange",
+			"waiting"
+		];
+		const __classes = computed(() => {
+			return {
+				"q-media__fullscreen": state.inFullscreen,
+				"q-media__fullscreen--window": state.inFullscreen
+			};
+		});
+		const __renderVideoClasses = computed(() => {
+			return {
+				"q-media--player": true,
+				"q-media--player--bottom-controls--standard": !props.dense && state.bottomControls && state.inFullscreen,
+				"q-media--player--bottom-controls--dense": props.dense && state.bottomControls && state.inFullscreen
+			};
+		});
+		const __videoControlsClasses = computed(() => {
+			return {
+				"q-media__controls--dense": !slots.controls && (state.showControls || props.mobileMode) && props.dense,
+				"q-media__controls--standard": !slots.controls && (state.showControls || props.mobileMode) && !props.dense,
+				"q-media__controls--hidden": !state.showControls,
+				"q-media__controls--bottom-controls": state.bottomControls
+			};
+		});
+		const __audioControlsClasses = computed(() => {
+			return {
+				"q-media__controls--dense": props.dense,
+				"q-media__controls--standard": !props.dense,
+				"q-media__controls--bottom-controls": state.bottomControls
+			};
+		});
+		const __contentStyle = computed(() => {
+			const style = {};
+			if (state.inFullscreen !== true) {
+				Object.assign(style, __mergeClassOrStyle("style", props.contentStyle));
+				if (props.bottomControls === true && style.height === void 0) style.height = `calc(100% - ${__controlsHeight.value}px)`;
+				if (style.height === void 0) style.height = "100%";
+			}
+			return style;
+		});
+		const __volumeIcon = computed(() => {
+			if (state.volume > 1 && state.volume < 70 && !state.muted) return iconSet.mediaPlayer.volumeDown;
+			else if (state.volume >= 70 && !state.muted) return iconSet.mediaPlayer.volumeUp;
+			else return iconSet.mediaPlayer.volumeOff;
+		});
+		const __selectTracksLanguageList = computed(() => {
+			const tracksList = [];
+			const track = {
+				label: lang.mediaPlayer.trackLanguageOff,
+				value: "off"
+			};
+			tracksList.push(track);
+			for (const mediaTrack of props.tracks) {
+				const track = {
+					label: mediaTrack.label || "",
+					value: mediaTrack.label || ""
+				};
+				tracksList.push(track);
+			}
+			return tracksList;
+		});
+		const __trackLanguageCaption = computed(() => {
+			return __selectTracksLanguageList.value.find((language) => language.value === state.trackLanguage)?.label || state.trackLanguage;
+		});
+		function __mediaElement() {
+			const media = $media.value;
+			return media !== null && media.volume !== void 0 ? media : null;
+		}
+		const __isMediaAvailable = computed(() => __mediaElement() !== null);
+		const __isAudio = computed(() => {
+			return props.type === "audio";
+		});
+		const __isVideo = computed(() => {
+			return props.type === "video";
+		});
+		const __poster = computed(() => {
+			return props.poster || props.fallbackPoster || void 0;
+		});
+		const __settingsPlaybackCaption = computed(() => {
+			let caption = "";
+			state.playbackRates.forEach((rate) => {
+				if (rate.value === state.playbackRate) caption = rate.label;
+			});
+			return caption;
+		});
+		const __controlsHeight = computed(() => {
+			if (controls.value) return controls.value.clientHeight;
+			return props.dense ? 40 : 80;
+		});
+		watch(() => $media.value, () => {
+			__init();
+			emit("mediaPlayer", $media.value);
+		});
+		watch(() => [props.poster, props.fallbackPoster], () => {
+			__updatePoster();
+		});
+		watch(() => props.sources, () => {
+			__updateSources();
+		}, { deep: true });
+		watch(() => props.source, () => {
+			__updateSources();
+		});
+		watch(() => props.tracks, () => {
+			__updateTracks();
+		}, { deep: true });
+		watch(() => props.volume, () => {
+			__updateVolume();
+		});
+		watch(() => props.muted, () => {
+			__updateMuted();
+		});
+		watch(() => props.trackLanguage, () => {
+			__updateTrackLanguage();
+		});
+		watch(() => props.showBigPlayButton, () => {
+			__updateBigPlayButton();
+		});
+		watch(() => props.playbackRates, () => {
+			__updatePlaybackRates();
+		});
+		watch(() => props.playbackRate, () => {
+			__updatePlaybackRate();
+		});
+		watch(() => $q.lang?.isoName, () => {
+			__setupLang();
+		});
+		watch(() => [$q.iconSet?.name, $q.iconSet?.mediaPlayer], () => {
+			__setupIcons();
+		});
+		watch(() => $q.fullscreen?.isActive, (val) => {
+			if (!val && __isVideo.value && state.inFullscreen) exitFullscreen();
+		});
+		watch(() => state.playbackRate, (val) => {
+			const media = __mediaElement();
+			if (val && media !== null) {
+				media.playbackRate = val;
+				emit("playbackRate", val);
+			}
+		});
+		watch(() => state.trackLanguage, (val) => {
+			__toggleCaptions();
+			emit("trackLanguage", val);
+		});
+		watch(() => state.showControls, (val) => {
+			if (__isVideo.value && !state.noControls) emit("showControls", val);
+		});
+		watch(() => state.volume, (val) => {
+			const media = __mediaElement();
+			if (media !== null) {
+				const volume = val / 100;
+				if (media.volume !== volume) {
+					media.volume = volume;
+					emit("volume", val);
+				}
+			}
+		});
+		watch(() => state.muted, (val) => {
+			emit("muted", val);
+		});
+		watch(() => state.currentTime, () => {
+			const media = __mediaElement();
+			if (media !== null && state.playReady) {
+				if (isFinite(media.duration)) state.remainingTime = timeParse(media.duration - media.currentTime);
+				state.displayTime = timeParse(media.currentTime);
+			}
+		});
+		watch(() => props.bottomControls, (val) => {
+			state.bottomControls = val;
+			if (val) state.showControls = true;
+		});
+		watch(() => props.noControls, (val) => {
+			state.noControls = val;
+			if (props.nativeControls === true) state.noControls = true;
+		});
+		watch(() => props.autoPause, () => {
+			__updateAutoPauseObserver();
+		});
+		onMounted(() => {
+			canRender.value = typeof window !== "undefined";
+			if (canRender.value === true) {
+				__setupLang();
+				__setupIcons();
+				nextTick(() => {
+					__updateAutoPauseObserver();
+				});
+			}
+		});
+		onBeforeUnmount(() => {
+			if (canRender.value === true) {
+				__removeAutoPauseObserver();
+				exitFullscreen();
+				document.body.classList.remove("no-scroll");
+				__removeSourceEventListeners();
+				__removeMediaEventListeners();
+				__removeTracks();
+				__removeSources();
+				$media.value = null;
+			}
+		});
+		/**
+		* Load audio or video using a Blob or File object.
+		*
+		* @param blob Blob or File object. The player creates and manages the object URL.
+		* @param-tsType blob Blob | File
+		* @param-api-exemption blob examples
+		* @returns True if the media source was loaded, otherwise false.
+		* @returns-type Boolean
+		* @returns-tsType boolean
+		* @returns-api-exemption examples
+		*/
+		function loadBlob(blob) {
+			const media = __mediaElement();
+			if (media === null) return false;
+			if (!(blob instanceof Blob)) {
+				console.error("[QMediaPlayer]: loadBlob method requires a Blob or File");
+				return false;
+			}
+			__removeSources();
+			const objectUrl = URL.createObjectURL(blob);
+			blobObjectUrl.value = objectUrl;
+			media.src = objectUrl;
+			__reset();
+			__addSourceEventListeners();
+			media.load();
+			nextTick(() => {
+				__syncMediaReady();
+			}).catch((e) => console.error(e));
+			return true;
+		}
+		/**
+		* Load audio or video using a FileList. Only the first item in the list is used.
+		*
+		* @param fileList FileList received from an input with `type="file"`.
+		* @param-tsType fileList FileList
+		* @param-api-exemption fileList examples
+		* @returns True if the media source was loaded, otherwise false.
+		* @returns-type Boolean
+		* @returns-tsType boolean
+		* @returns-api-exemption examples
+		*/
+		function loadFileBlob(fileList) {
+			if (fileList) {
+				if (Object.prototype.toString.call(fileList) === "[object FileList]") {
+					const file = fileList.item(0);
+					return file !== null ? loadBlob(file) : false;
+				}
+				console.error("[QMediaPlayer]: loadFileBlob method requires a FileList");
+			}
+			return false;
+		}
+		/**
+		* Show the controls. Has no effect if controls are already displayed.
+		*
+		* @applicable Video
+		*/
+		function showControls() {
+			if (state.noControls) {
+				state.showControls = false;
+				return;
+			}
+			if (state.bottomControls) {
+				state.showControls = true;
+				return;
+			}
+			if (timer.hideControlsTimer) {
+				clearTimeout(timer.hideControlsTimer);
+				timer.hideControlsTimer = null;
+			}
+			state.showControls = true;
+			__checkCursor();
+			if (props.controlsDisplayTime !== -1 && !props.mobileMode && __isVideo.value) timer.hideControlsTimer = setTimeout(() => {
+				if (!__showingMenu() && state.inControls !== true) {
+					state.showControls = false;
+					timer.hideControlsTimer = null;
+					__checkCursor();
+				} else showControls();
+			}, props.controlsDisplayTime);
+		}
+		/**
+		* Hide the controls. Has no effect if controls are already hidden.
+		*
+		* @applicable Video
+		*/
+		function hideControls() {
+			if (state.inControls) return;
+			if (state.noControls) {
+				state.showControls = false;
+				return;
+			}
+			if (state.bottomControls) {
+				state.showControls = true;
+				return;
+			}
+			if (timer.hideControlsTimer) clearTimeout(timer.hideControlsTimer);
+			if (props.controlsDisplayTime !== -1) {
+				state.showControls = false;
+				__checkCursor();
+			}
+			timer.hideControlsTimer = null;
+		}
+		/**
+		* Toggle the controls.
+		*
+		* @applicable Video
+		*/
+		function toggleControls() {
+			if (state.bottomControls) return;
+			if (state.showControls) hideControls();
+			else showControls();
+		}
+		/**
+		* Start playback if the media is ready. This should be called after the `ready` event and may still require a user gesture depending on browser policy.
+		*
+		* @applicable Audio | Video
+		*/
+		function play() {
+			const media = __mediaElement();
+			if (media !== null && state.playReady === true) media.play().then(() => {
+				state.showBigPlayButton = false;
+				state.playing = true;
+				__mouseLeaveVideo();
+				return true;
+			}).catch(() => {});
+		}
+		/**
+		* Pause playback if the media is currently playing.
+		*
+		* @applicable Audio | Video
+		*/
+		function pause() {
+			const media = __mediaElement();
+			if (media !== null && state.playReady === true) {
+				if (state.playing) {
+					media.pause();
+					state.showBigPlayButton = true;
+					state.playing = false;
+				}
+			}
+		}
+		function __updateAutoPauseObserver() {
+			__removeAutoPauseObserver();
+			if (props.autoPause !== true || canRender.value !== true || typeof IntersectionObserver === "undefined" || $root.value === null) return;
+			autoPauseObserver.value = new IntersectionObserver((entries) => {
+				if (entries[0]?.isIntersecting !== true && state.playing === true && state.inFullscreen !== true) pause();
+			});
+			autoPauseObserver.value.observe($root.value);
+		}
+		function __removeAutoPauseObserver() {
+			if (autoPauseObserver.value !== null) {
+				autoPauseObserver.value.disconnect();
+				autoPauseObserver.value = null;
+			}
+		}
+		/**
+		* Mute the audio.
+		*
+		* @applicable Audio | Video
+		*/
+		function mute() {
+			state.muted = true;
+			const media = __mediaElement();
+			if (media !== null) media.muted = true;
+		}
+		/**
+		* Unmute the audio.
+		*
+		* @applicable Audio | Video
+		*/
+		function unmute() {
+			state.muted = false;
+			const media = __mediaElement();
+			if (media !== null) media.muted = false;
+		}
+		/**
+		* Toggle between play and pause states.
+		*
+		* @applicable Audio | Video
+		* @param event Optional source event.
+		* @param-required event false
+		* @param-tsType event Event
+		*/
+		function togglePlay(event) {
+			__stopAndPrevent(event);
+			const media = __mediaElement();
+			if (media !== null && state.playReady === true) if (state.playing) {
+				media.pause();
+				state.showBigPlayButton = true;
+				state.playing = false;
+			} else media.play().then(() => {
+				state.showBigPlayButton = false;
+				state.playing = true;
+				__mouseLeaveVideo();
+				return true;
+			}).catch(() => {});
+		}
+		/**
+		* Toggle between muted and unmuted states.
+		*
+		* @applicable Audio | Video
+		* @param event Source event.
+		* @param-tsType event Event
+		*/
+		function toggleMuted(event) {
+			__stopAndPrevent(event);
+			state.muted = !state.muted;
+			const media = __mediaElement();
+			if (media !== null) media.muted = state.muted === true;
+		}
+		/**
+		* Toggle fullscreen mode.
+		*
+		* @applicable Video
+		* @param event Source event.
+		* @param-tsType event Event
+		*/
+		function toggleFullscreen(event) {
+			if (__isVideo.value) {
+				__stopAndPrevent(event);
+				if (state.inFullscreen) exitFullscreen();
+				else setFullscreen();
+				emit("fullscreen", state.inFullscreen);
+			}
+		}
+		/**
+		* Enter fullscreen mode.
+		*
+		* @applicable Video
+		*/
+		function setFullscreen() {
+			const media = __mediaElement();
+			if (props.hideFullscreenBtn === true || !__isVideo.value || state.inFullscreen) return;
+			if ($q.fullscreen !== void 0 && media !== null) {
+				state.inFullscreen = true;
+				$q.fullscreen.request(media.parentElement);
+				document.body.classList.add("no-scroll");
+			}
+		}
+		/**
+		* Exit fullscreen mode.
+		*
+		* @applicable Video
+		*/
+		function exitFullscreen() {
+			if (props.hideFullscreenBtn === true || !__isVideo.value || !state.inFullscreen) return;
+			if ($q.fullscreen !== void 0) {
+				state.inFullscreen = false;
+				$q.fullscreen.exit();
+				document.body.classList.remove("no-scroll");
+			}
+		}
+		/**
+		* Return the current play time in seconds.
+		*
+		* @applicable Audio | Video
+		* @returns `-1` if not ready, otherwise the current play time in seconds.
+		* @returns-type Number
+		* @returns-tsType number
+		* @returns-api-exemption examples
+		*/
+		function currentTime() {
+			const media = __mediaElement();
+			if (media !== null && state.playReady === true) return media.currentTime;
+			return -1;
+		}
+		/**
+		* Set the current play time.
+		*
+		* @applicable Audio | Video
+		* @param seconds Time in seconds.
+		* @param-type seconds Number
+		* @param-tsType seconds number
+		* @param-example seconds 30
+		* @param-example seconds 280
+		*/
+		function setCurrentTime(seconds) {
+			const media = __mediaElement();
+			if (state.playReady) {
+				if (media !== null && isFinite(media.duration) && seconds >= 0 && seconds <= media.duration) state.currentTime = media.currentTime = seconds;
+			}
+		}
+		/**
+		* Set the volume as a percent from 0-100.
+		*
+		* @applicable Audio | Video
+		* @param volume Volume in percent.
+		* @param-type volume Number
+		* @param-tsType volume number
+		* @param-example volume 50
+		* @param-example volume 75
+		*/
+		function setVolume(volume) {
+			if (volume >= 0 && volume <= 100) state.volume = volume;
+		}
+		function __reset() {
+			if (timer.hideControlsTimer && !state.bottomControls) clearTimeout(timer.hideControlsTimer);
+			timer.hideControlsTimer = null;
+			state.errorText = null;
+			state.currentTime = .01;
+			state.durationTime = "00:00";
+			state.remainingTime = "00:00";
+			state.displayTime = "00:00";
+			state.duration = 1;
+			state.playReady = false;
+			state.playing = false;
+			state.loading = true;
+			state.metadataLoaded = false;
+			__updateTrackLanguage();
+			showControls();
+		}
+		function __toggleCaptions() {
+			__showCaptions(state.trackLanguage);
+		}
+		function __showCaptions(lang) {
+			const media = __mediaElement();
+			if (media !== null && __isVideo.value) for (const track of Array.from(media.textTracks)) if (track.label === lang) {
+				track.mode = "showing";
+				track.oncuechange = __cueChanged;
+			} else {
+				track.mode = "hidden";
+				track.oncuechange = null;
+			}
+		}
+		function __stopAndPrevent(e) {
+			if (e) {
+				if (e.cancelable !== false) e.preventDefault();
+				e.stopPropagation();
+			}
+		}
+		async function __setupLang() {
+			const isoName = $q.lang?.isoName || "en-US";
+			let language;
+			try {
+				language = await __loadLang(isoName);
+			} catch {}
+			if (language?.mediaPlayer !== void 0) {
+				lang.mediaPlayer = {
+					...defaultMediaPlayerLang.mediaPlayer,
+					...language.mediaPlayer
+				};
+				__updatePlaybackRates();
+				__updateTrackLanguage();
+			}
+		}
+		async function __loadLang(lang) {
+			let langList = {};
+			if (lang) {
+				const mediaPlayerGlobal = typeof window !== "undefined" ? window.QMediaPlayer : void 0;
+				if (mediaPlayerGlobal && mediaPlayerGlobal.Component) {
+					const language = getLanguageCandidates(lang).find((candidate) => mediaPlayerGlobal.lang?.[getLanguageGlobalName(candidate)] !== void 0);
+					if (language !== void 0) langList = mediaPlayerGlobal.lang?.[getLanguageGlobalName(language)] ?? {};
+					else {
+						console.error(`[QMediaPlayer]: No language loaded called '${lang}'`);
+						console.error("[QMediaPlayer]: Be sure to load the UMD version of the language in a script tag before using with UMD");
+					}
+				} else try {
+					const langName = resolveLangLoaderName(lang);
+					const loadLang = langLoaders[langName];
+					if (langName === "en-US" && lang !== "en-US") console.error(`[QMediaPlayer]: Cannot find language file called '${lang}'`);
+					langList = (await loadLang()).default;
+				} catch {
+					console.error(`[QMediaPlayer]: Cannot find language file called '${lang}'`);
+				}
+			}
+			return langList;
+		}
+		async function __setupIcons() {
+			const customMediaPlayerIcons = $q.iconSet?.mediaPlayer;
+			if (customMediaPlayerIcons !== void 0) {
+				iconSet.mediaPlayer = {
+					...defaultMediaPlayerIconSet.mediaPlayer,
+					...customMediaPlayerIcons
+				};
+				return;
+			}
+			const iconSetName = $q.iconSet?.name || "material-icons";
+			let icnSet;
+			try {
+				icnSet = await __loadIconSet(iconSetName);
+			} catch {}
+			if (icnSet !== void 0 && icnSet.mediaPlayer !== void 0) iconSet.mediaPlayer = {
+				...defaultMediaPlayerIconSet.mediaPlayer,
+				...icnSet.mediaPlayer
+			};
+		}
+		async function __loadIconSet(set) {
+			let iconsList = {};
+			if (set) {
+				const mediaPlayerGlobal = typeof window !== "undefined" ? window.QMediaPlayer : void 0;
+				if (mediaPlayerGlobal && mediaPlayerGlobal.Component) {
+					const name = set.replace(/-([a-z])/g, (_match, char) => char.toUpperCase());
+					if (mediaPlayerGlobal.iconSet && mediaPlayerGlobal.iconSet[name]) iconsList = mediaPlayerGlobal.iconSet[name];
+					else {
+						console.error(`[QMediaPlayer]: No icon set loaded called '${set}'`);
+						console.error("[QMediaPlayer]:Be sure to load the UMD version of the icon set in a script tag before using with UMD");
+					}
+				} else {
+					const loadIconSet = iconSetLoaders[set] || iconSetLoaders["material-icons"];
+					if (iconSetLoaders[set] === void 0) console.error(`[QMediaPlayer]: Cannot find icon set file called '${set}'`);
+					iconsList = (await loadIconSet()).default;
+				}
+			}
+			return iconsList;
+		}
+		function __init() {
+			const media = __mediaElement();
+			state.bottomControls = props.bottomControls;
+			state.noControls = props.noControls;
+			if (props.nativeControls === true) state.noControls = true;
+			__addMediaEventListeners();
+			__updateTrackLanguage();
+			__updateSources();
+			__updateTracks();
+			__updateBigPlayButton();
+			__updateVolume();
+			__updateMuted();
+			__updatePlaybackRates();
+			__updatePlaybackRate();
+			if (props.crossOrigin && media !== null) media.setAttribute("crossorigin", props.crossOrigin);
+			if (media !== null) media.controls = false;
+			__addSourceEventListeners();
+			__toggleCaptions();
+		}
+		function __addMediaEventListeners() {
+			const media = __mediaElement();
+			if (media !== null) allEvents.forEach((event) => {
+				media.addEventListener(event, __mediaEventHandler);
+			});
+		}
+		function __removeMediaEventListeners() {
+			const media = __mediaElement();
+			if (media !== null) allEvents.forEach((event) => {
+				media.removeEventListener(event, __mediaEventHandler);
+			});
+		}
+		function __addSourceEventListeners() {
+			const media = __mediaElement();
+			if (media !== null) {
+				const sources = media.querySelectorAll("source");
+				for (const source of sources) source.addEventListener("error", __sourceEventHandler);
+			}
+		}
+		function __removeSourceEventListeners() {
+			const media = __mediaElement();
+			if (media !== null) {
+				const sources = media.querySelectorAll("source");
+				for (const source of sources) source.removeEventListener("error", __sourceEventHandler);
+			}
+		}
+		function __setMediaReady() {
+			const media = __mediaElement();
+			if (media === null) return false;
+			const wasReady = state.playReady;
+			state.playReady = true;
+			state.loading = false;
+			state.displayTime = timeParse(media.currentTime);
+			if (isFinite(media.duration)) {
+				state.duration = media.duration;
+				state.durationTime = timeParse(media.duration);
+				state.remainingTime = timeParse(media.duration - media.currentTime);
+			}
+			showControls();
+			return wasReady !== true;
+		}
+		function __syncMediaReady() {
+			const HAVE_METADATA = 1;
+			const media = __mediaElement();
+			if (media !== null && (media.currentSrc || media.src) && media.readyState >= HAVE_METADATA) __setMediaReady();
+		}
+		function __hasMediaSource(media) {
+			return media.currentSrc.length > 0 || (media.getAttribute("src") || "").length > 0 || Array.from(media.querySelectorAll("source")).some((source) => (source.getAttribute("src") || "").length > 0);
+		}
+		function __sourceEventHandler(event) {
+			const NETWORK_NO_SOURCE = 3;
+			const media = __mediaElement();
+			if (media !== null && __hasMediaSource(media) !== true) {
+				state.errorText = null;
+				state.loading = false;
+				return;
+			}
+			if (media !== null && media.networkState === NETWORK_NO_SOURCE) {
+				state.errorText = __isVideo.value ? lang.mediaPlayer.noLoadVideo : lang.mediaPlayer.noLoadAudio;
+				state.loading = false;
+			}
+			emit("networkState", event);
+		}
+		function __mediaEventHandler(event) {
+			const media = __mediaElement();
+			if (media === null) return;
+			if (event.type === "abort") emit("abort");
+			else if (event.type === "canplay") {
+				const becameReady = __setMediaReady();
+				emit("canplay");
+				if (becameReady) emit("ready");
+			} else if (event.type === "canplaythrough") emit("canplaythrough");
+			else if (event.type === "durationchange") {
+				if (isFinite(media.duration)) {
+					state.duration = media.duration;
+					state.durationTime = timeParse(media.duration);
+					emit("duration", media.duration);
+				}
+			} else if (event.type === "emptied") emit("emptied");
+			else if (event.type === "ended") {
+				state.playing = false;
+				emit("ended");
+			} else if (event.type === "error") {
+				if (__hasMediaSource(media) !== true) {
+					state.errorText = null;
+					state.playing = false;
+					state.loading = false;
+					return;
+				}
+				const error = media.error;
+				state.errorText = error && error.message ? error.message : null;
+				state.playing = false;
+				state.loading = false;
+				emit("error", error);
+			} else if (event.type === "interruptbegin") {} else if (event.type === "interruptend") {} else if (event.type === "loadeddata") {
+				state.loading = false;
+				emit("loadeddata");
+			} else if (event.type === "loadedmetadata") {
+				state.metadataLoaded = true;
+				__updateTracks();
+				__updateTrackLanguage();
+				__toggleCaptions();
+				const becameReady = __setMediaReady();
+				emit("loadedmetadata");
+				if (becameReady) emit("ready");
+			} else if (event.type === "stalled") emit("stalled");
+			else if (event.type === "suspend") emit("suspend");
+			else if (event.type === "loadstart") emit("loadstart");
+			else if (event.type === "pause") {
+				state.playing = false;
+				emit("paused");
+			} else if (event.type === "play") emit("play");
+			else if (event.type === "playing") {
+				state.playing = true;
+				emit("playing");
+			} else if (event.type === "progress") {} else if (event.type === "ratechange") {} else if (event.type === "seeked") {} else if (event.type === "timeupdate") {
+				state.currentTime = media.currentTime;
+				emit("timeupdate", media.currentTime, state.remainingTime);
+			} else if (event.type === "volumechange") {} else if (event.type === "waiting") emit("waiting");
+		}
+		function __mergeClassOrStyle(type, val) {
+			const child = {};
+			if (val !== void 0) if (typeof val === "string") {
+				if (type === "style") val.replace(/\s+/g, "").split(";").forEach((part) => {
+					if (part !== "") {
+						const [property, value] = part.split(":");
+						if (property !== void 0 && value !== void 0) child[property] = value;
+					}
+				});
+				else if (type === "class") val.split(" ").forEach((part) => {
+					if (part.replace(/\s+/g, "") !== "") child[part] = true;
+				});
+			} else Object.assign(child, val);
+			return child;
+		}
+		function __cueChanged(_data) {}
+		function __checkCursor() {
+			const media = __mediaElement();
+			if (media !== null) if (state.inFullscreen && state.playing && !state.showControls) {
+				media.classList.remove("cursor-inherit");
+				media.classList.add("cursor-none");
+			} else {
+				media.classList.remove("cursor-none");
+				media.classList.add("cursor-inherit");
+			}
+		}
+		function __adjustMenu() {
+			const qmenu = menu.value;
+			if (qmenu) setTimeout(() => {
+				qmenu.updatePosition();
+			}, 350);
+		}
+		function __videoClick(e) {
+			if (props.togglePlayOnClick !== true) return;
+			__stopAndPrevent(e);
+			if (props.mobileMode !== true) togglePlay();
+		}
+		function __bigButtonClick(e) {
+			__stopAndPrevent(e);
+			if (props.mobileMode) hideControls();
+			togglePlay();
+		}
+		function __settingsMenuShowing(val) {
+			settingsMenuVisible.value = val;
+		}
+		function __mouseLeaveVideo(e) {
+			const relatedTarget = e?.relatedTarget;
+			if (relatedTarget instanceof HTMLElement && relatedTarget.className === "q-pa-md") {
+				if (!props.bottomControls && !props.mobileMode && !__isAudio.value && state.inControls !== true) hideControls();
+			}
+		}
+		function __mouseMoveAction(e) {
+			if (!props.bottomControls && !props.mobileMode && !__isAudio.value) __showControlsIfValid(e);
+		}
+		function __getParentEl(el, className) {
+			if (!el) return null;
+			if (String(el.className).startsWith(className)) return el;
+			return __getParentEl(el.offsetParent, className);
+		}
+		function __showControlsIfValid(e) {
+			const media = __mediaElement();
+			if (media === null || !(e.target instanceof HTMLElement)) return false;
+			const pos = media.getBoundingClientRect();
+			const el = __getParentEl(e.target, "q-media");
+			if (!el) return;
+			const rect = el.getBoundingClientRect();
+			if (!pos || !rect) return false;
+			if (rect.left === pos.left && rect.top === pos.top && rect.height === pos.height && rect.width === pos.width) {
+				showControls();
+				return true;
+			}
+			return false;
+		}
+		function __videoCurrentTimeChanged(val) {
+			showControls();
+			const media = __mediaElement();
+			if (media !== null && media.duration && val && val > 0 && val <= state.duration) {
+				if (media.currentTime !== val) state.currentTime = media.currentTime = val;
+			}
+		}
+		function __volumePercentChanged(val) {
+			showControls();
+			state.volume = val;
+		}
+		function __trackLanguageChanged(language) {
+			if (state.trackLanguage !== language) state.trackLanguage = language;
+		}
+		function __playbackRateChanged(rate) {
+			if (state.playbackRate !== rate) state.playbackRate = rate;
+		}
+		function __showingMenu() {
+			return settingsMenuVisible.value;
+		}
+		function __updateBigPlayButton() {
+			if (state.showBigPlayButton !== props.showBigPlayButton) state.showBigPlayButton = props.showBigPlayButton;
+		}
+		function __updateVolume() {
+			if (state.volume !== props.volume) state.volume = props.volume;
+		}
+		function __updateMuted() {
+			if (state.muted !== props.muted) {
+				state.muted = props.muted;
+				const media = __mediaElement();
+				if (media !== null) media.muted = state.muted;
+			}
+		}
+		function __updateTrackLanguage() {
+			if (state.trackLanguage !== props.trackLanguage || lang.mediaPlayer.trackLanguageOff) state.trackLanguage = props.trackLanguage || lang.mediaPlayer.trackLanguageOff;
+		}
+		function __updatePlaybackRates() {
+			if (props.playbackRates && props.playbackRates.length > 0) state.playbackRates = [...props.playbackRates];
+			else {
+				state.playbackRates.splice(0, state.playbackRates.length);
+				state.playbackRates.push({
+					label: lang.mediaPlayer.ratePoint5,
+					value: .5
+				});
+				state.playbackRates.push({
+					label: lang.mediaPlayer.rateNormal,
+					value: 1
+				});
+				state.playbackRates.push({
+					label: lang.mediaPlayer.rate1Point5,
+					value: 1.5
+				});
+				state.playbackRates.push({
+					label: lang.mediaPlayer.rate2,
+					value: 2
+				});
+			}
+		}
+		function __updatePlaybackRate() {
+			if (state.playbackRate !== props.playbackRate) state.playbackRate = props.playbackRate;
+		}
+		function __updateSources() {
+			__removeSources();
+			__addSources();
+		}
+		function __removeSources() {
+			const media = __mediaElement();
+			if (media !== null) {
+				__removeSourceEventListeners();
+				media.pause();
+				__revokeBlobObjectUrl();
+				media.removeAttribute("src");
+				if (media.currentTime) media.currentTime = 0;
+				const childNodes = media.childNodes;
+				for (let index = childNodes.length - 1; index >= 0; --index) {
+					const node = childNodes[index];
+					if (node instanceof HTMLSourceElement) media.removeChild(node);
+				}
+			}
+		}
+		function __revokeBlobObjectUrl() {
+			if (blobObjectUrl.value !== null) {
+				URL.revokeObjectURL(blobObjectUrl.value);
+				blobObjectUrl.value = null;
+			}
+		}
+		function __addSources() {
+			const media = __mediaElement();
+			if (media !== null) {
+				let loaded = false;
+				if (props.source && props.source.length > 0) {
+					media.src = props.source;
+					loaded = true;
+				} else if (props.sources.length > 0) props.sources.forEach((source) => {
+					const s = document.createElement("source");
+					s.src = source.src ? source.src : "";
+					s.type = source.type ? source.type : "";
+					media.appendChild(s);
+					if (!loaded && source.src) {
+						media.src = source.src;
+						loaded = true;
+					}
+				});
+				__reset();
+				if (loaded !== true) {
+					state.loading = false;
+					return;
+				}
+				__addSourceEventListeners();
+				media.load();
+				nextTick(() => {
+					__syncMediaReady();
+				}).catch((e) => console.error(e));
+			}
+		}
+		function __updateTracks() {
+			__removeTracks();
+			__addTracks();
+		}
+		function __removeTracks() {
+			const media = __mediaElement();
+			if (media !== null) {
+				const childNodes = media.childNodes;
+				for (let index = childNodes.length - 1; index >= 0; --index) {
+					const node = childNodes[index];
+					if (node instanceof HTMLTrackElement) media.removeChild(node);
+				}
+			}
+		}
+		function __addTracks() {
+			const media = __mediaElement();
+			if (__isVideo.value && media !== null) {
+				props.tracks.forEach((track) => {
+					const t = document.createElement("track");
+					t.kind = track.kind ? track.kind : "";
+					t.label = track.label ? track.label : "";
+					t.src = track.src ? track.src : "";
+					t.srclang = track.srclang ? track.srclang : "";
+					media.appendChild(t);
+				});
+				nextTick(() => {
+					__toggleCaptions();
+				});
+			}
+		}
+		function __updatePoster() {
+			const media = __mediaElement();
+			if (media instanceof HTMLVideoElement) media.poster = __poster.value || "";
+		}
+		function __mouseEnterControls() {
+			state.inControls = true;
+		}
+		function __mouseLeaveControls() {
+			state.inControls = false;
+		}
+		function __renderVideo() {
+			const slot = slots.oldbrowser;
+			const attrs = {
+				poster: __poster.value,
+				preload: props.preload,
+				playsinline: props.playsinline === true,
+				loop: props.loop === true,
+				autoplay: props.autoplay === true,
+				muted: props.muted === true,
+				width: props.contentWidth || void 0,
+				height: props.contentHeight || void 0
+			};
+			nextTick(() => {
+				const media = __mediaElement();
+				if (media !== null && props.nativeControls === true) media.controls = true;
+			}).catch((e) => console.error(e));
+			return h("video", {
+				ref: $media,
+				class: {
+					...__renderVideoClasses.value,
+					...__mergeClassOrStyle("class", props.contentClass)
+				},
+				style: { ...__contentStyle.value },
+				...attrs
+			}, hSlot(slot, h("p", lang.mediaPlayer.oldBrowserVideo)));
+		}
+		function __renderAudio() {
+			const slot = slots.oldbrowser;
+			const mediaTag = props.noVideo === true ? "audio" : "video";
+			const attrs = {
+				...mediaTag === "video" ? { poster: __poster.value } : {},
+				preload: props.preload,
+				playsinline: props.playsinline === true,
+				loop: props.loop === true,
+				autoplay: props.autoplay === true,
+				muted: props.muted === true,
+				width: props.contentWidth || void 0,
+				height: props.contentHeight || void 0
+			};
+			nextTick(() => {
+				const media = __mediaElement();
+				if (media !== null && props.nativeControls === true) media.controls = true;
+			}).catch((e) => console.error(e));
+			return h(mediaTag, {
+				ref: $media,
+				class: {
+					"q-media--player": true,
+					...__mergeClassOrStyle("class", props.contentClass)
+				},
+				style: props.contentStyle,
+				...attrs
+			}, hSlot(slot, h("p", lang.mediaPlayer.oldBrowserAudio)));
+		}
+		function __renderOverlayWindow() {
+			if (slots.overlay) return h("div", { class: "q-media__overlay-window fit" }, slots.overlay());
+		}
+		function errorWindowCloseButton() {
+			return h(QBtn, {
+				class: "q-media__error-window--button",
+				onClick: () => {
+					state.errorText = null;
+				},
+				icon: matClose,
+				flat: true,
+				size: "sm"
+			});
+		}
+		function __renderErrorWindow() {
+			const slot = slots.errorWindow;
+			return h("div", { class: "q-media__error-window" }, hSlot(slot, h("span", [state.errorText, errorWindowCloseButton()])));
+		}
+		function __renderPlayButton() {
+			if (props.hidePlayBtn === true) return;
+			const slot = slots.play;
+			const properties = {
+				icon: state.playing ? iconSet.mediaPlayer.pause : iconSet.mediaPlayer.play,
+				size: "1rem",
+				disable: !state.playReady,
+				flat: true,
+				padding: "4px"
+			};
+			const events = { onClick: togglePlay };
+			return slot && slot() || h(QBtn, {
+				class: "q-media__controls--button play-button",
+				...properties,
+				...events
+			}, () => [props.showTooltips && state.playing && h(QTooltip, () => lang.mediaPlayer.pause), props.showTooltips && !state.playing && state.playReady && h(QTooltip, () => lang.mediaPlayer.play)]);
+		}
+		function __renderVideoControls() {
+			const slot = slots.controls;
+			const events = {
+				onClick: __stopAndPrevent,
+				onMouseenter: __mouseEnterControls,
+				onMouseleave: __mouseLeaveControls
+			};
+			if (slot) return h("div", {
+				ref: controls,
+				class: {
+					"q-media__controls": true,
+					"q-media__controls--overlay": __isVideo.value === true && state.bottomControls !== true,
+					...__videoControlsClasses.value
+				},
+				...events
+			}, slot());
+			return h("div", {
+				ref: controls,
+				class: {
+					"q-media__controls": true,
+					"q-media__controls--overlay": __isVideo.value === true && state.bottomControls !== true,
+					...__videoControlsClasses.value
+				},
+				...events
+			}, [
+				props.dense && h("div", { class: "q-media__controls--row row col content-start items-center" }, [
+					h("div", [__renderPlayButton(), props.showTooltips && !state.playReady && h(QTooltip, () => lang.mediaPlayer.waitingVideo)]),
+					__renderVolumeButton(),
+					__renderVolumeSlider(),
+					__renderDisplayTime(),
+					__renderCurrentTimeSlider(),
+					__renderDurationTime(),
+					__renderSettingsButton(),
+					$q.fullscreen !== void 0 && props.hideFullscreenBtn !== true && __renderFullscreenButton()
+				]),
+				!props.dense && h("div", { class: "q-media__controls--row row col items-center justify-between" }, [
+					__renderDisplayTime(),
+					__renderCurrentTimeSlider(),
+					__renderDurationTime()
+				]),
+				!props.dense && h("div", { class: "q-media__controls--row row col content-start items-center" }, [h("div", { class: "row col" }, [
+					h("div", [__renderPlayButton(), props.showTooltips && !state.playReady && h(QTooltip, () => lang.mediaPlayer.waitingVideo)]),
+					__renderVolumeButton(),
+					__renderVolumeSlider()
+				]), h("div", [__renderSettingsButton(), $q.fullscreen !== void 0 && props.hideFullscreenBtn !== true && __renderFullscreenButton()])])
+			]);
+		}
+		function __renderAudioControls() {
+			const slot = slots.controls;
+			return slot && slot() || h("div", {
+				ref: controls,
+				class: {
+					"q-media__controls": true,
+					...__audioControlsClasses.value
+				}
+			}, [
+				props.dense && h("div", { class: "q-media__controls--row row col content-start items-center" }, [
+					h("div", [__renderPlayButton(), props.showTooltips && !state.playReady && h(QTooltip, () => lang.mediaPlayer.waitingAudio)]),
+					__renderVolumeButton(),
+					__renderVolumeSlider(),
+					__renderDisplayTime(),
+					__renderCurrentTimeSlider(),
+					__renderDurationTime()
+				]),
+				!props.dense && h("div", { class: "q-media__controls--row row col items-center justify-between" }, [
+					__renderDisplayTime(),
+					__renderCurrentTimeSlider(),
+					__renderDurationTime()
+				]),
+				!props.dense && h("div", { class: "q-media__controls--row row col content-start items-center" }, [
+					h("div", [__renderPlayButton(), props.showTooltips && !state.playReady && h(QTooltip, () => lang.mediaPlayer.waitingAudio)]),
+					__renderVolumeButton(),
+					__renderVolumeSlider()
+				])
+			]);
+		}
+		function __renderVolumeButton() {
+			if (props.hideVolumeBtn === true) return;
+			const slot = slots.volume;
+			const properties = {
+				icon: __volumeIcon.value,
+				size: "1rem",
+				disable: !state.playReady,
+				flat: true,
+				padding: "4px"
+			};
+			const events = { onClick: toggleMuted };
+			return slot && slot() || h(QBtn, {
+				class: "q-media__controls--button volume-button",
+				style: { color: props.dark === true || $q.dark.isActive ? "var(--mediaplayer-color-dark)" : "var(--mediaplayer-color)" },
+				...properties,
+				...events
+			}, () => [props.showTooltips === true ? state.muted === true ? h(QTooltip, () => lang.mediaPlayer.unmute) : h(QTooltip, () => lang.mediaPlayer.mute) : void 0]);
+		}
+		function __renderVolumeSlider() {
+			if (props.hideVolumeSlider === true || props.hideVolumeBtn === true) return;
+			const slot = slots.volumeSlider;
+			const properties = {
+				modelValue: state.volume,
+				dark: props.dark,
+				min: 0,
+				max: 100,
+				disable: !state.playReady || state.muted
+			};
+			const events = { onChange: __volumePercentChanged };
+			return slot && slot() || h(QSlider, {
+				class: "col",
+				style: {
+					width: "20%",
+					margin: "0 0.5rem",
+					minWidth: props.dense ? "20px" : "50px",
+					maxWidth: props.dense ? "50px" : "200px",
+					color: props.dark === true || $q.dark.isActive ? "var(--mediaplayer-color-dark)" : "var(--mediaplayer-color)"
+				},
+				...properties,
+				...events
+			});
+		}
+		function __renderSettingsButton() {
+			if (props.hideSettingsBtn === true) return;
+			const slot = slots.settings;
+			const properties = {
+				icon: iconSet.mediaPlayer.settings,
+				size: "1rem",
+				disable: !state.playReady,
+				flat: true,
+				padding: "4px"
+			};
+			return slot && slot() || h(QBtn, {
+				class: "q-media__controls--button settings-button",
+				...properties
+			}, () => [props.showTooltips === true && !settingsMenuVisible.value ? h(QTooltip, () => lang.mediaPlayer.settings) : void 0, __renderSettingsMenu()]);
+		}
+		function __renderFullscreenButton() {
+			const slot = slots.fullscreen;
+			const properties = {
+				icon: state.inFullscreen ? iconSet.mediaPlayer.fullscreenExit : iconSet.mediaPlayer.fullscreen,
+				size: "1rem",
+				disable: !state.playReady,
+				flat: true,
+				padding: "4px"
+			};
+			const events = { onClick: toggleFullscreen };
+			return slot && slot() || h(QBtn, {
+				class: "q-media__controls--button fullscreen-button",
+				...properties,
+				...events
+			}, () => [props.showTooltips === true ? h(QTooltip, () => lang.mediaPlayer.toggleFullscreen) : void 0]);
+		}
+		function __renderLoader() {
+			if (props.spinnerSize === void 0) if (__isVideo.value) state.spinnerSize = "3em";
+			else state.spinnerSize = "1.5em";
+			else state.spinnerSize = props.spinnerSize;
+			const slot = slots.spinner;
+			return slot && slot() || h("div", { class: __isVideo.value ? "q-media__loading--video" : "q-media__loading--audio" }, [h(QSpinner, { size: state.spinnerSize })]);
+		}
+		function __renderBigPlayButton() {
+			const slot = slots.bigPlayButton;
+			const events = { onClick: __bigButtonClick };
+			return slot && slot() || h("div", { class: {
+				"q-media--big-button q-media--big-button-bottom-controls": state.bottomControls === true,
+				"q-media--big-button": state.bottomControls !== true
+			} }, [h(QIcon, {
+				name: iconSet.mediaPlayer.bigPlayButton,
+				class: "q-media--big-button-icon",
+				...events
+			})]);
+		}
+		function __renderCurrentTimeSlider() {
+			const slot = slots.positionSlider;
+			const properties = {
+				modelValue: state.currentTime,
+				dark: props.dark,
+				min: 0,
+				max: state.duration ? state.duration : 1,
+				disable: !state.playReady || props.disabledSeek
+			};
+			const events = { onChange: __videoCurrentTimeChanged };
+			return slot && slot() || h(QSlider, {
+				class: "col",
+				style: {
+					margin: "0 0.5rem",
+					color: props.dark === true || $q.dark.isActive ? "var(--mediaplayer-color-dark)" : "var(--mediaplayer-color)"
+				},
+				...properties,
+				...events
+			});
+		}
+		function __renderDisplayTime() {
+			const slot = slots.displayTime;
+			return slot && slot() || h("span", {
+				class: "q-media__controls--video-time-text text-left",
+				style: { color: props.dark === true || $q.dark.isActive ? "var(--mediaplayer-color-dark)" : "var(--mediaplayer-color)" }
+			}, state.displayTime);
+		}
+		function __renderDurationTime() {
+			const media = __mediaElement();
+			if (media === null) return;
+			const slot = slots.durationTime;
+			const isInfinity = !isFinite(media.duration);
+			return slot && slot() || h("span", {
+				class: "q-media__controls--video-time-text text-right",
+				style: {
+					width: isInfinity ? "30px" : "auto",
+					color: props.dark === true || $q.dark.isActive ? "var(--mediaplayer-color-dark)" : "var(--mediaplayer-color)"
+				}
+			}, [__isMediaAvailable.value === true && isInfinity !== true && state.durationTime, __isMediaAvailable.value === true && isInfinity === true && __renderInfinitySvg()]);
+		}
+		function __renderInfinitySvg() {
+			return h("svg", {
+				height: "16",
+				viewbox: "0 0 16 16"
+			}, [h("path", {
+				fill: "none",
+				color: props.dark === true || $q.dark.isActive ? "var(--mediaplayer-color-dark)" : "var(--mediaplayer-color)",
+				strokeWidth: "2",
+				d: "M8,8 C16,0 16,16 8,8 C0,0 0,16 8,8z"
+			})]);
+		}
+		function __renderSettingsMenu() {
+			const slot = slots.settingsMenu;
+			const properties = {
+				anchor: "top right",
+				self: "bottom right"
+			};
+			const events = {
+				onShow: () => {
+					__settingsMenuShowing(true);
+				},
+				onHide: () => {
+					__settingsMenuShowing(false);
+				}
+			};
+			return h(QMenu, {
+				ref: menu,
+				...properties,
+				...events
+			}, () => [slot && slot() || h("div", [state.playbackRates.length > 0 && h(QExpansionItem, {
+				group: "settings-menu",
+				expandSeparator: true,
+				icon: iconSet.mediaPlayer.speed,
+				label: lang.mediaPlayer.speed,
+				caption: __settingsPlaybackCaption.value,
+				onShow: __adjustMenu,
+				onHide: __adjustMenu
+			}, () => [h(QList, { highlight: true }, () => [state.playbackRates.map((rate) => {
+				return withDirectives(h(QItem, {
+					key: rate.value,
+					clickable: true,
+					dense: true,
+					onClick: (e) => {
+						__stopAndPrevent(e);
+						__playbackRateChanged(rate.value);
+					}
+				}, () => [h(QItemSection, { avatar: true }, () => [rate.value === state.playbackRate && h(QIcon, { name: iconSet.mediaPlayer.selected })]), h(QItemSection, () => rate.label)]), [[ClosePopup]]);
+			})])]), __selectTracksLanguageList.value.length > 1 && h(QExpansionItem, {
+				group: "settings-menu",
+				expandSeparator: true,
+				icon: iconSet.mediaPlayer.language,
+				label: lang.mediaPlayer.language,
+				caption: __trackLanguageCaption.value,
+				onShow: __adjustMenu,
+				onHide: __adjustMenu
+			}, () => [h(QList, { highlight: true }, () => [__selectTracksLanguageList.value.map((language) => {
+				return withDirectives(h(QItem, {
+					key: language.value,
+					clickable: true,
+					dense: true,
+					onClick: (e) => {
+						__stopAndPrevent(e);
+						__trackLanguageChanged(language.value);
+					}
+				}, () => [h(QItemSection, { avatar: true }, () => [language.value === state.trackLanguage && h(QIcon, { name: iconSet.mediaPlayer.selected })]), h(QItemSection, () => language.label)]), [[ClosePopup]]);
+			})])])])]);
+		}
+		function __renderMediaPlayer() {
+			const events = {
+				onMousemove: __mouseMoveAction,
+				onMouseleave: __mouseLeaveVideo,
+				onClick: __videoClick
+			};
+			return h("div", {
+				class: {
+					"q-media--dark": props.dark === true,
+					"q-media": true,
+					...__classes.value
+				},
+				style: {
+					borderRadius: !state.inFullscreen ? props.radius : 0,
+					height: __isVideo.value ? "auto" : props.dense ? "40px" : "80px"
+				},
+				ref: $root,
+				...events
+			}, canRender.value === true ? [
+				__isVideo.value && __renderVideo(),
+				__isAudio.value && __renderAudio(),
+				__renderOverlayWindow(),
+				state.errorText && __renderErrorWindow(),
+				__isVideo.value && !state.noControls && !state.errorText && __renderVideoControls(),
+				__isAudio.value && !state.noControls && !state.errorText && __renderAudioControls(),
+				props.showSpinner === true && state.loading && !state.playReady && !state.errorText && __renderLoader(),
+				__isVideo.value && props.showBigPlayButton && state.playReady && !state.playing && __renderBigPlayButton()
+			] : void 0);
+		}
+		expose({
+			loadBlob,
+			loadFileBlob,
+			showControls,
+			hideControls,
+			toggleControls,
+			play,
+			pause,
+			mute,
+			unmute,
+			togglePlay,
+			toggleMuted,
+			toggleFullscreen,
+			setFullscreen,
+			exitFullscreen,
+			currentTime,
+			setCurrentTime,
+			setVolume,
+			$media
+		});
+		return () => __renderMediaPlayer();
+	}
+});
+//#endregion
+//#region src/version.ts
+const version = "3.0.0";
+//#endregion
+//#region src/index.ts
+function install(app) {
+	app.component(String(QMediaPlayer_default.name), QMediaPlayer_default);
+}
+//#endregion
+//#region src/index.esm.ts
+var index_esm_default = {
+	version,
+	QMediaPlayer: QMediaPlayer_default,
+	install
+};
+//#endregion
+export { QMediaPlayer_default as QMediaPlayer, index_esm_default as default, install, version };

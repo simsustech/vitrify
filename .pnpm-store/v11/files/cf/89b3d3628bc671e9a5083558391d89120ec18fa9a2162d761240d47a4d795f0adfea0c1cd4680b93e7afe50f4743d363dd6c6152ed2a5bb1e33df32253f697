@@ -1,0 +1,13 @@
+import { Preset } from 'unocss';
+
+interface Options {
+    /**
+     * Whether to output the entire animate.css.
+     * Which is very effective if you need to dynamically combine class names at runtime.
+     * @default true
+     */
+    buildFullVersion: boolean;
+}
+declare function animatedUno({ buildFullVersion, }?: Options): Preset<any>;
+
+export { animatedUno };

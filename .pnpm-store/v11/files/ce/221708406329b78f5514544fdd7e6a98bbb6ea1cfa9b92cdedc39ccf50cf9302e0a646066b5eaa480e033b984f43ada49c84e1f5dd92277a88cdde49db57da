@@ -1,0 +1,1157 @@
+{
+  "generated_at": "2026-07-06T17:06:10.254Z",
+  "type": "component",
+  "meta": {
+    "docsUrl": "/developing/using-qmediaplayer"
+  },
+  "props": {
+    "type": {
+      "desc": "Tells the component which player is to be used.",
+      "type": "String",
+      "tsType": "MediaPlayerType",
+      "required": false,
+      "default": "video",
+      "values": [
+        "video",
+        "audio"
+      ],
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        "type=\"video\"",
+        "type=\"audio\""
+      ]
+    },
+    "mobile-mode": {
+      "desc": "Use mobile logic for handling visibility of controls. This mode is best for mobiles, but can be used on desktop as well. It prevents the controls from displaying/hiding with mouse hover. Instead, clicks are used to show/hide the controls.",
+      "type": "Boolean",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "toggle-play-on-click": {
+      "desc": "When true, clicking or tapping the video frame toggles play/pause. Turn this off when the overlay slot contains interactive content, such as forms or buttons.",
+      "type": "Boolean",
+      "default": "true",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        ":toggle-play-on-click=\"false\""
+      ]
+    },
+    "source": {
+      "desc": "Direct media source URL. When this is set, the media element `src` is set directly and the `sources` prop is ignored.",
+      "type": "String",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "model",
+      "examples": [
+        "source=\"https://path/to/the/video.mpeg\""
+      ]
+    },
+    "sources": {
+      "desc": "One or more sources for video or audio. The browser picks the best source based on supported codecs.",
+      "type": "Array",
+      "tsType": "MediaSource[]",
+      "default": "() => []",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "model",
+      "examples": [
+        ":sources=\"[{ src: 'https://your-server/your-video.mov', type: 'video/mp4' }]\"",
+        ":sources=\"[{ src: 'https://your-server/your-audio.mp3', type: 'audio/mp3' }]\""
+      ]
+    },
+    "poster": {
+      "desc": "Poster image to display before the video is loaded.",
+      "type": "String",
+      "default": "",
+      "applicable": [
+        "Video"
+      ],
+      "category": "model",
+      "examples": [
+        "poster=\"https://path/to/the/image.jpg\""
+      ]
+    },
+    "fallback-poster": {
+      "desc": "Fallback poster image to display when `poster` is not provided. The `poster` prop always takes precedence.",
+      "type": "String",
+      "default": "",
+      "applicable": [
+        "Video"
+      ],
+      "category": "model",
+      "examples": [
+        "fallback-poster=\"https://path/to/the/fallback-image.jpg\""
+      ]
+    },
+    "tracks": {
+      "desc": "One or more text tracks for subtitles, captions, chapters, or metadata.",
+      "type": "Array",
+      "tsType": "MediaTrack[]",
+      "default": "() => []",
+      "applicable": [
+        "Video"
+      ],
+      "category": "model",
+      "examples": [
+        ":tracks=\"[{ src: 'https://your-server/path/to/subtitles-en.vtt', kind: 'subtitles', srclang: 'en', label: 'English' }]\""
+      ]
+    },
+    "dense": {
+      "desc": "Display controls in a compact single-line layout.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "style"
+    },
+    "autoplay": {
+      "desc": "Automatically start playback when the media is ready to play.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "auto-pause": {
+      "desc": "Pause playback when the player scrolls completely out of the viewport. QMediaPlayer will not automatically resume playback when it becomes visible again.",
+      "type": "Boolean",
+      "default": "false",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        "auto-pause"
+      ]
+    },
+    "cross-origin": {
+      "desc": "Whether to use CORS for fetching media assets.",
+      "type": "String",
+      "tsType": "CrossOrigin",
+      "default": "null",
+      "values": [
+        "null",
+        "anonymous",
+        "use-credentials"
+      ],
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        "cross-origin=\"anonymous\""
+      ]
+    },
+    "volume": {
+      "desc": "Initial volume from 0-100, as a percentage.",
+      "type": "Number",
+      "default": "60",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        ":volume=\"50\"",
+        ":volume=\"75\""
+      ]
+    },
+    "hide-volume-slider": {
+      "desc": "Hide the volume slider control.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "hide-volume-btn": {
+      "desc": "Hide the volume button and volume slider.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.1.0"
+    },
+    "hide-play-btn": {
+      "desc": "Hide the play/pause button.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.0.21"
+    },
+    "hide-settings-btn": {
+      "desc": "Hide the settings button.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.0.2"
+    },
+    "hide-fullscreen-btn": {
+      "desc": "Hide the fullscreen button.",
+      "type": "Boolean",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.2.0"
+    },
+    "disabled-seek": {
+      "desc": "Disable the seek-to-position slider.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.1.0"
+    },
+    "preload": {
+      "desc": "Provides a hint to the browser about what the author thinks will lead to the best user experience.",
+      "type": "String",
+      "default": "metadata",
+      "values": [
+        "none",
+        "metadata",
+        "auto"
+      ],
+      "applicable": [
+        "Video"
+      ],
+      "tsType": "'none' | 'metadata' | 'auto'",
+      "category": "state",
+      "examples": [
+        "preload=\"metadata\""
+      ]
+    },
+    "no-video": {
+      "desc": "Force the player to use an `<audio>` element when `type` is `audio`.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.0.23"
+    },
+    "muted": {
+      "desc": "Start the player muted.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "playsinline": {
+      "desc": "Render media inline where the platform supports the video element `playsinline` attribute.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "loop": {
+      "desc": "Automatically seek back to the start when playback reaches the end.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "track-language": {
+      "desc": "Track `label` value to show by default.",
+      "type": "String",
+      "default": "off",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        "track-language=\"English\""
+      ]
+    },
+    "show-tooltips": {
+      "desc": "Show tooltips for built-in controls.",
+      "type": "Boolean",
+      "category": "state"
+    },
+    "show-big-play-button": {
+      "desc": "Show the big play button over the video frame.",
+      "type": "Boolean",
+      "default": "true",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "show-spinner": {
+      "desc": "Show the spinner while video or audio is loading.",
+      "type": "Boolean",
+      "default": "true",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "spinner-size": {
+      "desc": "CSS size for the spinner. Defaults to `3em` for video and `1.5em` for audio.",
+      "type": "String",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "state",
+      "examples": [
+        "spinner-size=\"3em\"",
+        "spinner-size=\"1.5em\""
+      ]
+    },
+    "no-controls": {
+      "desc": "Never display QMediaPlayer controls.",
+      "type": "Boolean",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior"
+    },
+    "native-controls": {
+      "desc": "Show the native browser media controls.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "behavior",
+      "addedIn": "v1.2.0"
+    },
+    "bottom-controls": {
+      "desc": "Render controls below the video instead of covering the video.",
+      "type": "Boolean",
+      "default": "false",
+      "applicable": [
+        "Video",
+        "Audio"
+      ],
+      "category": "behavior"
+    },
+    "controls-display-time": {
+      "desc": "Idle time in milliseconds before hiding the controls.",
+      "type": "Number",
+      "default": "4000",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        ":controls-display-time=\"3000\""
+      ]
+    },
+    "playback-rates": {
+      "desc": "Playback speed options for the settings menu.",
+      "type": "Array",
+      "applicable": [
+        "Video"
+      ],
+      "default": "[ { label: '.5x', value: 0.5 }, { label: 'Normal', value: 1 }, { label: '1.5x', value: 1.5 }, { label: '2x', value: 2 } ]",
+      "tsType": "PlaybackRateOption[]",
+      "category": "behavior",
+      "examples": [
+        ":playback-rates=\"[{ label: '.5x', value: 0.5 }]\""
+      ]
+    },
+    "playback-rate": {
+      "desc": "Initial playback rate. Corresponds to a `value` in `playback-rates`.",
+      "type": "Number",
+      "default": "1",
+      "applicable": [
+        "Video"
+      ],
+      "category": "behavior",
+      "examples": [
+        ":playback-rate=\"2\""
+      ]
+    },
+    "dark": {
+      "desc": "Render the player on a dark background.",
+      "type": "Boolean",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "style"
+    },
+    "radius": {
+      "desc": "Border radius applied to the media player.",
+      "type": "Number | String",
+      "default": "0",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "tsType": "number | string",
+      "category": "style",
+      "examples": [
+        "radius=\"4px\"",
+        "radius=\"6%\""
+      ]
+    },
+    "content-style": {
+      "desc": "Style definitions applied directly to the media element.",
+      "type": "String | Object",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "tsType": "ClassOrStyle",
+      "category": "style",
+      "examples": [
+        "content-style=\"background-color: #ff0000\"",
+        ":content-style=\"{ backgroundColor: '#ff0000' }\""
+      ]
+    },
+    "content-class": {
+      "desc": "Class definitions applied directly to the media element.",
+      "type": "String | Object",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "tsType": "ClassOrStyle",
+      "category": "style",
+      "examples": [
+        "content-class=\"my-special-class\"",
+        ":content-class=\"{ 'my-special-class': condition }\""
+      ]
+    },
+    "content-width": {
+      "desc": "Width attribute applied directly to the media element, in pixels.",
+      "type": "Number",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "style",
+      "examples": [
+        ":content-width=\"300\""
+      ],
+      "addedIn": "v1.0.2"
+    },
+    "content-height": {
+      "desc": "Height attribute applied directly to the media element, in pixels.",
+      "type": "Number",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "category": "style",
+      "examples": [
+        ":content-height=\"300\""
+      ],
+      "addedIn": "v1.0.2"
+    }
+  },
+  "events": {
+    "media-player": {
+      "desc": "Emitted when the media element has been created.",
+      "params": {
+        "mediaElement": {
+          "desc": "Media element instance.",
+          "required": true,
+          "tsType": "HTMLMediaElement | null",
+          "type": "Object"
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "playback-rate": {
+      "desc": "Emitted when the playback rate changes.",
+      "params": {
+        "rate": {
+          "desc": "Playback rate value.",
+          "required": true,
+          "tsType": "number",
+          "type": "Number",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "track-language": {
+      "desc": "Emitted when the track language changes.",
+      "params": {
+        "lang": {
+          "desc": "Track language value.",
+          "required": true,
+          "tsType": "string",
+          "type": "String",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "show-controls": {
+      "desc": "Emitted when QMediaPlayer controls are toggled.",
+      "params": {
+        "showing": {
+          "desc": "Whether the controls are showing.",
+          "required": true,
+          "tsType": "boolean",
+          "type": "Boolean"
+        }
+      },
+      "applicable": [
+        "Video"
+      ]
+    },
+    "volume": {
+      "desc": "Emitted when the volume changes.",
+      "params": {
+        "volume": {
+          "desc": "Volume as a percent.",
+          "required": true,
+          "tsType": "number",
+          "type": "Number",
+          "examples": [
+            "50 - 50%",
+            "75 - 75%"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "muted": {
+      "desc": "Emitted when mute changes.",
+      "params": {
+        "muted": {
+          "desc": "Whether volume is muted.",
+          "required": true,
+          "tsType": "boolean",
+          "type": "Boolean"
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "fullscreen": {
+      "desc": "Emitted when entering or exiting fullscreen mode.",
+      "params": {
+        "showing": {
+          "desc": "Whether the player is in fullscreen mode.",
+          "required": true,
+          "tsType": "boolean",
+          "type": "Boolean"
+        }
+      },
+      "applicable": [
+        "Video"
+      ]
+    },
+    "network-state": {
+      "desc": "Emitted when a source element reports a network-state error.",
+      "params": {
+        "event": {
+          "desc": "Native source error event.",
+          "required": true,
+          "tsType": "Event",
+          "type": "Object",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "abort": {
+      "desc": "Emitted when the resource was not fully loaded, but not as the result of an error.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "ready": {
+      "desc": "Emitted when the media is ready to play. Do not call play/pause or setCurrentTime before this event.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "canplay": {
+      "desc": "Emitted when the user agent can play the media, but estimates that more buffering may be needed before playback can finish.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "canplaythrough": {
+      "desc": "Emitted when the user agent estimates enough data has loaded to play through to the end without further buffering.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "duration": {
+      "desc": "Emitted when the duration of the media has been determined.",
+      "params": {
+        "seconds": {
+          "desc": "Duration in seconds.",
+          "required": true,
+          "tsType": "number",
+          "type": "Number",
+          "examples": [
+            "600 - 10 minutes of audio or video",
+            "1200 - 20 minutes of audio or video"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "emptied": {
+      "desc": "Emitted when the media has become empty, for example when `HTMLMediaElement.load()` reloads previously loaded media.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "ended": {
+      "desc": "Emitted when the media has finished playing.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "error": {
+      "desc": "Emitted when there is a media error.",
+      "params": {
+        "mediaError": {
+          "desc": "Media error details from the HTML media element.",
+          "required": true,
+          "tsType": "MediaError | null",
+          "type": "Object",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "loadeddata": {
+      "desc": "Emitted when the browser has loaded the current frame of media data.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "loadedmetadata": {
+      "desc": "Emitted when the metadata has been loaded.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "stalled": {
+      "desc": "Emitted when the user agent is trying to fetch media data, but data is unexpectedly not forthcoming.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "suspend": {
+      "desc": "Emitted when media data loading has been suspended.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "loadstart": {
+      "desc": "Emitted when the browser has started loading a resource.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "paused": {
+      "desc": "Emitted when the media player is paused.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "play": {
+      "desc": "Emitted when the paused property changes from true to false because of `HTMLMediaElement.play()` or autoplay.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "addedIn": "v1.0.18"
+    },
+    "playing": {
+      "desc": "Emitted when media starts playing. This can also emit after a pause or wait.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "timeupdate": {
+      "desc": "Emitted whenever playback time updates during play.",
+      "params": {
+        "currentTime": {
+          "desc": "Current play time in seconds.",
+          "required": true,
+          "tsType": "number",
+          "type": "Number",
+          "__exemption": [
+            "examples"
+          ]
+        },
+        "remainingTime": {
+          "desc": "Remaining play time formatted as `MM:SS`.",
+          "required": true,
+          "tsType": "string",
+          "type": "String",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "waiting": {
+      "desc": "Emitted when playback stops because of a temporary lack of data.",
+      "params": {},
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    }
+  },
+  "slots": {
+    "controls": {
+      "desc": "Replace the default controls.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "oldbrowser": {
+      "desc": "Replace the default old browser fallback text.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "overlay": {
+      "desc": "Render custom overlay content over the video frame.",
+      "applicable": [
+        "Video"
+      ]
+    },
+    "errorWindow": {
+      "desc": "Replace the default error window.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "play": {
+      "desc": "Replace the default play/pause control.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "volume": {
+      "desc": "Replace the default volume button.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "volumeSlider": {
+      "desc": "Replace the default volume slider.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "settings": {
+      "desc": "Replace the default settings button.",
+      "applicable": [
+        "Video"
+      ]
+    },
+    "fullscreen": {
+      "desc": "Replace the default fullscreen button.",
+      "applicable": [
+        "Video"
+      ]
+    },
+    "spinner": {
+      "desc": "Replace the default spinner/loading icon.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "bigPlayButton": {
+      "desc": "Replace the default big play button.",
+      "applicable": [
+        "Video"
+      ]
+    },
+    "positionSlider": {
+      "desc": "Replace the default playback position slider.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "displayTime": {
+      "desc": "Replace the default display time.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "durationTime": {
+      "desc": "Replace the default duration time.",
+      "applicable": [
+        "Audio",
+        "Video"
+      ]
+    },
+    "settingsMenu": {
+      "desc": "Replace the default settings menu content.",
+      "applicable": [
+        "Video"
+      ]
+    }
+  },
+  "methods": {
+    "loadBlob": {
+      "desc": "Load audio or video using a Blob or File object.",
+      "params": {
+        "blob": {
+          "desc": "Blob or File object. The player creates and manages the object URL.",
+          "required": true,
+          "tsType": "Blob | File",
+          "type": "Blob",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "tsSignature": "function loadBlob(blob: Blob): boolean",
+      "type": "Function",
+      "returns": {
+        "desc": "True if the media source was loaded, otherwise false.",
+        "type": "Boolean",
+        "__exemption": [
+          "examples"
+        ],
+        "tsType": "boolean"
+      }
+    },
+    "loadFileBlob": {
+      "desc": "Load audio or video using a FileList. Only the first item in the list is used.",
+      "params": {
+        "fileList": {
+          "desc": "FileList received from an input with `type=\"file\"`.",
+          "required": true,
+          "tsType": "FileList",
+          "type": "FileList",
+          "__exemption": [
+            "examples"
+          ]
+        }
+      },
+      "tsSignature": "function loadFileBlob(fileList: FileList): boolean",
+      "type": "Function",
+      "returns": {
+        "desc": "True if the media source was loaded, otherwise false.",
+        "type": "Boolean",
+        "__exemption": [
+          "examples"
+        ],
+        "tsType": "boolean"
+      }
+    },
+    "showControls": {
+      "desc": "Show the controls. Has no effect if controls are already displayed.",
+      "tsSignature": "function showControls(): void",
+      "type": "Function",
+      "applicable": [
+        "Video"
+      ],
+      "returns": null
+    },
+    "hideControls": {
+      "desc": "Hide the controls. Has no effect if controls are already hidden.",
+      "tsSignature": "function hideControls(): void",
+      "type": "Function",
+      "applicable": [
+        "Video"
+      ],
+      "returns": null
+    },
+    "toggleControls": {
+      "desc": "Toggle the controls.",
+      "tsSignature": "function toggleControls(): void",
+      "type": "Function",
+      "applicable": [
+        "Video"
+      ],
+      "returns": null
+    },
+    "play": {
+      "desc": "Start playback if the media is ready. This should be called after the `ready` event and may still require a user gesture depending on browser policy.",
+      "tsSignature": "function play(): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "pause": {
+      "desc": "Pause playback if the media is currently playing.",
+      "tsSignature": "function pause(): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "mute": {
+      "desc": "Mute the audio.",
+      "tsSignature": "function mute(): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "unmute": {
+      "desc": "Unmute the audio.",
+      "tsSignature": "function unmute(): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "togglePlay": {
+      "desc": "Toggle between play and pause states.",
+      "params": {
+        "event": {
+          "desc": "Optional source event.",
+          "required": false,
+          "tsType": "Event",
+          "type": "Event"
+        }
+      },
+      "tsSignature": "function togglePlay(event?: Event): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "toggleMuted": {
+      "desc": "Toggle between muted and unmuted states.",
+      "params": {
+        "event": {
+          "desc": "Source event.",
+          "required": true,
+          "tsType": "Event",
+          "type": "Event"
+        }
+      },
+      "tsSignature": "function toggleMuted(event: Event): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "toggleFullscreen": {
+      "desc": "Toggle fullscreen mode.",
+      "params": {
+        "event": {
+          "desc": "Source event.",
+          "required": true,
+          "tsType": "Event",
+          "type": "Event"
+        }
+      },
+      "tsSignature": "function toggleFullscreen(event: Event): void",
+      "type": "Function",
+      "applicable": [
+        "Video"
+      ],
+      "returns": null
+    },
+    "setFullscreen": {
+      "desc": "Enter fullscreen mode.",
+      "tsSignature": "function setFullscreen(): void",
+      "type": "Function",
+      "applicable": [
+        "Video"
+      ],
+      "returns": null
+    },
+    "exitFullscreen": {
+      "desc": "Exit fullscreen mode.",
+      "tsSignature": "function exitFullscreen(): void",
+      "type": "Function",
+      "applicable": [
+        "Video"
+      ],
+      "returns": null
+    },
+    "currentTime": {
+      "desc": "Return the current play time in seconds.",
+      "tsSignature": "function currentTime(): number",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": {
+        "desc": "`-1` if not ready, otherwise the current play time in seconds.",
+        "type": "Number",
+        "__exemption": [
+          "examples"
+        ],
+        "tsType": "number"
+      }
+    },
+    "setCurrentTime": {
+      "desc": "Set the current play time.",
+      "params": {
+        "seconds": {
+          "desc": "Time in seconds.",
+          "required": true,
+          "tsType": "number",
+          "type": "Number",
+          "examples": [
+            "30",
+            "280"
+          ]
+        }
+      },
+      "tsSignature": "function setCurrentTime(seconds: number): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    },
+    "setVolume": {
+      "desc": "Set the volume as a percent from 0-100.",
+      "params": {
+        "volume": {
+          "desc": "Volume in percent.",
+          "required": true,
+          "tsType": "number",
+          "type": "Number",
+          "examples": [
+            "50",
+            "75"
+          ]
+        }
+      },
+      "tsSignature": "function setVolume(volume: number): void",
+      "type": "Function",
+      "applicable": [
+        "Audio",
+        "Video"
+      ],
+      "returns": null
+    }
+  }
+}

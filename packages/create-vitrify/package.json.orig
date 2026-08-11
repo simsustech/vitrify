@@ -1,0 +1,53 @@
+{
+  "name": "create-vitrify",
+<<<<<<< HEAD
+  "version": "0.8.3",
+  "homepage": "https://github.com/simsustech/vitrify/tree/main/packages/create-vitrify#readme",
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
+=======
+  "version": "0.8.4",
+>>>>>>> 7376b6e9f3d33e5e7db33b3578ea35d6c5c8f658
+  "license": "MIT",
+  "author": "Stefan van Herwijnen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/create-vitrify"
+  },
+  "bin": {
+    "create-vitrify": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "type": "module",
+  "main": "dist/cli.js",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.5.0",
+    "@vitrify/tools": "workspace:*",
+    "handlebars": "^4.7.9",
+    "latest-version": "^9.0.0",
+    "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.5",
+    "@types/node": "^25.9.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.14",
+    "vue": "^3.5.35"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

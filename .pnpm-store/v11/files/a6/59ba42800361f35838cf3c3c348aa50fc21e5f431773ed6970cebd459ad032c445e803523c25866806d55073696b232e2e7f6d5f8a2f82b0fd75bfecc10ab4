@@ -1,0 +1,82 @@
+{
+  "name": "@fastify/middie",
+  "version": "9.3.3",
+  "description": "Middleware engine for Fastify",
+  "main": "index.js",
+  "type": "commonjs",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:unit": "c8 --100 node --test",
+    "test:typescript": "tstyche"
+  },
+  "keywords": [
+    "fastify",
+    "middleware",
+    "webframework",
+    "performances"
+  ],
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "contributors": [
+    {
+      "name": "Tomas Della Vedova",
+      "url": "https://delvedor.dev"
+    },
+    {
+      "name": "Manuel Spigolon",
+      "email": "behemoth89@gmail.com"
+    },
+    {
+      "name": "Aras Abbasi",
+      "email": "aras.abbasi@gmail.com"
+    },
+    {
+      "name": "Frazer Smith",
+      "email": "frazer.dev@icloud.com",
+      "url": "https://github.com/fdawgs"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastify/middie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fastify/middie/issues"
+  },
+  "homepage": "https://github.com/fastify/middie#readme",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/fastify"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/fastify"
+    }
+  ],
+  "devDependencies": {
+    "@types/connect": "^3.4.38",
+    "@types/node": "^25.0.3",
+    "c8": "^11.0.0",
+    "cors": "^2.8.5",
+    "eslint": "^9.17.0",
+    "fastify": "^5.0.0",
+    "helmet": "^8.0.0",
+    "neostandard": "^0.13.0",
+    "serve-static": "^2.2.0",
+    "tstyche": "^7.0.0"
+  },
+  "dependencies": {
+    "@fastify/error": "^4.0.0",
+    "fastify-plugin": "^6.0.0",
+    "find-my-way": "^9.5.0",
+    "path-to-regexp": "^8.1.0",
+    "reusify": "^1.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

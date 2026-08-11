@@ -1,0 +1,1 @@
+{"version":3,"file":"ICookieStoreDeleteOptions.d.ts","sourceRoot":"","sources":["../../src/cookie-store/ICookieStoreDeleteOptions.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,CAAC,OAAO,WAAW,yBAAyB;IACjD,IAAI,EAAE,MAAM,CAAC;IACb,MAAM,CAAC,EAAE,MAAM,GAAG,IAAI,CAAC;IACvB,IAAI,CAAC,EAAE,MAAM,CAAC;IACd,WAAW,CAAC,EAAE,OAAO,CAAC;CACtB"}

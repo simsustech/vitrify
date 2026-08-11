@@ -1,0 +1,63 @@
+{
+  "name": "@vitrify/tools",
+<<<<<<< HEAD
+  "version": "0.5.2",
+  "homepage": "https://github.com/simsustech/vitrify/tree/master/packages/tools#readme",
+  "bugs": {
+    "url": "https://github.com/simsustech/vitrify/issues"
+  },
+=======
+  "version": "0.5.3",
+>>>>>>> 7376b6e9f3d33e5e7db33b3578ea35d6c5c8f658
+  "author": "Stefan van Herwijnen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simsustech/vitrify.git",
+    "directory": "packages/tools"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./render": {
+      "types": "./dist/types/render/index.d.ts",
+      "import": "./dist/render/index.js"
+    },
+    "./parse": {
+      "types": "./dist/types/parse/index.d.ts",
+      "import": "./dist/parse/index.js"
+    },
+    "./env": {
+      "types": "./dist/types/env/index.d.ts",
+      "import": "./dist/env/index.js"
+    },
+    "./scrypt": {
+      "types": "./dist/types/scrypt/index.d.ts",
+      "import": "./dist/scrypt/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.9"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.14"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
