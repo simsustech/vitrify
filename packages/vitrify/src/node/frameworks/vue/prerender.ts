@@ -11,7 +11,8 @@ export const prerender = async ({
   manifest,
   render,
   routes,
-  onTemplateRendered
+  onTemplateRendered,
+  base = '/'
 }: {
   outDir: string
   template: string
@@ -19,6 +20,7 @@ export const prerender = async ({
   render: unknown
   routes: RouteRecordRaw[]
   onTemplateRendered: OnTemplateRenderedHook[]
+  base?: string
 }) => {
   const promises = []
   const paths = routesToPaths(routes).filter(
@@ -26,6 +28,7 @@ export const prerender = async ({
   )
   const beasties = new (await import('beasties')).default({
     path: outDir,
+    publicPath: base,
     logLevel: 'info',
     external: true,
     fonts: true,

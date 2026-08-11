@@ -9,6 +9,7 @@ import type { Server } from 'net'
 import type { FastifyInstance } from 'fastify'
 import { readdir, readFile, writeFile } from 'fs/promises'
 import { loadSSRAssets } from '../frameworks/vue/fastify-ssr-plugin.js'
+import { baseConfig } from '../index.js'
 
 const cli = cac('vitrify')
 cli
@@ -74,7 +75,7 @@ cli
         })
         break
       case 'ssg':
-        await build({
+        const clientBuild = await build({
           ssr: 'client',
           ...args,
           outDir: fileURLToPath(new URL('static/', baseOutDir))
@@ -101,12 +102,20 @@ cli
         })
         const routes = await getRoutes()
 
+        const { base } = await baseConfig({
+          ...args,
+          command: 'build',
+          mode: 'production',
+          ssr: 'client'
+        })
+
         await prerender({
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
           template,
           manifest,
           render,
           routes,
+          base: base ?? '/',
           onAppRendered,
           onTemplateRendered
         })

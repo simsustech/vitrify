@@ -30,13 +30,6 @@ export async function build(opts: {
     emptyOutDir: !!opts.outDir
   }
 
-  // if (opts.base) {
-  //   config.define = {
-  //     ...config.define,
-  //     __BASE_URL__: `'${opts.base}'`
-  //   }
-  // }
-
   return viteBuild({
     configFile: false,
     // base: opts.base,
