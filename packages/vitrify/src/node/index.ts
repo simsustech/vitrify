@@ -60,11 +60,12 @@ const internalServerModules = [
 const manualChunkNames = [
   'prerender',
   'fastify-ssr-plugin',
-  'fastify-csr-plugin'
-  // 'server'
+  'fastify-csr-plugin',
+  'server',
+  'entry-server'
 ]
 
-const moduleChunks = {
+const moduleChunks: Record<string, string[]> = {
   vue: [
     'vue',
     '@vue',
@@ -81,7 +82,21 @@ const moduleChunks = {
     'hookable'
   ],
   quasar: ['quasar'],
-  atQuasar: ['@quasar']
+  atQuasar: ['@quasar'],
+  fastify: [
+    'fastify',
+    '@fastify',
+    'light-my-request',
+    'find-my-way',
+    'avvio',
+    'pino',
+    'pino-pretty',
+    'real-require',
+    'atomic-sleep',
+    'boom',
+    'cookie'
+  ],
+  beasties: ['beasties']
 }
 
 export const VIRTUAL_MODULES = [
@@ -107,34 +122,48 @@ const createCodeSplittingGroups = (
       priority: 30
     })),
     {
+      test: /ssr\/server\.ts$/,
+      name: 'server',
+      priority: 40,
+      includeDependenciesRecursively: false
+    },
+    {
+      test: /ssr\/entry-server\.ts$/,
+      name: 'entry-server',
+      priority: 40,
+      includeDependenciesRecursively: false
+    },
+    {
+      test: /ssr\/prerender\.ts$/,
+      name: 'prerender',
+      priority: 40,
+      includeDependenciesRecursively: false
+    },
+    {
+      test: /ssr\/fastify-ssr-plugin\.ts$/,
+      name: 'fastify-ssr-plugin',
+      priority: 40,
+      includeDependenciesRecursively: false
+    },
+    {
       test: /(?<!@)quasar/,
       name: 'quasar'
     },
     {
       test: /@quasar/,
       name: 'at_quasar'
+    },
+    ...Object.entries(moduleChunks).map(([key, value]) => ({
+      name: key,
+      test: new RegExp(value.join('|')),
+      priority: 20,
+      maxSize: ssr === 'client' || ssr === 'ssg' ? 1000000 : Infinity
+    })),
+    {
+      name: 'vendor',
+      test: /node_modules/,
+      priority: 1
     }
-    // ...manualChunkNames.map((m) => ({
-    //     name: m,
-    //     test: new RegExp(m),
-    //     priority: 20
-    //   })),
-    //   ...Object.entries(moduleChunks).map(([key, value]) => ({
-    //     name: key,
-    //     test: new RegExp(value.join('|')),
-    //     priority: 20,
-    //     maxSize: ssr === 'client' || ssr === 'ssg' ? 1000000 : Infinity
-    //   })),
-    //   {
-    //     name: 'vendor',
-    //     test: /node_modules/,
-    //     priority: 1
-    //   },
-    //   {
-    //     name: 'typst',
-    //     test: /\.typ/,
-    //     priority: 40
-    //   }
   ]
 }
 

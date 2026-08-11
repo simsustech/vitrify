@@ -101,7 +101,7 @@ cli
         })
         const routes = await getRoutes()
 
-        prerender({
+        await prerender({
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
           template,
           manifest,
