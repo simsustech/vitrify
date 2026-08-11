@@ -788,7 +788,6 @@ export const baseConfig = async ({
     },
     define: {
       __HOST__: `'localhost'`,
-      __BASE_URL__: `'${base}'`,
       __IS_PWA__: `${isPwa}`,
       __DEBUG__: `'${debug ? true : false}'`
     },
@@ -816,7 +815,14 @@ export const baseConfig = async ({
     }
   } as VitrifyConfig
 
-  return mergeConfig(config, vitrifyConfig)
+  const mergedConfig = mergeConfig(config, vitrifyConfig)
+
+  // vue-router history/SSR base must track the effective base, unless
+  // the user overrides define.__BASE_URL__ explicitly.
+  mergedConfig.define ??= {}
+  mergedConfig.define.__BASE_URL__ ??= `'${mergedConfig.base ?? '/'}'`
+
+  return mergedConfig
 }
 
 export const vitrifyDir = new URL('..', import.meta.url)
