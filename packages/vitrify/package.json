@@ -1,6 +1,6 @@
 {
   "name": "vitrify",
-  "version": "0.26.10",
+  "version": "0.26.11",
   "description": "Vite as your Full Stack development tool",
   "keywords": [
     "fastify",
