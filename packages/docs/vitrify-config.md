@@ -92,9 +92,9 @@ export interface VitrifyConfig extends ViteUserConfig {
       alias?: Alias[]
     }
     /**
-     * Files which should be a seperate chunk
+     * Named code splitting chunks, e.g. `{ typst: ['@myriaddreamin/typst'] }`.
      */
-    manualChunks?: string[]
+    chunks?: Record<string, string[]>
     /**
      * Enables vite-plugin-pwa
      */

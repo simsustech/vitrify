@@ -66,22 +66,18 @@ const manualChunkNames = [
 ]
 
 const moduleChunks: Record<string, string[]> = {
-  vue: [
-    'vue',
-    '@vue',
-    'vue-router',
-    'pinia',
-    '@pinia/colada',
-    '@vue/devtools-api',
-    '@vue/devtools-kit',
-    '@vue/devtools-shared',
-    '@vueuse/core',
-    '@vueuse/metadata',
-    '@vueuse/shared',
-    'perfect-debounce',
-    'hookable'
-  ],
-  quasar: ['quasar'],
+  vue: ['node_modules/vue/'],
+  vueRuntimeDom: ['@vue/runtime-dom'],
+  vueRuntimeCore: ['@vue/runtime-core'],
+  vueReactivity: ['@vue/reactivity'],
+  vueShared: ['@vue/shared'],
+  vueServerRenderer: ['@vue/server-renderer'],
+  vueCompiler: ['@vue/compiler'],
+  vueRouter: ['vue-router'],
+  pinia: ['@pinia', '/pinia/'],
+  vueuse: ['@vueuse', 'perfect-debounce', 'hookable'],
+  vueDevtools: ['@vue/devtools'],
+  quasar: ['(^|[\\\\/])quasar([\\\\/@]|$)'],
   atQuasar: ['@quasar'],
   fastify: [
     'fastify',
@@ -108,12 +104,12 @@ export const VIRTUAL_MODULES = [
 ]
 
 /**
- * Advanced chunking may no longer be necessary.
- * @param ssr
- * @returns
+ * Named chunks for framework code. Groups capture only matching modules and
+ * are never split further: rolldown's maxSize splitting duplicates modules
+ * across chunks and breaks singletons at runtime (vitejs/vite#22286).
  */
 const createCodeSplittingGroups = (
-  ssr?: VitrifySSRModes
+  chunks: Record<string, string[]> = {}
 ): CodeSplittingGroup[] => {
   return [
     ...VIRTUAL_MODULES.map((m) => ({
@@ -157,7 +153,15 @@ const createCodeSplittingGroups = (
       name: key,
       test: new RegExp(value.join('|')),
       priority: 20,
-      maxSize: ssr === 'client' || ssr === 'ssg' ? 1000000 : Infinity
+      // Only matching modules, never split (maxSize duplicates modules — vite#22286)
+      includeDependenciesRecursively: false
+    })),
+    // Higher priority so app chunks can carve modules out of built-in groups.
+    ...Object.entries(chunks).map(([key, value]) => ({
+      name: key,
+      test: new RegExp(value.join('|')),
+      priority: 25,
+      includeDependenciesRecursively: false
     })),
     {
       name: 'vendor',
@@ -702,7 +706,7 @@ export const baseConfig = async ({
         chunkFileNames: '[name].mjs',
         format: 'es',
         codeSplitting: {
-          groups: createCodeSplittingGroups(ssr)
+          groups: createCodeSplittingGroups(vitrifyConfig.vitrify?.chunks)
         }
       }
     }
@@ -721,7 +725,7 @@ export const baseConfig = async ({
         chunkFileNames: '[name].mjs',
         format: 'es',
         codeSplitting: {
-          groups: createCodeSplittingGroups(ssr)
+          groups: createCodeSplittingGroups(vitrifyConfig.vitrify?.chunks)
         }
       }
     }
@@ -739,7 +743,7 @@ export const baseConfig = async ({
         chunkFileNames: '[name].mjs',
         format: 'es',
         codeSplitting: {
-          groups: createCodeSplittingGroups(ssr)
+          groups: createCodeSplittingGroups(vitrifyConfig.vitrify?.chunks)
         }
       }
     }
