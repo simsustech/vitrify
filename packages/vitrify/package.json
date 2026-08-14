@@ -24,6 +24,7 @@
   "files": [
     "dist",
     "src",
+    "client.d.ts",
     "!dist/**/*.test.js"
   ],
   "type": "module",
@@ -54,8 +55,7 @@
       "import": "./dist/plugins/index.js"
     },
     "./hooks": {
-      "types": "./dist/types/hooks/index.d.ts",
-      "import": "./dist/hooks/index.d.ts"
+      "types": "./dist/types/hooks/index.d.ts"
     }
   },
   "publishConfig": {
