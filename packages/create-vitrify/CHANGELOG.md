@@ -1,5 +1,14 @@
 # create-vitrify
 
+## 0.8.5
+
+### Patch Changes
+
+- a07a5ce: chore: manual chunks for unocss and pinia
+- Updated dependencies [a07a5ce]
+- Updated dependencies [2cc4b40]
+  - @vitrify/tools@0.5.4
+
 ## 0.8.4
 
 ### Patch Changes
