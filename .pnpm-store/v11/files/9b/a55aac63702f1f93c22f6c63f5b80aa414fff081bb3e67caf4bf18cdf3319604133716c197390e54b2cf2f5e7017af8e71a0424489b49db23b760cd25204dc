@@ -1,3 +1,0 @@
-export { C as CONTROL_MINI_NO_NEGATIVE, f as colorOpacityToString, c as colorResolver, e as colorToString, i as colorableShadows, b as cornerMap, d as directionMap, o as directionSize, q as getBracket, t as getComponent, z as getComponents, g as globalKeywords, w as h, h as handler, a as hasParseableColor, u as hex2rgba, j as insetMap, m as makeGlobalStaticRules, p as parseColor, v as parseCssColor, k as positionMap, l as resolveBreakpoints, r as resolveVerticalBreakpoints, s as splitShorthand, y as valueHandlers, x as xyzMap } from './shared/preset-mini.acf4efb2.mjs';
-export { a as variantGetBracket, v as variantGetParameter, b as variantMatcher, c as variantParentMatcher } from './shared/preset-mini.780f5e22.mjs';
-import '@unocss/core';

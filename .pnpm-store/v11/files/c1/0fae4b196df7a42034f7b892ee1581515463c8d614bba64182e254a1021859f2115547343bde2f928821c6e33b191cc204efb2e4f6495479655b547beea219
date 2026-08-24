@@ -1,6 +1,0 @@
-/*!
- * @quasar/quasar-ui-qmediaplayer v3.0.0
- * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
- * Released under the MIT License.
- */
-(function(e,a){"object"===typeof exports&&"undefined"!==typeof module?module.exports=a():"function"===typeof define&&define.amd?define([],a):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.fr=a())})(this,function(){return{lang:"fr",mediaPlayer:{oldBrowserVideo:"Pour voir cette vidéo, merci d'activer le Javascript ou d'utiliser un navigateur supportant le HTML5.",oldBrowserAudio:"Pour écouter ce média audio, merci d'activer le Javascript ou d'utiliser un navigateur supportant le HTML5.",pause:"Pause",play:"Lecture",settings:"Réglages",toggleFullscreen:"Plein écran",mute:"Désactiver le son",unmute:"Activer le son",speed:"Vitesse",language:"Langue",playbackRate:"Vitesse de lecture",waitingVideo:"En attente de la vidéo",waitingAudio:"En attente de l'audio",ratePoint5:".5x",rateNormal:"Normal",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"Arrêt",noLoadVideo:"Impossible de charger la vidéo",noLoadAudio:"Impossible de charger l'audio",cannotPlayVideo:"Impossible de lire la vidéo",cannotPlayAudio:"Impossible de lire l'audio"}}});

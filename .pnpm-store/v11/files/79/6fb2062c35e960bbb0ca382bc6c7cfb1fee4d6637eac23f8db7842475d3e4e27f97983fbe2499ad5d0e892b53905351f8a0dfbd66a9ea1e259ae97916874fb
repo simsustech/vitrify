@@ -1,6 +1,0 @@
-/*!
- * @quasar/quasar-ui-qmediaplayer v3.0.0
- * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
- * Released under the MIT License.
- */
-(function(e,n){"object"===typeof exports&&"undefined"!==typeof module?module.exports=n():"function"===typeof define&&define.amd?define([],n):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.fa=n())})(this,function(){return{lang:"fa",mediaPlayer:{oldBrowserVideo:"undefined",oldBrowserAudio:"undefined",pause:"undefined",play:"undefined",settings:"undefined",toggleFullscreen:"undefined",mute:"undefined",unmute:"undefined",speed:"undefined",language:"undefined",playbackRate:"undefined",waitingVideo:"undefined",waitingAudio:"undefined",ratePoint5:".5x",rateNormal:"undefined",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"undefined",noLoadVideo:"undefined",noLoadAudio:"undefined",cannotPlayVideo:"undefined",cannotPlayAudio:"undefined"}}});

@@ -1,6 +1,0 @@
-/*!
- * @quasar/quasar-ui-qmediaplayer v3.0.0
- * (c) 2026 Jeff Galbraith <jeff@quasar.dev>
- * Released under the MIT License.
- */
-(function(e,a){"object"===typeof exports&&"undefined"!==typeof module?module.exports=a():"function"===typeof define&&define.amd?define([],a):(e="undefined"!==typeof globalThis?globalThis:e||self,e.QMediaPlayer=e.QMediaPlayer||{},e.QMediaPlayer.lang=e.QMediaPlayer.lang||{},e.QMediaPlayer.lang.he=a())})(this,function(){return{lang:"he",mediaPlayer:{oldBrowserVideo:"כדי לצפות בסרטון זה, יש להפעיל JavaScript ו/או לעדכן את הדפדפן לגרסה שתומכת בווידאו HTML5.",oldBrowserAudio:"כדי להאזין לאודיו זה, יש להפעיל JavaScript ו/או לעדכן את הדפדפן לגרסה שתומכת באודיו HTML5.",pause:"השהה",play:"נגן",settings:"הגדרות",toggleFullscreen:"מסך מלא",mute:"השתק",unmute:"בטל השתקה",speed:"מהירות",language:"שפה",playbackRate:"מהירות הפעלה",waitingVideo:"ממתין לווידאו",waitingAudio:"ממתין לאודיו",ratePoint5:".5x",rateNormal:"רגיל",rate1Point5:"1.5x",rate2:"2x",trackLanguageOff:"כבוי",noLoadVideo:"לא ניתן לטעון את הסרטון",noLoadAudio:"לא ניתן לטעון את האודיו",cannotPlayVideo:"לא ניתן לנגן את הסרטון",cannotPlayAudio:"לא ניתן לנגן את האודיו"}}});

@@ -1,5 +1,0 @@
-{
-  "mixins": ["plugins/storage/engine/web-storage"],
-
-  "injection": "$q.sessionStorage"
-}

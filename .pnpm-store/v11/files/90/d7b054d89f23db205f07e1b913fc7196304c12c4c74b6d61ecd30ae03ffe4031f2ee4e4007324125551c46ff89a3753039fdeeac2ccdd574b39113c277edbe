@@ -1,1 +1,0 @@
-{"version":3,"file":"ICanvasAdapterCaller.d.ts","sourceRoot":"","sources":["../../src/canvas/ICanvasAdapterCaller.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,aAAa,MAAM,mCAAmC,CAAC;AACnE,OAAO,KAAK,aAAa,MAAM,4BAA4B,CAAC;AAC5D,OAAO,KAAK,YAAY,MAAM,mBAAmB,CAAC;AAElD,MAAM,CAAC,OAAO,WAAW,oBAAoB;IAC5C,MAAM,EAAE,aAAa,CAAC;IACtB,YAAY,EAAE,aAAa,CAAC;IAC5B,MAAM,EAAE,YAAY,CAAC;CACrB"}

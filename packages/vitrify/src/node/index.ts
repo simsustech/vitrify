@@ -74,11 +74,24 @@ const moduleChunks: Record<string, string[]> = {
   vueServerRenderer: ['@vue/server-renderer'],
   vueCompiler: ['@vue/compiler'],
   vueRouter: ['vue-router'],
-  pinia: ['@pinia', '/pinia/'],
+  // pinia in its own chunk. Precise package-boundary patterns (not '/pinia/')
+  // so pnpm's directory hashes (e.g. ..._@pinia+colada@1.4.2_pinia@4.0.3_...)
+  // don't drag unrelated modules (vitrify's main.ts, the uno.css entry) in.
+  pinia: ['(^|[\\\\/])pinia([\\\\/@]|$)', '(^|[\\\\/])@pinia([\\\\/@]|$)'],
   vueuse: ['@vueuse', 'perfect-debounce', 'hookable'],
   vueDevtools: ['@vue/devtools'],
   quasar: ['(^|[\\\\/])quasar([\\\\/@]|$)'],
   atQuasar: ['@quasar'],
+  unocss: [
+    // UnoCSS runtime + presets + the uno.css virtual entry land in one chunk,
+    // so the generated CSS is emitted as unocss-*.css instead of leaking into
+    // whatever chunk happens to import the entry (previously pinia).
+    '(^|[\\\\/])unocss([\\\\/@]|$)',
+    '(^|[\\\\/])@unocss([\\\\/@]|$)',
+    'unocss-preset-quasar',
+    // the uno.css virtual entry resolves to a path ending in __uno.css
+    '__uno\\.css'
+  ],
   fastify: [
     'fastify',
     '@fastify',
