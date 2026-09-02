@@ -46,7 +46,7 @@ minimumReleaseAgeExclude:
   - '@rolldown/binding-openharmony-arm64@1.2.5'
   - '@rolldown/binding-win32-arm64-msvc@1.2.5'
   - '@rolldown/binding-win32-x64-msvc@1.2.5'
-  - happy-dom@20.11.6
+  - happy-dom@20.11.6 || 20.12.2
   - magic-string@1.2.2
   - rolldown@1.2.5
   - vite@8.2.2
