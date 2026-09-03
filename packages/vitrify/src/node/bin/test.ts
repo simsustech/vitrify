@@ -1,4 +1,5 @@
 import { startVitest } from 'vitest/node'
+import 'vitest/config'
 import { baseConfig } from '../index.js'
 import { fileURLToPath } from 'url'
 export async function test(opts: { appDir: URL }) {
@@ -16,7 +17,8 @@ export async function test(opts: { appDir: URL }) {
       dir: fileURLToPath(opts.appDir),
 
       globals: true,
-      environment: 'happy-dom'
+      environment: 'happy-dom',
+      ...config.test
     },
     config
   )

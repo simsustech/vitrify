@@ -14,6 +14,7 @@ import type { Router } from 'vue-router'
 import type { App } from '@vue/runtime-core'
 import type { Pinia } from 'pinia'
 import type { _UseQueryEntryNodeValueSerialized } from '@pinia/colada'
+import type { InlineConfig as VitestInlineConfig } from 'vitest/node'
 
 export type SSRContext = {
   // Quasar requires req and res on SSRContext instead of request and reply
@@ -226,6 +227,11 @@ export interface VitrifyConfig extends ViteUserConfig {
      */
     unpluginVueComponents?: unpluginVueComponentsOptions
   }
+  /**
+   * Vitest configuration. Passed to `startVitest` when running `vitrify test`.
+   * Merged over vitrify's defaults (root/dir, globals, environment).
+   */
+  test?: VitestInlineConfig
 }
 
 export type VitrifyCommands = 'build' | 'dev' | 'test'
