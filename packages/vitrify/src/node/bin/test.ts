@@ -16,7 +16,8 @@ export async function test(opts: { appDir: URL }) {
       dir: fileURLToPath(opts.appDir),
 
       globals: true,
-      environment: 'happy-dom'
+      environment: 'happy-dom',
+      ...config.test
     },
     config
   )
