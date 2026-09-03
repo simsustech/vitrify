@@ -50,7 +50,7 @@
     "@vue/runtime-dom": "3.5.42",
     "@vue/server-renderer": "3.5.42",
     "@vue/shared": "3.5.42",
-    "beasties": "0.4.3",
+    "beasties": "0.5.3",
     "devcert": "1.2.3",
     "fastify": "5.12.1",
     "npm-run-all": "4.1.5",
@@ -61,7 +61,7 @@
     "vite-plugin-pwa": "1.3.0",
     "vitrify": "0.27.1",
     "vue": "3.5.42",
-    "vue-router": "5.3.0",
+    "vue-router": "5.3.1",
     "workbox-window": "7.4.1"
   },
   "productName": "App"

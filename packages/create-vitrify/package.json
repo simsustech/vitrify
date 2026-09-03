@@ -30,7 +30,7 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@inquirer/prompts": "^8.7.0",
+    "@inquirer/prompts": "^8.7.1",
     "@vitrify/tools": "workspace:*",
     "handlebars": "^4.7.9",
     "latest-version": "^9.0.0",

@@ -645,7 +645,14 @@ export const baseConfig = async ({
   if (packageUrls['vue']) {
     for (const pkg of vueInternalPkgs) {
       const specifier = pkg.split('/').at(-1)
-      const pkgJsonPath = await findDepPkgJsonPath(pkg, fileURLToPath(appDir!))
+      const pkgJsonPath =
+        (await findDepPkgJsonPath(pkg, fileURLToPath(appDir!))) ||
+        (packageUrls['vue']
+          ? await findDepPkgJsonPath(
+              pkg,
+              fileURLToPath(new URL('.', packageUrls['vue']))
+            )
+          : undefined)
       if (pkgJsonPath)
         vuePkgAliases.push({
           find: pkg,
