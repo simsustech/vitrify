@@ -1,5 +1,11 @@
 # create-vitrify
 
+## 0.8.6
+
+### Patch Changes
+
+- 5423741: fix: fix vue alias resolution
+
 ## 0.8.5
 
 ### Patch Changes
