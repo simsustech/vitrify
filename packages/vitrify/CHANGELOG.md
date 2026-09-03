@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.28.1
+
+### Patch Changes
+
+- 0b1bcf5: fix(vitrify): correct prerender.d.ts import path for types
+
 ## 0.28.0
 
 ### Minor Changes
