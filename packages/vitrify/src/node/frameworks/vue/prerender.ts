@@ -1,8 +1,8 @@
 import { existsSync, promises as fs, mkdirSync } from 'fs'
-import type { OnTemplateRenderedHook } from '../../../node/vitrify-config.js'
+import type { OnTemplateRenderedHook } from '../../vitrify-config.js'
 import { routesToPaths } from '../../helpers/routes.js'
 import { renderHtml } from './fastify-ssr-plugin.js'
-import { type RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import { fileURLToPath } from 'url'
 
 export const prerender = async ({
