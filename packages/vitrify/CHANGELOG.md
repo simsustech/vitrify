@@ -1,5 +1,11 @@
 # vitrify
 
+## 0.27.2
+
+### Patch Changes
+
+- 5423741: fix: fix vue alias resolution
+
 ## 0.27.1
 
 ### Patch Changes
