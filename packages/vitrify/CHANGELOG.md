@@ -1,5 +1,25 @@
 # vitrify
 
+## 0.28.0
+
+### Minor Changes
+
+- e968c9f: feat: add `test` key to `VitrifyConfig` for Vitest configuration
+
+  Users can now pass Vitest options directly in their `vitrify.config.ts`.
+  The `test` key is merged over vitrify's defaults (`root`, `dir`, `globals`, `environment`).
+
+  ```ts
+  import { defineConfig } from 'vitrify'
+
+  export default defineConfig({
+    test: {
+      environment: 'jsdom',
+      globals: false
+    }
+  })
+  ```
+
 ## 0.27.2
 
 ### Patch Changes
