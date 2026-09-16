@@ -76,12 +76,11 @@ export async function createApp(
   }
 
   // Workaround to fix hydration errors when serving html files directly
-  router.beforeEach((to, from, next) => {
+  router.beforeEach((to) => {
     if (to.path.endsWith('.html')) {
-      return next({ path: to.path.replace('.html', '') })
+      return { path: to.path.replace('.html', '') }
     }
-
-    next()
+    return true
   })
 
   for (const key in provide) {
