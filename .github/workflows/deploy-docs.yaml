@@ -5,7 +5,7 @@ on:
     branches: ['production']
 
 env:
-  working-directory: ./packages/docs/
+  working-directory: ./packages/docs
   url: www.vitrify.dev
 
 jobs:
@@ -14,43 +14,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Creating .npmrc
         run: |
-          cat > ~/.npmrc << EOF
-            //npm.simsus.tech/:_authToken=$SIMSUSTECH_NPM_TOKEN
-          EOF
+          printf '//npm.simsus.tech/:_authToken=%s\n' \
+            "$SIMSUSTECH_NPM_TOKEN" > ~/.npmrc
         env:
           SIMSUSTECH_NPM_TOKEN: ${{ secrets.SIMSUSTECH_NPM_TOKEN }}
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 11
+          run_install: false
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm i
 
       - name: Build
         working-directory: ${{ env.working-directory }}
-        run: |
-          pnpm run build
+        run: pnpm run build
 
       - name: rsync deployments
-        uses: burnett01/rsync-deployments@7.0.2
+        uses: burnett01/rsync-deployments@v9
         with:
           switches: -avzr --delete
-          path: ${{env.working-directory}}.vitepress/dist/
-          remote_path: /srv/${{env.url}}
+          path: ${{ env.working-directory }}/.vitepress/dist/
+          remote_path: /srv/${{ env.url }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
           remote_key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Remove .npmrc
-        run: rm ~/.npmrc
+        if: always()
+        run: rm -f ~/.npmrc
