@@ -1,5 +1,12 @@
 # vitrify
 
+## 0.28.2
+
+### Patch Changes
+
+- a94aef8: chore: update dependencies
+- e86f9b4: chore: update dependencies
+
 ## 0.28.1
 
 ### Patch Changes
