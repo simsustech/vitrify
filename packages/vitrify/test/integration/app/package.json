@@ -40,10 +40,10 @@
   "dependencies": {
     "@fastify/middie": "9.3.4",
     "@fastify/one-line-logger": "2.2.0",
-    "@fastify/static": "10.1.4"
+    "@fastify/static": "10.1.5"
   },
   "devDependencies": {
-    "@types/node": "26.6.2",
+    "@types/node": "26.6.3",
     "@vitejs/plugin-vue": "6.0.9",
     "@vue/reactivity": "3.5.43",
     "@vue/runtime-core": "3.5.43",
@@ -54,10 +54,10 @@
     "devcert": "1.2.3",
     "fastify": "5.12.5",
     "npm-run-all": "4.1.5",
-    "oxfmt": "^0.70.0",
-    "oxlint": "^1.85.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
     "typescript": "7.0.2",
-    "vite": "8.3.0",
+    "vite": "8.3.2",
     "vite-plugin-pwa": "1.3.0",
     "vitrify": "0.28.1",
     "vue": "3.5.43",
