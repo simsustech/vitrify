@@ -34,8 +34,20 @@ export interface QuasarPluginOptions {
 export const injectSsrContext: OnTemplateRenderedHook = ({
   html,
   ssrContext
-}) =>
-  html
+}) => {
+  const headTags = ssrContext?._meta.headTags || ''
+
+  // The SSR-collected head tags are authoritative for the document title.
+  // vitrify's `productName` handling injects a <title> when the document has
+  // none (`addOrReplaceTitle`), and Quasar's Meta plugin injects the per-page
+  // title — so without dropping the pre-existing one the built page carries two
+  // <title> tags, and a crawler picks arbitrarily between them. Only the title is
+  // dropped; every other existing head tag is left alone.
+  const withAuthoritativeTitle = /<title[\s>]/i.test(headTags)
+    ? html.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i, '')
+    : html
+
+  return withAuthoritativeTitle
     .replace(/(<html[^>]*)(>)/i, (found, start, end) => {
       let matches
 
@@ -52,13 +64,12 @@ export const injectSsrContext: OnTemplateRenderedHook = ({
       return `${start} ${ssrContext?._meta.htmlAttrs || ''} ${end}`
     })
     .replace(
-      /(<head[^>]*)(>)/i,
-      (_, start, end) => `${start}${end}${ssrContext?._meta.headTags || ''}`
-    )
-    .replace(
       /(<\/head>)/i,
       (_, tag) =>
-        `${ssrContext?._meta.resourceStyles || ''}${
+        // Inject at the END of <head>, not right after its opening tag, so the
+        // document's own <meta charset> stays inside the first 1 KiB (the
+        // Lighthouse `charset` audit fails otherwise).
+        `${headTags}${ssrContext?._meta.resourceStyles || ''}${
           ssrContext?._meta.endingHeadTags || ''
         }${tag}`
     )
@@ -78,6 +89,7 @@ export const injectSsrContext: OnTemplateRenderedHook = ({
         ssrContext?._meta.bodyAttrs || ''
       }${end}${ssrContext?._meta.bodyTags || ''}`
     })
+}
 
 export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
   ssr = false,

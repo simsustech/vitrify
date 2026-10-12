@@ -9,6 +9,7 @@ export async function build(opts: {
   appDir?: URL
   publicDir?: URL
   debug?: boolean
+  minify?: boolean
   productName?: string
 }) {
   const config = await baseConfig({
@@ -24,8 +25,8 @@ export async function build(opts: {
 
   config.build = {
     ...config.build,
-    // minify: !opts.debug,
-    minify: false,
+    // Minify by default; `--debug` (or an explicit `minify: false`) opts out.
+    minify: opts.minify ?? !opts.debug,
     outDir: opts.outDir,
     emptyOutDir: !!opts.outDir
   }

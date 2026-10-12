@@ -555,10 +555,25 @@ export const baseConfig = async ({
                 /<link (.*?)>\n?/g,
                 ''
               )
+              // De-duplicate by href before re-appending. The head can already
+              // contain the same asset twice (e.g. a stylesheet emitted with and
+              // without `crossorigin`, or one the SSR pass also injected via
+              // `_meta.resourceStyles`); re-adding it verbatim made the browser
+              // download that asset twice. Keep the first occurrence.
+              const uniqueLinks = [
+                ...new Map(
+                  headLinks.map((link) => [
+                    link.match(/href=["']([^"']+)["']/i)?.[1] ?? link,
+                    link
+                  ])
+                ).values()
+              ]
               const headWithSortedLinks = headWithoutLinks.replace(
                 '</head>',
                 [
-                  ...headLinks.sort((link) => (link.includes('.css') ? -1 : 0)),
+                  ...uniqueLinks.sort((link) =>
+                    link.includes('.css') ? -1 : 0
+                  ),
                   '</head>'
                 ].join('\n')
               )
