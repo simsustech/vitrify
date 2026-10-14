@@ -7,3 +7,4 @@ ISSUES.md
 /packages/docs/.vitepress/cache
 .pi/fff
 .pnpm-store
+/.npmrc

@@ -40,6 +40,22 @@ jobs:
       - name: Build Packages
         run: pnpm run build
 
+      # pnpm does not read a bare NPM_TOKEN env var; it authenticates only from
+      # a `//registry.npmjs.org/:_authToken=` line in .npmrc. changesets/action
+      # v1 wrote that file itself, v2 does not, so since the v2 bump in
+      # 059fed5f `changeset publish` ran `pnpm publish` unauthenticated and npm
+      # answered the PUT with `404 {"error":"Not found"}`. That is how the
+      # vitrify@0.28.3 publish failed; nothing else authenticates it.
+      - name: Configure npm auth
+        run: |
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo "::error::NPM_TOKEN secret is empty or missing"
+            exit 1
+          fi
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v2
@@ -48,4 +64,6 @@ jobs:
           commit-message: 'chore: release package(s)'
           pr-title: 'chore: release package(s)'
         env:
+          # Kept for compatibility; the auth that actually reaches pnpm is the
+          # .npmrc written by "Configure npm auth" above.
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
