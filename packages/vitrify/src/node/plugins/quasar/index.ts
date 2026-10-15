@@ -43,8 +43,17 @@ export const injectSsrContext: OnTemplateRenderedHook = ({
   // title — so without dropping the pre-existing one the built page carries two
   // <title> tags, and a crawler picks arbitrarily between them. Only the title is
   // dropped; every other existing head tag is left alone.
+  //
+  // A `<title>` that only appears inside an HTML comment is documentation, not a
+  // title. Matching it also swallowed the comment's terminator, so everything
+  // after it — the module script, the stylesheets, the modulepreloads — stayed
+  // inside an unterminated comment and the page rendered blank. Consume comments
+  // first so the callback can hand them back untouched.
   const withAuthoritativeTitle = /<title[\s>]/i.test(headTags)
-    ? html.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i, '')
+    ? html.replace(
+        /<!--[\s\S]*?-->|<title\b[^>]*>[\s\S]*?<\/title>/gi,
+        (match) => (match.startsWith('<!--') ? match : '')
+      )
     : html
 
   return withAuthoritativeTitle

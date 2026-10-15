@@ -117,3 +117,70 @@ test('leaves the document title alone when the head tags have none', () => {
   // No title in headTags → the existing one is the only one, so it stays.
   expect(output).toContain('<title>Product name</title>')
 })
+
+/**
+ * A `<title>` that only appears inside an HTML comment is documentation, not a
+ * title. Matching it made the drop above swallow the comment's terminator too:
+ * the module script, the stylesheets and the modulepreloads that follow stayed
+ * inside an unterminated comment, the browser executed nothing, and the page
+ * rendered blank. slimfact's `packages/app/index.html` documents the empty-title
+ * workaround in exactly such a comment, so this is that shape.
+ */
+const htmlWithCommentedTitle = [
+  '<!DOCTYPE html>',
+  '<html>',
+  '<head>',
+  '<meta charset="utf-8">',
+  '<!-- The route map owns the title: an empty <title> here duplicated it',
+  '     in the SSR head. -->',
+  '<title>Product name</title>',
+  '<script type="module" src="/index.mjs"></script>',
+  '</head>',
+  '<body><div id="app"></div></body>',
+  '</html>'
+].join('\n')
+
+const withHeadTitle = {
+  _meta: {
+    ...ssrContext._meta,
+    headTags: '<title>Home · My Site</title>'
+  }
+}
+
+test('drops a real <title> but keeps one written inside a comment', () => {
+  const output = injectSsrContext({
+    html: htmlWithCommentedTitle,
+    ssrContext: withHeadTitle
+  } as never) as string
+
+  // Exactly one closing title tag: the authoritative one from the head tags.
+  expect(output.match(/<\/title>/gi) ?? []).toHaveLength(1)
+  expect(output).toContain('<title>Home · My Site</title>')
+  expect(output).not.toContain('<title>Product name</title>')
+
+  // The comment stayed terminated, so what follows it is real markup again.
+  expect(output).toContain('in the SSR head. -->')
+  const scriptAt = output.indexOf('<script type="module"')
+  const commentAt = output.lastIndexOf('<!--', scriptAt)
+  expect(output.indexOf('-->', commentAt)).toBeLessThan(scriptAt)
+})
+
+test('a commented <title> is never mistaken for the document title', () => {
+  const withoutRealTitle = htmlWithCommentedTitle.replace(
+    '<title>Product name</title>\n',
+    ''
+  )
+
+  const output = injectSsrContext({
+    html: withoutRealTitle,
+    ssrContext: withHeadTitle
+  } as never) as string
+
+  // Nothing to drop, so nothing is: the comment survives whole and the head
+  // still carries the authoritative title exactly once.
+  expect(output).toContain('in the SSR head. -->')
+  expect(output.match(/<\/title>/gi) ?? []).toHaveLength(1)
+  const scriptAt = output.indexOf('<script type="module"')
+  const commentAt = output.lastIndexOf('<!--', scriptAt)
+  expect(output.indexOf('-->', commentAt)).toBeLessThan(scriptAt)
+})
