@@ -100,6 +100,10 @@ export interface VitrifyConfig extends ViteUserConfig {
      */
     pwa?: Partial<VitePWAOptions>
     /**
+     * Analytics injected into the served HTML at build time. Only Umami for now
+     */
+    analytics?: VitrifyAnalyticsConfig
+    /**
      * UnoCSS Configuration
      */
     unocss?: UnoCSSUserConfig
@@ -107,6 +111,23 @@ export interface VitrifyConfig extends ViteUserConfig {
      * unplugin-vue-components configuration
      */
     unpluginVueComponents?: unpluginVueComponentsOptions
+  }
+}
+```
+
+```ts
+export interface VitrifyAnalyticsConfig {
+  umami?: {
+    /** Empty means: inject nothing */
+    websiteId?: string
+    /** Origin, or a bare host which is read as https */
+    host: string
+    /** Hostnames that count as visits, emitted as `data-domains` */
+    domains?: string[]
+    /** Honour the browser's Do Not Track setting. Default true */
+    doNotTrack?: boolean
+    /** Script name for a renamed self-hosted instance. Default `script.js` */
+    scriptName?: string
   }
 }
 ```

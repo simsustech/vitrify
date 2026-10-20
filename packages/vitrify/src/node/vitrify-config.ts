@@ -120,6 +120,38 @@ export type OnTemplateRenderedHook = ({
   ssrContext?: SSRContext
 }) => Promise<string> | string
 
+/**
+ * Analytics injected into the served HTML at build time.
+ *
+ * Only Umami for now: it is the one tool that stores nothing on the visitor's
+ * device, so a site can carry it without a consent banner. The shape is an
+ * object with an optional `umami` key rather than a bare Umami option, because
+ * the next tool (a consent-gated one) needs a place to live that is visibly a
+ * different thing.
+ */
+export interface VitrifyAnalyticsConfig {
+  umami?: {
+    /** The website id from the Umami dashboard. Empty means: inject nothing. */
+    websiteId?: string
+    /**
+     * The instance, as an origin (`https://analytics.example.com`) or a bare
+     * host (`analytics.example.com`, which is read as https).
+     */
+    host: string
+    /**
+     * Hostnames that count as visits, emitted as `data-domains`.
+     *
+     * Without it Umami records whatever host it was served from — so a preview
+     * deployment and a staging host both look like real traffic.
+     */
+    domains?: string[]
+    /** Honour the browser's Do Not Track setting. Defaults to true. */
+    doNotTrack?: boolean
+    /** Script name, for a self-hosted instance that renamed it. Default `script.js`. */
+    scriptName?: string
+  }
+}
+
 export interface VitrifyConfig extends ViteUserConfig {
   vitrify?: {
     lang?: string
@@ -218,6 +250,17 @@ export interface VitrifyConfig extends ViteUserConfig {
      * Enables vite-plugin-pwa
      */
     pwa?: Partial<VitePWAOptions>
+    /**
+     * Analytics injected into `index.html` at build time.
+     *
+     * Declared here rather than written into a component so the tag exists in
+     * the *served HTML*: a tag added from an `onMounted` runs only after the
+     * client bundle has executed, so the first page view of a visitor on a slow
+     * connection — and every crawler — is unmeasured. It is also the one place
+     * where "no id, no tag" is enforced once, instead of every app re-checking
+     * it in its own code.
+     */
+    analytics?: VitrifyAnalyticsConfig
     /**
      * UnoCSS Configuration
      */

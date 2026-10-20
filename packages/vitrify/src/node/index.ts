@@ -34,7 +34,12 @@ import type {
 import type { VitrifyContext } from './bin/run.js'
 import type { VitrifyPlugin } from './plugins/index.js'
 import { resolve } from './app-urls.js'
-import { addOrReplaceTitle, appendToBody } from './helpers/utils.js'
+import {
+  addOrReplaceTitle,
+  appendToBody,
+  appendToHead
+} from './helpers/utils.js'
+import { analyticsTags } from './helpers/analytics.js'
 import Components from 'unplugin-vue-components/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import UnoCSS from 'unocss/vite'
@@ -638,6 +643,13 @@ export const baseConfig = async ({
           const entryScript = `<script type="module" src="${entry}"></script>`
           html = appendToBody(entryScript, html)
           if (productName) html = addOrReplaceTitle(productName, html)
+
+          // Analytics belongs in the served HTML, not in a component: a tag
+          // added after hydration is invisible to a crawler and late for the
+          // first page view. An empty website id produces an empty string, so a
+          // site that configures nothing ships no third-party request at all.
+          const analytics = analyticsTags(vitrifyConfig.vitrify?.analytics)
+          if (analytics) html = appendToHead(analytics, html)
           return html
         }
       }
