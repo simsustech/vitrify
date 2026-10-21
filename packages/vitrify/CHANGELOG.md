@@ -1,5 +1,53 @@
 # vitrify
 
+## 0.29.0
+
+### Minor Changes
+
+- 2b8b2a4: Inject analytics tags into the served HTML from the config.
+
+  A measuring script added by a component only exists after the client bundle has
+  run: the first page view of a visitor on a slow connection is unmeasured, and a
+  crawler never sees it at all. The tag now comes from `vitrify.analytics` at build
+  time, so it is part of the prerendered HTML — and because the decision is made at
+  build time, a site without a website id ships no third-party request anywhere,
+  instead of a `<script>` that a runtime guard has to hide.
+
+  ```ts
+  vitrify: {
+    analytics: {
+      umami: {
+        websiteId: '…',
+        host: 'stats.example.com',   // bare host or full origin
+        domains: ['example.com'],    // keeps previews out of the numbers
+        // doNotTrack defaults to true
+      }
+    }
+  }
+  ```
+
+  Umami is the first tool here because it stores nothing on the visitor's device,
+  so the tag needs no consent gate; the `analytics` object is shaped so a
+  consent-gated tool can be added beside it rather than folded into it.
+
+### Patch Changes
+
+- 1d78177: fix: do not mistake a `<title>` inside an HTML comment for the document title
+
+  `injectSsrContext` drops the document's pre-existing `<title>` so the
+  SSR-collected head tags stay the only source of truth. The matcher was not
+  comment-aware, so a `<title>` written inside an HTML comment — as a note
+  explaining the empty-title workaround — was matched, and the match ran on to the
+  document's real `</title>`, taking the comment's terminator with it. Everything
+  after the comment (the module script, the stylesheets and the modulepreloads)
+  stayed inside an unterminated comment: the browser executed nothing and the page
+  rendered blank.
+
+  Comments are now consumed first and handed back untouched, so only a real
+  `<title>` is dropped. A regression test covers the shape that broke and fails
+  against the previous matcher; a second test pins the boundary where the comment
+  holds the document's only `<title>`.
+
 ## 0.28.3
 
 ### Patch Changes
