@@ -13,7 +13,8 @@ import {
   type QuasarIconSets,
   type QuasarPlugins,
   type GlobalQuasarIconMapFn,
-  type QuasarIconSet
+  type QuasarIconSet,
+  type QuasarPluginOptions as QuasarSdkOptions
 } from 'quasar'
 import type { QuasarFonts } from '@quasar/extras'
 import { QuasarResolver } from 'unplugin-vue-components/resolvers'
@@ -26,6 +27,19 @@ export interface QuasarPluginOptions {
     lang?: string
     iconSet?: QuasarIconSets | QuasarIconSet
     iconMapFn?: GlobalQuasarIconMapFn
+    /**
+     * Quasar's own runtime configuration (`QuasarUIConfiguration`) — `dark`,
+     * `notify`, `loading`, `brand`, and every plugin default.
+     *
+     * It was not reachable before, which is why a site could not follow the
+     * operating system's colour scheme. `dark: 'auto'` in particular is not a
+     * client-only detail: Quasar's **server** build reads this value, writes
+     * `body--light`/`body--dark` into the prerendered HTML and marks the body
+     * `data-dark-auto`, and its client build then applies `prefers-color-scheme`
+     * after hydration. Setting the class from a component instead fights the
+     * prerender and flashes.
+     */
+    config?: QuasarSdkOptions['config']
   }
   extras?: (QuasarIconSets | QuasarFonts)[]
   disableSass?: boolean
@@ -182,6 +196,10 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
                 // @ts-expect-error undefined
                 'virtual:quasar-iconMapFn'
               )
+              const { default: config } = await import(
+                // @ts-expect-error undefined
+                'virtual:quasar-config'
+              )
 
               const { installQuasar } = await import(
                 // @ts-expect-error undefined
@@ -195,7 +213,12 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
                   directives,
                   lang,
                   iconSet,
+                  // The site's own Quasar configuration first (dark mode, plugin
+                  // defaults), then the icon map the plugin supplies — a site
+                  // cannot override that, and spreading it last would let one
+                  // accidentally.
                   config: {
+                    ...config,
                     iconMapFn
                   }
                 },
@@ -295,6 +318,8 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
               return 'virtual:quasar-iconSet'
             case 'virtual:quasar-iconMapFn':
               return 'virtual:quasar-iconMapFn'
+            case 'virtual:quasar-config':
+              return 'virtual:quasar-config'
             case 'virtual:quasar':
               return { id: 'virtual:quasar', moduleSideEffects: false }
             default:
@@ -328,6 +353,14 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
             return `export default ${
               quasarConf?.framework.iconMapFn?.toString() ?? null
             }`
+          } else if (id === 'virtual:quasar-config') {
+            // Serialised, because the app-created hook that consumes it is
+            // itself stringified into a generated module: a hook cannot close
+            // over anything in this file, so the value has to arrive the same
+            // way the icon set and the plugins do — as a module.
+            return `export default ${JSON.stringify(
+              quasarConf.framework.config ?? {}
+            )}`
           } else if (id === 'virtual:quasar') {
             return `export * from 'quasar/src/plugins.js';
           export * from 'quasar/src/components.js';
