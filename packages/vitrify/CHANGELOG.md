@@ -1,5 +1,60 @@
 # vitrify
 
+## 0.31.0
+
+### Minor Changes
+
+- 9c64d6a: Let a site pass options to `beasties` with `vitrify.beasties`.
+
+  `beasties` inlines each prerendered page's critical CSS with fixed settings
+  before now, including `fonts: true`, which inserts a `<link rel="preload">` for
+  every font the inlined CSS references — without checking what the document
+  already preloads. A site that preloads its own font therefore shipped that font
+  twice, once with `crossorigin` and once without, which the browser cannot
+  dedupe: 26 kB per page. `vitrify.beasties` takes any `beasties` option, so that
+  site can turn the automatic preload off and keep one emitter.
+
+- 9c64d6a: Boot the client after the page has loaded, with `vitrify.deferHydration`.
+
+  Every prerendered page is real HTML — text, links, images and forms are in the
+  markup before any JavaScript runs — yet the entry chunk and its `modulepreload`
+  links were fetched while the document was still parsing, competing for bandwidth
+  with the stylesheet and the fonts. Lighthouse's mobile simulation charges that to
+  First Contentful Paint. Measured on a prerendered site: 375 KiB preloaded, FCP
+  2.7 s, LCP 3.1 s, performance 67; with the entry deferred, FCP 1.2 s, LCP 1.7 s,
+  performance 100 (desktop 97 → 100).
+
+  Enabled, the built HTML carries no module `<script>` and no `modulepreload`
+  links; an inline bootstrap imports the entry the build emitted. It starts on
+  `load`, on the first interaction, or one second after the first paint — that last
+  trigger matters because `load` also waits for third-party tags, and a stalled
+  analytics host otherwise leaves the page inert (measured: 8.1 s).
+
+  Off by default: it changes when the app boots, so an app whose above-the-fold UI
+  is client-only should leave it off.
+
+### Patch Changes
+
+- 9c64d6a: Stop an analytics tag from holding the page's `DOMContentLoaded`.
+
+  The Umami tag was emitted with `defer`, and a deferred script is executed before
+  `DOMContentLoaded` fires — so an analytics host that was slow or unreachable
+  delayed the page becoming ready, and anything waiting on that with it. Analytics
+  is independent of the app; the tag is now `async`.
+
+- 19ecf6b: Decide Quasar's `dark: 'auto'` before the first paint.
+
+  With `dark: 'auto'` Quasar picks the theme from `prefers-color-scheme` inside its
+  Dark plugin — that is, when the app boots. A prerendered page can only carry the
+  class the build produced, so a visitor whose OS is dark saw the light theme until
+  then: measured `body--light` at 24 ms and `body--dark` at 203 ms, and with
+  `deferHydration` the gap becomes about a second of the wrong theme.
+
+  The Quasar plugin now emits an inline `matchMedia` check at the top of `<body>`,
+  which sets the class Quasar is about to set itself, so nothing flips.
+  `dark: true` and `dark: false` are untouched: those are choices the prerendered
+  class already states.
+
 ## 0.30.1
 
 ### Patch Changes
