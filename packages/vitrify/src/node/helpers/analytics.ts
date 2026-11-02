@@ -49,8 +49,12 @@ export function umamiTag(umami?: VitrifyAnalyticsConfig['umami']): string {
   if (!origin) return ''
 
   const src = `${origin}/${(umami.scriptName ?? 'script.js').replace(/^\/+/, '')}`
+  // `async`, not `defer`: a defer script is executed before DOMContentLoaded, so
+  // an analytics host that is slow or unreachable holds the page's own
+  // DOMContentLoaded — and with it anything that waits for the page to be ready.
+  // Analytics is independent of the app; it has no business ordering it.
   const attributes = [
-    'defer',
+    'async',
     `src="${escapeAttribute(src)}"`,
     `data-website-id="${escapeAttribute(umami.websiteId.trim())}"`
   ]

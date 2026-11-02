@@ -184,12 +184,14 @@ export const renderTemplate = ({
   template,
   initialStateScript,
   appHtml,
-  preloadLinks
+  preloadLinks,
+  deferHydration
 }: {
   template: string
   initialStateScript: string
   appHtml: string
   preloadLinks: string
+  deferHydration?: boolean
 }) => {
   const seen = new Set(
     [...template.matchAll(/<link\b[^>]*>/gi)]
@@ -197,16 +199,24 @@ export const renderTemplate = ({
       .filter((key): key is string => key !== null)
   )
 
-  const links = (preloadLinks.match(/<link\b[^>]*>/gi) ?? []).filter((tag) => {
-    const key = linkKey(tag)
+  // A page that hydrates on idle must not prefetch its own chunks: the
+  // `modulepreload` links the SSR pass emits start those downloads during HTML
+  // parsing, which is exactly the bandwidth `deferHydration` keeps for the
+  // stylesheet, the fonts and the images. Stylesheet and font preloads stay.
+  const deferChunks = deferHydration === true
 
-    if (key === null) return true
-    if (seen.has(key)) return false
+  const links = (preloadLinks.match(/<link\b[^>]*>/gi) ?? [])
+    .filter((tag) => !(deferChunks && tag.includes('rel="modulepreload"')))
+    .filter((tag) => {
+      const key = linkKey(tag)
 
-    seen.add(key)
+      if (key === null) return true
+      if (seen.has(key)) return false
 
-    return true
-  })
+      seen.add(key)
+
+      return true
+    })
 
   return appendToHead(
     links.join('\n'),
@@ -224,6 +234,7 @@ const renderHtml = async (options: {
   template: string
   manifest: Record<string, unknown>
   render: any
+  deferHydration?: boolean
 }) => {
   const ssrContextonAppRendered: (() => unknown)[] = []
   const ssrContext: SSRContext = {
@@ -293,7 +304,8 @@ const renderHtml = async (options: {
     template: options.template,
     appHtml,
     initialStateScript,
-    preloadLinks
+    preloadLinks,
+    deferHydration: options.deferHydration
   })
 
   if (onTemplateRendered?.length) {

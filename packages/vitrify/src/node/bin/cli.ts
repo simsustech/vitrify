@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import cac from 'cac'
+import { getVitrifyOptions } from '../index.js'
 import { fileURLToPath } from 'url'
 import { getAppDir, parsePath } from '../app-urls.js'
 import { printHttpServerUrls, exitLogs } from '../helpers/logger.js'
@@ -110,6 +111,8 @@ cli
         })
 
         await prerender({
+          deferHydration: getVitrifyOptions()?.deferHydration === true,
+          beastiesOptions: getVitrifyOptions()?.beasties,
           outDir: fileURLToPath(new URL('static/', baseOutDir)),
           template,
           manifest,

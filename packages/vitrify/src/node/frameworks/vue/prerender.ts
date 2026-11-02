@@ -1,5 +1,6 @@
 import { existsSync, promises as fs, mkdirSync } from 'fs'
 import type { OnTemplateRenderedHook } from '../../vitrify-config.js'
+import type { Options as BeastiesOptions } from 'beasties'
 import { routesToPaths } from '../../helpers/routes.js'
 import { renderHtml } from './fastify-ssr-plugin.js'
 import type { RouteRecordRaw } from 'vue-router'
@@ -12,7 +13,9 @@ export const prerender = async ({
   render,
   routes,
   onTemplateRendered,
-  base = '/'
+  base = '/',
+  deferHydration = false,
+  beastiesOptions
 }: {
   outDir: string
   template: string
@@ -21,6 +24,18 @@ export const prerender = async ({
   routes: RouteRecordRaw[]
   onTemplateRendered: OnTemplateRenderedHook[]
   base?: string
+  /**
+   * The app boots on idle, so this page must not prefetch its own chunks.
+   * Passed in rather than read from the loaded config: this module also runs
+   * inside the app's own SSR bundle, which does not share the CLI's state.
+   */
+  deferHydration?: boolean
+  /**
+   * Overrides for `beasties`, which inlines the critical CSS of every page.
+   * Passed in for the same reason as `deferHydration`: this module also runs
+   * inside the app's own SSR bundle, which does not share the CLI's state.
+   */
+  beastiesOptions?: Partial<BeastiesOptions>
 }) => {
   const promises = []
   const paths = routesToPaths(routes).filter(
@@ -32,7 +47,8 @@ export const prerender = async ({
     logLevel: 'info',
     external: true,
     fonts: true,
-    compress: false
+    compress: false,
+    ...beastiesOptions
   })
 
   for (const url of paths) {
@@ -56,7 +72,8 @@ export const prerender = async ({
       req: { headers: {}, url },
       res: {},
       template,
-      onTemplateRendered
+      onTemplateRendered,
+      deferHydration
     })
     html = await beasties.process(html)
 

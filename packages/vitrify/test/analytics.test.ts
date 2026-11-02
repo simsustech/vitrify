@@ -31,7 +31,7 @@ describe('umamiTag', () => {
     })
 
     expect(tag).toBe(
-      '<script defer src="https://analytics.example.com/script.js" data-website-id="abc-123" data-do-not-track="true"></script>'
+      '<script async src="https://analytics.example.com/script.js" data-website-id="abc-123" data-do-not-track="true"></script>'
     )
   })
 

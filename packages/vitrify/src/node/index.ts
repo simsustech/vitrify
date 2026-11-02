@@ -1,4 +1,6 @@
 import vuePlugin from '@vitejs/plugin-vue'
+import { deferEntryScript } from './helpers/defer-entry.js'
+import { setVitrifyOptions } from './loaded-options.js'
 import type {
   Alias,
   InlineConfig,
@@ -253,6 +255,8 @@ export const baseConfig = async ({
     console.log('No valid vitrify.config.(ts|js) file found.')
     throw e
   }
+
+  setVitrifyOptions(vitrifyConfig.vitrify)
 
   const localPackages = []
   if (framework === 'vue')
@@ -656,6 +660,37 @@ export const baseConfig = async ({
     })
 
     if (debug) plugins.push(visualizer())
+
+    if (vitrifyConfig.vitrify?.deferHydration === true) {
+      /*
+       * Deferred hydration, second half.
+       *
+       * The plugin above adds the entry as a module script, and only after Vite
+       * has rewritten its `src` to the built file does the URL exist — so this
+       * is the one place that knows both the intent and the final file: it
+       * swaps the entry for `deferEntryScript()` and drops the chunk preloads,
+       * which would otherwise start the same downloads during parsing.
+       */
+      plugins.unshift({
+        name: 'defer-hydration',
+        enforce: 'post',
+        transformIndexHtml: {
+          order: 'post',
+          handler: (html) => {
+            const entry =
+              /<script[^>]*type="module"[^>]*src="([^"]+)"[^>]*><\/script>/.exec(
+                html
+              )
+            if (entry === null) return html
+
+            return html
+              .replace(/<link[^>]*rel="modulepreload"[^>]*>/g, '')
+              .replace(entry[0], '')
+              .replace('</body>', deferEntryScript(entry[1]) + '</body>')
+          }
+        }
+      })
+    }
   }
 
   // Vue now only exports CJS for Node
@@ -880,3 +915,4 @@ export const vitrifyDir = new URL('..', import.meta.url)
 export { prerender } from './frameworks/vue/prerender.js'
 
 export type { VitrifyConfig, VitrifyConfigAsync, VitrifyPlugin, VitrifyContext }
+export { getVitrifyOptions, setVitrifyOptions } from './loaded-options.js'

@@ -1,0 +1,8 @@
+{
+  "name": "ssr-vue-cjs-app",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "vue": "3.5.43"
+  }
+}

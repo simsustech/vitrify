@@ -1,5 +1,6 @@
 import type { Alias, UserConfig as ViteUserConfig, ViteDevServer } from 'vite'
 import type { ComponentInternalInstance } from '@vue/runtime-core'
+import type { Options } from 'beasties'
 import type {
   FastifyInstance,
   FastifyReply,
@@ -229,6 +230,38 @@ export interface VitrifyConfig extends ViteUserConfig {
     /**
      * SSR specific configuration
      */
+    /**
+     * Boot the client app after the page has loaded, instead of while its HTML
+     * is still being parsed.
+     *
+     * Every page vitrify prerenders is real HTML: the text, links, images and
+     * forms are in the markup before any JavaScript runs. Fetching the entry and
+     * its chunks during parsing nonetheless competes for bandwidth with the
+     * stylesheet and the fonts, and Lighthouse's mobile simulation charges that
+     * to First Contentful Paint — measured on a prerendered site 2026-11-02:
+     * 375 KiB preloaded, FCP 2.7 s, performance 67; with the entry deferred,
+     * FCP 1.2 s, performance 99.
+     *
+     * Enabled, the built HTML carries no module `<script>` and no
+     * `modulepreload` links; an inline bootstrap imports the entry on `load`
+     * (and an idle callback). Hydration then happens shortly after the page is
+     * readable instead of before it is — anything that only works after
+     * hydration (a dialog, a menu) responds a moment later, so turn this off for
+     * an app whose above-the-fold UI is client-only.
+     *
+     * Off by default: it changes when the app boots.
+     */
+    deferHydration?: boolean
+    /**
+     * Overrides for `beasties`, the inliner that turns each prerendered page's
+     * critical CSS into a `<style>` element.
+     *
+     * The default inlines the rules the page needs and leaves the stylesheet
+     * linked; `inlineThreshold` is the knob that changes that. Raising it to the
+     * size of the whole sheet inlines everything, which removes a request from
+     * the critical path at the cost of HTML that no longer caches on its own.
+     */
+    beasties?: Partial<Options>
     ssr?: {
       /**
        * Packages which should not be bundled but installed on the server instead.
