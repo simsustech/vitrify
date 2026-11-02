@@ -46,12 +46,12 @@
     "build": "tsc"
   },
   "dependencies": {
-    "handlebars": "^4.7.9"
+    "handlebars": "^4.7.10"
   },
   "devDependencies": {
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.6",
     "typescript": "^7.0.2",
-    "vite": "^8.3.2"
+    "vite": "^8.3.5"
   },
   "engines": {
     "node": ">=24.0.0"

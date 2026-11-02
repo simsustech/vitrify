@@ -169,7 +169,7 @@
   chunks (vitejs/vite#22286), breaking single-instance libraries like
   Vue's reactivity at runtime (`RefImpl is not a constructor`). Groups now
   capture only their matching modules (`includeDependenciesRecursively:
-false`) and are never split further; the default `vue` group is split
+  false`) and are never split further; the default `vue` group is split
   into per-package chunks (vue, vueRuntimeDom, vueRuntimeCore, ...).
 
   The unused `manualChunks` option is replaced by `chunks`, a map of
