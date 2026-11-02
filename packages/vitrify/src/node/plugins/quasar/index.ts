@@ -5,6 +5,7 @@ import type {
   VitrifyConfig,
   OnAppCreatedHook
 } from '../../vitrify-config.js'
+import { autoDarkScript } from './dark-mode.js'
 import type { VitrifyPlugin } from '../index.js'
 import { findDepPkgJsonPath } from 'vitefu'
 import {
@@ -289,6 +290,30 @@ export const QuasarPlugin: VitrifyPlugin<QuasarPluginOptions> = async ({
             ssr: {
               noExternal: ['quasar']
             }
+          }
+        }
+      },
+      /*
+       * `dark: 'auto'` is decided before the first paint.
+       *
+       * Quasar applies it in the Dark plugin, which runs when the app boots; a
+       * prerendered page can only carry the class the build produced, so a
+       * visitor whose OS is dark saw the light theme until then — a second of
+       * it once `deferHydration` moved the boot after the paint. See
+       * `autoDarkScript()`.
+       */
+      {
+        name: 'quasar-dark-mode-before-paint',
+        enforce: 'post',
+        transformIndexHtml: {
+          order: 'post',
+          handler: (html) => {
+            const script = autoDarkScript(quasarConf.framework.config)
+
+            if (!script) return html
+            if (html.includes('prefers-color-scheme')) return html
+
+            return html.replace(/<body([^>]*)>/i, (tag) => tag + script)
           }
         }
       },
