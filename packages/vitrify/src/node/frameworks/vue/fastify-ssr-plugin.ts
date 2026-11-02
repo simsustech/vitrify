@@ -159,7 +159,28 @@ const fastifySsrPlugin: FastifyPluginAsync<FastifySsrOptions> = async (
   }
 }
 
-const renderTemplate = ({
+const linkKey = (tag: string) => {
+  const rel = tag.match(/\brel=["']([^"']+)["']/i)?.[1]?.toLowerCase()
+  const href = tag.match(/\bhref=["']([^"']+)["']/i)?.[1]
+
+  return rel && href ? `${rel} ${href}` : null
+}
+
+/**
+ * Exported for the regression test in `test/duplicate-head-links.test.ts`.
+ *
+ * The template already carries the `<link rel="stylesheet">` that `vite build`
+ * injected for the client's CSS, and the SSR render returns a link for the same
+ * asset out of the module manifest. Appending that verbatim put the same
+ * stylesheet in the head twice, and `beasties` inlines whatever each link points
+ * at — so every prerendered page shipped the whole stylesheet twice: 35 KB of
+ * HTML per page, 6.8 KB gzipped, and a second parse of 1500 rules in the browser.
+ *
+ * Links are matched on rel **and** href, so a `<link rel="preload">` never
+ * cancels the `<link rel="stylesheet">` it preloads. The first occurrence wins,
+ * which keeps the template's `crossorigin` on the asset it loads.
+ */
+export const renderTemplate = ({
   template,
   initialStateScript,
   appHtml,
@@ -170,8 +191,25 @@ const renderTemplate = ({
   appHtml: string
   preloadLinks: string
 }) => {
+  const seen = new Set(
+    [...template.matchAll(/<link\b[^>]*>/gi)]
+      .map(([tag]) => linkKey(tag))
+      .filter((key): key is string => key !== null)
+  )
+
+  const links = (preloadLinks.match(/<link\b[^>]*>/gi) ?? []).filter((tag) => {
+    const key = linkKey(tag)
+
+    if (key === null) return true
+    if (seen.has(key)) return false
+
+    seen.add(key)
+
+    return true
+  })
+
   return appendToHead(
-    preloadLinks,
+    links.join('\n'),
     appendToBody(initialStateScript, addOrReplaceAppDiv(appHtml, template))
   )
 }
