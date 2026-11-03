@@ -821,8 +821,24 @@ export const baseConfig = async ({
       external,
       output: {
         minifyInternalExports: false,
-        entryFileNames: '[name].mjs',
-        chunkFileNames: '[name].mjs',
+        /*
+         * Content-hashed client output.
+         *
+         * Without the hash every chunk keeps its name across builds — `index.mjs`,
+         * `vendor.mjs`, `quasar.mjs` — while its contents change, so there is no
+         * `Cache-Control` value that is both safe and useful: `immutable` on an
+         * unhashed name serves stale code until the name eventually changes, and
+         * `no-cache` re-validates every chunk on every page view. Worse, the
+         * version that is easy to get wrong is the one that breaks: a returning
+         * visitor runs an old chunk beside new HTML and hydration fails with an
+         * error nobody can reproduce.
+         *
+         * Only the client branch. The two server bundles above are imported from
+         * disk by path (`ssr/server/entry-server.mjs`); a hash there would break
+         * the reference and buy nothing, because Node does not cache by URL.
+         */
+        entryFileNames: '[name]-[hash].mjs',
+        chunkFileNames: '[name]-[hash].mjs',
         format: 'es',
         codeSplitting: {
           groups: createCodeSplittingGroups(vitrifyConfig.vitrify?.chunks)
